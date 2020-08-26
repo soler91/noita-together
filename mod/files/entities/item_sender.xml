@@ -1,0 +1,76 @@
+<Entity tags="teleportable_NOT">
+	<Base file="data/entities/base_shop_item.xml">
+		<ItemCostComponent cost="0" />
+		
+		<SpriteComponent 
+			offset_x="8"
+			offset_y="30" 
+			 >
+		</SpriteComponent>
+	</Base>
+
+	<UIInfoComponent
+		name="Item Sender"
+		>
+	</UIInfoComponent>
+
+	<ItemComponent
+		item_name="Send Items"
+		play_spinning_animation="0"
+   		play_pick_sound="0"
+   		stats_count_as_item_pick_up="0"
+		auto_pickup="0" >
+	</ItemComponent>
+	
+	<VelocityComponent />
+
+	<SimplePhysicsComponent/>
+
+	<SpriteComponent 
+		_tags="enabled_in_world,character" 
+		alpha="1" 
+		image_file="data/buildings_gfx/perk_reroll.png" 
+		next_rect_animation="" 
+		rect_animation="" 
+		offset_x="10"
+		offset_y="40"
+		z_index="20" >
+	</SpriteComponent>
+
+	<VariableStorageComponent
+		name="players_sent"
+		value_string="[No Players],"
+		>
+	</VariableStorageComponent>
+
+  <LuaComponent 
+    script_item_picked_up="mods/noita-together/files/scripts/item_sender.lua" >
+  </LuaComponent>
+  
+  <ParticleEmitterComponent 
+		emitted_material_name="spark_green"
+		gravity.y="0.0"
+		lifetime_min="4"
+		lifetime_max="8"
+		x_vel_min="-5"
+		x_vel_max="5"
+		y_vel_min="-20"
+		y_vel_max="5"
+		count_min="4"
+		count_max="8"
+		render_on_grid="1"
+		fade_based_on_lifetime="1"
+		cosmetic_force_create="1"
+		collide_with_grid="0"
+		airflow_force="0.051"
+		airflow_time="1.01"
+		airflow_scale="0.03"
+		emission_interval_min_frames="30"
+		emission_interval_max_frames="30"
+		emit_cosmetic_particles="1"
+		area_circle_radius.max="11"
+		render_back="1"
+		is_emitting="1" >
+	</ParticleEmitterComponent>
+  
+</Entity>

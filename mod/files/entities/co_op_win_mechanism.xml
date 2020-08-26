@@ -1,0 +1,11 @@
+<Entity tags="ending_sampo_spot_co_op">
+	<LuaComponent
+    script_source_file="mods/noita-together/files/scripts/co_op_win_mechanism.lua"
+    vm_type="ONE_PER_COMPONENT_INSTANCE"
+    enable_coroutines="1"
+    execute_on_added="1"
+    execute_times="1"
+    execute_every_n_frame="-1"
+    >
+  </LuaComponent>
+</Entity>
