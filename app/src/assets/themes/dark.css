@@ -1,0 +1,53 @@
+:root {
+    --app-border-color: rgba(255, 255, 255, 0.5);
+    --app-inner-border-color: #2b2b2b;
+    --app-background: #1d1d1d;
+    --app-color: rgba(255, 255, 255, 0.8);
+    --app-active-item: rgb(255, 135, 0);
+    --app-inactive-item: rgba(170, 170, 170, 0.5);
+    --app-bookmark-item: rgba(170, 170, 170, 0.5);
+    --app-bookmarked-item: rgb(255, 135, 0);
+    --app-shadow-color: rgba(0, 0, 0, 0.8);
+    
+    --app-header-background: rgb(22, 22, 30);
+    --app-header-button-background-hover: rgba(44, 44, 60, 0.6);
+    --app-header-color: white;
+    --app-header-button-color: rgba(255, 255, 255, 0.5);
+    --app-header-button-color-hover: rgba(255, 255, 255, 0.8);
+
+    --app-navigation-background: #1d1d1d;
+    --app-navigation-color: white;
+
+    --app-navigation-item-background-hover: rgba(255, 255, 255, 0.1);
+    --app-navigation-item-color: rgba(255, 255, 255, 0.8);
+    --app-navigation-item-color-hover: white;
+
+    --app-content-background: #1d1d1d;
+    --app-content-color: black;
+
+    --app-content-entry-background: rgba(128, 128, 128, 0.4);
+    --app-content-entry-color: rgba(255, 255, 255, 0.8);
+    --app-content-entry-border: rgba(29, 29, 29, 0.8);
+
+    --button-background: #111111;
+    --button-background-hover: #2c2c2c;
+    --button-color: rgba(255, 255, 255, 0.8);
+    --button-color-hover: rgb(255, 255, 255);
+
+    --tooltip-background: black;
+    --tooltip-color: white;
+    --tooltip-border-color: red;
+
+    --slider-background: white;
+    --slider-thumb: grey;
+    --slider-thumb-hover: white;
+
+    --scrollbar-track: darkgrey;
+    --scrollbar-thumb: black;
+    --scrollbar-thumb-hover: white;
+
+    --link-color: grey;
+    --link-color-active: rgba(255, 255, 255, 0.7);
+    --link-color-visited: grey;
+    
+}
