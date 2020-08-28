@@ -404,6 +404,13 @@ function send_spells(queue)
     end
 end
 
+function send_wands(queue)
+    if (main_socket) then
+        send_event({type = eventTypes.sendWand, player = NT.selected_player, data = queue})
+        NT.wand_send_queue = ""
+    end
+end
+
 function send_gold()
     if (main_socket) then
         send_event({type = eventTypes.sendGold, player = NT.selected_player, data = NT.gold_send_queue})

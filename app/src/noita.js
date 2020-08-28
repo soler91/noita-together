@@ -105,7 +105,7 @@ class Noita {
                 break;
 
             case eventTypes.sendWand:
-                this.parent.twitch.say(`#${msgTypes.userSendWand};${dataJSON.player};${dataJSON.data}`)
+                this.parent.twitch.say(`#${msgTypes.userSendWand};${dataJSON.player};${this.minifyWand(dataJSON.data)}`)
                 break;
 
             case eventTypes.sendHpPlus:
@@ -179,6 +179,55 @@ class Noita {
         return arr.join(",")
     }
 
+    parseWand(data) {
+        const statKeys = [
+            "deck_capacity",
+            "reload_time",
+            "mana_charge_speed",
+            "spread_degrees",
+            "shuffle_deck_when_empty",
+            "ui_name",
+            "mana_max",
+            "sprite",
+            "speed_multiplier",
+            "mana",
+            "fire_rate_wait",
+            "actions_per_round"
+        ]
+        const wand = JSON.parse(data)
+        const parsedStats = {}
+        let [stats, always_cast, deck] = wand
+        for (const index in stats) {
+            parsedStats[statKeys[index]] = stats[index]
+        }
+        if (always_cast.length > 0) {
+            always_cast = always_cast.map(id => this.spellsArray[id].id)
+        }
+        if (deck.length > 0) {
+            deck = deck.map(id => this.spellsArray[id].id)
+        }
+
+        return JSON.stringify([parsedStats, always_cast, deck])
+    }
+
+    minifyWand(data) {
+        const wand = JSON.parse(data)
+        const smallStats = []
+        let [stats, always_cast, deck] = wand
+        stats.ui_name = `NT${Math.floor((Math.random() * 100) + 1)}`
+        for (const key in stats) {
+            smallStats.push(stats[key])
+        }
+        if (always_cast.length > 0) {
+            always_cast = this.spellsToIds(always_cast.join(",")).split(",")
+        }
+        if (deck.length > 0) {
+            deck = this.spellsToIds(deck.join(",")).split(",")
+        }
+
+        return JSON.stringify([smallStats, always_cast, deck])
+    }
+
     goldToClient(amount, player) {
         this.toGame(`queue_gold(${amount}, "${player}")`)
     }
@@ -188,7 +237,7 @@ class Noita {
     }
 
     wandToClient(data, player) {
-
+        this.toGame(`queue_wands('${this.parseWand(data)}', "${player}")`)
     }
 
     hpPlusToClient(player) {

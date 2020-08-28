@@ -1,3 +1,10 @@
+function queue_wands(str, player)
+    GamePrint(player .. " sent you something.")
+    local queue = json.decode(NT.wand_player_queue)
+    table.insert(queue, json.decode(str))
+    NT.wand_player_queue = json.encode(queue)
+end
+
 function queue_spells(str, player)
     GamePrint(player .. " sent you something.")
     NT.spell_player_queue = NT.spell_player_queue .. str
@@ -76,7 +83,7 @@ end
 
 function run_over(username, type)
     local typeText = type == 1 and "won" or "died"
-    GamePrintImportant(username.. " has " .. typeText.."." , "")
+    GamePrintImportant(username .. " has " .. typeText .. ".", "")
     if (type == 1) then
         NT.players_won = NT.players_won + 1
     elseif (type == 0) then
@@ -118,6 +125,10 @@ async_loop(
         local spells = NT.spell_send_queue
         if (#spells > 1) then
             send_spells(spells)
+        end
+        local wands = NT.wand_send_queue
+        if (#wands > 1) then
+            send_wands(wands)
         end
         if (GameHasFlagRun("co-op_run_ended") == false) then
             if (NT.send_win) then

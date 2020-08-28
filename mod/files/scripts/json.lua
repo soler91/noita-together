@@ -74,12 +74,12 @@ do
    -----------------------------------------------------------------------------
    -- Imports and dependencies
    -----------------------------------------------------------------------------
-   local math_floor, math_max, math_type = math.floor, math.max, math.type or function() end
-   local string_char, string_sub, string_find, string_match, string_gsub, string_format
-      = string.char, string.sub, string.find, string.match, string.gsub, string.format
+   local math_floor, math_max, math_type = math.floor, math.max, math.type or function()
+         end
+   local string_char, string_sub, string_find, string_match, string_gsub, string_format = string.char, string.sub, string.find, string.match, string.gsub, string.format
    local table_insert, table_remove, table_concat = table.insert, table.remove, table.concat
    local type, tostring, pairs, assert, error = type, tostring, pairs, assert, error
-   local loadstring = loadstring or load
+   
 
    -----------------------------------------------------------------------------
    -- Public functions
@@ -161,29 +161,41 @@ do
    --       callback( {"d", "e"}, "object",  json.empty,     52,  53  )  -- the next invocation brings the result of decoding (special Lua value for empty JSON object)
    --       callback( {"d", "f"}, "array",   nil,            60,  nil )
 
-
    -- Both decoder functions json.decode(s) and json.traverse(s, callback) can accept JSON (argument s)
    --    as a "loader function" instead of a string.
    --    This function will be called repeatedly to return next parts (substrings) of JSON.
    --    An empty string, nil, or no value returned from "loader function" means the end of JSON.
    --    This may be useful for low-memory devices or for traversing huge JSON files.
 
-
    --- The json.null table allows one to specify a null value in an associative array (which is otherwise
    -- discarded if you set the value with 'nil' in Lua. Simply set t = { first=json.null }
    local null = {"This Lua table is used to designate JSON null value, compare your values with json.null to determine JSON nulls"}
-   json.null = setmetatable(null, {
-      __tostring = function() return 'null' end
-   })
+   json.null =
+      setmetatable(
+      null,
+      {
+         __tostring = function()
+            return "null"
+         end
+      }
+   )
 
    --- The json.empty table allows one to specify an empty JSON object.
    -- To encode empty JSON array use usual empty Lua table.
    -- Example: t = { empty_object=json.empty, empty_array={} }
    local empty = {}
-   json.empty = setmetatable(empty, {
-      __tostring = function() return '{}' end,
-      __newindex = function() error("json.empty is an read-only Lua table", 2) end
-   })
+   json.empty =
+      setmetatable(
+      empty,
+      {
+         __tostring = function()
+            return "{}"
+         end,
+         __newindex = function()
+            error("json.empty is an read-only Lua table", 2)
+         end
+      }
+   )
 
    -----------------------------------------------------------------------------
    -- Private functions
@@ -211,34 +223,34 @@ do
    function json.encode(obj)
       -- Handle nil and null values
       if obj == nil or obj == null then
-         return 'null'
+         return "null"
       end
 
       -- Handle empty JSON object
       if obj == empty then
-         return '{}'
+         return "{}"
       end
 
       local obj_type = type(obj)
 
       -- Handle strings
-      if obj_type == 'string' then
-         return '"'..encodeString(obj)..'"'
+      if obj_type == "string" then
+         return '"' .. encodeString(obj) .. '"'
       end
 
       -- Handle booleans
-      if obj_type == 'boolean' then
+      if obj_type == "boolean" then
          return tostring(obj)
       end
 
       -- Handle numbers
-      if obj_type == 'number' then
-         assert(isRegularNumber(obj), 'numeric values Inf and NaN are unsupported')
-         return math_type(obj) == 'integer' and tostring(obj) or string_format('%.17g', obj)
+      if obj_type == "number" then
+         assert(isRegularNumber(obj), "numeric values Inf and NaN are unsupported")
+         return math_type(obj) == "integer" and tostring(obj) or string_format("%.17g", obj)
       end
 
       -- Handle tables
-      if obj_type == 'table' then
+      if obj_type == "table" then
          local rval = {}
          -- Consider arrays separately
          local bArray, maxCount = isArray(obj)
@@ -246,21 +258,21 @@ do
             for i = obj[0] ~= nil and 0 or 1, maxCount do
                table_insert(rval, json.encode(obj[i]))
             end
-         else  -- An object, not an array
+         else -- An object, not an array
             for i, j in pairs(obj) do
                if isConvertibleToString(i) and isEncodable(j) then
-                  table_insert(rval, '"'..encodeString(i)..'":'..json.encode(j))
+                  table_insert(rval, '"' .. encodeString(i) .. '":' .. json.encode(j))
                end
             end
          end
          if bArray then
-            return '['..table_concat(rval, ',')..']'
+            return "[" .. table_concat(rval, ",") .. "]"
          else
-            return '{'..table_concat(rval, ',')..'}'
+            return "{" .. table_concat(rval, ",") .. "}"
          end
       end
 
-      error('Unable to JSON-encode Lua value of unsupported type "'..obj_type..'": '..tostring(obj))
+      error('Unable to JSON-encode Lua value of unsupported type "' .. obj_type .. '": ' .. tostring(obj))
    end
 
    local function create_state(s)
@@ -300,9 +312,9 @@ do
    local function read_ahead(state, startPos)
       -- Make sure there are at least 32 bytes read ahead
       local endPos = startPos + 31
-      local part = state.part  -- current part (substring of "whole JSON" string)
-      local disp = state.disp  -- number of bytes before current part inside "whole JSON" string
-      local more = state.more  -- function to load next substring
+      local part = state.part -- current part (substring of "whole JSON" string)
+      local disp = state.disp -- number of bytes before current part inside "whole JSON" string
+      local more = state.more -- function to load next substring
       assert(startPos > disp)
       while more and disp + #part < endPos do
          --  (disp + 1) ... (disp + #part)  -  we already have this segment now
@@ -312,7 +324,7 @@ do
             more = nil
          else
             disp, part = disp + #part, string_sub(part, startPos - disp)
-            disp, part = disp - #part, part..next_substr
+            disp, part = disp - #part, part .. next_substr
          end
       end
       state.disp, state.part, state.more = disp, part, more
@@ -320,7 +332,9 @@ do
 
    local function get_word(state, startPos, length)
       -- 1 <= length <= 32
-      if state.more then read_ahead(state, startPos) end
+      if state.more then
+         read_ahead(state, startPos)
+      end
       local idx = startPos - state.disp
       return string_sub(state.part, idx, idx + length - 1)
    end
@@ -329,7 +343,9 @@ do
       -- #word < 30
       -- returns position after that word (nil if not found)
       repeat
-         if state.more then read_ahead(state, startPos) end
+         if state.more then
+            read_ahead(state, startPos)
+         end
          local part, disp = state.part, state.disp
          local b, e = string_find(part, word, startPos - disp, true)
          if b then
@@ -348,7 +364,9 @@ do
       if operation == "read" then
          local t = {}
          repeat
-            if state.more then read_ahead(state, startPos) end
+            if state.more then
+               read_ahead(state, startPos)
+            end
             local part, disp = state.part, state.disp
             local str = string_match(part, pattern, startPos - disp)
             if str then
@@ -359,7 +377,9 @@ do
          return table_concat(t), startPos
       elseif operation == "skip" then
          repeat
-            if state.more then read_ahead(state, startPos) end
+            if state.more then
+               read_ahead(state, startPos)
+            end
             local part, disp = state.part, state.disp
             local b, e = string_find(part, pattern, startPos - disp)
             if b then
@@ -382,7 +402,7 @@ do
    function decode(state, startPos, traverse, decode_key)
       local curChar, value, nextPos
       startPos, curChar = decode_scanWhitespace(state, startPos)
-      if curChar == '{' and not decode_key then
+      if curChar == "{" and not decode_key then
          -- Object
          if traverse and traverse.callback(traverse.path, "object", nil, startPos, nil) then
             -- user wants to decode this JSON object (and get it as Lua value) while traversing
@@ -391,7 +411,7 @@ do
             return false, endPos
          end
          return decode_scanObject(state, startPos, traverse)
-      elseif curChar == '[' and not decode_key then
+      elseif curChar == "[" and not decode_key then
          -- Array
          if traverse and traverse.callback(traverse.path, "array", nil, startPos, nil) then
             -- user wants to decode this JSON array (and get it as Lua value) while traversing
@@ -439,7 +459,7 @@ do
    -- @param   traverse    (optional) table with fields "path" and "callback" for traversing JSON.
    -- @return  table,int   The scanned array as a table, and the position of the next character to scan.
    function decode_scanArray(state, startPos, traverse)
-      local array = not traverse and {}  -- The return value
+      local array = not traverse and {} -- The return value
       local elem_index, elem_ready, object = 1
       startPos = startPos + 1
       -- Infinite loop for array elements
@@ -447,14 +467,14 @@ do
          repeat
             local curChar
             startPos, curChar = decode_scanWhitespace(state, startPos)
-            if curChar == ']' then
+            if curChar == "]" then
                return array, startPos + 1
-            elseif curChar == ',' then
+            elseif curChar == "," then
                if not elem_ready then
                   -- missing value in JSON array
                   if traverse then
                      table_insert(traverse.path, elem_index)
-                     traverse.callback(traverse.path, "null", null, startPos, startPos - 1)  -- empty substring: pos_last = pos - 1
+                     traverse.callback(traverse.path, "null", null, startPos, startPos - 1) -- empty substring: pos_last = pos - 1
                      table_remove(traverse.path)
                   else
                      array[elem_index] = null
@@ -464,9 +484,9 @@ do
                elem_index = elem_index + 1
                startPos = startPos + 1
             end
-         until curChar ~= ','
+         until curChar ~= ","
          if elem_ready then
-            error('Comma is missing in JSON array at position '..startPos)
+            error("Comma is missing in JSON array at position " .. startPos)
          end
          if traverse then
             table_insert(traverse.path, elem_index)
@@ -496,7 +516,7 @@ do
       elseif w4 == "null" then
          return null, startPos + 4
       end
-      error('Failed to parse JSON at position '..startPos)
+      error("Failed to parse JSON at position " .. startPos)
    end
 
    --- Scans a number from the JSON encoded string.
@@ -506,12 +526,12 @@ do
    -- @param   startPos     The position at which to start scanning.
    -- @return  number,int   The extracted number and the position of the next character to scan.
    function decode_scanNumber(state, startPos)
-      local stringValue, endPos = match_with_pattern(state, startPos, '^[%+%-%d%.eE]+', "read")
-      local stringEval = loadstring('return '..stringValue)
-      if not stringEval then
-         error('Failed to scan number '..stringValue..' in JSON string at position '..startPos)
+      local stringValue, endPos = match_with_pattern(state, startPos, "^[%+%-%d%.eE]+", "read")
+      local stringEval = tonumber(stringValue)
+      if stringEval == nil then
+         error("Failed to scan number " .. stringValue .. " in JSON string at position " .. startPos)
       end
-      return stringEval(), endPos
+      return stringEval, endPos
    end
 
    --- Scans a JSON object into a Lua object.
@@ -528,23 +548,23 @@ do
          repeat
             local curChar
             startPos, curChar = decode_scanWhitespace(state, startPos)
-            if curChar == '}' then
+            if curChar == "}" then
                return object, startPos + 1
-            elseif curChar == ',' then
+            elseif curChar == "," then
                startPos = startPos + 1
                elem_ready = false
             end
-         until curChar ~= ','
+         until curChar ~= ","
          if elem_ready then
-            error('Comma is missing in JSON object at '..startPos)
+            error("Comma is missing in JSON object at " .. startPos)
          end
          -- Scan the key as string or unquoted identifier such as in {"a":1,b:2}
          local key, value
          key, startPos = decode(state, startPos, nil, true)
          local colon
          startPos, colon = decode_scanWhitespace(state, startPos)
-         if colon ~= ':' then
-            error('JSON object key-value assignment mal-formed at '..startPos)
+         if colon ~= ":" then
+            error("JSON object key-value assignment mal-formed at " .. startPos)
          end
          startPos = decode_scanWhitespace(state, startPos + 1)
          if traverse then
@@ -560,7 +580,7 @@ do
             object[key] = value
          end
          elem_ready = true
-      end  -- infinite loop while key-value pairs are found
+      end -- infinite loop while key-value pairs are found
    end
 
    --- Scans JSON string for an identifier (unquoted key name inside object)
@@ -569,9 +589,9 @@ do
    -- @param  startPos     The starting position of the scan.
    -- @return string,int   The extracted string as a Lua string, and the next character to parse.
    function decode_scanIdentifier(state, startPos)
-      local identifier, idx = match_with_pattern(state, startPos, '^[%w_%-%$]+', "read")
+      local identifier, idx = match_with_pattern(state, startPos, "^[%w_%-%$]+", "read")
       if identifier == "" then
-         error('JSON String decoding failed: missing key name at position '..startPos)
+         error("JSON String decoding failed: missing key name at position " .. startPos)
       end
       return identifier, idx
    end
@@ -579,7 +599,7 @@ do
    -- START SoniEx2
    -- Initialize some things used by decode_scanString
    -- You know, for efficiency
-   local escapeSequences = { t = "\t", f = "\f", r = "\r", n = "\n", b = "\b" }
+   local escapeSequences = {t = "\t", f = "\f", r = "\r", n = "\n", b = "\b"}
    -- END SoniEx2
 
    --- Scans a JSON string from the opening quote to the end of the string.
@@ -596,12 +616,12 @@ do
          local c = string_sub(w6, 1, 1)
          if c == '"' then
             return table_concat(t), idx + 1
-         elseif c == '\\' then
+         elseif c == "\\" then
             local esc = string_sub(w6, 2, 2)
             if esc == "u" then
                local n = tonumber(string_sub(w6, 3), 16)
                if not n then
-                  error("String decoding failed: bad Unicode escape "..w6.." at position "..idx)
+                  error("String decoding failed: bad Unicode escape " .. w6 .. " at position " .. idx)
                end
                -- Handling of UTF-16 surrogate pairs
                if n >= 0xD800 and n < 0xDC00 then
@@ -616,13 +636,13 @@ do
                      x = string_char(n % 0x80)
                   elseif n < 0x800 then
                      -- [110x xxxx] [10xx xxxx]
-                     x = string_char(0xC0 + (math_floor(n/64) % 0x20), 0x80 + (n % 0x40))
+                     x = string_char(0xC0 + (math_floor(n / 64) % 0x20), 0x80 + (n % 0x40))
                   elseif n < 0x10000 then
                      -- [1110 xxxx] [10xx xxxx] [10xx xxxx]
-                     x = string_char(0xE0 + (math_floor(n/64/64) % 0x10), 0x80 + (math_floor(n/64) % 0x40), 0x80 + (n % 0x40))
+                     x = string_char(0xE0 + (math_floor(n / 64 / 64) % 0x10), 0x80 + (math_floor(n / 64) % 0x40), 0x80 + (n % 0x40))
                   else
                      -- [1111 0xxx] [10xx xxxx] [10xx xxxx] [10xx xxxx]
-                     x = string_char(0xF0 + (math_floor(n/64/64/64) % 8), 0x80 + (math_floor(n/64/64) % 0x40), 0x80 + (math_floor(n/64) % 0x40), 0x80 + (n % 0x40))
+                     x = string_char(0xF0 + (math_floor(n / 64 / 64 / 64) % 8), 0x80 + (math_floor(n / 64 / 64) % 0x40), 0x80 + (math_floor(n / 64) % 0x40), 0x80 + (n % 0x40))
                   end
                   table_insert(t, x)
                end
@@ -632,7 +652,7 @@ do
                idx = idx + 2
             end
          else
-            error('String decoding failed: missing closing " for string at position '..startPos)
+            error('String decoding failed: missing closing " for string at position ' .. startPos)
          end
       end
    end
@@ -644,18 +664,18 @@ do
    -- @return  int,char   The first position where non-whitespace was encountered, non-whitespace char.
    function decode_scanWhitespace(state, startPos)
       while true do
-         startPos = match_with_pattern(state, startPos, '^[ \n\r\t]+', "skip")
+         startPos = match_with_pattern(state, startPos, "^[ \n\r\t]+", "skip")
          local w2 = get_word(state, startPos, 2)
-         if w2 == '/*' then
-            local endPos = skip_until_word(state, startPos + 2, '*/')
+         if w2 == "/*" then
+            local endPos = skip_until_word(state, startPos + 2, "*/")
             if not endPos then
-               error("Unterminated comment in JSON string at "..startPos)
+               error("Unterminated comment in JSON string at " .. startPos)
             end
             startPos = endPos
          else
             local next_char = string_sub(w2, 1, 1)
-            if next_char == '' then
-               error('Unexpected end of JSON')
+            if next_char == "" then
+               error("Unexpected end of JSON")
             end
             return startPos, next_char
          end
@@ -667,21 +687,27 @@ do
    -- @param   s        The string to return as a JSON encoded (i.e. backquoted string)
    -- @return  string   The string appropriately escaped.
    local escapeList = {
-         ['"']  = '\\"',
-         ['\\'] = '\\\\',
-         ['/']  = '\\/',
-         ['\b'] = '\\b',
-         ['\f'] = '\\f',
-         ['\n'] = '\\n',
-         ['\r'] = '\\r',
-         ['\t'] = '\\t',
-         ['\127'] = '\\u007F'
+      ['"'] = '\\"',
+      ["\\"] = "\\\\",
+      ["/"] = "\\/",
+      ["\b"] = "\\b",
+      ["\f"] = "\\f",
+      ["\n"] = "\\n",
+      ["\r"] = "\\r",
+      ["\t"] = "\\t",
+      ["\127"] = "\\u007F"
    }
    function encodeString(s)
-      if type(s) == 'number' then
-         s = math_type(s) == 'integer' and tostring(s) or string_format('%.f', s)
+      if type(s) == "number" then
+         s = math_type(s) == "integer" and tostring(s) or string_format("%.f", s)
       end
-      return string_gsub(s, ".", function(c) return escapeList[c] or c:byte() < 32 and string_format('\\u%04X', c:byte()) end)
+      return string_gsub(
+         s,
+         ".",
+         function(c)
+            return escapeList[c] or c:byte() < 32 and string_format("\\u%04X", c:byte())
+         end
+      )
    end
 
    -- Determines whether the given Lua type is an array or a table / dictionary.
@@ -695,17 +721,17 @@ do
       -- (with the possible exception of 'n')
       local maxIndex = 0
       for k, v in pairs(t) do
-         if type(k) == 'number' and math_floor(k) == k and 0 <= k and k <= 1e6 then  -- k,v is an indexed pair
-            if not isEncodable(v) then  -- All array elements must be encodable
+         if type(k) == "number" and math_floor(k) == k and 0 <= k and k <= 1e6 then -- k,v is an indexed pair
+            if not isEncodable(v) then -- All array elements must be encodable
                return false
             end
             maxIndex = math_max(maxIndex, k)
-         elseif not (k == 'n' and v == #t) then  -- if it is n, then n does not hold the number of elements
+         elseif not (k == "n" and v == #t) then -- if it is n, then n does not hold the number of elements
             if isConvertibleToString(k) and isEncodable(v) then
                return false
             end
          end -- End of k,v not an indexed pair
-      end  -- End of loop across all pairs
+      end -- End of loop across all pairs
       return true, maxIndex
    end
 
@@ -715,7 +741,7 @@ do
    -- @return  boolean  True if the object should be JSON encoded, false if it should be ignored.
    function isEncodable(o)
       local t = type(o)
-      return t == 'string' or t == 'boolean' or t == 'number' and isRegularNumber(o) or t == 'nil' or t == 'table'
+      return t == "string" or t == "boolean" or t == "number" and isRegularNumber(o) or t == "nil" or t == "table"
    end
 
    --- Determines whether the given Lua object / table / variable can be a JSON key.
@@ -724,17 +750,16 @@ do
    -- @return  boolean  True if the object can be converted to a string, false if it should be ignored.
    function isConvertibleToString(o)
       local t = type(o)
-      return t == 'string' or t == 'number' and isRegularNumber(o) and (math_type(o) == 'integer' or math_floor(o) == o)
+      return t == "string" or t == "number" and isRegularNumber(o) and (math_type(o) == "integer" or math_floor(o) == o)
    end
 
-   local is_Inf_or_NaN = {[tostring(1/0)]=true, [tostring(-1/0)]=true, [tostring(0/0)]=true, [tostring(-(0/0))]=true}
+   local is_Inf_or_NaN = {[tostring(1 / 0)] = true, [tostring(-1 / 0)] = true, [tostring(0 / 0)] = true, [tostring(-(0 / 0))] = true}
    --- Determines whether the given Lua number is a regular number or Inf/Nan.
    -- @param   v        The number to examine.
    -- @return  boolean  True if the number is a regular number which may be encoded in JSON.
    function isRegularNumber(v)
       return not is_Inf_or_NaN[tostring(v)]
    end
-
 end
 
 --return json

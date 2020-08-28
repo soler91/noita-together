@@ -26,7 +26,7 @@ if (NT.initialized ~= true) then
 
     NT.wand_queue = ""
     NT.wand_send_queue = ""
-    NT.wand_player_queue = ""
+    NT.wand_player_queue = "[]"
 
     NT.gold_queue = 0
     NT.gold_send_queue = 0
