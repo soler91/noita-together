@@ -411,6 +411,13 @@ function send_wands(queue)
     end
 end
 
+function send_items(queue)
+    if (main_socket) then
+        send_event({type = eventTypes.sendItem, player = NT.selected_player, data = queue})
+        NT.item_send_queue = ""
+    end
+end
+
 function send_gold()
     if (main_socket) then
         send_event({type = eventTypes.sendGold, player = NT.selected_player, data = NT.gold_send_queue})

@@ -1,6 +1,6 @@
 {
-  "name": "noitaplays",
-  "version": "0.1.21",
+  "name": "noitatogether",
+  "version": "0.1.23",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",

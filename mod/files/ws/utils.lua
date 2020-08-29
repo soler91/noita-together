@@ -5,6 +5,13 @@ function queue_wands(str, player)
     NT.wand_player_queue = json.encode(queue)
 end
 
+function queue_items(str, player)
+    GamePrint(player .. " sent you something.")
+    local queue = json.decode(NT.item_player_queue)
+    table.insert(queue, json.decode(str))
+    NT.item_player_queue = json.encode(queue)
+end
+
 function queue_spells(str, player)
     GamePrint(player .. " sent you something.")
     NT.spell_player_queue = NT.spell_player_queue .. str
@@ -129,6 +136,11 @@ async_loop(
         local wands = NT.wand_send_queue
         if (#wands > 1) then
             send_wands(wands)
+        end
+
+        local items = NT.item_send_queue
+        if (#items > 1) then
+            send_items(items)
         end
         if (GameHasFlagRun("co-op_run_ended") == false) then
             if (NT.send_win) then

@@ -22,7 +22,7 @@ if (NT.initialized ~= true) then
 
     NT.item_queue = ""
     NT.item_send_queue = ""
-    NT.item_player_queue = ""
+    NT.item_player_queue = "[]"
 
     NT.wand_queue = ""
     NT.wand_send_queue = ""

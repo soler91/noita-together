@@ -1,0 +1,202 @@
+<Entity tags="hittable,teleportable_NOT" >
+
+  <!-- physical presence -->
+  
+  <PhysicsBodyComponent 
+    _tags="enabled_in_world"
+    uid="1" 
+    allow_sleep="1" 
+    angular_damping="0" 
+    fixed_rotation="0" 
+    is_bullet="1" 
+    linear_damping="0"
+    auto_clean="0"
+    on_death_leave_physics_body="1"
+    hax_fix_going_through_ground="1"
+  ></PhysicsBodyComponent>
+  
+  <PhysicsImageShapeComponent 
+    body_id="1"
+    centered="1"
+    image_file="data/items_gfx/potion_normals.png"
+    material="potion_glass_box2d"
+  ></PhysicsImageShapeComponent>
+  
+  <PhysicsThrowableComponent
+    max_throw_speed="180"
+    throw_force_coeff="1.5"
+  ></PhysicsThrowableComponent>
+
+  <ProjectileComponent
+    _tags="enabled_in_world"
+    lifetime="100000"
+    penetrate_entities="1"
+  ></ProjectileComponent>
+
+  <VelocityComponent
+    _tags="enabled_in_world"
+  ></VelocityComponent>
+  
+  <!-- potion logic -->
+   
+	<LuaComponent 
+		remove_after_executed="1"
+		script_item_picked_up="data/scripts/items/potion_effect.lua"
+	></LuaComponent>
+
+  <PotionComponent
+    _tags="enabled_in_hand,enabled_in_world"
+    spray_velocity_coeff="75"
+    spray_velocity_normalized_min="0.75"
+  ></PotionComponent>
+
+  <MaterialSuckerComponent 
+    _tags="enabled_in_world,enabled_in_hand"
+    barrel_size="1000"
+    num_cells_sucked_per_frame="5"
+  ></MaterialSuckerComponent>
+
+  <MaterialInventoryComponent 
+    _tags="enabled_in_world,enabled_in_hand"
+    drop_as_item="0" 
+    on_death_spill="1"
+    leak_pressure_min="0.07"
+    leak_pressure_min="0.1"
+    leak_on_damage_percent="1"
+    min_damage_to_leak="0.0"
+    death_throw_particle_velocity_coeff="0.5" >
+    <count_per_material_type>
+    </count_per_material_type>
+  </MaterialInventoryComponent>
+
+  <DamageModelComponent 
+    _tags="enabled_in_world"
+    air_needed="0" 
+    blood_material="" 
+    drop_items_on_death="0" 
+    falling_damages="0" 
+    fire_damage_amount="0.2" 
+    fire_probability_of_ignition="0" 
+	critical_damage_resistance="1"
+    hp="0.5" 
+    is_on_fire="0" 
+    materials_create_messages="0" 
+    materials_damage="1" 
+    materials_that_damage="lava"
+    materials_how_much_damage="0.001"
+    ragdoll_filenames_file=""
+    ragdoll_material=""
+  ></DamageModelComponent>
+
+  <ExplodeOnDamageComponent
+    _tags="enabled_in_world"
+    explode_on_death_percent="1"
+    explode_on_damage_percent="0"
+    physics_body_destruction_required="0.51"
+    physics_body_modified_death_probability="1" >
+    <config_explosion
+      never_cache="0"
+      damage="0"
+      camera_shake="10" 
+      explosion_radius="3" 
+      explosion_sprite="" 
+      explosion_sprite_lifetime="10" 
+      hole_destroy_liquid="0" 
+      hole_enabled="0" 
+      ray_energy="100000"
+      particle_effect="0" 
+      damage_mortals="1" 
+      physics_explosion_power.max="5" 
+      shake_vegetation="1" 
+      sparks_count_min="1" 
+      sparks_count_max="2" 
+      sparks_enabled="0" 
+      stains_enabled="1" 
+      stains_radius="0" >
+    </config_explosion>
+  </ExplodeOnDamageComponent>
+
+  <PhysicsBodyCollisionDamageComponent 
+    _tags="enabled_in_world" 
+    speed_threshold="80.0"
+  ></PhysicsBodyCollisionDamageComponent>
+
+  <!-- item -->
+
+  <SpriteComponent
+    _tags="enabled_in_hand"
+    _enabled="false"
+    offset_x="4"
+    offset_y="4"
+    image_file="data/items_gfx/potion.png"
+  ></SpriteComponent>
+
+  <ItemComponent
+    _tags="enabled_in_world"
+    item_name="$item_potion"
+    max_child_items="0"
+    is_pickable="1"
+    is_equipable_forced="1"
+    ui_sprite="data/ui_gfx/items/potion.png"
+    ui_description="$item_description_potion"
+    preferred_inventory="QUICK"
+  ></ItemComponent>
+
+  <AbilityComponent
+    ui_name="$item_potion_with_material"
+    throw_as_item="1"
+  ><gun_config
+    deck_capacity="0"
+  ></gun_config>
+  </AbilityComponent>
+
+  <UIInfoComponent
+    _tags="enabled_in_world"
+    name="">
+  </UIInfoComponent>
+  
+  <SpriteParticleEmitterComponent
+		sprite_file="data/particles/ray.xml" 
+		delay="0"
+		lifetime="1.5"
+		color.r="1" color.g="0.5" color.b="1" color.a="1.0"
+		color_change.r="0" color_change.g="0" color_change.b="0" color_change.a="-3.5"
+		velocity.x="0" velocity.y="0"
+		gravity.x="0" gravity.y="0"
+		velocity_slowdown="0"
+		rotation="0"
+		angular_velocity="0"
+		scale.x="1" scale.y="0"
+		scale_velocity.x="-0.3" scale_velocity.y="3"
+		emission_interval_min_frames="3"
+		emission_interval_max_frames="6"
+		emissive="1"
+		additive="1"
+		count_min="1" count_max="1"
+		use_velocity_as_rotation="1"
+		randomize_position.min_x="-2"
+		randomize_position.max_x="2"
+		randomize_position.min_y="-2"
+		randomize_position.max_y="2"
+		randomize_velocity.min_x="-30"
+		randomize_velocity.max_x="30"
+		randomize_velocity.min_y="-30"
+		randomize_velocity.max_y="30"
+		velocity_always_away_from_center="1">
+	</SpriteParticleEmitterComponent>
+
+  <AudioLoopComponent
+    _tags="sound_spray,enabled_in_world,enabled_in_hand"
+    file="data/audio/Desktop/materials.snd"
+    event_name="materials/spray_potion" 
+    volume_autofade_speed="0.1" >
+  </AudioLoopComponent>
+
+  <AudioComponent
+    _tags="enabled_in_world"
+    file="data/audio/Desktop/materials.snd"
+    event_root="collision/glass_potion"
+    set_latest_event_position="1" >
+  </AudioComponent>
+
+</Entity>

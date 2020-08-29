@@ -8,6 +8,7 @@ local x, y = EntityGetTransform(entity_id)
 -- tags -> card_actions | tablet | wand | item_physics
 local card_actions = EntityGetWithTag("card_action")
 local wands = EntityGetWithTag("wand")
+local flasks = EntityGetWithTag("item_physics")
 if (#card_actions > 0) then
     local collected = false
     local tx = 0
@@ -103,7 +104,6 @@ if (#wands > 0 and #NT.wand_queue == 0 and GameHasFlagRun("can_send_wands")) the
         table.insert(queue, json.decode(NT.wand_queue))
         NT.wand_player_queue = json.encode(queue)
         ]]
-
         EntityLoad("data/entities/particles/poof_pink.xml", x, y)
         EntityKill(wand)
     end
@@ -128,5 +128,66 @@ elseif (#wands > 0 and #NT.wand_queue > 0 and GameHasFlagRun("can_send_wands")) 
 
     if wand ~= nil then
         GamePrint("ONLY ONE WAND")
+    end
+end
+
+if (#flasks > 0 and #NT.item_queue == 0 and GameHasFlagRun("can_send_items")) then
+    local flask = nil
+    local flask_inventory = nil
+    for _, flask_id in ipairs(flasks) do
+        local in_world = false
+        local components = EntityGetComponent(flask_id, "PhysicsBodyComponent")
+        local inventory = EntityGetFirstComponentIncludingDisabled(flask_id, "MaterialInventoryComponent")
+        if (components ~= nil and inventory ~= nil) then
+            in_world = true
+        end
+
+        tx, ty = EntityGetTransform(flask_id)
+        if (in_world and flask == nil) then
+            local distance = math.abs(x - tx) + math.abs(y - ty)
+            if (distance < 24) then
+                flask = flask_id
+                flask_inventory = inventory
+            end
+        end
+    end
+
+    if flask ~= nil then
+        local count_per_material_type = ComponentGetValue2(flask_inventory, "count_per_material_type")
+        local serialized = {}
+        for k, v in pairs(count_per_material_type) do
+            if v ~= 0 then
+                table.insert( serialized, {v, k-1} )
+            end
+        end
+
+        NT.item_queue = json.encode(serialized)
+        --GamePrint(NT.item_queue)
+        EntityLoad("data/entities/particles/poof_pink.xml", x, y)
+        EntityKill(flask)
+    end
+elseif (#flasks > 0 and #NT.item_queue > 0 and GameHasFlagRun("can_send_items")) then
+    local flask = nil
+    local flask_inventory = nil
+    for _, flask_id in ipairs(flasks) do
+        local in_world = false
+        local components = EntityGetComponent(flask_id, "PhysicsBodyComponent")
+        local inventory = EntityGetFirstComponentIncludingDisabled(flask_id, "MaterialInventoryComponent")
+        if (components ~= nil and inventory ~= nil) then
+            in_world = true
+        end
+
+        tx, ty = EntityGetTransform(flask_id)
+        if (in_world and flask == nil) then
+            local distance = math.abs(x - tx) + math.abs(y - ty)
+            if (distance < 24) then
+                flask = flask_id
+                flask_inventory = inventory
+            end
+        end
+    end
+
+    if flask ~= nil then
+        GamePrint("ONLY ONE FLASK")
     end
 end

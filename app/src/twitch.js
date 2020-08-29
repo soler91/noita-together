@@ -195,7 +195,7 @@ class Twitch {
                 targetUser = splitMsg.shift()
                 if (this.username == targetUser) {
                     const items = splitMsg.shift()
-                    this.parent.noita.itemsToClient(items.split(","), username)
+                    this.parent.noita.itemsToClient(items, username)
                 }
                 break;
 

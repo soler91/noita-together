@@ -233,7 +233,7 @@ class Noita {
     }
 
     itemsToClient(data, player) {
-
+        this.toGame(`queue_items("${data}","${player}")`)
     }
 
     wandToClient(data, player) {

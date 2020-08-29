@@ -141,7 +141,7 @@ export default {
                 {
                     id: "3",
                     u: "can_send_items",
-                    name: "Send items",
+                    name: "Send flasks",
                     enabled: false,
                 },
 

@@ -58,7 +58,7 @@ if (player ~= nil) then
                 ComponentObjectSetValue2(ability_comp, "gunaction_config", "speed_multiplier", wand.speed_multiplier)
                 ComponentSetValue2(ability_comp, "mana_max", wand.mana_max)
                 ComponentSetValue2(ability_comp, "mana", wand.mana_max)
-                
+
                 if (#always_casts > 0) then
                     for _, spell in pairs(always_casts) do
                         AddGunActionPermanent(wand_entity, spell)
@@ -71,6 +71,18 @@ if (player ~= nil) then
                     end
                 end
                 EntitySetTransform(wand_entity, x, y)
+            end
+        end
+
+        local flasks_queue = json.decode(NT.item_player_queue)
+        NT.item_player_queue = "[]"
+        if (#flasks_queue > 0) then
+            poof = true
+            for _, contents in ipairs(flasks_queue) do
+                local flask = EntityLoad("mods/noita-together/files/entities/empty_flask.xml", x, y)
+                for i, inv in ipairs(contents) do
+                    AddMaterialInventoryMaterial(flask, CellFactory_GetName(inv[2]), inv[1])
+                end
             end
         end
 
