@@ -8,10 +8,10 @@ Play alone together
 * Send gold
 * Sync gods mood
 * Sync death
+* Send wands
+* Send flasks
 
 ## coming soon
-* Send wands
-* Send items (flasks, tablets, etc)
 * Revive dead teammate
 * VS mode (synced seed)
 * Race mode (synced seed)
