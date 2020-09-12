@@ -82,7 +82,7 @@
         </a>
         -->
         <a v-if="isHost" class="btn centered" @click.prevent="startRun">Start run</a>
-        <div class="">Game status: {{ready ? "Ready" : "Not Ready"}}</div>
+        <div class>Game status: {{ready ? "Ready" : "Not Ready"}}</div>
     </div>
 </template>
 
@@ -95,10 +95,10 @@ export default {
     name: "Home",
     mounted() {
         ipcRenderer.on("USER_ADD", (event, data) => {
-            let exist = false
+            let exist = false;
             for (const user of this.users) {
                 if (user.name == data.name) {
-                    exist = true
+                    exist = true;
                 }
             }
             if (!exist) {
@@ -106,10 +106,10 @@ export default {
             }
         });
         ipcRenderer.on("GAME_STATUS", (event, data) => {
-            this.ready = data.state
-        })
+            this.ready = data.state;
+        });
         ipcRenderer.on("USER_REMOVE", (event, data) => {
-            this.users = this.users.filter(user => user.name != data.name)
+            this.users = this.users.filter((user) => user.name != data.name);
         });
         ipcRenderer.on("USER_READYSTATE", (event, data) => {
             for (const user of this.users) {
@@ -184,25 +184,32 @@ export default {
     },
     methods: {
         async joinChannel() {
-            if (this.joining) {
-                return;
+            try {
+                if (this.joining) {
+                    return;
+                }
+                if (!this.hostUsername && !this.isHost) {
+                    alert("Please specify a host username to join");
+                    return;
+                } else if (!this.hostChannel) {
+                    alert("Please specify a channel to join");
+                    return;
+                }
+                this.joining = true;
+                const host = this.isHost ? this.username : this.hostUsername;
+                await this.$store.dispatch("join", {
+                    channel: this.hostChannel,
+                    host,
+                });
+                this.joining = false;
+            } catch (err) {
+                alert("Failed to join, try again")
+                this.joining = false
+                console.log(err);
             }
-            if (!this.hostUsername && !this.isHost) {
-                alert("Please specify a host username to join");
-                return;
-            } else if (!this.hostChannel) {
-                alert("Please specify a channel to join");
-                return;
-            }
-            this.joining = true;
-            const host = this.isHost ? this.username : this.hostUsername;
-            await this.$store.dispatch("join", {
-                channel: this.hostChannel,
-                host,
-            });
-            this.joining = false;
         },
-        async toggleReady() {//unused
+        async toggleReady() {
+            //unused
             if (this.waiting) {
                 return;
             }

@@ -9,6 +9,7 @@ class Twitch {
         this.username = ""
         this.hostUsername = ""
 
+        this.joinTimeout = null
         this.joinPromise = null
         this.joining = false
         this.joined = false
@@ -61,9 +62,18 @@ class Twitch {
         ipcMain.on("TWITCH_JOIN", async (event, data) => {
             try {
                 await this.join(data)
-                await new Promise((res) => {
+                const join = new Promise((res) => {
                     this.joinPromise = res
                 })
+                clearTimeout(this.joinTimeout)
+                this.joinTimeout = new Promise((res, reject) => {
+                    setTimeout(() => {
+                        clearTimeout(this.joinTimeout)
+                        reject()
+                    }, 10000);
+                })
+                await Promise.race([join, timeout])
+
                 event.sender.send("TWITCH_JOINED")
             } catch (error) {
 
@@ -116,7 +126,7 @@ class Twitch {
         const username = userstate["display-name"]
         const splitMsg = msg.split(";")
         const msgId = splitMsg.shift().substr(1)
-        if (this.blacklist.indexOf(username) > -1) {return}
+        if (this.blacklist.indexOf(username) > -1) { return }
         switch (msgId) {
             case msgTypes.hostAccept:
                 if (!this.joining) { return }
