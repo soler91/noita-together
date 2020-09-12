@@ -374,6 +374,9 @@ function send_gods_mood()
 end
 
 function send_run_end(type)
+    if not GameHasFlagRun("nt_run_started") then
+        return nil
+    end
     if main_socket then
         GameAddFlagRun("co-op_run_ended")
         send_event({type = eventTypes.endRun, data = type})
