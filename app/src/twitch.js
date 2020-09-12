@@ -327,6 +327,14 @@ class Twitch {
         this.appEvent("USER_READYSTATE", { name, state })
     }
 
+    unreadyAll() {
+        if (!this.isHost) { return }
+        for (const name of Object.keys(this.users)) {
+            this.users[name] = false
+            this.appEvent("USER_READYSTATE", { name, state: false })
+        }
+    }
+
     startRun() {
         const users = Object.keys(this.users).join(",")
         this.say(`#${msgTypes.hostStart};${this.gameFlags.join(",")};${users}`)

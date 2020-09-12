@@ -75,12 +75,14 @@
                 
             </div>
         </div>
-        -->
+        
         <a v-if="!isHost" class="btn centered" @click.prevent="toggleReady">
             <span v-if="!waiting">{{!ready ? "Ready" : "Unready"}}</span>
             <i v-else class="fas fa-spinner fa-pulse"></i>
         </a>
+        -->
         <a v-if="isHost" class="btn centered" @click.prevent="startRun">Start run</a>
+        <div class="">Game status: {{ready ? "Ready" : "Not Ready"}}</div>
     </div>
 </template>
 
@@ -103,6 +105,9 @@ export default {
                 this.users.push(data);
             }
         });
+        ipcRenderer.on("GAME_STATUS", (event, data) => {
+            this.ready = data.state
+        })
         ipcRenderer.on("USER_REMOVE", (event, data) => {
             this.users = this.users.filter(user => user.name != data.name)
         });
@@ -197,7 +202,7 @@ export default {
             });
             this.joining = false;
         },
-        async toggleReady() {
+        async toggleReady() {//unused
             if (this.waiting) {
                 return;
             }

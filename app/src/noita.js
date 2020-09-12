@@ -39,6 +39,7 @@ class Noita {
 
             socket.on("close", () => {
                 if (this.client === socket) {
+                    this.parent.twitch.appEvent("GAME_STATUS", {state: false})
                     console.log("BYE NOITA")
                     this.client = null
                 }
@@ -66,6 +67,7 @@ class Noita {
         if (kind == "heartbeat") {
             this.lastContact = Date.now()
             if (this.client != ws) {
+                this.parent.twitch.appEvent("GAME_STATUS", {state: true})
                 console.log("Registering game client")
                 this.client = ws
                 this.toGame(`set_print_to_socket(true)`)
@@ -83,12 +85,10 @@ class Noita {
                 break;
 
             case eventTypes.endRun:
-                console.log("END RUN")
                 this.parent.twitch.say(`#${msgTypes.userDeath};${dataJSON.data}`) // 0 = ded, 1 = win
                 break;
 
             case eventTypes.sendSpells:
-                console.log("SEND SPELLS", JSON.stringify(dataJSON))
                 this.parent.twitch.say(`#${msgTypes.userSendSpells};${dataJSON.player};${this.spellsToIds(dataJSON.spells)}`)
                 break;
 
