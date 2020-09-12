@@ -39,7 +39,7 @@ function draw_display()
         GuiLayoutEnd(gui)
         return
     end
-
+    player_count = player_count + 1 -- useless?
     local player_text = "Players"
     local player_selector_button = "[SHOW]"
     if (player_selector) then
