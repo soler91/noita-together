@@ -338,8 +338,8 @@ class Twitch {
     }
 
     async readyState(state) {
+        this.appEvent("GAME_STATUS", {state})
         await this.say(`#${msgTypes.userReadyState};${state}`)
-        this.appEvent("GAME_STATUS", {state: false})
     }
 
     unreadyAll() {
