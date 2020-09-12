@@ -329,7 +329,8 @@ class Twitch {
 
     unreadyAll() {
         if (!this.isHost) { return }
-        for (const name of Object.keys(this.users)) {
+        const users = Object.keys(this.users).filter((name) => name.toLowerCase() !== this.username.toLowerCase())
+        for (const name of users) {
             this.users[name] = false
             this.appEvent("USER_READYSTATE", { name, state: false })
         }
