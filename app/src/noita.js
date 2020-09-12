@@ -39,7 +39,7 @@ class Noita {
 
             socket.on("close", () => {
                 if (this.client === socket) {
-                    this.parent.twitch.appEvent("GAME_STATUS", {state: false})
+                    this.parent.twitch.readyState(false)
                     console.log("BYE NOITA")
                     this.client = null
                 }
@@ -67,7 +67,7 @@ class Noita {
         if (kind == "heartbeat") {
             this.lastContact = Date.now()
             if (this.client != ws) {
-                this.parent.twitch.appEvent("GAME_STATUS", {state: true})
+                this.parent.twitch.readyState(true)
                 console.log("Registering game client")
                 this.client = ws
                 this.toGame(`set_print_to_socket(true)`)

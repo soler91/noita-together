@@ -337,6 +337,11 @@ class Twitch {
         this.appEvent("USER_READYSTATE", { name, state })
     }
 
+    async readyState(state) {
+        await this.say(`#${msgTypes.userReadyState};${state}`)
+        this.appEvent("GAME_STATUS", {state: false})
+    }
+
     unreadyAll() {
         if (!this.isHost) { return }
         const users = Object.keys(this.users).filter((name) => name.toLowerCase() !== this.username.toLowerCase())
