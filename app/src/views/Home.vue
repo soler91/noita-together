@@ -82,7 +82,7 @@
         </a>
         -->
         <a v-if="isHost" class="btn centered" @click.prevent="startRun">Start run</a>
-        <div class>Game status: {{ready ? "Ready" : "Not Ready"}}</div>
+        <p>Game status: {{ready ? "Ready" : "Not Ready"}}</p>
     </div>
 </template>
 

@@ -790,3 +790,7 @@ input:checked + .slider:before {
 .user-states a {
   border-radius: 0;
 }
+
+.content p {
+  color: rgba(255, 255, 255, 0.8);
+}
