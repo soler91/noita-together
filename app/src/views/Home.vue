@@ -82,7 +82,7 @@
         </a>
         -->
         <a v-if="isHost" class="btn centered" @click.prevent="startRun">Start run</a>
-        <p>Game status: {{ready ? "Ready" : "Not Ready"}}</p>
+        <p v-if="joined">Game status: {{ready ? "Ready" : "Not Ready"}}</p>
     </div>
 </template>
 
@@ -202,9 +202,10 @@ export default {
                     host,
                 });
                 this.joining = false;
+                this.joined = true;
             } catch (err) {
-                alert("Failed to join, try again")
-                this.joining = false
+                alert("Failed to join, try again");
+                this.joining = false;
                 console.log(err);
             }
         },

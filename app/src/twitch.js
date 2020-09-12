@@ -338,6 +338,7 @@ class Twitch {
     }
 
     async readyState(state) {
+        if (!this.joined) { return }
         this.appEvent("GAME_STATUS", {state})
         await this.say(`#${msgTypes.userReadyState};${state}`)
     }
