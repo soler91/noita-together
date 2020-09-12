@@ -1,4 +1,4 @@
-_spawn_sampo_spot = _spawn_sampo_spot or spawn_sampo_spot
+local _spawn_sampo_spot = _spawn_sampo_spot or spawn_sampo_spot
 
 function spawn_sampo_spot(x, y)
     if (GameHasFlagRun("NT_GAMEMODE_CO_OP")) then

@@ -1,5 +1,5 @@
 dofile("mods/noita-together/files/scripts/utils.lua")
-_item_pickup = _item_pickup or item_pickup
+local _item_pickup = _item_pickup or item_pickup
 
 function shared_heart(entity_item, entity_who_picked, name)
     local damagemodels = EntityGetComponent(entity_who_picked, "DamageModelComponent")

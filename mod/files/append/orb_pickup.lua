@@ -1,5 +1,5 @@
 dofile("mods/noita-together/files/scripts/utils.lua")
-_item_pickup = _item_pickup or item_pickup
+local _item_pickup = _item_pickup or item_pickup
 
 function item_pickup(entity_item, entity_who_picked, name)
     if (GameHasFlagRun("sync_orbs") and EntityHasTag(entity_item, "fake_orb") == false) then

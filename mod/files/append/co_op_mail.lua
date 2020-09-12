@@ -1,4 +1,4 @@
-_spawn_hp = _spawn_hp or spawn_hp
+local _spawn_hp = _spawn_hp or spawn_hp
 
 RegisterSpawnFunction(0xffc9490a, "spawn_spell_eater")
 RegisterSpawnFunction(0xff63c408, "spawn_spell_spitter")
