@@ -66,8 +66,8 @@ class Twitch {
                     this.joinPromise = res
                 })
                 clearTimeout(this.joinTimeout)
-                this.joinTimeout = new Promise((res, reject) => {
-                    setTimeout(() => {
+                const timeout = new Promise((res, reject) => {
+                    this.joinTimeout = setTimeout(() => {
                         clearTimeout(this.joinTimeout)
                         reject()
                     }, 10000);
@@ -76,7 +76,6 @@ class Twitch {
 
                 event.sender.send("TWITCH_JOINED")
             } catch (error) {
-
             }
         })
 
@@ -338,9 +337,14 @@ class Twitch {
     }
 
     async readyState(state) {
-        if (!this.joined) { return }
-        this.appEvent("GAME_STATUS", {state})
-        await this.say(`#${msgTypes.userReadyState};${state}`)
+        try {
+            if (!this.joined) { return }
+            this.appEvent("GAME_STATUS", { state })
+            await this.say(`#${msgTypes.userReadyState};${state}`)
+        } catch (error) {
+
+        }
+
     }
 
     unreadyAll() {
