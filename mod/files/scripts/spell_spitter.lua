@@ -37,6 +37,7 @@ if (player ~= nil) then
         NT.wand_player_queue = "[]"
         if (#wands_queue > 0) then
             poof = true
+            local force_unshuffle = GlobalsGetValue( "PERK_NO_MORE_SHUFFLE_WANDS", "0" ) == "1"
             for _, wand_table in ipairs(wands_queue) do
                 local wand_entity = EntityLoad("mods/noita-together/files/entities/wand.xml")
                 local ability_comp = EntityGetFirstComponentIncludingDisabled(wand_entity, "AbilityComponent")
@@ -45,6 +46,11 @@ if (player ~= nil) then
                 local deck = wand_table[3]
 
                 local wand_info = wands[wand.sprite]
+
+                if (force_unshuffle) then
+                    wand.shuffle_deck_when_empty = false
+                end
+
                 SetWandSprite(wand_entity, ability_comp, wand_info.file, wand_info.grip_x, wand_info.grip_y, (wand_info.tip_x - wand_info.grip_x), (wand_info.tip_y - wand_info.grip_y))
                 --serialized.sprite = wand_sprite
                 ComponentSetValue2(ability_comp, "ui_name", wand.ui_name)
