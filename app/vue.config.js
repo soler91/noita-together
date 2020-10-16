@@ -7,7 +7,7 @@ module.exports = {
         win: { target: ["portable"] },
         portable: {
           requestExecutionLevel: "user",
-          unpackDirName: "NoitaPlays"
+          unpackDirName: "NoitaTogether"
         },
         fileAssociations: {
           ext: "exe",

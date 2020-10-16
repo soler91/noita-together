@@ -42,7 +42,7 @@ function createWindow() {
     // Create the browser window.
     win = new BrowserWindow({
         transparent: false,
-        title: "Noita Plays",
+        title: "Noita Together",
         thickFrame: true,
         width: 400,
         height: 600,

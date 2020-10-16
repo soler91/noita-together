@@ -11,7 +11,7 @@ export default {
     components: { AppHeader },
     data() {
         return {
-            title: "Noita Plays"
+            title: "Noita Together"
         };
     }
 };
