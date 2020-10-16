@@ -94,6 +94,7 @@ function run_over(username, type)
     if (type == 1) then
         NT.players_won = NT.players_won + 1
     elseif (type == 0) then
+        GameAddFlagRun("co-op_run_ended")--until respawning is a thing
         async(
             function()
                 wait(300)

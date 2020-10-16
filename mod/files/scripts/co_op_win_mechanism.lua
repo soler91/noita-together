@@ -19,11 +19,13 @@ function delete_quick_inv(player)
     if inven ~= nil then
         local items = EntityGetAllChildren(inven)
         for _, item in ipairs(items) do
-            GameKillInventoryItem(player, item)
+            if (EntityHasTag(item, "wand") or EntityHasTag(item, "item_physics")) then
+                GameKillInventoryItem(player, item)
+            end
         end
     end
-
 end
+
 async_loop(
     function()
         local player = get_player()
@@ -40,7 +42,7 @@ async_loop(
 
         if (mechanism_spawned == false) then
             local players, playercount = get_player_list()
-            if (NT.players_won == playercount+1) then
+            if (NT.players_won == playercount + 1) then
                 mechanism_spawned = true
                 GamePrintImportant("All players have won.", "LOCK IT IN")
                 EntityLoad("data/entities/animals/boss_centipede/ending/ending_sampo_spot_underground.xml", x, y + 30)
