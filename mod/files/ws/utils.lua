@@ -45,11 +45,22 @@ function add_hp(player_name)
     local x, y = get_player_pos()
     local damagemodels = EntityGetComponent(player, "DamageModelComponent")
     local players, playercount = get_player_list()
+    local multiplier = 1
+
+    if (variablestorages ~= nil) then
+        for key, comp_id in pairs(variablestorages) do
+            local var_name = ComponentGetValue(comp_id, "name")
+            if (var_name == "hearts_more_extra_hp") then
+                multiplier = ComponentGetValueInt(comp_id, "value_int")
+            end
+        end
+    end
+    
     if (damagemodels ~= nil) then
         for i, damagemodel in ipairs(damagemodels) do
             max_hp = tonumber(ComponentGetValue(damagemodel, "max_hp"))
             max_hp_old = max_hp
-            max_hp = max_hp + (1 / (playercount + 1)) * 1
+            max_hp = max_hp + math.max(0.16 ,(1 / (playercount + 1)) * multiplier)
 
             local max_hp_cap = tonumber(ComponentGetValue(damagemodel, "max_hp_cap"))
             if max_hp_cap > 0 then
