@@ -29,6 +29,10 @@ function update_gold(amount)
     NT.gold_queue = total
 end
 
+function reset_gold()
+    NT.gold_queue = 0
+end
+
 function draw_display()
     reset_id()
     GuiStartFrame(gui)
