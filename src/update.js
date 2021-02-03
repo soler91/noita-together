@@ -1,5 +1,5 @@
 const appEvent = require("./appEvent")
-let branch = "noita-together" //'master';
+let branch = "mod" //'master';
 let updatelog = true;
 let noselfupdate = false;
 function updateLog(data) {
