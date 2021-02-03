@@ -46,7 +46,7 @@
         "files/scripts/remove_flags.lua": "30f59a4df55fbeeb19d16423137f13c3ace8255fd40957416ae60e82462f686c",
         "files/scripts/spell_eater.lua": "cfa9ff3b77b4117a5b6005af78ba1d9daf0c03e9eb9518b02a96cc3534223dff",
         "files/scripts/spell_spitter.lua": "1454ef98cd78cb50aa31b0ebbb088206ec406edaed726f059364493d675f8ab4",
-        "files/scripts/ui.lua": "201162c01ac6188204b15234dd817eb7d607b71ce93c8d15e04dfd096fd6af19",
+        "files/scripts/ui.lua": "dddc76060f4ef2b35e882b2f9f66546a095b26c779e3d4d834f997ce47045ffe",
         "files/scripts/utils.lua": "f9bf52630a99a00b4e1eb7ad9b01264d7599af51c8bb88291d44368c66d3ec5a",
         "files/store.lua": "deea133dc0fa7da909aaed2cf2a1fea01e822cf6b92a3ef06dcbd343219f91aa",
         "files/stringstore/noitaglobalstore.lua": "df6663bed01bc62a918f994d2a9ec0ad2847e799366c9ce9a371973226d1299a",
