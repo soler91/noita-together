@@ -128,7 +128,7 @@ end
 function AngerSteve(userId)
     NT.sent_steve = true
     local player = PlayerList[userId].name
-    GamePrintImportant(player .. "Angered The Gods", "good luck")
+    GamePrintImportant(player .. " Angered The Gods", "good luck")
     GlobalsSetValue("TEMPLE_SPAWN_GUARDIAN", "1")
     local workshop_exit_id = EntityGetClosestWithTag(pos_x, pos_y, "workshop_exit")
     local guard_x = pos_x
