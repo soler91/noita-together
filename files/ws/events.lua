@@ -11,6 +11,9 @@ customEvents = {
     end,
     SampoPickup = function (data)
         local player = PlayerList[data.userId].name
+        if (player ~= nil) then
+            PlayerList[data.userId].sampo = true
+        end
         NT.players_sampo = NT.players_sampo + 1
         GamePrintImportant(player .. " picked up the salt", "they wait for you")
     end,
@@ -160,7 +163,8 @@ wsEvents = {
             maxHp = 100,
             name = data.name,
             userId = data.userId,
-            location = "Mountain"
+            location = "Mountain",
+            sampo = false
         }
         SpawnPlayerGhost(data, data.userId)
         NT.player_count = NT.player_count + 1
@@ -179,10 +183,12 @@ wsEvents = {
     end,
     PlayerDeath = function(data)
         if (data.isWin == true) then
+            PlayerList[data.userId].curHp = 0
             msg = PlayerList[data.userId].name .. " has won."
             --InGameChatAddMsg({name = "[System]", message = msg})
             GamePrintImportant(msg, "")
         else
+            PlayerList[data.userId].curHp = 0
             msg = PlayerList[data.userId].name .. " has died."
             if (GameHasFlagRun("death_penalty_end") or GameHasFlagRun("death_penalty_weak_respawn")) then
                 NT.end_msg = msg
