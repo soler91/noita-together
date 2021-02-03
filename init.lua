@@ -32,6 +32,7 @@ SpellSprites = {}
 InGameChat = {}
 lastChatMsg = 0
 PlayerList = {}
+PlayerCount = 1 -- fix this later
 GamePaused = false
 LastUpdate = {location= "Mountain", curHp = 100, maxHp = 100}
 LastLocation = {x = 0, y = 0}

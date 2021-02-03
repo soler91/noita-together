@@ -167,12 +167,12 @@ wsEvents = {
             sampo = false
         }
         SpawnPlayerGhost(data, data.userId)
-        NT.player_count = NT.player_count + 1
+        PlayerCount = PlayerCount + 1
     end,
     RemovePlayer = function(data)
         DespawnPlayerGhost(data.userId)
         PlayerList[data.userId] = nil
-        NT.player_count = NT.player_count - 1
+        PlayerCount = PlayerCount - 1
     end,
     PlayerPickup = function(data)
         if (data.heart ~= nil) then

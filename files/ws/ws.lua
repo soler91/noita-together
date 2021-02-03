@@ -92,6 +92,7 @@ async_loop(function()
             NT.sent_steve = true
             SendWsEvent({event="CustomModEvent", payload={name="AngerySteve"}})
         end
+        NT.player_count = PlayerCount
     end
     local x, y = GetPlayerPos()
     if (LastLocation.x ~= x or LastLocation.y ~= y) then

@@ -150,7 +150,7 @@ function PlayerHeartPickup(perk, userId)
     local x, y = GetPlayerPos()
     local damagemodels = EntityGetComponent(player, "DamageModelComponent")
     local variablestorages = EntityGetComponent(entity_who_picked, "VariableStorageComponent")
-    local playercount = NT.player_count
+    local playercount = NT.player_count or 1
     local multiplier = 1
 
     if (variablestorages ~= nil) then
