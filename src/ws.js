@@ -102,10 +102,10 @@ module.exports = (data) => {
                     appEvent(key, payload)
                 }
             }
-            if (["sPlayerMove", "sPlayerUpdate", "sChat"].indexOf(key) > -1) { return }
-            console.log(`[SERVER ${key}]`)
-            console.log(payload)
-            console.log()
+            //if (["sPlayerMove", "sPlayerUpdate", "sChat"].indexOf(key) > -1) { return }
+            //console.log(`[SERVER ${key}]`)
+            //console.log(payload)
+            //console.log()
         } catch (error) {
             //eugh
             console.log(error)
