@@ -126,17 +126,18 @@ function GetPlayerInventory()
 end
 
 function AngerSteve(userId)
+    if (NT.sent_steve or GlobalsGetValue("TEMPLE_SPAWN_GUARDIAN") == "1") then return nil end
     NT.sent_steve = true
     local player = PlayerList[userId].name
-    GamePrintImportant(player .. "Angered The Gods", "good luck")
+    GamePrintImportant(player .. " Angered The Gods", "good luck")
     GlobalsSetValue("TEMPLE_SPAWN_GUARDIAN", "1")
     local workshop_exit_id = EntityGetClosestWithTag(pos_x, pos_y, "workshop_exit")
     local guard_x = pos_x
     local guard_y = pos_y
     if (workshop_exit_id ~= 0) then
         guard_x, guard_y = EntityGetTransform(workshop_exit_id)
-        guard_x = guard_x - 120
-        guard_y = guard_y + 60
+        guard_x = guard_x - 90
+        guard_y = guard_y + 30
         EntityLoad("data/entities/misc/spawn_necromancer_shop.xml", guard_x, guard_y)
     end
     GamePlaySound("data/audio/Desktop/event_cues.snd", "event_cues/sampo_pick/create", pos_x, pos_y)
