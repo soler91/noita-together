@@ -61,7 +61,7 @@ function OnWorldPostUpdate()
     IsPlayerDead()
     if (_ws_main and is_valid_entity(world_state)) then
         _ws_main()
-        if (NT ~= nil and NT.player_count == NT.players_sampo and NT.boss_fight == false) then
+        if (NT.sampo_pickup and NT ~= nil and NT.player_count == NT.players_sampo and NT.boss_fight == false) then
             StartBossFight()
         end
     end
