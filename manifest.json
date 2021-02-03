@@ -47,7 +47,7 @@
         "files/scripts/spell_eater.lua": "cfa9ff3b77b4117a5b6005af78ba1d9daf0c03e9eb9518b02a96cc3534223dff",
         "files/scripts/spell_spitter.lua": "1454ef98cd78cb50aa31b0ebbb088206ec406edaed726f059364493d675f8ab4",
         "files/scripts/ui.lua": "201162c01ac6188204b15234dd817eb7d607b71ce93c8d15e04dfd096fd6af19",
-        "files/scripts/utils.lua": "b4e8f65a309357c9213c813cdc23330cf183df1d42cb78ac6d8e3b6afbe117aa",
+        "files/scripts/utils.lua": "f9bf52630a99a00b4e1eb7ad9b01264d7599af51c8bb88291d44368c66d3ec5a",
         "files/store.lua": "deea133dc0fa7da909aaed2cf2a1fea01e822cf6b92a3ef06dcbd343219f91aa",
         "files/stringstore/noitaglobalstore.lua": "df6663bed01bc62a918f994d2a9ec0ad2847e799366c9ce9a371973226d1299a",
         "files/stringstore/stringstore.lua": "7934f19bd537a87b1b9476cb30fa506f7d48b37953011980630a9eb37df4060f",
@@ -66,10 +66,10 @@
         "files/ui/next_page.png": "d74d46129cc1a1ac9a739d903f5a1218d76cdb50948292410b4730870e9af5a7",
         "files/ui/next_page.png~": "49d9d856f95592c15095e611fa308922343dbb031343195782c2a5f6fa627ab4",
         "files/ui/prev_page.png": "49d9d856f95592c15095e611fa308922343dbb031343195782c2a5f6fa627ab4",
-        "files/ws/events.lua": "068f2b52015fb28c0b48367e934c3e8ec4cd27615fc23e35040f565b09036ce1",
+        "files/ws/events.lua": "f3b721fedb84b5faf7422d29af662cc9192f7605e81a0a1863b98330619cb157",
         "files/ws/host.lua": "777e33a06f060249cb738e7ba39a8f63e4e117b4d69ef9842d02c3a8fff5b215",
-        "files/ws/ws.lua": "89ae3d6e5a5e08b5056f036b474b53b2308499fd5a0d71b9540b6494f0f7ae39",
-        "init.lua": "8e086914bb8e5570bb95c387b8d570616c05193b7c956308e78d671ab93b8f0b",
+        "files/ws/ws.lua": "fd78453bf86567642cacecb36d3c7f6b963d3f59eeef1124a9deb730e562f2b1",
+        "init.lua": "44d736cd131e5e87b7378fc5f1a054bad76ec804054878e95e3b29fdd4043dff",
         "mod.xml": "bb32c00f2074ccf690547230e833fe5963bcc4bee0a7628991811e51b9e92693"
     }
 }
