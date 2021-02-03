@@ -234,7 +234,8 @@ module.exports = (data) => {
             id: uuidv4(),
             stats: keysToCamel(wand.stats),
             alwaysCast: wand.always_cast ? wand.always_cast.map(mapSpells) : undefined,
-            deck: wand.deck.map(mapSpells)
+            deck: wand.deck.map(mapSpells),
+            sentBy: user.userId
         }
     }
 
