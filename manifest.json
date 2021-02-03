@@ -69,7 +69,7 @@
         "files/ws/events.lua": "068f2b52015fb28c0b48367e934c3e8ec4cd27615fc23e35040f565b09036ce1",
         "files/ws/host.lua": "777e33a06f060249cb738e7ba39a8f63e4e117b4d69ef9842d02c3a8fff5b215",
         "files/ws/ws.lua": "89ae3d6e5a5e08b5056f036b474b53b2308499fd5a0d71b9540b6494f0f7ae39",
-        "init.lua": "793de03fe752e160cf28e3bc9c04bd93dcf6c9f26ad1f52d01b67d7c75a204f6",
+        "init.lua": "3256806abbb64dee94650e771b72b99018968581970cf5449f7dd1e40defb353",
         "mod.xml": "bb32c00f2074ccf690547230e833fe5963bcc4bee0a7628991811e51b9e92693"
     }
 }
