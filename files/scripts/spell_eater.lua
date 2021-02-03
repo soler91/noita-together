@@ -152,16 +152,16 @@ if (#flasks > 0 and GameHasFlagRun("send_flasks")) then
         local color = GameGetPotionColorUint(flask)
         serialized.color = color
         serialized.isChest = is_chest
-        serialized.content = {
-            {id=0, amount=0}
-        }
-        print("Flask color: " .. tostring(color))
+        serialized.content = {}
+        
         for k, v in pairs(count_per_material_type) do
             if v ~= 0 then
                 table.insert( serialized.content, {id = k-1, amount = v} )
             end
         end
-        print(json.encode(serialized))
+        if (#serialized.content == 0) then
+            table.insert(serialized.content, {id=0, amount=0})
+        end
         table.insert(msg.payload.flasks, serialized)
         send = true
         EntityLoad("data/entities/particles/poof_pink.xml", x, y)

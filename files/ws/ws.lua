@@ -44,10 +44,10 @@ _ws_main = function()
         return
     end
 
-    for i=1, 25 do -- bandaid for desync
+    for i=1, 15 do -- bandaid for desync
         local happy, msg = main_socket:poll()
-        
         if (not happy and count % 1200 == 0) then
+            GamePrint("NOT HAPPY")
             main_socket = nil
             reconnect = true
             increase_count()
@@ -100,5 +100,5 @@ async_loop(function()
     end
     UpdatePlayerStats()
     
-    wait(25)
+    wait(35)
 end)

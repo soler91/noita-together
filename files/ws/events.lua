@@ -1,9 +1,13 @@
 customEvents = {
     AngerySteve = function (data)
-        AngerSteve(data.userId)
+        if (GameHasFlagRun("sync_steve")) then
+            AngerSteve(data.userId)
+        end
     end,
     RespawnPenalty = function (data)
-        RespawnPenalty(data.userId)
+        if (GameHasFlagRun("death_penalty_weak_respawn")) then
+            RespawnPenalty(data.userId)
+        end
     end,
     SampoPickup = function (data)
         local player = PlayerList[data.userId].name

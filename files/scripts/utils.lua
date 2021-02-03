@@ -136,7 +136,7 @@ function AngerSteve(userId)
     local guard_y = pos_y
     if (workshop_exit_id ~= 0) then
         guard_x, guard_y = EntityGetTransform(workshop_exit_id)
-        guard_x = guard_x - 90
+        guard_x = guard_x - 120
         guard_y = guard_y + 30
         EntityLoad("data/entities/misc/spawn_necromancer_shop.xml", guard_x, guard_y)
     end
@@ -438,7 +438,7 @@ function EndRun()
 end
 
 function FinishRun()
-    if (NT.run_ended) then return end
+    if (NT.run_ended or not NT.run_started) then return end
     NT.run_ended = true
     
     local player = GetPlayer()
