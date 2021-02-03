@@ -97,6 +97,9 @@ function OnPausePreUpdate()
         GamePaused = true
         SendWsEvent({event="paused", payload = {}})
     end
+    if (_ws_main) then
+        _ws_main()
+    end
 end
 
 function OnModPreInit()
