@@ -24,7 +24,7 @@ function FindGameFolder() {
     })
 }
 // Constants
-const AutoUpdateServers = ["http://unicast.link:8080/",'https://raw.githubusercontent.com/soler91/noita-together/'];
+const AutoUpdateServers = ['https://raw.githubusercontent.com/soler91/noita-together/'];
 
 // Implementation
 function forcedirSync(dir) {
