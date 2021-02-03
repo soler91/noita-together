@@ -30,7 +30,7 @@ SendWsEvent = function(data)
 end
 
 local function increase_count()
-    wake_up_waiting_threads(1) -- from coroutines.lua
+    wake_up_waiting_threads(1)
     count = count + 1
 end
 
@@ -44,10 +44,9 @@ _ws_main = function()
         return
     end
 
-    for i=1, 15 do -- bandaid for desync
+    for i=1, 20 do -- bandaid for desync
         local happy, msg = main_socket:poll()
         if (not happy and count % 1200 == 0) then
-            GamePrint("NOT HAPPY")
             main_socket = nil
             reconnect = true
             increase_count()
@@ -77,10 +76,11 @@ _ws_main = function()
         if (count % 60 == 0) then
             SendWsEvent({event="ping", payload = {}})
         end
-        increase_count()
+        
     end
+    increase_count()
 end
-
+local loc_counter = 0
 async_loop(function()
     if (NT ~= nil) then
         local queue = json.decode(NT.wsQueue)
@@ -95,6 +95,7 @@ async_loop(function()
     end
     local x, y = GetPlayerPos()
     if (LastLocation.x ~= x or LastLocation.y ~= y) then
+        loc_counter = loc_counter +1
         SendWsEvent({event="PlayerMove", payload={x=x, y=y}})
         LastLocation = {x=x, y=y}
     end
