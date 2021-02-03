@@ -49,8 +49,8 @@ if not initialized then
             tostring(wand.actionsPerRound),
             string.format("%.2f",wand.fireRateWait/60),
             string.format("%.2f",wand.reloadTime/60),
-            string.format("%.2f",wand.manaMax),
-            string.format("%.2f",wand.manaChargeSpeed),
+            string.format("%.0f",wand.manaMax),
+            string.format("%.0f",wand.manaChargeSpeed),
             tostring(wand.deckCapacity),
             string.format("%.2f DEG",wand.spreadDegrees)
         }
@@ -80,9 +80,14 @@ if not initialized then
     local function draw_item_sprite(item, x,y)
         GuiZSetForNextWidget(gui, 8)
         if (item.gameId ~= nil) then --spell
+            local player = PlayerList[item.sentBy] or {name="Me"}
+            local spell_description = ""
+            if (player ~= nil) then
+                spell_description = spell_description .. "\nSent by: " .. player.name
+            end
             local spell = SpellSprites[item.gameId]
             GuiImage(gui, next_id(), x +2, y +2,  spell.sprite, 1,1,1)--SpellSprites[item.gameId], 1)
-            GuiTooltip(gui, spell.name, "")
+            GuiTooltip(gui, spell.name, spell_description)
         elseif (item.stats ~= nil) then --wand
             GuiZSetForNextWidget(gui, 7)
             local sprite = wands[tonumber(item.stats.sprite)].file
@@ -129,10 +134,13 @@ if not initialized then
                     end
                 end
             end
-            --GuiTooltip(gui, "Wand " .. tostring(w) .. " " .. tostring(h), wand_tooltip(item.stats))
             
         elseif (item.content ~= nil) then --flask
+            local player = PlayerList[item.sentBy] or {name="Me"}
             local container_name = item.isChest and "Powder Stash" or "Flask"
+            if (player ~= nil) then
+                container_name = container_name .. "\nSent by: " .. player.name
+            end
             GuiZSetForNextWidget(gui, 7)
             if (item.isChest) then
                 GuiImage(gui, next_id(), x + 2, y + 2, "data/ui_gfx/items/powder_stash.png", 1, 1, 1)
@@ -189,10 +197,16 @@ if not initialized then
     end
 
     local function draw_player_info(player)
+        if (player.sampo) then
+            GuiOptionsAddForNextWidget(gui, GUI_OPTION.Layout_NextSameLine)
+            GuiZSetForNextWidget(gui, 9)
+            GuiImage(gui, next_id(), 88, 0, "data/entities/animals/boss_centipede/sampo.png", 0.5, 0.5, 0.5)
+        end
         GuiZSetForNextWidget(gui, 10)
         GuiText(gui, 0, 0, player.name)
         local location = GameTextGetTranslatedOrNot(player.location)
         if (location == nil or location == "_EMPTY_") then location = "Mountain" end
+        location = location .. "\nDepth: " .. string.format("%.0f", player.y)
         GuiTooltip(gui, player.name, "Hp: " .. tostring(math.floor(player.curHp)) .. " / " .. tostring(math.floor(player.maxHp)) .. "\nLocation: " .. location)
         GuiOptionsAddForNextWidget(gui, GUI_OPTION.Layout_NextSameLine)
         GuiZSetForNextWidget(gui, 9)
