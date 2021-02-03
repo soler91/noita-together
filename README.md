@@ -1,17 +1,7 @@
 # noita-together
 Play alone together
+[click here to downloads](https://github.com/soler91/noita-together/releases)
 
-## current features
-* Shared hearts
-* Shared orbs
-* Send spells
-* Send gold
-* Sync gods mood
-* Sync death
-* Send wands
-* Send flasks
+better readme later...
 
-## coming soon
-* Revive dead teammate
-* VS mode (synced seed)
-* Race mode (synced seed)
+mod uses [pollws](https://github.com/probable-basilisk/pollws/) made by probable-basilisk (fakepyry / pyry)
