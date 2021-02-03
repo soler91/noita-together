@@ -201,7 +201,7 @@ class NoitaGame extends EventEmitter {
     }
 
     sPlayerMove(payload) {
-        if (payload.userId == this.user.userId) {
+        if (payload.userId == this.user.userId || !this.client) {
             return
         }
         this.sendEvt("PlayerMove", payload)
