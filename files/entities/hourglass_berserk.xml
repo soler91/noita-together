@@ -1,0 +1,20 @@
+<Entity tags="hourglass_entity">
+
+	<MaterialAreaCheckerComponent
+		_tags="disabled_by_liquid"
+		area_aabb.min_x="-16" 
+		area_aabb.max_x="16" 
+		area_aabb.min_y="0"   
+		area_aabb.max_y="11" 
+		update_every_x_frame="1"
+		material="magic_liquid_berserk"
+		material2="magic_liquid_berserk"
+		look_for_failure="0"
+		kill_after_message="0">
+	</MaterialAreaCheckerComponent>
+
+	<LuaComponent
+		_tags="disabled_by_liquid"
+		script_material_area_checker_success="mods/noita-together/files/scripts/hourglass_berserk.lua" >
+	</LuaComponent>
+</Entity>

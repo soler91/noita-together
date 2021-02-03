@@ -1,0 +1,66 @@
+<Entity 
+  tags="nt_ghost" 
+  serialize="0" >
+
+  <StreamingKeepAliveComponent>
+  </StreamingKeepAliveComponent>
+
+  <_Transform 
+    position.x="0" 
+    position.y="0" 
+    rotation="0" 
+    scale.x="1" 
+    scale.y="1" >
+  </_Transform>
+
+  <VariableStorageComponent
+  name="userId"
+  value_string=""
+  >
+  </VariableStorageComponent>
+
+  <VariableStorageComponent
+  name="uFrames"
+  value_string="0,0"
+  >
+  </VariableStorageComponent>
+
+  <VariableStorageComponent
+  name="dest"
+  value_string="3,4"
+  >
+  </VariableStorageComponent>
+
+  <VariableStorageComponent
+  name="last_dest"
+  value_string="1,2"
+  >
+  </VariableStorageComponent>
+
+  <SpriteComponent 
+    _enabled="1" 
+    additive="1" 
+    alpha="0.9" 
+    emissive="1" 
+    has_special_scale="0" 
+    image_file="data/enemies_gfx/playerghost.xml"
+    is_text_sprite="0" 
+    kill_entity_after_finished="0" 
+    next_rect_animation="" 
+    rect_animation="" 
+    smooth_filtering="0" 
+    transform_offset.x="0" 
+    transform_offset.y="-5" 
+    ui_is_parent="0" 
+    update_transform="1" 
+    update_transform_rotation="1" 
+    visible="1" 
+     >
+  </SpriteComponent>
+
+  <LuaComponent
+    script_source_file="mods/noita-together/files/scripts/playerghost.lua"
+    execute_every_n_frame="1"
+   >
+  </LuaComponent>
+</Entity>

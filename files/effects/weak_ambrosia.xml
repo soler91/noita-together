@@ -1,0 +1,30 @@
+<Entity>
+	<InheritTransformComponent 
+		_enabled="1" >
+    </InheritTransformComponent>	
+    
+    <LuaComponent
+		script_source_file="mods/noita-together/files/effects/weak_ambrosia_start.lua"
+		execute_every_n_frame="4"
+		remove_after_executed="1"
+		>
+	</LuaComponent>
+	
+	<LuaComponent
+		script_source_file="mods/noita-together/files/effects/weak_ambrosia_end.lua"
+		execute_every_n_frame="-1"
+		execute_on_removed="1"
+		>
+	</LuaComponent>
+	
+	<LifetimeComponent
+		lifetime="7200"
+		>
+	</LifetimeComponent>
+	
+	<VariableStorageComponent
+		name="resis_data"
+		value_string=""
+		>
+	</VariableStorageComponent>
+</Entity>
