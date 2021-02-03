@@ -1,0 +1,614 @@
+package NT;
+syntax = "proto3";
+
+message Envelope {
+    oneof kind {
+        GameAction game_action = 0;
+        LobbyAction lobby_action = 50;
+    }
+}
+
+message GameAction {
+    oneof action {
+        ClientPlayerMove c_player_move = 0;
+        ServerPlayerMove s_player_move = 1;
+
+        ClientPlayerUpdate c_player_update = 2;
+        ServerPlayerUpdate s_player_update = 3;
+
+        ClientPlayerUpdateInventory c_player_update_inventory = 4;
+        ServerPlayerUpdateInventory s_player_update_inventory = 5;
+
+        ClientHostItemBank c_host_item_bank = 6;
+        ServerHostItemBank s_host_item_bank = 7;
+
+        ClientHostUserTake c_host_user_take = 8;
+        ServerHostUserTake s_host_user_take = 9;
+
+        ClientHostUserTakeGold c_host_user_take_gold = 10;
+        ServerHostUserTakeGold s_host_user_take_gold = 11;
+
+        ClientPlayerAddGold c_player_add_gold = 12;
+        ServerPlayerAddGold s_player_add_gold = 13;
+
+        ClientPlayerTakeGold c_player_take_gold = 14;
+        ServerPlayerTakeGold s_player_take_gold = 15;
+
+        ClientPlayerAddItem c_player_add_item = 16;
+        ServerPlayerAddItem s_player_add_item = 17;
+
+        ClientPlayerTakeItem c_player_take_item = 18;
+        ServerPlayerTakeItem s_player_take_item = 19;
+
+        ClientPlayerPickup c_player_pickup = 20;
+        ServerPlayerPickup s_player_pickup = 21;
+
+        ClientNemesisAbility c_nemesis_ability = 22;
+        ServerNemesisAbility s_nemesis_ability = 23;
+
+        ClientNemesisPickupItem c_nemesis_pickup_item = 24;
+        ServerNemesisPickupItem s_nemesis_pickup_item = 25;
+
+        ClientChat c_chat = 26;
+        ServerChat s_chat = 27;
+
+        ClientPlayerDeath c_player_death = 28;
+        ServerPlayerDeath s_player_death = 29;
+
+        ClientPlayerNewGamePlus c_player_new_game_plus = 30;
+        ServerPlayerNewGamePlus s_player_new_game_plus = 31;
+
+        ClientPlayerSecretHourglass c_player_secret_hourglass = 32;
+        ServerPlayerSecretHourglass S_player_secret_hourglass = 33;
+    
+        ClientCustomModEvent c_custom_mod_event = 34;
+        ServerCustomModEvent s_custom_mod_event = 35;
+    }
+}
+
+message ClientPlayerMove {
+    optional float x = 0;
+    optional float y = 1;
+    optional float speed = 2;
+    optional uint32 frames = 3;
+}
+
+message ServerPlayerMove {
+    required string user_id = 0;
+    optional float x = 1;
+    optional float y = 2;
+    optional float speed = 3; 
+    optional uint32 frames = 4;
+}
+
+message ClientPlayerUpdate {
+    optional float cur_hp = 1;
+    optional float max_hp = 2;
+    optional string location = 3;
+}
+
+message ServerPlayerUpdate {
+    required string user_id = 0;
+    optional float cur_hp = 1;
+    optional float max_hp = 2;
+    optional string location = 3;
+}
+
+message ClientPlayerUpdateInventory {
+    repeated InventoryWand wands = 0;
+    repeated InventoryItem items = 1;
+    repeated InventorySpell spells = 2;
+
+    message InventoryWand {
+        required uint32 index = 0;
+        required Wand wand = 1;
+    }
+
+    message InventoryItem {
+        required uint32 index = 0;
+        required Item item = 1;
+    }
+
+    message InventorySpell {
+        required uint32 index = 0;
+        required Spell spell = 1;
+    }
+}
+
+message ServerPlayerUpdateInventory {
+    required string user_id = 0;
+    repeated InventoryWand wands = 1;
+    repeated InventoryItem items = 2;
+    repeated InventorySpell spells = 3;
+
+    message InventoryWand {
+        required uint32 index = 0;
+        required Wand wand = 1;
+    }
+
+    message InventoryItem {
+        required uint32 index = 0;
+        required Item item = 1;
+    }
+
+    message InventorySpell {
+        required uint32 index = 0;
+        required Spell spell = 1;
+    }
+}
+
+message ClientHostItemBank {
+    repeated Wand wands = 1;
+    repeated Spell spells = 2;
+    repeated Item items = 3;
+    uint32 gold = 4;
+}
+
+message ServerHostItemBank {
+    repeated Wand wands = 1;
+    repeated Spell spells = 2;
+    repeated Item items = 3;
+    uint32 gold = 4;
+}
+
+message ClientHostUserTake {
+    required string user_id = 0;
+    required string id = 1;
+    required bool success = 2;
+}
+
+message ServerHostUserTake {
+    required string user_id = 0;
+    required string id = 1;
+    required bool success = 2;
+}
+
+message ClientHostUserTakeGold {
+    required string user_id = 0;
+    required uint32 amount = 1;
+    required bool success = 2;
+}
+
+message ServerHostUserTakeGold {
+    required string user_id = 0;
+    required uint32 amount = 1;
+    required bool success = 2;
+}
+
+message ClientPlayerAddGold {
+    required uint32 amount = 0;
+}
+
+message ServerPlayerAddGold {
+    required string user_id = 0;
+    required uint32 amount = 1;
+}
+
+message ClientPlayerTakeGold {
+    required uint32 amount = 0;
+}
+
+message ServerPlayerTakeGold {
+    required string user_id = 0;
+    required uint32 amount = 1;
+}
+
+message ClientPlayerAddItem {
+    oneof item {
+        Spells spells = 0;
+        Wands wands = 1;
+        Items flasks = 2;
+    }
+
+    message Spells {
+        repeated Spell list = 0;
+    }
+    message Wands {
+        repeated Wand list = 0;
+    }
+    message Items {
+        repeated Item list = 0;
+    }
+}
+
+message ServerPlayerAddItem {
+    required string user_id = 0;
+    oneof item {
+        Spells spells = 1;
+        Wands wands = 2;
+        Items flasks = 3;
+    }
+
+    message Spells {
+        repeated Spell list = 0;
+    }
+    message Wands {
+        repeated Wand list = 0;
+    }
+    message Items {
+        repeated Item list = 0;
+    }
+}
+
+message ClientPlayerTakeItem {
+    required string id = 0;
+}
+
+message ServerPlayerTakeItem {
+    required string user_id = 0;
+    required string id = 1;
+}
+
+message ClientChat {
+    required string message = 0;
+}
+
+message ServerChat {
+    required string id = 0;
+    required string user_id = 1;
+    required string name = 2;
+    required string message = 3;
+}
+
+
+message ClientPlayerPickup {
+    oneof kind {
+        HeartPickup heart = 0;
+        OrbPickup orb = 1;
+    }
+
+    message HeartPickup {
+        required bool hp_perk = 0;
+    }
+
+    message OrbPickup {
+        required uint32 id = 0;
+    }
+}
+
+message ServerPlayerPickup {
+    string user_id = 0;
+    oneof kind {
+        HeartPickup heart = 1;
+        OrbPickup orb = 2;
+    }
+
+    message HeartPickup {
+        required bool hp_perk = 0;
+    }
+
+    message OrbPickup {
+        required uint32 id = 0;
+    }
+}
+
+message ClientNemesisPickupItem {
+    required string game_id = 0;
+}
+
+message ServerNemesisPickupItem {
+    required string user_id = 0;
+    required string game_id = 1;
+}
+
+message ClientNemesisAbility {
+    required string game_id = 0;
+}
+
+message ServerNemesisAbility {
+    required string user_id = 0;
+    required string game_id = 1;
+}
+
+message ClientPlayerDeath {
+    required bool is_win = 0;
+    optional uint32 game_time = 1;
+}
+
+message ServerPlayerDeath {
+    required string user_id = 0;
+    required bool is_win = 1;
+    optional uint32 game_time = 2;
+}
+
+message ClientPlayerNewGamePlus {
+    required uint32 amount = 0;
+}
+
+message ServerPlayerNewGamePlus {
+    string user_id = 0;
+    required uint32 amount = 1;
+}
+
+message ClientPlayerSecretHourglass {
+    required string material = 1;
+}
+
+message ServerPlayerSecretHourglass {
+    required string user_id = 0;
+    required string material = 1;
+}
+
+message ClientCustomModEvent {
+    required string payload = 0;
+}
+
+message ServerCustomModEvent {
+    required string user_id = 0;
+    required string payload = 1;
+}
+
+message Wand {
+    required string id = 0;
+    WandStats stats = 1;
+    repeated Spell always_cast = 2;
+    repeated Spell deck = 3;
+    optional string sent_by = 4;
+    optional string contributed_by = 5;
+
+    message WandStats {
+        required string sprite = 0;
+        //required float mana = 1;
+        required string ui_name = 2;
+        required float mana_max = 3;
+        required float mana_charge_speed = 4;
+        required uint32 reload_time = 5;
+        required uint32 actions_per_round = 6;
+        required uint32 deck_capacity = 7;
+        required bool shuffle_deck_when_empty = 8;
+        required float spread_degrees = 9;
+        required float speed_multiplier = 10;
+        required uint32 fire_rate_wait = 11;
+    }
+}
+
+message Spell {
+    required string id = 0;
+    required string game_id = 1;
+    optional string sent_by = 2;
+    optional string contributed_by = 3;
+    required int32 uses_remaining = 4;
+}
+
+message Item {
+    required string id = 0;
+    required Color color = 1;
+    repeated Material content = 2;
+    optional string sent_by = 3;
+    optional string contributed_by = 4;
+    required bool is_chest = 5;
+
+    message Color {
+        required float r = 0;
+        required float g = 1;
+        required float b = 2;
+    }
+    message Material {
+        required uint32 id = 0;
+        required uint32 amount = 1;
+    }
+}
+
+message LobbyAction {
+    oneof action {
+        ClientRoomCreate c_room_create = 0;
+        ServerRoomCreated s_room_created = 1;
+        ServerRoomCreateFailed s_room_create_failed = 2;
+
+        ClientRoomUpdate c_room_update = 3;
+        ServerRoomUpdated s_room_updated = 4;
+        ServerRoomUpdateFailed s_room_update_failed = 5;
+
+        ClientRoomFlagsUpdate c_room_flags_update = 6;
+        ServerRoomFlagsUpdated s_room_flags_updated = 7;
+        ServerRoomFlagsUpdateFailed s_room_flags_update_failed = 8;
+
+        ClientRoomDelete c_room_delete = 9;
+        ServerRoomDeleted s_room_deleted = 10;
+
+        ClientJoinRoom c_join_room = 11;
+        ServerJoinRoomSuccess s_join_room_success = 12;
+        ServerJoinRoomFailed s_join_room_failed = 13;
+        ServerUserJoinedRoom s_user_joined_room = 14;
+
+        ClientLeaveRoom c_leave_room = 15;
+        ServerUserLeftRoom s_user_left_room = 16;
+
+        ClientKickUser c_kick_user = 17;
+        ServerUserKicked s_user_kicked = 18;
+
+        ClientBanUser c_ban_user = 19;
+        ServerUserBanned s_user_banned = 20;
+
+        ClientReadyState c_ready_state = 21;
+        ServerUserReadyState s_user_ready_state = 22;
+
+        ClientStartRun c_start_run = 23;
+        ServerHostStart s_host_start = 24;
+
+        ClientRequestRoomList c_request_room_list = 26;
+        ServerRoomList s_room_list = 27;
+
+        ServerDisconnected s_disconnected = 30;
+    }
+}
+
+message ServerDisconnected {
+    string reason = 0;
+}
+
+message ClientRoomDelete {
+    required string id = 0;
+}
+
+message ServerRoomDeleted {
+    required string id = 0;
+}
+
+message ClientRoomCreate {
+    required string name = 0;
+    required uint32 gamemode = 1;
+    required uint32 max_users = 2;
+    optional string password = 3;
+}
+
+message ServerRoomCreated {
+    required string id = 0;
+    required string name = 1;
+    required uint32 gamemode = 2;
+    required uint32 max_users = 3;
+    optional string password = 4;
+    required bool locked = 5;
+    repeated User users = 6;
+
+    message User {
+        required string user_id = 0;
+        required string name = 1;
+        required bool ready = 2;
+        required bool owner = 3;
+    }
+}
+
+message ServerRoomCreateFailed {
+    string reason = 0;
+}
+
+message ClientRoomUpdate {
+    optional string name = 1;
+    optional uint32 gamemode = 2;
+    optional uint32 max_users = 3;
+    optional string password = 4;
+    optional bool locked = 5;
+}
+
+message ServerRoomUpdated {
+    optional string name = 1;
+    optional uint32 gamemode = 2;
+    optional uint32 max_users = 3;
+    optional string password = 4;
+    optional bool locked = 5;
+}
+
+message ServerRoomUpdateFailed{
+    string reason = 0;
+}
+
+message ClientRoomFlagsUpdate {
+    repeated GameFlag flags = 0;
+    message GameFlag {
+        required string flag = 0;
+        optional int32 int_val = 1;
+        optional string str_val = 2;
+        optional float float_val = 3;
+        optional bool bool_val = 4;
+    }
+}
+
+message ServerRoomFlagsUpdated {
+    repeated GameFlag flags = 0;
+    message GameFlag {
+        required string flag = 0;
+        optional int32 int_val = 1;
+        optional string str_val = 2;
+        optional float float_val = 3;
+        optional bool bool_val = 4;
+    }
+}
+
+message ServerRoomFlagsUpdateFailed {
+    string reason = 0;
+}
+
+message ClientJoinRoom {
+    required string id = 0;
+    optional string password = 1;
+}
+
+message ServerJoinRoomSuccess {
+    required string id = 0;
+    required string name = 1;
+    required uint32 gamemode = 2;
+    required uint32 max_users = 3;
+    optional string password = 4;
+    required bool locked = 5;
+    repeated User users = 6;
+
+    message User {
+        required string user_id = 0;
+        required string name = 1;
+        required bool ready = 2;
+        required bool owner = 3;
+    }
+}
+
+message ServerJoinRoomFailed {
+    string reason = 0;
+}
+
+message ServerUserJoinedRoom {
+    required string user_id = 1;
+    required string name = 2;
+}
+
+message ClientLeaveRoom {
+    required string user_id = 1; //should be empty msg
+}
+
+message ServerUserLeftRoom {
+    required string user_id = 1;
+}
+
+message ClientKickUser {
+    required string user_id = 1;
+}
+
+message ServerUserKicked {
+    required string user_id = 1;
+}
+
+message ClientBanUser {
+    required string user_id = 1;
+}
+
+message ServerUserBanned {
+    required string user_id = 1;
+}
+
+message ClientReadyState {
+    required bool ready = 0;
+    optional string seed = 1;
+    repeated string mods = 2;
+}
+
+message ServerUserReadyState {
+    required string user_id = 0;
+    required bool ready = 1;
+    optional string seed = 2;
+    repeated string mods = 3;
+}
+
+message ClientStartRun {
+    required bool forced = 0;
+}
+
+message ServerHostStart {
+    required bool forced = 0;
+}
+
+message ClientRequestRoomList {
+    required uint32 page = 0;
+}
+
+message ServerRoomList {
+    repeated Room rooms = 0;
+    optional uint32 pages = 1;
+    message Room {
+        required string id = 0;
+        required string name = 1;
+        required uint32 gamemode = 2;
+        required uint32 cur_users = 3;
+        required uint32 max_users = 4;
+        required bool protected = 5;
+        required string owner = 6;
+    }
+}
