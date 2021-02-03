@@ -206,7 +206,7 @@ if not initialized then
         GuiText(gui, 0, 0, player.name)
         local location = GameTextGetTranslatedOrNot(player.location)
         if (location == nil or location == "_EMPTY_") then location = "Mountain" end
-        location = location .. "\nDepth: " .. string.format("%.0f", player.y)
+        location = location .. "\nDepth: " .. string.format("%.0f", player.y or 0)
         GuiTooltip(gui, player.name, "Hp: " .. tostring(math.floor(player.curHp)) .. " / " .. tostring(math.floor(player.maxHp)) .. "\nLocation: " .. location)
         GuiOptionsAddForNextWidget(gui, GUI_OPTION.Layout_NextSameLine)
         GuiZSetForNextWidget(gui, 9)
