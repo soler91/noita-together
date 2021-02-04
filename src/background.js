@@ -6,6 +6,7 @@ import { app, protocol, BrowserWindow, dialog } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import { updateMod } from "./update.js"
+const appEvent = require("./appEvent")
 const wsClient = require("./ws.js")
 // Use later ?
 // import keytar from "keytar"
@@ -21,7 +22,9 @@ protocol.registerSchemesAsPrivileged([
 if (!app.isDefaultProtocolClient(NT_SCHEME)) {
     app.setAsDefaultProtocolClient(NT_SCHEME)
 }
-
+autoUpdater.on('update-downloaded', (info) => {
+    appEvent("UPDATE_DOWNLOADED", "")
+});
 async function createWindow() {
     // Create the browser window.
     mainWindow = new BrowserWindow({

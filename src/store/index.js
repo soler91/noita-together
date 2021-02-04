@@ -14,7 +14,14 @@ const ipcPlugin = (ipc) => {
             console.log(data)
         })
         */
-        
+        ipc.on("UPDATE_DOWNLOADED", () => {
+            store.dispatch("errDialog", {
+                title: "Update available",
+                body: "App finished downloading an update and will apply the next time you launch.",
+                canClose: false
+            })
+        })
+
         ipc.on("CONNECTION_LOST", () => {
             store.dispatch("errDialog", {
                 title: "Disconnected from server",
@@ -70,7 +77,7 @@ const ipcPlugin = (ipc) => {
         })
 
         ipc.on("sUserReadyState", (event, data) => {
-            console.log({gotready: data})
+            console.log({ gotready: data })
             store.commit("userReadyState", data)
         })
 
@@ -190,21 +197,21 @@ export default new Vuex.Store({
         roomHasPassword: (state) => {
             return state.room.protected
         },
-        flags: (state) => { 
+        flags: (state) => {
             const mode = state.room.gamemode
             const fDefaults = state.defaultFlags[mode]
             return fDefaults.map(flag => {
                 const found = state.roomFlags.find(f => f.id == flag.id)
                 if (!found && flag.type == "boolean") {
-                    return {...flag, value: false}
+                    return { ...flag, value: false }
                 }
                 else if (found && flag.type == "boolean") {
-                    return {...flag, value: true}
+                    return { ...flag, value: true }
                 }
                 else if (found) {
                     return flag
                 }
-                else {return undefined}
+                else { return undefined }
             }).filter(v => typeof v !== "undefined")
         }
     },
@@ -423,11 +430,11 @@ export default new Vuex.Store({
         },
         sendFlags: ({ state }) => {
             const flags = state.roomFlags.filter(v => typeof v.value == v.type)
-            .map(val => {
-                const flag = { flag: val.id }
-                if (typeof val.value == "number") { flag.intVal = val.value }
-                return flag
-            })
+                .map(val => {
+                    const flag = { flag: val.id }
+                    if (typeof val.value == "number") { flag.intVal = val.value }
+                    return flag
+                })
             console.log("store")
             console.log({ flags })
             ipcRenderer.send("CLIENT_MESSAGE", {
