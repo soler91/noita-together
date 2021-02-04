@@ -58,6 +58,10 @@ export default {
     font-family: Helvetica, Arial, sans-serif;
 }
 
+body {
+    overflow-y: hidden;
+}
+
 .wrapper {
     display: flex;
     flex-flow: column;
