@@ -8,11 +8,11 @@
 </template>
 
 <script>
-import { shell, app } from "electron";
+import { shell, remote } from "electron";
 export default {
     name: "vFooter",
     beforeMount() {
-        this.version = app.getVersion()
+        this.version = remote.app.getVersion()
     },
     data() {
         return {
