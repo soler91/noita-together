@@ -1,5 +1,6 @@
 <template>
     <div class="footer">
+        <span id="app-version">v0.9.11</span>
         <div class="donate" @click="OpenKofi">
             <span>Support me on ko-fi <i slot="icon" class="fas fa-heart"></i></span>
         </div>
@@ -30,6 +31,12 @@ export default {
     min-height: 32px;
     max-height: 32px;
     background-color: #2d2d2d;
+}
+
+#app-version {
+    color: rgba(255, 255, 255, 0.4);
+    margin-left: 0.5em;
+    margin-right: auto;
 }
 
 .donate {
