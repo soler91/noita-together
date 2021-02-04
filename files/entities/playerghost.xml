@@ -1,10 +1,10 @@
 <Entity 
   tags="nt_ghost" 
   serialize="0" >
-
+    <!--
   <StreamingKeepAliveComponent>
   </StreamingKeepAliveComponent>
-
+    -->
   <_Transform 
     position.x="0" 
     position.y="0" 
