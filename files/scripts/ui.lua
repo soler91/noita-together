@@ -97,10 +97,14 @@ if not initialized then
             GuiImage(gui, next_id(), x + ox, y + oy, sprite, 1, 1, 1)
             local left, right, hover = previous_data(gui)
             if (hover) then
+                local player = PlayerList[item.sentBy] or {name="Me"}
                 local nx, ny = (screen_width / 2) - 260, (screen_height/2) - 95
                 local nox, nyx = 5, 0
                 GuiZSetForNextWidget(gui, 6)
                 GuiImageNinePiece(gui, next_id, nx, ny, 160, 160, 1)
+                GuiZSetForNextWidget(gui, 5)
+                GuiText(gui, nx + nox, ny + nyx, "Sent By " .. player.name)
+                nyx = nyx + 15
                 
                 for key, value in ipairs(wand_tooltip(item.stats))do
                     GuiZSetForNextWidget(gui, 5)
