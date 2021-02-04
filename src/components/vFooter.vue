@@ -1,6 +1,6 @@
 <template>
     <div class="footer">
-        <span id="app-version">v0.9.11</span>
+        <span id="app-version">v{{version}}</span>
         <div class="donate" @click="OpenKofi">
             <span>Support me on ko-fi <i slot="icon" class="fas fa-heart"></i></span>
         </div>
@@ -8,12 +8,16 @@
 </template>
 
 <script>
-import { shell } from "electron";
+import { shell, app } from "electron";
 export default {
     name: "vFooter",
+    beforeMount() {
+        this.version = app.getVersion()
+    },
     data() {
         return {
-            kofiUrl: "https://ko-fi.com/soler91"
+            kofiUrl: "https://ko-fi.com/soler91",
+            version: "0"
         }
     },
     methods: {
