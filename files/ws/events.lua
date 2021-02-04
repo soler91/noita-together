@@ -156,6 +156,7 @@ wsEvents = {
         end
     end,
     AddPlayer = function(data)
+        if (PlayerList[data.userId] ~= nil) then return end
         PlayerList[data.userId] = {
             x = 0,
             y = 0,
@@ -166,8 +167,10 @@ wsEvents = {
             location = "Mountain",
             sampo = false
         }
-        SpawnPlayerGhost(data, data.userId)
         PlayerCount = PlayerCount + 1
+        if (not HideGhosts) then
+            SpawnPlayerGhost(data, data.userId)
+        end
     end,
     RemovePlayer = function(data)
         DespawnPlayerGhost(data.userId)
