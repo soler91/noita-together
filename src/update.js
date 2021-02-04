@@ -13,6 +13,10 @@ exports.updateMod = async () => {
     let error = false;
 
     const updater = new Updater(branch);
+    updater.on('gamepath_error', () => {
+        appEvent("GAME_PATH_NOT_FOUND")
+    })
+
     updater.on('run_start', () => { updateLog(`[update] Self-update started (Branch: ${updater.branch})`); });
     updater.on('check_start', (serverIndex) => { if (updatelog) updateLog(`[update] Update check started (Server: ${serverIndex})`); });
     updater.on('check_success', (serverIndex, operations) => { if (updatelog) updateLog(`[update] Update check finished (Server: ${serverIndex}), ${operations.length} operations required`); });
