@@ -5,7 +5,8 @@ module.exports = {
             builderOptions: {
                 productName: "Noita Together",
                 win: {
-                    target: "nsis"
+                    target: "nsis",
+                    requestedExecutionLevel: "requireAdministrator"//eugh
                 },
                 nsis: {
                     perMachine: true,
