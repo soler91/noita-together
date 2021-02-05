@@ -9,7 +9,7 @@
             <vButton @click="leaveRoom">
                 <i class="fas fa-arrow-left" slot="icon"></i>
             </vButton>
-            <h1>{{ room.name }}</h1>
+            <h1>[{{users.length}}/{{room.maxUsers}}]{{ room.name }}</h1>
             <div class="room-edit">
                 <vButton @click="lockRoom" :disabled="!isHost">
                     <i class="fas fa-lock" slot="icon" v-if="room.locked"></i>
