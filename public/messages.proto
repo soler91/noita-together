@@ -430,6 +430,7 @@ message LobbyAction {
         ServerRoomList s_room_list = 27;
 
         ServerDisconnected s_disconnected = 30;
+        ServerRoomAddToList s_room_add_to_list = 31;
     }
 }
 
@@ -610,5 +611,20 @@ message ServerRoomList {
         required uint32 max_users = 4;
         required bool protected = 5;
         required string owner = 6;
+        required bool locked = 7;
+    }
+}
+
+message ServerRoomAddToList {
+    required Room room = 0;
+    message Room {
+        required string id = 0;
+        required string name = 1;
+        required uint32 gamemode = 2;
+        required uint32 cur_users = 3;
+        required uint32 max_users = 4;
+        required bool protected = 5;
+        required string owner = 6;
+        required bool locked = 7;
     }
 }
