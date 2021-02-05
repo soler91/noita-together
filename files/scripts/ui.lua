@@ -177,7 +177,7 @@ if not initialized then
         local offx, offy = 10, 0
         GuiOptionsAdd(gui, GUI_OPTION.NoPositionTween)
         GuiZSetForNextWidget(gui, 10)
-        GuiImageNinePiece(gui, next_id(), pos_x, pos_y, 160, 170, 1, "data/ui_gfx/inventory/quick_inventory_box_hovered.png")
+        GuiImageNinePiece(gui, next_id(), pos_x, pos_y, 160, 170, 1, "mods/noita-together/files/ui/background.png")
 
         for i = 1, 25 do
             draw_bank_item(pos_x + offx,pos_y + offy, i)
@@ -237,7 +237,7 @@ if not initialized then
         local pos_x, pos_y = (screen_width / 2) + 85, (screen_height/2) - 90
         GuiOptionsAdd(gui, GUI_OPTION.NoPositionTween)
         GuiZSetForNextWidget(gui, 10)
-        GuiImageNinePiece(gui, next_id(), pos_x, pos_y, 120, 65, 1, "data/ui_gfx/inventory/quick_inventory_box_hovered.png")
+        GuiImageNinePiece(gui, next_id(), pos_x, pos_y, 120, 65, 1, "mods/noita-together/files/ui/background.png")
         GuiZSetForNextWidget(gui, 9)
         GuiText(gui, pos_x, pos_y, "Gold: " .. tostring(BankGold))
 
