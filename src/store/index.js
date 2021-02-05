@@ -89,6 +89,14 @@ const ipcPlugin = (ipc) => {
             store.commit("userReadyState", data)
         })
 
+        ipc.on("sRoomAddToList", (event, data) => {
+            store.commit("addRoom", data.room)
+        })
+
+        ipc.on("sRoomDeleted", (event, data) => {
+            store.commit("deleteRoom", data.id)
+        })
+
         ipc.on("sRoomList", (event, data) => {
             store.commit("setRooms", data.rooms)
         })
@@ -133,16 +141,7 @@ export default new Vuex.Store({
             name: "",
             id: 0
         },
-        lobbies: [
-            /*{
-                id: String,
-                name: String,
-                gamemode: Number,
-                curUsers: Number,
-                maxUsers: Number,
-                protected: Boolean
-            }*/
-        ],
+        lobbies: [],
         room: {
             id: "",
             name: "",
@@ -244,6 +243,12 @@ export default new Vuex.Store({
         setUser: (state, payload) => {
             state.user.name = payload.display_name
             state.user.id = payload.id
+        },
+        addRoom: (state, payload) => {
+            state.lobbies.push(payload)
+        },
+        deleteRoom: (state, id) => {
+            state.lobbies = state.lobbies.filter(room => room.id != id)
         },
         setRooms: (state, payload) => {
             state.lobbies = payload
