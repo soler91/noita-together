@@ -23,7 +23,7 @@ ModLuaFileAppend("data/entities/animals/boss_centipede/sampo_pickup.lua", "mods/
 ModLuaFileAppend("data/scripts/items/heart.lua", "mods/noita-together/files/append/heart_append.lua")
 ModLuaFileAppend("data/scripts/items/orb_init.lua", "mods/noita-together/files/append/orb_init.lua")
 ModLuaFileAppend("data/scripts/items/orb_pickup.lua", "mods/noita-together/files/append/orb_pickup.lua")
-
+ModLuaFileAppend("data/scripts/perks/perk_pickup.lua", "mods/noita-together/files/append/perk_pickup.lua")
 HideGhosts = false
 HideChat = false
 BankItems = {}

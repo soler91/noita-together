@@ -1,4 +1,19 @@
+dofile( "data/scripts/perks/perk.lua" )
 customEvents = {
+    TeamPerk = function(data)
+        local user = PlayerList[data.userId]
+        if (user ~= nil) then
+            GamePrintImportant(user.name .. " sent you a perk", "enjoy")
+        end
+        local player = GetPlayer()
+        local x, y = GetPlayerPos()
+        if (player ~= nil) then
+            local perk_entity = perk_spawn(x, y - 8, data.id)
+            if (perk_entity ~= nil) then
+                perk_pickup(perk_entity, player, nil, true, false)
+            end
+        end
+    end,
     AngerySteve = function (data)
         if (GameHasFlagRun("sync_steve")) then
             AngerSteve(data.userId)
@@ -226,6 +241,12 @@ wsEvents = {
         for _, entry in ipairs(data) do
             if (entry.flag == "sync_world_seed") then
                 ModSettingSet( "noita_together.seed", entry.intVal )
+                local seed = tonumber(StatsGetValue("world_seed"))
+                if (entry.intVal > 0 and seed ~= entry.intVal) then
+                    GameTriggerGameOver()
+                elseif (entry.intVal == seed) then
+                    ModSettingSet( "noita_together.seed", 0 )
+                end
             else
                 GameAddFlagRun(entry.flag)
             end
