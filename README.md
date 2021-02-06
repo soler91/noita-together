@@ -10,3 +10,4 @@ mod uses [pollws](https://github.com/probable-basilisk/pollws/) made by probable
 
 ### **How to install [(click here)](https://github.com/soler91/noita-together/wiki/Installation)**
 ### **How to use [(click here)](https://github.com/soler91/noita-together/wiki/Usage)**
+### **FAQ [(click here)](https://github.com/soler91/noita-together/wiki/FAQ)**
