@@ -151,16 +151,7 @@ function PlayerHeartPickup(perk, userId)
     local damagemodels = EntityGetComponent(player, "DamageModelComponent")
     local variablestorages = EntityGetComponent(entity_who_picked, "VariableStorageComponent")
     local playercount = NT.player_count or 1
-    local multiplier = 1
-
-    if (variablestorages ~= nil) then
-        for key, comp_id in pairs(variablestorages) do
-            local var_name = ComponentGetValue(comp_id, "name")
-            if (var_name == "hearts_more_extra_hp") then
-                multiplier = ComponentGetValueInt(comp_id, "value_int")
-            end
-        end
-    end
+    local multiplier = tonumber( GlobalsGetValue( "HEARTS_MORE_EXTRA_HP_MULTIPLIER", "1" ) )
 
     if (damagemodels ~= nil) then
         for i, damagemodel in ipairs(damagemodels) do
