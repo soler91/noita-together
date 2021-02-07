@@ -2,7 +2,7 @@ dofile( "data/scripts/perks/perk.lua" )
 customEvents = {
     TeamPerk = function(data)
         local list = dofile("mods/noita-together/files/scripts/perks.lua")
-        if (not GameHasFlagRun("NT_GAMEMODE_CO_OP") or list[data.id] == false or list[data.id] == nil) then return nil end
+        if (not GameHasFlagRun("NT_GAMEMODE_CO_OP") or not GameHasFlagRun("team_perks") or list[data.id] == false or list[data.id] == nil) then return nil end
         local user = PlayerList[data.userId]
         if (user ~= nil) then
             GamePrintImportant(user.name .. " sent you a perk", "enjoy")
@@ -145,7 +145,7 @@ wsEvents = {
     RequestGameInfo = function(data)
         local seed = StatsGetValue("world_seed")
         local mods = ModGetActiveModIDs()
-        SendWsEvent({event="GameInfo", payload={seed=seed, mods=mods}})
+        SendWsEvent({event="GameInfo", payload={seed=seed, mods=mods, version="v0.9.0"}})
         SendWsEvent({event="RequestPlayerList", payload={}})
         PopulateSpellList()
     end,
