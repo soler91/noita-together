@@ -63,6 +63,12 @@ message GameAction {
     
         ClientCustomModEvent c_custom_mod_event = 34;
         ServerCustomModEvent s_custom_mod_event = 35;
+
+        ClientRespawnPenalty c_respawn_penalty = 36;
+        ServerRespawnPenalty s_respawn_penalty = 37;
+
+        ClientAngerySteve c_angery_steve = 38;
+        ServerAngerySteve s_angery_steve = 39;
     }
 }
 
@@ -338,6 +344,22 @@ message ServerCustomModEvent {
     required string payload = 1;
 }
 
+message ClientRespawnPenalty {
+    required uint32 deaths = 0;
+}
+
+message ServerRespawnPenalty {
+    required string user_id = 0;
+}
+
+message ClientAngerySteve {
+    required bool idk = 0;
+}
+
+message ServerAngerySteve {
+    required string user_id = 0;
+}
+
 message Wand {
     required string id = 0;
     WandStats stats = 1;
@@ -580,6 +602,7 @@ message ClientReadyState {
     optional string seed = 1;
     repeated string mods = 2;
     optional string version = 3;
+    optional bool beta = 4;
 }
 
 message ServerUserReadyState {
@@ -588,6 +611,7 @@ message ServerUserReadyState {
     optional string seed = 2;
     repeated string mods = 3;
     optional string version = 4;
+    optional bool beta = 5;
 }
 
 message ClientStartRun {
