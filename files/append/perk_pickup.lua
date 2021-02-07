@@ -15,7 +15,7 @@ function item_pickup( entity_item, entity_who_picked, item_name )
 			end
 		end
 	end
-    if (GameHasFlagRun("NT_GAMEMODE_CO_OP") and list[perk_id] == true) then
+    if (GameHasFlagRun("NT_GAMEMODE_CO_OP") and GameHasFlagRun("team_perks") and list[perk_id] == true) then
         local queue = json.decode(NT.wsQueue)
         table.insert(queue, {event="CustomModEvent", payload={name="TeamPerk", id=perk_id}})
         NT.wsQueue = json.encode(queue)
