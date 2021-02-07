@@ -320,7 +320,7 @@ export default new Vuex.Store({
                 name: payload.name.trim(),
                 message: payload.message.trim()
             })
-            if (state.roomChat.length > 100) {
+            if (state.roomChat.length > 250) {
                 state.roomChat.shift()
             }
         },
