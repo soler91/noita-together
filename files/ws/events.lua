@@ -16,16 +16,6 @@ customEvents = {
             end
         end
     end,
-    AngerySteve = function (data)
-        if (GameHasFlagRun("sync_steve")) then
-            AngerSteve(data.userId)
-        end
-    end,
-    RespawnPenalty = function (data)
-        if (GameHasFlagRun("death_penalty_weak_respawn")) then
-            RespawnPenalty(data.userId)
-        end
-    end,
     SampoPickup = function (data)
         local player = PlayerList[data.userId].name
         if (player ~= nil) then
@@ -98,6 +88,16 @@ customEvents = {
     end
 }
 wsEvents = {
+    AngerySteve = function (data)
+        if (GameHasFlagRun("sync_steve")) then
+            AngerSteve(data.userId)
+        end
+    end,
+    RespawnPenalty = function (data)
+        if (GameHasFlagRun("death_penalty_weak_respawn")) then
+            RespawnPenalty(data.userId)
+        end
+    end,
     StartRun = function ()
         local player = GetPlayer()
         local controls_component = EntityGetFirstComponent(player, "ControlsComponent")
@@ -145,7 +145,7 @@ wsEvents = {
     RequestGameInfo = function(data)
         local seed = StatsGetValue("world_seed")
         local mods = ModGetActiveModIDs()
-        SendWsEvent({event="GameInfo", payload={seed=seed, mods=mods, version="v0.9.0"}})
+        SendWsEvent({event="GameInfo", payload={seed=seed, mods=mods, version="v0.9.0", beta=GameIsBetaBuild()}})
         SendWsEvent({event="RequestPlayerList", payload={}})
         PopulateSpellList()
     end,
