@@ -90,7 +90,8 @@ if not initialized then
             GuiTooltip(gui, spell.name, spell_description)
         elseif (item.stats ~= nil) then --wand
             GuiZSetForNextWidget(gui, 7)
-            local sprite = wands[tonumber(item.stats.sprite)].file
+            local idx = tonumber(item.stats.sprite) or 123 --idk mang
+            local sprite = wands[idx].file
             local w, h = GuiGetImageDimensions(gui, sprite, 1)
             local ox = ((w - 20) / 2) * -1
             local oy = ((h - 20) / 2) * -1
