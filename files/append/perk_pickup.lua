@@ -4,18 +4,7 @@ dofile_once("mods/noita-together/files/scripts/json.lua")
 local _item_pickup = item_pickup
 
 function item_pickup( entity_item, entity_who_picked, item_name )
-    local list = {
-        EXTRA_MONEY=true,
-        STRONG_KICK=true,
-        GLOBAL_GORE=true,
-        EXTRA_HP=true,
-        HEARTS_MORE_EXTRA_HP=true,
-        ATTRACT_ITEMS=true,
-        EXTRA_SHOP_ITEM=true,
-        GENOME_MORE_HATRED=true,
-        GENOME_MORE_LOVE=true,
-        PEACE_WITH_GODS=true
-    }
+    local list = dofile("mods/noita-together/files/scripts/perks.lua")
 	local perk_id = ""
 	local components = EntityGetComponent( entity_item, "VariableStorageComponent" )
 	if ( components ~= nil ) then
@@ -26,7 +15,7 @@ function item_pickup( entity_item, entity_who_picked, item_name )
 			end
 		end
 	end
-    if (GameHasFlagRun("NT_GAMEMODE_CO_OP")) then
+    if (GameHasFlagRun("NT_GAMEMODE_CO_OP") and list[perk_id] == true) then
         local queue = json.decode(NT.wsQueue)
         table.insert(queue, {event="CustomModEvent", payload={name="TeamPerk", id=perk_id}})
         NT.wsQueue = json.encode(queue)

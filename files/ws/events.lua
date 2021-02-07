@@ -1,6 +1,8 @@
 dofile( "data/scripts/perks/perk.lua" )
 customEvents = {
     TeamPerk = function(data)
+        local list = dofile("mods/noita-together/files/scripts/perks.lua")
+        if (not GameHasFlagRun("NT_GAMEMODE_CO_OP") or list[data.id] == false or list[data.id] == nil) then return nil end
         local user = PlayerList[data.userId]
         if (user ~= nil) then
             GamePrintImportant(user.name .. " sent you a perk", "enjoy")
@@ -244,8 +246,8 @@ wsEvents = {
                 local seed = tonumber(StatsGetValue("world_seed"))
                 if (entry.intVal > 0 and seed ~= entry.intVal) then
                     GameTriggerGameOver()
-                elseif (entry.intVal == seed) then
-                    ModSettingSet( "noita_together.seed", 0 )
+                --elseif (entry.intVal == seed) then messes up random perks/items sadge
+                    --ModSettingSet( "noita_together.seed", 0 )
                 end
             else
                 GameAddFlagRun(entry.flag)
