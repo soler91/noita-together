@@ -119,7 +119,7 @@ export default new Vuex.Store({
     state: {
         defaultFlags: {
             0: [
-                { id: "allow_mods", name: "Allow Mods", tooltip: "Lets players use extra mods.", type: "boolean", value: true },
+                { id: "team_perks", name: "Team Perks", tooltip: "When grabbing certain perks (not all) the whole team will also get them.", type: "boolean", value: true },
                 { id: "sync_steve", name: "Sync Steve", tooltip: "Angers the gods for everyone.", type: "boolean", value: true },
                 { id: "sync_hearts", name: "Sync Hearts", tooltip: "When someone picks up a heart everyone else gets it too.", type: "boolean", value: true },
                 { id: "sync_orbs", name: "Sync Orbs", tooltip: "When someone picks up an orb everyone else gets it too.", type: "boolean", value: true },
@@ -235,6 +235,7 @@ export default new Vuex.Store({
                     user.ready = payload.ready
                     user.seed = payload.seed
                     user.mods = payload.mods
+                    user.version = payload.version
                 }
                 return user
             })

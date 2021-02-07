@@ -43,6 +43,7 @@
                                 </span>
                                 <div v-if="user.ready">
                                     <p>Seed: {{user.seed}}</p>
+                                    <p>Mod version: {{user.version}}</p>
                                     <p>Mods:</p>
                                     <p v-for="mod in user.mods" :key="mod">{{mod}}</p>
                                 </div>
