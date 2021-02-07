@@ -205,7 +205,7 @@ if not initialized then
         if (player.sampo) then
             GuiOptionsAddForNextWidget(gui, GUI_OPTION.Layout_NextSameLine)
             GuiZSetForNextWidget(gui, 9)
-            GuiImage(gui, next_id(), 88, 0, "data/entities/animals/boss_centipede/sampo.png", 0.5, 0.5, 0.5)
+            GuiImage(gui, next_id(), 88, 0, "mods/noita-together/files/ui/sampo.png", 0.5, 1, 1)
         end
         GuiZSetForNextWidget(gui, 10)
         GuiText(gui, 0, 0, player.name)
