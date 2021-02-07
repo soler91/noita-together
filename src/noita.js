@@ -1,6 +1,16 @@
 const EventEmitter = require("events")
 const path = require("path")
 const ws = require("ws")
+const { v4: uuidv4 } = require("uuid")
+const appEvent = require("./appEvent")
+function sysMsg(message) {
+    appEvent("sChat", {
+        id: uuidv4(),
+        userId: "-1",
+        name: "[System]",
+        message
+    })
+}
 class NoitaGame extends EventEmitter {
     constructor() {
         super()
@@ -296,10 +306,18 @@ class NoitaGame extends EventEmitter {
         console.log({ payload })
         if (payload.userId == this.user.userId) { return }
         this.sendEvt("PlayerPickup", payload)
+        const player = this.players[payload.userId]
+        if (player) {
+            sysMsg(`${player.name} picked up a ${typeof payload.heart != "undefined" ? "heart" : "orb"}.`)
+        }
     }
     sPlayerDeath(payload) {
         if (payload.userId == this.user.userId) { return }
         this.sendEvt("PlayerDeath", payload)
+        const player = this.players[payload.userId]
+        if (player) {
+            sysMsg(`${player.name} has died.`)
+        }
     }
     //sPlayerNewGamePlus (payload) => {},
     sPlayerSecretHourglass(payload) {
@@ -312,6 +330,22 @@ class NoitaGame extends EventEmitter {
             this.sendEvt("CustomModEvent", { userId: payload.userId, ...JSON.parse(payload.payload) })
         } catch (error) {
 
+        }
+    }
+    sRespawnPenalty(payload) {
+        if (payload.userId == this.user.userId) { return }
+        this.sendEvt("RespawnPenalty", payload)
+        const player = this.players[payload.userId]
+        if (player) {
+            sysMsg(`${player.name} had to respawn against his will.`)
+        }
+    }
+    sAngerySteve(payload) {
+        if (payload.userId == this.user.userId) { return }
+        this.sendEvt("AngerySteve", payload)
+        const player = this.players[payload.userId]
+        if (player) {
+            sysMsg(`${player.name} has angered the gods.`)
         }
     }
     /*
