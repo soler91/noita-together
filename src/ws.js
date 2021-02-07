@@ -130,7 +130,8 @@ module.exports = (data) => {
             const msg = messageHandler.encodeLobbyMsg("cReadyState", {
                 ready: true,
                 seed: event.seed,
-                mods: event.mods
+                mods: event.mods,
+                version: event.version
             })
             sendMsg(msg)
         })
