@@ -65,6 +65,7 @@ if (#wands > 0 and GameHasFlagRun("send_wands")) then
                 local sprite_id = string.match(wand_sprite, "wand_([0-9]+)")
                 if (sprite_id ~= nil) then
                     wand_sprite = tonumber(sprite_id) + 1
+                    wand_sprite = math.min(wand_sprite, 1000)
                 else
                     wand_sprite = Random(10,500)
                 end

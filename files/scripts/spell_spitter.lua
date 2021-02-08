@@ -38,7 +38,7 @@ function SpawnWand(wand, x, y)
     if (force_unshuffle) then
         wand.stats.shuffleDeckWhenEmpty = false
     end
-    local wand_info = wands[tonumber(wand.stats.sprite)]
+    local wand_info = wands[math.min(tonumber(wand.stats.sprite), 1000)]
     SetWandSprite(wand_entity, ability_comp, wand_info.file, wand_info.grip_x, wand_info.grip_y, (wand_info.tip_x - wand_info.grip_x), (wand_info.tip_y - wand_info.grip_y))
     ComponentSetValue2(ability_comp, "ui_name", wand.stats.uiName)
     ComponentObjectSetValue2(ability_comp, "gun_config", "reload_time", wand.stats.reloadTime)
