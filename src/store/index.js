@@ -235,7 +235,8 @@ export default new Vuex.Store({
                     user.ready = payload.ready
                     user.seed = payload.seed
                     user.mods = payload.mods
-                    user.version = payload.version
+                    user.version = payload.version,
+                    user.beta = payload.beta
                 }
                 return user
             })

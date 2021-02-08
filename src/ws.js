@@ -131,7 +131,8 @@ module.exports = (data) => {
                 ready: true,
                 seed: event.seed,
                 mods: event.mods,
-                version: event.version
+                version: event.version,
+                beta: event.beta
             })
             sendMsg(msg)
         })
