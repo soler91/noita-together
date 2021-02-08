@@ -2,16 +2,25 @@
     <div class="tooltip-wrapper">
         <slot name="content">
             <!-- TODO show personal alert for user -->
-            <vTooltip v-if="isHost && matches.length > 0">
+            <vTooltip v-if="isHost && host.ready && matches.length > 0">
                 <i class="fas fa-exclamation-triangle" slot="content"></i>
+                <div>
+                    <p v-for="entry in matches" :key="entry">{{ entry }}</p>
+                </div>
             </vTooltip>
-            
+
             <span :class="user.ready ? 'user-ready' : 'user-not-ready'">
                 {{ user.ready ? "Ready" : "Not Ready" }}
             </span>
         </slot>
         <div class="tooltip" ref="tooltip">
-            <div v-if="isReady"></div>
+            <div v-if="isReady">
+                <p>Seed: {{ user.seed }}</p>
+                <p>Branch: {{branch}}</p>
+                <p>Mod version: {{ version }}</p>
+                <p>Mods:</p>
+                <p v-for="mod in user.mods" :key="mod">{{ mod }}</p>
+            </div>
             <div v-else>
                 <p>Waiting for game...</p>
             </div>
@@ -21,10 +30,10 @@
 
 <script>
 import { createPopper } from "@popperjs/core";
-import vTooltip from "@/components/vTooltip.vue"
+import vTooltip from "@/components/vTooltip.vue";
 export default {
     components: {
-        vTooltip
+        vTooltip,
     },
     props: {
         user: {
@@ -38,13 +47,14 @@ export default {
             matches: {
                 version: {
                     hostMsg: "User is not on the same mod version.",
-                    userMsg: "You are not in the samge game branch as the host."
+                    userMsg:
+                        "You are not in the samge game branch as the host.",
                 },
                 beta: {
                     hostMsg: "User is not in the same game branch.",
-                    userMsg: "You are not in the same game branch as the host."
-                }
-            }
+                    userMsg: "You are not in the same game branch as the host.",
+                },
+            },
         };
     },
     computed: {
@@ -58,7 +68,7 @@ export default {
             const users = this.$store.state.room.users;
             for (const user of users) {
                 if (user.owner) {
-                    return user
+                    return user;
                 }
             }
         },
@@ -73,15 +83,15 @@ export default {
             return this.user.beta ? "Beta" : "Main";
         },
         matchHost() {
-            const messages = []
-            const msg = this.isHost ? "hostMsg" : "userMsg"
-            for(const key in this.matches) {
+            const messages = [];
+            const msg = this.isHost ? "hostMsg" : "userMsg";
+            for (const key in this.matches) {
                 if (this.user[key] != host[key]) {
-                    messages.push(this.matches[key][msg])
+                    messages.push(this.matches[key][msg]);
                 }
             }
-            return messages
-        }
+            return messages;
+        },
     },
     mounted() {
         if (this.$refs.tooltip) {
