@@ -37,18 +37,7 @@
                     <tr v-for="user in users" :key="user.userId">
                         <td>{{ user.name }}</td>
                         <td>
-                            <vTooltip >
-                                <span slot="content" :class="user.ready ? 'user-ready' : 'user-not-ready'">
-                                    {{user.ready ? "Ready" : "Not Ready"}}
-                                </span>
-                                <div v-if="user.ready">
-                                    <p>Seed: {{user.seed}}</p>
-                                    <p>Mod version: {{user.version}}</p>
-                                    <p>Mods:</p>
-                                    <p v-for="mod in user.mods" :key="mod">{{mod}}</p>
-                                </div>
-                                <div v-else><p>Waiting for game...</p></div>
-                            </vTooltip>
+                            <vUserTooltip :user="user"></vUserTooltip>
                         </td>
                         <td v-if="isHost && user.userId != userId">
                             <vButton
@@ -101,12 +90,14 @@
 <script>
 import vButton from "@/components/vButton.vue";
 import vRoomFlags from "@/components/vRoomFlags.vue";
-import vTooltip from "@/components/vTooltip.vue"
+//import vTooltip from "@/components/vTooltip.vue"
+import vUserTooltip from "@/components/vUserTooltip.vue"
 export default {
     components: {
         vButton,
         vRoomFlags,
-        vTooltip
+        //vTooltip,
+        vUserTooltip
     },
     data() {
         return {
