@@ -50,9 +50,9 @@ class NoitaGame extends EventEmitter {
             this.server = new ws.Server({ port: this.port })
         }
         this.server.on("connection", (socket) => {
-            console.log("[Game WS] New connection(?)")
+            //console.log("[Game WS] New connection(?)")
             if (!this.isConnectionLocalhost(socket) || this.rejectConnections) {
-                console.log("terminate")
+                //console.log("terminate")
                 socket.terminate()
                 return
             }
@@ -61,7 +61,7 @@ class NoitaGame extends EventEmitter {
 
             socket.on("close", () => {
                 if (this.client === socket) {
-                    console.log("[Game] Disconnected.")
+                    //console.log("[Game] Disconnected.")
                     this.client = null
                     this.emit("GAME_CLOSE")
                 }
@@ -97,7 +97,7 @@ class NoitaGame extends EventEmitter {
         if (data.slice(0, 1) == ">") {
             if (data == ">RES> [no value]") { return }
             else {
-                console.log(data)
+                //console.log(data)
                 return
             }
         }
@@ -112,7 +112,7 @@ class NoitaGame extends EventEmitter {
         }
         if (dataJSON.event == "ping") {
             if (!this.client) {
-                console.log("[Game] Connected.")
+                //console.log("[Game] Connected.")
                 this.client = socket
                 this.emit("GAME_OPEN")
                 this.bankToGame()
@@ -148,7 +148,7 @@ class NoitaGame extends EventEmitter {
     toGame(obj = {}) {
         const evt = JSON.stringify(obj)
         if (!this.client) {
-            console.log("[Game] Pushed code to queue.")
+            //console.log("[Game] Pushed code to queue.")
             this.queue.push(evt)
             return
         }
@@ -308,8 +308,6 @@ class NoitaGame extends EventEmitter {
         this.emit("HostTake", { userId: payload.userId, id: payload.id, success: false })
     }
     sPlayerPickup(payload) {
-        console.log("[PICKUP]")
-        console.log({ payload })
         const player = payload.userId == this.user.userId ? this.user : this.players[payload.userId]
         if (player) {
             sysMsg(`${player.name} picked up a ${payload.heart ? "heart" : "orb"}.`)

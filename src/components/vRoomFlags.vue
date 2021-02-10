@@ -115,7 +115,7 @@ export default {//braincells where'd ya go
         applyFlags() {
             const flags = this.flags;
             const payload = [];
-            console.log({a: flags.death})
+            //console.log({a: flags.death})
             for (const flag in flags.death) {
                 if (flags.death[flag].name == this.deathFlag) {
                     flags.death[flag].value = true
@@ -138,7 +138,7 @@ export default {//braincells where'd ya go
                 if (isNaN(val)) { val = 0 }
                 payload.push({flag: flags.world[flag].id, value: Math.min(val, 4294967295)})
             }
-            console.log({ flags: payload })
+            //console.log({ flags: payload })
             this.$emit("applyFlags", { flags: payload });
         },
         close() {

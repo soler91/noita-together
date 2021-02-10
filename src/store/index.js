@@ -85,7 +85,7 @@ const ipcPlugin = (ipc) => {
         })
 
         ipc.on("sUserReadyState", (event, data) => {
-            console.log({ gotready: data })
+            //console.log({ gotready: data })
             store.commit("userReadyState", data)
         })
 
@@ -450,8 +450,8 @@ export default new Vuex.Store({
                     if (typeof val.value == "number") { flag.intVal = val.value }
                     return flag
                 })
-            console.log("store")
-            console.log({ flags })
+            //console.log("store")
+            //console.log({ flags })
             ipcRenderer.send("CLIENT_MESSAGE", {
                 key: "cRoomFlagsUpdate",
                 payload: { flags }
