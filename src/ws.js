@@ -177,6 +177,11 @@ module.exports = (data) => {
         sendMsg(msg)
     })
 
+    noita.on("AngerySteve", (event) => {
+        const msg = messageHandler.encodeGameMsg("cAngerySteve", event)
+        sendMsg(msg)
+    })
+
     noita.on("SendItems", (event) => {
         const payload = {}
         if (event.spells) {
