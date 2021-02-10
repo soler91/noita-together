@@ -3,6 +3,7 @@ const path = require("path")
 const ws = require("ws")
 const { v4: uuidv4 } = require("uuid")
 const appEvent = require("./appEvent")
+import { ipcMain } from 'electron'
 function sysMsg(message) {
     appEvent("sChat", {
         id: uuidv4(),
@@ -16,7 +17,7 @@ class NoitaGame extends EventEmitter {
         super()
         this.setMaxListeners(0)
         this.port = 1234
-        this.server = new ws.Server({ port: this.port })
+        this.server = null
 
         this.client = null
         this.paused = false
@@ -34,7 +35,9 @@ class NoitaGame extends EventEmitter {
             flasks: [],
             gold: 0
         }
-        this.gameListen()
+        ipcMain.once("game_listen", () => {
+            this.gameListen()
+        })
     }
 
     isConnectionLocalhost(ws) {
@@ -43,6 +46,9 @@ class NoitaGame extends EventEmitter {
     }
 
     gameListen() {
+        if (!this.server) {
+            this.server = new ws.Server({ port: this.port })
+        }
         this.server.on("connection", (socket) => {
             console.log("[Game WS] New connection(?)")
             if (!this.isConnectionLocalhost(socket) || this.rejectConnections) {
