@@ -2,7 +2,7 @@
 const NT_SCHEME = "noitatogether"
 const path = require("path")
 import { autoUpdater } from "electron-updater"
-import { app, protocol, BrowserWindow, dialog } from 'electron'
+import { app, protocol, BrowserWindow, dialog, ipcMain } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import { updateMod } from "./update.js"
@@ -60,8 +60,12 @@ async function createWindow() {
         autoUpdater.checkForUpdatesAndNotify()
     }
 
-    updateMod()
+    
 }
+
+ipcMain.on("update_mod", () => {
+    updateMod()
+})
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {

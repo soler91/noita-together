@@ -29,6 +29,9 @@ export default {
             this.success = data;
         });
     },
+    created() {
+        ipcRenderer.send("update_mod")
+    },
     methods: {
         ContinueLogin() {
             this.$router.replace({ path: "/login" });
