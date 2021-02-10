@@ -3,7 +3,7 @@ const path = require("path")
 const ws = require("ws")
 const { v4: uuidv4 } = require("uuid")
 const appEvent = require("./appEvent")
-import { ipcMain } from 'electron'
+const { ipcMain } = require("electron")
 function sysMsg(message) {
     appEvent("sChat", {
         id: uuidv4(),
