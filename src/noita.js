@@ -312,7 +312,7 @@ class NoitaGame extends EventEmitter {
         console.log({ payload })
         const player = payload.userId == this.user.userId ? this.user : this.players[payload.userId]
         if (player) {
-            sysMsg(`${player.name} picked up a ${typeof payload.heart != "undefined" ? "heart" : "orb"}.`)
+            sysMsg(`${player.name} picked up a ${payload.heart ? "heart" : "orb"}.`)
         }
         if (payload.userId == this.user.userId) { return }
         this.sendEvt("PlayerPickup", payload)
