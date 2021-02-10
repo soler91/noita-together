@@ -350,6 +350,7 @@ message ClientRespawnPenalty {
 
 message ServerRespawnPenalty {
     required string user_id = 0;
+    required uint32 deaths = 1;
 }
 
 message ClientAngerySteve {
