@@ -286,6 +286,18 @@ if not initialized then
         GuiStartFrame(gui)
         GuiIdPushString( gui, "noita_together")
 
+        local player = GetPlayer()
+        if (player) then
+            local platform_shooter_player = EntityGetFirstComponentIncludingDisabled(player, "PlatformShooterPlayerComponent")
+            if (platform_shooter_player) then
+                local is_gamepad = ComponentGetValue2(platform_shooter_player, "mHasGamepadControlsPrev")
+                if (is_gamepad) then
+                    GuiOptionsAdd(gui, GUI_OPTION.NonInteractive)
+                    GuiOptionsAdd(gui, GUI_OPTION.AlwaysClickable)
+                end
+            end
+        end
+
         local ghost_button = HideGhosts and "hide_player_ghosts.png" or "player_ghosts.png"
         local chat_button = HideChat and "hide_chat.png" or "chat.png"
         local ghost_tooltip = HideGhosts and "No player ghosts" or "Showing player ghosts"
