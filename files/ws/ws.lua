@@ -90,7 +90,7 @@ async_loop(function()
         NT.wsQueue = "[]"
         if (not NT.sent_steve and GlobalsGetValue("TEMPLE_SPAWN_GUARDIAN") == "1") then
             NT.sent_steve = true
-            SendWsEvent({event="CustomModEvent", payload={name="AngerySteve"}})
+            SendWsEvent({event="AngerySteve", payload={idk=true}})
         end
         NT.player_count = PlayerCount
     end

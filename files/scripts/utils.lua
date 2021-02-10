@@ -509,7 +509,7 @@ function PlayerRespawn(entity_id, poly, weak)
                 --send custom message for weakening
                 if (GameGetFrameNum() > LastRespawn + 30) then
                     LastRespawn = GameGetFrameNum()
-                    SendWsEvent({event="CustomModEvent", payload={name="RespawnPenalty"}})
+                    SendWsEvent({event="RespawnPenalty", payload={deaths=0}})--for now
                 end
             end
             ComponentSetValue2(damage_models, "hp", max_hp)
