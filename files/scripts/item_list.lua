@@ -50,6 +50,10 @@ nt_items = {
         name = "$item_kakka",
         sprite = "data/ui_gfx/items/kakke.png"
     },
+    ["data/entities/items/pickup/sunseed.xml"] = {
+        name = "$item_sunseed",
+        sprite = "data/ui_gfx/items/sunseed.png"
+    },
 
     -- E G G
     ["data/entities/items/pickup/egg_fire.xml"] = {
