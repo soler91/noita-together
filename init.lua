@@ -69,27 +69,27 @@ function OnWorldPostUpdate()
 end
 
 function OnPlayerSpawned(player_entity)
-    local init_check_flag = "start_nt_init_done"
+    --[[local init_check_flag = "start_nt_init_done"
 	if GameHasFlagRun( init_check_flag ) then
 		return
 	end
-    GameAddFlagRun( init_check_flag )
+    GameAddFlagRun( init_check_flag )]]
     dofile_once("mods/noita-together/files/store.lua")
     local damage_models = EntityGetFirstComponent(player_entity, "DamageModelComponent")
     if (damage_models ~= nil) then ComponentSetValue2(damage_models, "wait_for_kill_flag_on_death", true) end
     local res_x = MagicNumbersGetValue("DESIGN_PLAYER_START_POS_X")
     local res_y = MagicNumbersGetValue("DESIGN_PLAYER_START_POS_Y")
+    if (not GameHasFlagRun("respawn_checkpoint_added")) then
+		EntityAddComponent2(player_entity, "VariableStorageComponent", {
+            name = "respawn_checkpoint",
+            value_string = res_x .. "," .. res_y
+        })
+        GameAddFlagRun("respawn_checkpoint_added")
+	end
 
-    EntityAddComponent2(player_entity, "VariableStorageComponent", {
-        name = "respawn_checkpoint",
-        value_string = res_x .. "," .. res_y
-    })
-
-    if (NT ~= nil and NT.run_started == false) then
-        local controls_component = EntityGetFirstComponent(player_entity, "ControlsComponent")
-        if (controls_component ~= nil) then
-            ComponentSetValue2(controls_component, "enabled", false)
-        end
+    local controls_component = EntityGetFirstComponent(player_entity, "ControlsComponent")
+    if (controls_component ~= nil) then
+        ComponentSetValue2(controls_component, "enabled", false)
     end
 end
 

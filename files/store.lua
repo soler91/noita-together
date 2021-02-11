@@ -18,7 +18,6 @@ if (NT.initialized ~= true) then
     NT.run_ended = false
     NT.sent_steve = false
     NT.end_msg = ""
-    NT.bank = '{"wands": [], "spells": [], "items": [], "gold": 0}'
 
     NT.skip_heart = 0
 
