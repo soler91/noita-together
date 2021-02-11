@@ -112,6 +112,7 @@ export default new Vuex.Store({
     state: {
         defaultFlags: {
             0: [
+                { id: "sync_perks", name: "Share all perks", tooltip: "When grabbing perks the whole team will also get them.", type: "boolean", value: false },
                 { id: "team_perks", name: "Team Perks", tooltip: "When grabbing certain perks (not all) the whole team will also get them.", type: "boolean", value: true },
                 { id: "sync_steve", name: "Sync Steve", tooltip: "Angers the gods for everyone.", type: "boolean", value: true },
                 { id: "sync_hearts", name: "Sync Hearts", tooltip: "When someone picks up a heart everyone else gets it too.", type: "boolean", value: true },
@@ -119,6 +120,7 @@ export default new Vuex.Store({
                 { id: "send_wands", name: "Send Wands", tooltip: "Allow players to deposit/take wands.", type: "boolean", value: true },
                 { id: "send_flasks", name: "Send Flasks", tooltip: "Allow players to deposit/take flasks.", type: "boolean", value: true },
                 { id: "send_gold", name: "Send Gold", tooltip: "Allow players to deposit/take gold.", type: "boolean", value: true },
+                { id: "send_items", name: "Send Items", tooltip: "Allow players to deposit/take items.", type: "boolean", value: true },
                 { id: "sync_world_seed", name: "Sync Seed", tooltip: "All players play in the same world seed (requires everyone to start a new game) 0 means random seed.", type: "number", value: 0 },
                 { id: "death_penalty_end", name: "End run", tooltip: "Run ends for all players when someone dies.", type: "boolean", value: true },
                 { id: "death_penalty_weak_respawn", name: "Respawn Penalty", tooltip: "Player respawns and everyone takes a % drop on their max hp, once it goes below certain threshold on the weakest player the run ends for everyone.", type: "boolean", value: true },
