@@ -1,6 +1,7 @@
 GameRemoveFlagRun("NT_GAMEMODE_CO_OP")
 GameRemoveFlagRun("sync_steve")
 GameRemoveFlagRun("sync_hearts")
+GameRemoveFlagRun("sync_perks")
 GameRemoveFlagRun("sync_orbs")
 GameRemoveFlagRun("send_wands")
 GameRemoveFlagRun("send_flasks")
