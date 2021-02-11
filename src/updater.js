@@ -5,8 +5,17 @@ const fs = require('fs');
 const path = require('path');
 const EventEmitter = require('events');
 const { spawn } = require("child_process")
+const { app } = require("electron")
 function FindGameFolder() {
     return new Promise(res => {
+        forcedirSync(app.getPath("userData"))
+        const userDataPath = path.join(app.getPath("userData"), "/gamePath.json")
+        if (fs.existsSync(userDataPath)) {
+            try {
+                const gamePath = JSON.parse(fs.readFileSync(userDataPath))
+                res(gamePath)
+            } catch (error) { }
+        }
         const gamePaths = []
         const child = spawn("powershell.exe", [
             `
@@ -19,7 +28,11 @@ function FindGameFolder() {
         });
         child.stdin.end()
         child.on("close", () => {
-            res(gamePaths)
+            let gamePath = gamePaths.shift() || ""
+            if (gamePath) { gamePath = gamePath.replace("\r\n", "") }
+            
+            fs.writeFileSync(userDataPath, JSON.stringify(gamePath))
+            res(gamePath)
         })
     })
 }
@@ -40,12 +53,12 @@ function hash(data) {
 }
 
 class Updater extends EventEmitter {
-    constructor(branch = 'mod') {
+    constructor(branch = 'mod', gamePath) {
         super();
         this.setMaxListeners(0);
 
         this.branch = branch;
-        this.gamePath = ""
+        this.gamePath = gamePath || ""
     }
 
     buildPath(relpath) {
@@ -113,16 +126,29 @@ class Updater extends EventEmitter {
         }
     }
 
+    async resolveGamePath() {
+        if (!this.gamePath) {
+            const gamePath = await FindGameFolder()
+            if (gamePath) {
+                this.gamePath = gamePath
+            }
+        }
+        if (fs.existsSync(path.join(this.gamePath, "/noita.exe"))) {
+            
+            this.gamePath = path.join(this.gamePath, "/mods/noita-together/")
+            return true
+        }
+        else { return false }
+    }
+
     async run(checkResult = null) {
         this.emit('run_start');
 
         this.emit('gamepath_find');
-        const paths = await FindGameFolder()
-        if (paths.length > 0) {
-            this.gamePath = path.join(paths.shift().replace("\r\n", ""), "/mods/noita-together/")
-        }
-        else {
+        const foundGamepath = await this.resolveGamePath()
+        if (!foundGamepath) {
             this.emit('gamepath_error')
+            return
         }
         if (!checkResult)
             checkResult = await this.check();

@@ -14,13 +14,6 @@ const ipcPlugin = (ipc) => {
             console.log(data)
         })
         */
-        ipc.on("GAME_PATH_NOT_FOUND", () => {
-            store.dispatch("errDialog", {
-                title: "This is awkward... Game not found",
-                body: "The app could not find where your game is installed, if you own the game thru Steam or GOG please reinstall it, sorry :(",
-                canClose: false
-            })
-        })
         
         ipc.on("UPDATE_DOWNLOADED", () => {
             store.dispatch("errDialog", {
