@@ -165,14 +165,14 @@ if not initialized then
             item_name = GameTextGetTranslatedOrNot(item_name)
             if (player ~= nil) then
                 item_name = item_name .. "\nSent by: " .. player.name
-        end
+            end
             local w, h = GuiGetImageDimensions(gui, item.sprite, 1)
             local ox = ((w - 20) / 2) * -1
             local oy = ((h - 20) / 2) * -1
             GuiZSetForNextWidget(gui, 7)
             GuiImage(gui, next_id(), x + ox, y + oy, item.sprite, 1, 1, 1)
             GuiTooltip(gui, item_name, "")
-    end
+        end
     end
 
     local function draw_bank_item(x, y, i)
@@ -193,22 +193,25 @@ if not initialized then
     local function draw_item_bank()
         local pages = math.floor(#BankItems / 25)
         local pos_x, pos_y = (screen_width / 2) - 90, (screen_height/2) - 90
-        local offx, offy = 10, 0
+        local offx, offy = 20, 5
         GuiOptionsAdd(gui, GUI_OPTION.NoPositionTween)
         GuiZSetForNextWidget(gui, 10)
         GuiImageNinePiece(gui, next_id(), pos_x, pos_y, 160, 170, 1, "mods/noita-together/files/ui/background.png")
-
+        GuiZSetForNextWidget(gui, 9)
+        if (GuiImageButton(gui, next_id(), pos_x + 147, pos_y, "", "mods/noita-together/files/ui/close.png")) then
+            show_bank = not show_bank
+        end
         for i = 1, 25 do
             draw_bank_item(pos_x + offx,pos_y + offy, i)
             
-            offx = offx + 30
+            offx = offx + 25
 
             if (i % 5 == 0) then
-                offx = 10
-                offy = offy + 30
+                offx = 20
+                offy = offy + 25
             end
         end        
-
+        offy = offy + 20
         if (GuiImageButton(gui, next_id(), pos_x, pos_y + offy, "", "mods/noita-together/files/ui/prev_page.png")) then
             change_bank_offset(-1, pages)
         end
