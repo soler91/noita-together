@@ -159,7 +159,20 @@ if not initialized then
                 GuiImage(gui, next_id(), x + 2, y + 2, "data/ui_gfx/items/potion.png", 1, 1, 1)
             end
             GuiTooltip(gui, container_name, flask_info(item.content, item.isChest))
+        elseif (item.path ~= nil) then
+            local player = PlayerList[item.sentBy] or {name="Me"}
+            local item_name = nt_items[item.path] and nt_items[item.path].name or ""
+            item_name = GameTextGetTranslatedOrNot(item_name)
+            if (player ~= nil) then
+                item_name = item_name .. "\nSent by: " .. player.name
         end
+            local w, h = GuiGetImageDimensions(gui, item.sprite, 1)
+            local ox = ((w - 20) / 2) * -1
+            local oy = ((h - 20) / 2) * -1
+            GuiZSetForNextWidget(gui, 7)
+            GuiImage(gui, next_id(), x + ox, y + oy, item.sprite, 1, 1, 1)
+            GuiTooltip(gui, item_name, "")
+    end
     end
 
     local function draw_bank_item(x, y, i)

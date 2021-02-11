@@ -1,3 +1,4 @@
+dofile_once("mods/noita-together/files/scripts/item_list.lua")
 dofile_once("mods/noita-together/files/scripts/utils.lua")
 dofile_once("data/scripts/gun/procedural/gun_procedural.lua")
 dofile_once("data/scripts/gun/procedural/gun_action_utils.lua")
@@ -104,6 +105,8 @@ if (distance < 24) then
                 else
                     SpawnFlask(item.content, x, y)
                 end
+            elseif (item.path ~= nil) then
+                EntityLoad(item.path, x, y)
             end
         end
         NT.queuedItems = "[]"
@@ -114,50 +117,7 @@ if (distance < 24) then
         if (wallet ~= nil) then
             ComponentSetValue2(wallet, "money", gold + NT.gold_queue)
             NT.gold_queue = 0
-        end
-    end
-end
---[[
-    local spells = str_to_table(NT.spell_player_queue)
-    local poof = false
-    if (distance < 24) then
-        if (#spells > 0) then
-            poof = true
-            NT.spell_player_queue = ""
-            for _, action_id in ipairs(spells) do
-                CreateItemActionEntity(action_id, x, y)
-            end
-        end
-
-        if (NT.gold_player_queue > 0) then
-            poof = true
-            local wallet_component = EntityGetFirstComponent(player, "WalletComponent")
-            if (wallet_component ~= nil) then
-                local money = tonumber(ComponentGetValue2(wallet_component, "money"))
-                ComponentSetValue2(wallet_component, "money", money + NT.gold_player_queue)
-                NT.gold_player_queue = 0
-            end
-        end
-
-        local wands_queue = json.decode(NT.wand_player_queue)
-        NT.wand_player_queue = "[]"
-        if (#wands_queue > 0) then
-            poof = true
-            for _, wand_table in ipairs(wands_queue) do
-                
-            end
-        end
-
-        local flasks_queue = json.decode(NT.item_player_queue)
-        NT.item_player_queue = "[]"
-        if (#flasks_queue > 0) then
-            poof = true
-            
-        end
-
-        if (poof) then
             EntityLoad("data/entities/particles/poof_pink.xml", x, y)
         end
     end
 end
-]]

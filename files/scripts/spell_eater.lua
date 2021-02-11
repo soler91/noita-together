@@ -1,3 +1,4 @@
+dofile_once("mods/noita-together/files/scripts/item_list.lua")
 dofile_once("data/scripts/lib/utilities.lua")
 
 dofile_once("mods/noita-together/files/store.lua")
@@ -169,6 +170,45 @@ if (#flasks > 0 and GameHasFlagRun("send_flasks")) then
         EntityKill(flask)
     end
     if (send) then
+        local queue = json.decode(NT.wsQueue)
+        table.insert(queue, msg)
+        NT.wsQueue = json.encode(queue)
+    end
+end
+
+if (#flasks > 0 and GameHasFlagRun("send_items")) then
+    local msg = {event="SendItems", payload={objects={}}}
+    local items = {}
+    local send = false
+    for _, item_entity in ipairs(flasks) do
+        local in_world = false
+        local components = EntityGetComponent(item_entity, "PhysicsBodyComponent")
+        local inventory = EntityGetFirstComponentIncludingDisabled(item_entity, "MaterialInventoryComponent")
+        if (components ~= nil and inventory == nil) then
+            in_world = true
+        end
+
+        tx, ty = EntityGetTransform(item_entity)
+        if (in_world) then
+            local distance = math.abs(x - tx) + math.abs(y - ty)
+            if (distance < 24) then
+                table.insert(items, item_entity)
+            end
+        end
+    end
+
+    for _, item_entity in ipairs(items) do
+        local path = EntityGetFilename(item_entity)
+        local item_comp = EntityGetFirstComponentIncludingDisabled(item_entity, "ItemComponent")
+        local sprite = ComponentGetValue2(item_comp, "ui_sprite")
+
+        table.insert(msg.payload.objects, {path=path, sprite=sprite})
+        send = true
+        EntityKill(item_entity)
+    end
+
+    if (send) then
+        EntityLoad("data/entities/particles/poof_pink.xml", x, y)
         local queue = json.decode(NT.wsQueue)
         table.insert(queue, msg)
         NT.wsQueue = json.encode(queue)
