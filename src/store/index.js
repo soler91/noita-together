@@ -112,7 +112,7 @@ export default new Vuex.Store({
     state: {
         defaultFlags: {
             0: [
-                { id: "sync_perks", name: "Share all perks", tooltip: "When grabbing perks the whole team will also get them.", type: "boolean", value: false },
+                //{ id: "sync_perks", name: "Share all perks", tooltip: "When grabbing perks the whole team will also get them.", type: "boolean", value: false },
                 { id: "team_perks", name: "Team Perks", tooltip: "When grabbing certain perks (not all) the whole team will also get them.", type: "boolean", value: true },
                 { id: "sync_steve", name: "Sync Steve", tooltip: "Angers the gods for everyone.", type: "boolean", value: true },
                 { id: "sync_hearts", name: "Sync Hearts", tooltip: "When someone picks up a heart everyone else gets it too.", type: "boolean", value: true },
