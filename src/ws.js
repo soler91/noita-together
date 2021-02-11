@@ -18,6 +18,7 @@ module.exports = (data) => {
                     wands: noita.bank.wands,
                     spells: noita.bank.spells,
                     items: noita.bank.flasks,
+                    objects: noita.bank.objects,
                     gold: noita.bank.gold
                 })
                 sendMsg(msg)
@@ -201,6 +202,10 @@ module.exports = (data) => {
             const wands = event.wands.map(mapWands)
             payload.wands = {list: wands}
         }
+        else if (event.objects) {
+            const objects = event.objects.map(mapObjects)
+            payload.objects = {list: objects}
+        }
         const msg = messageHandler.encodeGameMsg("cPlayerAddItem", payload)
         sendMsg(msg)
     })
@@ -270,6 +275,15 @@ module.exports = (data) => {
                 b: ((val.color >> 16) & 0xff) / 193
             },
             content: val.content,
+            sentBy: user.userId
+        }
+    }
+
+    function mapObjects(val) {
+        return {
+            id: uuidv4(),
+            path: val.path,
+            sprite: val.sprite,
             sentBy: user.userId
         }
     }

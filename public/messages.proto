@@ -148,6 +148,7 @@ message ClientHostItemBank {
     repeated Spell spells = 2;
     repeated Item items = 3;
     uint32 gold = 4;
+    repeated EntityItem objects = 5;
 }
 
 message ServerHostItemBank {
@@ -155,6 +156,7 @@ message ServerHostItemBank {
     repeated Spell spells = 2;
     repeated Item items = 3;
     uint32 gold = 4;
+    repeated EntityItem objects = 5;
 }
 
 message ClientHostUserTake {
@@ -204,6 +206,7 @@ message ClientPlayerAddItem {
         Spells spells = 0;
         Wands wands = 1;
         Items flasks = 2;
+        Entities objects = 3;
     }
 
     message Spells {
@@ -214,6 +217,9 @@ message ClientPlayerAddItem {
     }
     message Items {
         repeated Item list = 0;
+    }
+    message Entities {
+        repeated EntityItem list = 0;
     }
 }
 
@@ -223,6 +229,7 @@ message ServerPlayerAddItem {
         Spells spells = 1;
         Wands wands = 2;
         Items flasks = 3;
+        Entities objects = 4;
     }
 
     message Spells {
@@ -233,6 +240,9 @@ message ServerPlayerAddItem {
     }
     message Items {
         repeated Item list = 0;
+    }
+    message Entities {
+        repeated EntityItem list = 0;
     }
 }
 
@@ -410,6 +420,13 @@ message Item {
         required uint32 id = 0;
         required uint32 amount = 1;
     }
+}
+
+message EntityItem {
+    required string id = 0;
+    required string path = 1;
+    required string sprite = 2;
+    optional string sent_by = 3;
 }
 
 message LobbyAction {

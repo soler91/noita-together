@@ -33,6 +33,7 @@ class NoitaGame extends EventEmitter {
             wands: [],
             spells: [],
             flasks: [],
+            objects: [],
             gold: 0
         }
         ipcMain.once("game_listen", () => {
@@ -78,6 +79,7 @@ class NoitaGame extends EventEmitter {
                 wands: [],
                 spells: [],
                 flasks: [],
+                objects: [],
                 gold: 0
             }
         })
@@ -86,6 +88,7 @@ class NoitaGame extends EventEmitter {
                 wands: [],
                 spells: [],
                 flasks: [],
+                objects: [],
                 gold: 0
             }
         })
@@ -189,6 +192,9 @@ class NoitaGame extends EventEmitter {
         for (const item of this.bank.flasks) {
             bank.push(item)
         }
+        for (const item of this.bank.objects) {
+            bank.push(item)
+        }
         this.sendEvt("ItemBank", { items: bank, gold: this.bank.gold })
     }
 
@@ -212,6 +218,7 @@ class NoitaGame extends EventEmitter {
             wands: [],
             spells: [],
             flasks: [],
+            objects: [],
             gold: 0
         }
     }
@@ -237,6 +244,7 @@ class NoitaGame extends EventEmitter {
             wands: payload.wands,
             spells: payload.spells,
             flasks: payload.items,
+            objects: payload.objects,
             gold: payload.gold
         }
         this.bankToGame()
@@ -259,7 +267,7 @@ class NoitaGame extends EventEmitter {
         }
     }
     sPlayerAddItem(payload) {
-        const data = { flasks: payload.flasks, spells: payload.spells, wands: payload.wands }
+        const data = { flasks: payload.flasks, spells: payload.spells, wands: payload.wands, objects: payload.objects }
         const items = []
 
         for (const key in data) {
