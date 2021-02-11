@@ -1,6 +1,6 @@
 <template>
     <div class="labeled-input">
-        <input placeholder="idk" ref="input" :type="inputType" @input="handleInput" :value="content"/>
+        <input placeholder="idk" ref="input" :type="inputType" @input="handleInput" :value="content" :disabled="disabled"/>
         <label v-if="label">{{ label }}</label>
         <span v-if="errMsg" class="input-validation-err">{{ errMsg }}</span>
     </div>
@@ -24,6 +24,10 @@ export default {
         },
         label: {
             type: String,
+            required: false,
+        },
+        disabled: {
+            type: Boolean,
             required: false,
         },
     },
