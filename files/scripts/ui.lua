@@ -2,6 +2,7 @@ if initialized == nil then initialized = false; end
 
 if not initialized then
     initialized = true
+    dofile_once("mods/noita-together/files/scripts/item_list.lua")
     dofile_once("data/scripts/gun/procedural/wands.lua")
     dofile_once( "data/scripts/lib/utilities.lua" )
     local gui = gui or GuiCreate();
