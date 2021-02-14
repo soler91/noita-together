@@ -15,6 +15,7 @@ if not initialized then
     local hoveredFrames = 0
     local gold_amount = "1"
     local bank_offset = 0
+    local last_inven_is_open = false
     local _wand_tooltip = {
         "Shuffle",
         "Spells/Cast",
@@ -303,6 +304,7 @@ if not initialized then
         GuiStartFrame(gui)
         GuiIdPushString( gui, "noita_together")
 
+        -- controller stuff
         local player = GetPlayer()
         if (player) then
             local platform_shooter_player = EntityGetFirstComponentIncludingDisabled(player, "PlatformShooterPlayerComponent")
@@ -313,6 +315,20 @@ if not initialized then
                     GuiOptionsAdd(gui, GUI_OPTION.AlwaysClickable)
                 end
             end
+            --close on inventory change
+            local inven_gui = EntityGetFirstComponent(player, "InventoryGuiComponent")
+            if (inven_gui ~= nil) then
+                local is_open = ComponentGetValue2(inven_gui, "mActive")
+
+                if (is_open and not last_inven_is_open) then
+                    show_bank = false
+                end
+                last_inven_is_open = is_open
+            end
+        end
+        -- close on escape (pause)
+        if (show_bank and GamePaused) then
+            show_bank = false
         end
 
         local ghost_button = HideGhosts and "hide_player_ghosts.png" or "player_ghosts.png"
