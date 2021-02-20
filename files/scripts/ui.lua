@@ -362,6 +362,7 @@ if not initialized then
                 end
                 last_inven_is_open = is_open
             end
+            --[[ ghost selection
             local controls_comp = EntityGetFirstComponent(player, "ControlsComponent")
             if (controls_comp ~= nil) then
                 local x, y = ComponentGetValue2(controls_comp, "mMousePosition")
@@ -377,6 +378,7 @@ if not initialized then
                     end
                 end
             end
+            ]]
         end
         -- close on escape (pause)
         if (show_bank and GamePaused) then
