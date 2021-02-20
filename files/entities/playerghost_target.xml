@@ -1,0 +1,43 @@
+<Entity 
+  tags="nt_ghost_target" 
+  serialize="0" >
+
+  <StreamingKeepAliveComponent>
+  </StreamingKeepAliveComponent>
+
+  <_Transform 
+    position.x="0" 
+    position.y="0" 
+    rotation="0" 
+    scale.x="1" 
+    scale.y="1" >
+  </_Transform>
+
+  <PathFindingGridMarkerComponent 
+    _enabled="1" 
+    marker_offset_x="0" 
+    marker_offset_y="0" 
+    marker_work_flag="16" >
+  </PathFindingGridMarkerComponent>
+
+  <SpriteComponent 
+    _enabled="1" 
+    additive="0" 
+    alpha="1" 
+    emissive="1" 
+    has_special_scale="0" 
+    image_file="data/enemies_gfx/playerghost.xml"
+    is_text_sprite="0" 
+    kill_entity_after_finished="0" 
+    next_rect_animation="" 
+    rect_animation="" 
+    smooth_filtering="0" 
+    transform_offset.x="0" 
+    transform_offset.y="-5" 
+    ui_is_parent="0" 
+    update_transform="1" 
+    update_transform_rotation="1" 
+    visible="1" 
+     >
+  </SpriteComponent>
+</Entity>
