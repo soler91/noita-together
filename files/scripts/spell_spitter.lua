@@ -52,7 +52,6 @@ function SpawnWand(wand, x, y)
     ComponentObjectSetValue2(ability_comp, "gunaction_config", "speed_multiplier", wand.stats.speedMultiplier)
     ComponentSetValue2(ability_comp, "mana_max", wand.stats.manaMax)
     ComponentSetValue2(ability_comp, "mana", wand.stats.manaMax)
-
     if (#always_casts > 0) then
         for _, spell in ipairs(always_casts) do
             AddGunActionPermanent(wand_entity, spell.gameId)

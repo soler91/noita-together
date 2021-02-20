@@ -91,7 +91,7 @@ if (#wands > 0 and GameHasFlagRun("send_wands")) then
             serialized.spread_degrees = ComponentObjectGetValue2(ability_comp, "gunaction_config", "spread_degrees")
             serialized.speed_multiplier = ComponentObjectGetValue2(ability_comp, "gunaction_config", "speed_multiplier")
             serialized.fire_rate_wait = ComponentObjectGetValue2(ability_comp, "gunaction_config", "fire_rate_wait")
-    
+            
             local childs = EntityGetAllChildren(wand)
             local always_cast = {}
             local deck = {}
@@ -201,10 +201,11 @@ if (#flasks > 0 and GameHasFlagRun("send_items")) then
         local path = EntityGetFilename(item_entity)
         local item_comp = EntityGetFirstComponentIncludingDisabled(item_entity, "ItemComponent")
         local sprite = ComponentGetValue2(item_comp, "ui_sprite")
-
-        table.insert(msg.payload.objects, {path=path, sprite=sprite})
-        send = true
-        EntityKill(item_entity)
+        if (nt_items[path] ~= nil) then
+            table.insert(msg.payload.objects, {path=path, sprite=sprite})
+            send = true
+            EntityKill(item_entity)
+        end
     end
 
     if (send) then
