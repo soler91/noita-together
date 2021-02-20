@@ -385,13 +385,13 @@ message Wand {
         required string ui_name = 2;
         required float mana_max = 3;
         required float mana_charge_speed = 4;
-        required uint32 reload_time = 5;
+        required int32 reload_time = 5;
         required uint32 actions_per_round = 6;
         required uint32 deck_capacity = 7;
         required bool shuffle_deck_when_empty = 8;
         required float spread_degrees = 9;
         required float speed_multiplier = 10;
-        required uint32 fire_rate_wait = 11;
+        required int32 fire_rate_wait = 11;
     }
 }
 
