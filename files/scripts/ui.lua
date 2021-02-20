@@ -11,11 +11,13 @@ if not initialized then
     local screen_width, screen_height = GuiGetScreenDimensions(gui)
     local show_player_list = false
     local show_bank = false
+    local radar_on = true
     local hidden_chat = false
     local hoveredFrames = 0
     local gold_amount = "1"
     local bank_offset = 0
     local last_inven_is_open = false
+    local selected_player = ""
     local _wand_tooltip = {
         "Shuffle",
         "Spells/Cast",
@@ -25,6 +27,20 @@ if not initialized then
         "Mana chg spd",
         "Capacity",
         "Spread"
+    }
+    local biome_sprites = {
+        ["Mountain"] = "mountain.png",
+        ["$biome_coalmine"] = "coalmine.png",
+        ["$biome_coalmine_alt"] = "coalmine_alt.png",
+        ["$biome_excavationsite"] = "excavationsite.png",
+        ["$biome_fungicave"] = "fungicave.png",
+        ["$biome_rainforest"] = "rainforest.png",
+        ["$biome_snowcave"] = "snowcave.png",
+        ["$biome_snowcastle"] = "snowcastle.png",
+        ["$biome_vault"] = "vault.png",
+        ["$biome_crypt"] = "crypt.png",
+        ["$biome_holymountain"] = "holymountain.png",
+        ["$biome_boss_victoryroom"] = "the_work.png"
     }
 
     local function reset_id()
@@ -45,12 +61,25 @@ if not initialized then
         return left_click,right_click,hover,x,y,width,height,draw_x,draw_y,draw_width,draw_height;
     end
 
+    local function follow_player( userId, name )
+        local ghosts = EntityGetWithTag("nt_ghost") or {}
+        for _, ghost in ipairs(ghosts) do
+            if (EntityHasTag(ghost, "nt_follow")) then
+                EntityRemoveTag(ghost, "nt_follow")
+                GamePrint("No longer following " .. (name or ""))
+            else
+                EntityAddTag(ghost, "nt_follow")
+                GamePrint("Following " .. (name or ""))
+            end
+        end
+    end
+
     local function wand_tooltip(wand)
         local ret = {
             wand.shuffleDeckWhenEmpty and "Yes" or "No",
             tostring(wand.actionsPerRound),
-            string.format("%.2f",wand.fireRateWait/60),
-            string.format("%.2f",wand.reloadTime/60),
+            string.format("%.2f",wand.fireRateWait / 60),
+            string.format("%.2f",wand.reloadTime / 60),
             string.format("%.0f",wand.manaMax),
             string.format("%.0f",wand.manaChargeSpeed),
             tostring(wand.deckCapacity),
@@ -224,17 +253,25 @@ if not initialized then
         GuiOptionsClear(gui)
     end
 
-    local function draw_player_info(player)
+    local function draw_player_info(player, userId)
         if (player.sampo) then
             GuiOptionsAddForNextWidget(gui, GUI_OPTION.Layout_NextSameLine)
             GuiZSetForNextWidget(gui, 9)
             GuiImage(gui, next_id(), 88, 0, "mods/noita-together/files/ui/sampo.png", 0.5, 1, 1)
         end
+        if (biome_sprites[player.location] ~= nil) then
+            GuiOptionsAddForNextWidget(gui, GUI_OPTION.Layout_NextSameLine)
+            GuiZSetForNextWidget(gui, 9)
+            GuiImage(gui, next_id(), 80, 0, "mods/noita-together/files/ui/biomes/" .. biome_sprites[player.location] , 0.8, 1, 1)
+        end
         GuiZSetForNextWidget(gui, 10)
-        GuiText(gui, 0, 0, player.name)
+        
+        if (GuiButton(gui, next_id(), 0, 0, player.name)) then
+            follow_player(userId, player.name)
+        end
         local location = GameTextGetTranslatedOrNot(player.location)
         if (location == nil or location == "_EMPTY_") then location = "Mountain" end
-        location = location .. "\nDepth: " .. string.format("%.0f", player.y or 0)
+        location = location .. "\nDepth: " .. string.format("%.0f", player.y and player.y / 10 or 0)
         GuiTooltip(gui, player.name, "Hp: " .. tostring(math.floor(player.curHp)) .. " / " .. tostring(math.floor(player.maxHp)) .. "\nLocation: " .. location)
         GuiOptionsAddForNextWidget(gui, GUI_OPTION.Layout_NextSameLine)
         GuiZSetForNextWidget(gui, 9)
@@ -250,7 +287,7 @@ if not initialized then
         GuiBeginScrollContainer(gui, next_id(), 5, 50, 100, 150, false, 1, 1)
         GuiLayoutBeginVertical(gui, 0, 0)
         for userId, player in pairs(players) do
-            draw_player_info(player)
+            draw_player_info(player, userId)
         end
 
         GuiLayoutEnd(gui)
@@ -325,6 +362,21 @@ if not initialized then
                 end
                 last_inven_is_open = is_open
             end
+            local controls_comp = EntityGetFirstComponent(player, "ControlsComponent")
+            if (controls_comp ~= nil) then
+                local x, y = ComponentGetValue2(controls_comp, "mMousePosition")
+                local mouse_down = ComponentGetValue2(controls_comp, "mButtonDownLeftClick")
+                local selected_ghosts = mouse_down and EntityGetInRadiusWithTag(x, y, 24, "nt_ghost") or nil
+                if (selected_ghosts ~= nil) then
+                    selected_ghosts = selected_ghosts[1]
+                    local var_comps = EntityGetComponent(selected_ghosts, "VariableStorageComponent") or {}
+                    for _, var in ipairs(var_comps) do
+                        if (ComponentGetValue2(var, "name") == "userId") then
+                            --selected_player = ComponentGetValue2(var, "value_string")
+                        end
+                    end
+                end
+            end
         end
         -- close on escape (pause)
         if (show_bank and GamePaused) then
@@ -382,6 +434,34 @@ if not initialized then
         if (NT ~= nil and NT.run_ended) then
             GuiImageNinePiece(gui, next_id(), (screen_width / 2) - 90, 50, 180, 20, 0.8)
             GuiText(gui, (screen_width / 2) - 80, 55, NT.end_msg)
+        end
+
+        if (selected_player and PlayerList[selected_player] ~= nil) then
+            GuiImageNinePiece(gui, next_id(), 5, 210, 90, 80, 0.5)
+            if (GuiButton(gui, next_id(), 5, 210, "[x]")) then
+                selected_player = ""
+            end
+            GuiText(gui, 5, 215, PlayerList[selected_player].name)
+        end
+
+        if (PlayerRadar) then
+            local ghosts = EntityGetWithTag("nt_follow") or {}
+            local ppos_x, ppos_y = GetPlayerOrCameraPos()
+            local pos_x, pos_y = screen_width / 2, screen_height /2
+            for _, ghost in ipairs(ghosts) do
+                local var_comp = get_variable_storage_component(ghost, "userId")
+                local user_id = ComponentGetValue2(var_comp, "value_string")
+                local gx, gy = EntityGetTransform(ghost)
+                local dir_x = (gx or 0) - ppos_x
+                local dir_y = (gy or 0) - ppos_y
+                if (math.abs(dir_x) > 250 or math.abs(dir_y) > 150) then
+                    dir_x,dir_y = vec_normalize(dir_x,dir_y)
+                    local indicator_x = math.max(30, (pos_x - 30) + dir_x * 300)
+                    local indicator_y = pos_y + dir_y * 170
+                    GuiImage(gui, next_id(), indicator_x, indicator_y, "mods/noita-together/files/ui/player_ghost.png", 1, 1, 1)
+                    GuiTooltip(gui, next_id(), PlayerList[user_id].name or "")
+                end
+            end
         end
 
         GuiIdPop(gui)

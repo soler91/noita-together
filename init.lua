@@ -26,6 +26,7 @@ ModLuaFileAppend("data/scripts/items/orb_pickup.lua", "mods/noita-together/files
 ModLuaFileAppend("data/scripts/perks/perk_pickup.lua", "mods/noita-together/files/append/perk_pickup.lua")
 HideGhosts = false
 HideChat = false
+PlayerRadar = true
 BankItems = {}
 BankGold = 0
 SpellSprites = {}
