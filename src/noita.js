@@ -326,7 +326,7 @@ class NoitaGame extends EventEmitter {
     sPlayerDeath(payload) {
         const player = payload.userId == this.user.userId ? this.user : this.players[payload.userId]
         if (player) {
-            sysMsg(`${player.name} has died.`)
+            sysMsg(`${player.name} has ${payload.isWin ? "won":"died"}.`)
         }
         if (payload.userId == this.user.userId) { return }
         this.sendEvt("PlayerDeath", payload)
