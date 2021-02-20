@@ -40,7 +40,28 @@ if not initialized then
         ["$biome_vault"] = "vault.png",
         ["$biome_crypt"] = "crypt.png",
         ["$biome_holymountain"] = "holymountain.png",
-        ["$biome_boss_victoryroom"] = "the_work.png"
+        ["$biome_boss_victoryroom"] = "the_work.png",
+
+        ["$biome_boss_arena"] = "laboratory.png",
+        ["$biome_desert"] = "desert.png",
+        ["$biome_dragoncave"] = "dragoncave.png",
+        ["$biome_gold"] = "the_gold.png",
+        ["$biome_lake"] = "lake.png",
+        ["$biome_sandcave"] = "sandcave.png",
+        ["$biome_tower"] = "tower.png",
+        ["$biome_vault_frozen"] = "vault_frozen.png",
+        ["$biome_clouds"] = "cloudscape.png",
+        ["$biome_liquidcave"] = "ancient_laboratory.png",
+        ["$biome_secret_lab"] = "alchemistboss.png",
+        ["$biome_orbroom"] = "orbroom.png",
+        ["$biome_wizardcave"] = "wizardcave.png",
+        ["$biome_rainforest_dark"] = "lukki.png",
+        ["$biome_mestari_secret"] = "wizardboss.png",
+        ["$biome_ghost_secret"] = "snowy_boss.png",
+        ["$biome_winter_caves"] = "snowy_chasm.png",
+        ["$biome_the_end"] = "hell_work.png", --maybe no worky
+        ["$biome_the_end_sky"] = "sky_work.png", --maybe no worky
+        ["$biome_wandcave"] = "wandcave.png",
     }
 
     local function reset_id()
@@ -363,7 +384,7 @@ if not initialized then
                 last_inven_is_open = is_open
             end
             --[[ ghost selection
-            local controls_comp = EntityGetFirstComponent(player, "ControlsComponent")
+                local controls_comp = EntityGetFirstComponent(player, "ControlsComponent")
             if (controls_comp ~= nil) then
                 local x, y = ComponentGetValue2(controls_comp, "mMousePosition")
                 local mouse_down = ComponentGetValue2(controls_comp, "mButtonDownLeftClick")
