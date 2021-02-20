@@ -461,7 +461,7 @@ if not initialized then
                     local indicator_x = math.max(30, (pos_x - 30) + dir_x * 300)
                     local indicator_y = pos_y + dir_y * 170
                     GuiImage(gui, next_id(), indicator_x, indicator_y, "mods/noita-together/files/ui/player_ghost.png", 1, 1, 1)
-                    GuiTooltip(gui, next_id(), PlayerList[user_id].name or "")
+                    GuiTooltip(gui, (PlayerList[user_id].name or ""), "")
                 end
             end
         end
