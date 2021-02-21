@@ -14,6 +14,8 @@ if not initialized then
     local radar_on = true
     local hidden_chat = false
     local hoveredFrames = 0
+    local bankfilter = ""
+    local filteredItems = {}
     local gold_amount = "1"
     local bank_offset = 0
     local last_inven_is_open = false
@@ -229,7 +231,7 @@ if not initialized then
 
     local function draw_bank_item(x, y, i)
         local item_offset = i + bank_offset * 25
-        local item = BankItems[item_offset]
+        local item = filteredItems[item_offset]
         if (item ~= nil) then
             draw_item_sprite(item, x, y)
         end
@@ -242,10 +244,87 @@ if not initialized then
         end
     end
 
+    local function filterItems()
+        local filterkey = bankfilter
+        if (filterkey == "") then
+            filteredItems = BankItems
+            return
+        end
+        local ret = {}
+
+        for _, item in ipairs(BankItems) do
+            if (item.gameId ~= nil) then -- spell
+                local spell = SpellSprites[item.gameId]
+                if (string.find(string.lower(spell.name), string.lower(filterkey))) then
+                    table.insert(ret, item)
+                end
+            elseif (item.stats ~= nil) then -- wand
+                local found = false
+                for _, action in ipairs(item.alwaysCast or {}) do
+                    local spell = SpellSprites[action.gameId]
+                    if (spell ~= nil) then
+                        if (string.find(string.lower(spell.name), string.lower(filterkey))) then
+                            found = true
+                        end
+                    end
+                end
+                for _, action in ipairs(item.deck or {}) do
+                    local spell = SpellSprites[action.gameId]
+                    if (spell ~= nil) then
+                        if (string.find(string.lower(spell.name), string.lower(filterkey))) then
+                            found = true
+                        end
+                    end
+                end
+
+                if (found) then
+                    table.insert(ret, item)
+                end
+            elseif (item.content ~= nil) then -- flask
+                local container = item.isChest and "Powder Stash\n" or "Flask\n"
+                container = container .. flask_info(item.content, item.isChest)
+                if (string.find(string.lower(container), string.lower(filterkey))) then
+                    table.insert(ret, item)
+                end
+            elseif (item.path ~= nil) then -- entity item
+                local item_name = nt_items[item.path] and nt_items[item.path].name or ""
+                item_name = GameTextGetTranslatedOrNot(item_name)
+                if (string.find(string.lower(item_name), string.lower(filterkey))) then
+                    table.insert(ret, item)
+                end
+            end
+        end
+
+        filteredItems = ret
+    end
+
+    local function sortItems()
+        table.sort(BankItems, function (a, b)
+            if (a.gameId) then
+                if (b.gameId) then return a.gameId < b.gameId end
+                if (b.stats) then return false end
+                if (b.content) then return true end
+                if (b.path) then return true end
+            elseif (a.stats) then
+                if (b.gameId) then return true end
+                if (b.stats) then return a.stats.sprite < b.stats.sprite end
+                if (b.content) then return true end
+                if (b.path) then return true end
+            elseif (a.content) then
+                if (b.gameId) then return false end
+                if (b.stats) then return false end
+                if (b.content) then return false end
+                if (b.path) then return true end
+            elseif (a.path) then
+                return false
+            end
+            return false
+        end)
+    end
+
     local function draw_item_bank()
-        local pages = math.floor(#BankItems / 25)
         local pos_x, pos_y = (screen_width / 2) - 90, (screen_height/2) - 90
-        local offx, offy = 20, 5
+        local offx, offy = 20, 20
         GuiOptionsAdd(gui, GUI_OPTION.NoPositionTween)
         GuiZSetForNextWidget(gui, 10)
         GuiImageNinePiece(gui, next_id(), pos_x, pos_y, 160, 170, 1, "mods/noita-together/files/ui/background.png")
@@ -253,6 +332,14 @@ if not initialized then
         if (GuiImageButton(gui, next_id(), pos_x + 147, pos_y, "", "mods/noita-together/files/ui/close.png")) then
             show_bank = not show_bank
         end
+        GuiZSetForNextWidget(gui, 9)
+        if (GuiImageButton(gui, next_id(), pos_x + 10, pos_y, "", "mods/noita-together/files/ui/sort.png")) then
+            sortItems()
+        end
+        GuiZSetForNextWidget(gui, 9)
+        bankfilter = GuiTextInput(gui, next_id(), pos_x + 30, pos_y, bankfilter, 100, 32)
+        filterItems()
+        local pages = math.floor(#filteredItems / 25)
         for i = 1, 25 do
             draw_bank_item(pos_x + offx,pos_y + offy, i)
             
@@ -263,7 +350,7 @@ if not initialized then
                 offy = offy + 25
             end
         end        
-        offy = offy + 20
+        offy = offy + 5
         if (GuiImageButton(gui, next_id(), pos_x, pos_y + offy, "", "mods/noita-together/files/ui/prev_page.png")) then
             change_bank_offset(-1, pages)
         end
