@@ -344,6 +344,7 @@ if not initialized then
         bankfilter = GuiTextInput(gui, next_id(), pos_x + 30, pos_y, bankfilter, 100, 32)
         filterItems()
         local pages = math.floor(#filteredItems / 25)
+        if (bank_offset > pages) then bank_offset = pages end
         for i = 1, 25 do
             draw_bank_item(pos_x + offx,pos_y + offy, i)
             
