@@ -90,15 +90,15 @@ if not initialized then
             local var_comp = get_variable_storage_component(ghost, "userId")
             local user_id = ComponentGetValue2(var_comp, "value_string")
             if (user_id == userId) then
-            if (EntityHasTag(ghost, "nt_follow")) then
-                EntityRemoveTag(ghost, "nt_follow")
-                GamePrint("No longer following " .. (name or ""))
-            else
-                EntityAddTag(ghost, "nt_follow")
-                GamePrint("Following " .. (name or ""))
+                if (EntityHasTag(ghost, "nt_follow")) then
+                    EntityRemoveTag(ghost, "nt_follow")
+                    GamePrint("No longer following " .. (name or ""))
+                else
+                    EntityAddTag(ghost, "nt_follow")
+                    GamePrint("Following " .. (name or ""))
+                end
             end
         end
-    end
     end
 
     local function wand_tooltip(wand)
@@ -378,7 +378,7 @@ if not initialized then
             GuiImage(gui, next_id(), 80, 0, "mods/noita-together/files/ui/biomes/" .. biome_sprites[player.location] , 0.8, 1, 1)
         end
         GuiZSetForNextWidget(gui, 10)
-        
+
         if (GuiButton(gui, next_id(), 0,0, player.name)) then
             follow_player(userId, player.name)
         end
