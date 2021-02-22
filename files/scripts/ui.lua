@@ -87,6 +87,9 @@ if not initialized then
     local function follow_player( userId, name )
         local ghosts = EntityGetWithTag("nt_ghost") or {}
         for _, ghost in ipairs(ghosts) do
+            local var_comp = get_variable_storage_component(ghost, "userId")
+            local user_id = ComponentGetValue2(var_comp, "value_string")
+            if (user_id == userId) then
             if (EntityHasTag(ghost, "nt_follow")) then
                 EntityRemoveTag(ghost, "nt_follow")
                 GamePrint("No longer following " .. (name or ""))
@@ -95,6 +98,7 @@ if not initialized then
                 GamePrint("Following " .. (name or ""))
             end
         end
+    end
     end
 
     local function wand_tooltip(wand)
@@ -374,9 +378,10 @@ if not initialized then
         end
         GuiZSetForNextWidget(gui, 10)
         
-        if (GuiButton(gui, next_id(), 0, 0, player.name)) then
+        if (GuiButton(gui, next_id(), 0,0, player.name)) then
             follow_player(userId, player.name)
         end
+        
         local location = GameTextGetTranslatedOrNot(player.location)
         if (location == nil or location == "_EMPTY_") then location = "Mountain" end
         location = location .. "\nDepth: " .. string.format("%.0f", player.y and player.y / 10 or 0)
