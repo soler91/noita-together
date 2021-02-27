@@ -51,7 +51,7 @@
         "files/scripts/remove_flags.lua": "d31c05646c49cbbfb7ac17a914416917c68aa2b02c2138b14a916221dd9f459d",
         "files/scripts/spell_eater.lua": "5c46efae21f53b635eb63b54aef121156e458f6481907f3984d19b5e83d73c7a",
         "files/scripts/spell_spitter.lua": "869913c92c3e0d3b600ad82111cc996488f79978cdb096bcb2aebceb21ba2f54",
-        "files/scripts/ui.lua": "27b0e7c56943b24fae51baf404746d04b00d31ad096e67bcd59af99daeeb41a1",
+        "files/scripts/ui.lua": "a5fae07cd6ccc1ba3cb105e9e154197e1d754b0664c907bfa1368760c18cc732",
         "files/scripts/utils.lua": "b35a81309905bf9432399facaaff0ff660d3d4cb3f1f075067f468efa4f452a6",
         "files/store.lua": "07be16f4c6f2512b2c0bdbf0c9ef56e9d728ac373e0e713bf2b8160579eaa049",
         "files/stringstore/noitaglobalstore.lua": "df6663bed01bc62a918f994d2a9ec0ad2847e799366c9ce9a371973226d1299a",
@@ -110,10 +110,11 @@
         "files/ui/prev_page.png": "49d9d856f95592c15095e611fa308922343dbb031343195782c2a5f6fa627ab4",
         "files/ui/sampo.png": "c31ff349603eb169819838fdf70916d8ed4471e3720b58c4b7b045ba0b31ad28",
         "files/ui/sort.png": "5e3f729d1cfa2506449b27b783c0e133d80af784daa98f4d9bced2249f5694e0",
-        "files/ws/events.lua": "a50191719ca68266eab454ae671dd425f9d523df7b9ea4ce2d82b1e9f0a1e00c",
+        "files/ws/events.lua": "cbb5811d71f38464cbd932d8983f193a5975eec665424f0fd36f7ae779efee13",
         "files/ws/host.lua": "777e33a06f060249cb738e7ba39a8f63e4e117b4d69ef9842d02c3a8fff5b215",
         "files/ws/ws.lua": "99da6603294798fe2d7b3cc2f9d9bc290c46d6c31361d00a45c53f8e1cab75b0",
         "init.lua": "409ebae0c300354b67ab360fbe4b666709ce8cc36397c82eafbcc856e5a2168d",
-        "mod.xml": "bb32c00f2074ccf690547230e833fe5963bcc4bee0a7628991811e51b9e92693"
+        "mod.xml": "bb32c00f2074ccf690547230e833fe5963bcc4bee0a7628991811e51b9e92693",
+        "morphed.xml": "c1ed7a909663011d77e72573fb4770bc4c292f3c71afc93d6bcae1c57918a7ae"
     }
 }
