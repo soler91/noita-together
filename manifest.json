@@ -114,7 +114,6 @@
         "files/ws/host.lua": "777e33a06f060249cb738e7ba39a8f63e4e117b4d69ef9842d02c3a8fff5b215",
         "files/ws/ws.lua": "99da6603294798fe2d7b3cc2f9d9bc290c46d6c31361d00a45c53f8e1cab75b0",
         "init.lua": "409ebae0c300354b67ab360fbe4b666709ce8cc36397c82eafbcc856e5a2168d",
-        "mod.xml": "bb32c00f2074ccf690547230e833fe5963bcc4bee0a7628991811e51b9e92693",
-        "morphed.xml": "c1ed7a909663011d77e72573fb4770bc4c292f3c71afc93d6bcae1c57918a7ae"
+        "mod.xml": "bb32c00f2074ccf690547230e833fe5963bcc4bee0a7628991811e51b9e92693"
     }
 }
