@@ -385,7 +385,7 @@ if not initialized then
         
         local location = GameTextGetTranslatedOrNot(player.location)
         if (location == nil or location == "_EMPTY_") then location = "Mountain" end
-        location = location .. "\nDepth: " .. string.format("%.0f", player.y and player.y / 10 or 0)
+        location = location .. "\nDepth: " .. string.format("%.0fm", player.y and player.y / 10 or 0)
         GuiTooltip(gui, player.name, "Hp: " .. tostring(math.floor(player.curHp)) .. " / " .. tostring(math.floor(player.maxHp)) .. "\nLocation: " .. location)
         GuiOptionsAddForNextWidget(gui, GUI_OPTION.Layout_NextSameLine)
         GuiZSetForNextWidget(gui, 9)
@@ -570,12 +570,13 @@ if not initialized then
                 local gx, gy = EntityGetTransform(ghost)
                 local dir_x = (gx or 0) - ppos_x
                 local dir_y = (gy or 0) - ppos_y
+                local dist = math.sqrt(dir_x * dir_x + dir_y * dir_y)
                 if (math.abs(dir_x) > 250 or math.abs(dir_y) > 150) then
                     dir_x,dir_y = vec_normalize(dir_x,dir_y)
                     local indicator_x = math.max(30, (pos_x - 30) + dir_x * 300)
                     local indicator_y = pos_y + dir_y * 170
                     GuiImage(gui, next_id(), indicator_x, indicator_y, "mods/noita-together/files/ui/player_ghost.png", 1, 1, 1)
-                    GuiTooltip(gui, (PlayerList[user_id].name or ""), "")
+                    GuiTooltip(gui, (PlayerList[user_id].name or ""), string.format("%.0fm", math.floor(dist/10)))
                 end
             end
         end
