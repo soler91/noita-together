@@ -8,32 +8,36 @@ const { spawn } = require("child_process")
 const { app } = require("electron")
 function FindGameFolder() {
     return new Promise(res => {
-        forcedirSync(app.getPath("userData"))
-        const userDataPath = path.join(app.getPath("userData"), "/gamePath.json")
-        if (fs.existsSync(userDataPath)) {
-            try {
-                const gamePath = JSON.parse(fs.readFileSync(userDataPath))
-                res(gamePath)
-            } catch (error) { }
-        }
-        const gamePaths = []
-        const child = spawn("powershell.exe", [
-            `
+        try {
+            forcedirSync(app.getPath("userData"))
+            const userDataPath = path.join(app.getPath("userData"), "/gamePath.json")
+            if (fs.existsSync(userDataPath)) {
+                try {
+                    const gamePath = JSON.parse(fs.readFileSync(userDataPath))
+                    res(gamePath)
+                } catch (error) { }
+            }
+            const gamePaths = []
+            const child = spawn("powershell.exe", [
+                `
             (Get-Item "HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Steam App 881100").GetValue("InstallLocation")
             (Get-Item "HKLM:\\SOFTWARE\\WOW6432Node\\GOG.com\\Games\\1310457090").GetValue("path")
             `
-        ]);
-        child.stdout.on("data", function (data) {
-            gamePaths.push(data.toString())
-        });
-        child.stdin.end()
-        child.on("close", () => {
-            let gamePath = gamePaths.shift() || ""
-            if (gamePath) { gamePath = gamePath.replace("\r\n", "") }
-            
-            fs.writeFileSync(userDataPath, JSON.stringify(gamePath))
-            res(gamePath)
-        })
+            ]);
+            child.stdout.on("data", function (data) {
+                gamePaths.push(data.toString())
+            });
+            child.stdin.end()
+            child.on("close", () => {
+                let gamePath = gamePaths.shift() || ""
+                if (gamePath) { gamePath = gamePath.replace("\r\n", "") }
+
+                fs.writeFileSync(userDataPath, JSON.stringify(gamePath))
+                res(gamePath)
+            })
+        } catch (error) {
+            res("")
+        }
     })
 }
 // Constants
@@ -134,7 +138,7 @@ class Updater extends EventEmitter {
             }
         }
         if (fs.existsSync(path.join(this.gamePath, "/noita.exe"))) {
-            
+
             this.gamePath = path.join(this.gamePath, "/mods/noita-together/")
             return true
         }
