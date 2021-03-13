@@ -110,10 +110,10 @@
         "files/ui/prev_page.png": "49d9d856f95592c15095e611fa308922343dbb031343195782c2a5f6fa627ab4",
         "files/ui/sampo.png": "c31ff349603eb169819838fdf70916d8ed4471e3720b58c4b7b045ba0b31ad28",
         "files/ui/sort.png": "5e3f729d1cfa2506449b27b783c0e133d80af784daa98f4d9bced2249f5694e0",
-        "files/ws/events.lua": "cbb5811d71f38464cbd932d8983f193a5975eec665424f0fd36f7ae779efee13",
+        "files/ws/events.lua": "f74c7bd7a998247cc1c65cc790c15ef94e70926ded972e3719aeb83419178b77",
         "files/ws/host.lua": "777e33a06f060249cb738e7ba39a8f63e4e117b4d69ef9842d02c3a8fff5b215",
         "files/ws/ws.lua": "99da6603294798fe2d7b3cc2f9d9bc290c46d6c31361d00a45c53f8e1cab75b0",
-        "init.lua": "409ebae0c300354b67ab360fbe4b666709ce8cc36397c82eafbcc856e5a2168d",
+        "init.lua": "995d46ec4095f4e2c752f2204cf7f4f8799cd2bf010ea2abeff0093723ab45ac",
         "mod.xml": "bb32c00f2074ccf690547230e833fe5963bcc4bee0a7628991811e51b9e92693"
     }
 }
