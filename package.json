@@ -1,6 +1,6 @@
 {
     "name": "nt-app",
-    "version": "0.9.20",
+    "version": "0.9.22",
     "author": "Soler91",
     "description": "Allows you to play noita with friends...",
     "private": true,
@@ -24,6 +24,7 @@
         "uuid": "^8.3.2",
         "validator": "^13.5.1",
         "vue": "^2.6.11",
+        "vue-form-json-schema": "^2.9.2",
         "vue-router": "^3.2.0",
         "vuex": "^3.6.0",
         "ws": "^7.4.2"
