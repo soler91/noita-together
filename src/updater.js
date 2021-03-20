@@ -17,7 +17,7 @@ function FindGameFolder() {
             } catch (error) { }
         }
         const gamePaths = []
-        const child = spawn("powershellmeme.exe", [
+        const child = spawn("powershell.exe", [
             `
             (Get-Item "HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Steam App 881100").GetValue("InstallLocation")
             (Get-Item "HKLM:\\SOFTWARE\\WOW6432Node\\GOG.com\\Games\\1310457090").GetValue("path")
