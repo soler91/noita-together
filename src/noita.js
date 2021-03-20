@@ -36,6 +36,7 @@ class NoitaGame extends EventEmitter {
             objects: [],
             gold: 0
         }
+        this.onDeathKick = false
         ipcMain.once("game_listen", () => {
             this.gameListen()
         })
@@ -165,6 +166,11 @@ class NoitaGame extends EventEmitter {
     }
 
     updateFlags(data) {
+        const onDeathKick = data.some(flag => flag.id == "_ondeath_kick" && flag.value)
+        if (this.isHost) {
+            this.onDeathKick = onDeathKick
+        }
+
         data.push({ flag: "NT_GAMEMODE_CO_OP" })//hardcode this for now :) <3
         this.gameFlags = data
         this.sendEvt("UpdateFlags", data)
@@ -326,11 +332,14 @@ class NoitaGame extends EventEmitter {
     sPlayerDeath(payload) {
         const player = payload.userId == this.user.userId ? this.user : this.players[payload.userId]
         if (player) {
-            sysMsg(`${player.name} has ${payload.isWin ? "won":"died"}.`)
+            sysMsg(`${player.name} has ${payload.isWin ? "won" : "died"}.`)
+            if (this.isHost && !payload.isWin && this.user.userId != payload.userId) {
+                this.emit("death_kick", payload.userId)
+            }
         }
         if (payload.userId == this.user.userId) { return }
         this.sendEvt("PlayerDeath", payload)
-        
+
     }
     //sPlayerNewGamePlus (payload) => {},
     sPlayerSecretHourglass(payload) {
@@ -349,10 +358,13 @@ class NoitaGame extends EventEmitter {
         const player = payload.userId == this.user.userId ? this.user : this.players[payload.userId]
         if (player) {
             sysMsg(`${player.name} had to respawn against his will.`)
+            if (this.isHost && this.user.userId != payload.userId) {
+                this.emit("death_kick", payload.userId)
+            }
         }
         if (payload.userId == this.user.userId) { return }
         this.sendEvt("RespawnPenalty", payload)
-        
+
     }
     sAngerySteve(payload) {
         const player = payload.userId == this.user.userId ? this.user : this.players[payload.userId]
@@ -361,7 +373,7 @@ class NoitaGame extends EventEmitter {
         }
         if (payload.userId == this.user.userId) { return }
         this.sendEvt("AngerySteve", payload)
-        
+
     }
     /*
     sNemesisPickupItem (payload) => {},

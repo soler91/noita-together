@@ -124,7 +124,8 @@ export default new Vuex.Store({
                 { id: "sync_world_seed", name: "Sync Seed", tooltip: "All players play in the same world seed (requires everyone to start a new game) 0 means random seed.", type: "number", value: 0 },
                 { id: "death_penalty_end", name: "End run", tooltip: "Run ends for all players when someone dies.", type: "boolean", value: true },
                 { id: "death_penalty_weak_respawn", name: "Respawn Penalty", tooltip: "Player respawns and everyone takes a % drop on their max hp, once it goes below certain threshold on the weakest player the run ends for everyone.", type: "boolean", value: true },
-                { id: "death_penalty_full_respawn", name: "Respawn", tooltip: "Player will respawn on their last checkpoint and no penalties.", type: "boolean", value: true }
+                { id: "death_penalty_full_respawn", name: "Respawn", tooltip: "Player will respawn on their last checkpoint and no penalties.", type: "boolean", value: true },
+                { id: "_ondeath_kick", name: "Kick on death", tooltip: "Kicks whoever dies, more customisable soon™.", type: "boolean", value: false }
             ]
         },
         gamemodes: {
@@ -206,9 +207,6 @@ export default new Vuex.Store({
                 const found = state.roomFlags.find(f => f.id == flag.id)
                 if (!found && flag.type == "boolean") {
                     return { ...flag, value: false }
-                }
-                else if (found && flag.type == "boolean") {
-                    return { ...flag, value: true }
                 }
                 else if (found) {
                     return flag

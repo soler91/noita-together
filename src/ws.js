@@ -123,6 +123,11 @@ module.exports = (data) => {
         sendMsg(msg)
     })
 
+    noita.on("death_kick", (userId) => {
+        const msg = messageHandler.encodeLobbyMsg("cKickUser", {userId})
+        sendMsg(msg)
+    })
+
     noita.on("GAME_OPEN", () => {
         noita.sendEvt("RequestGameInfo")
         noita.sendEvt("RequestSpellList")
