@@ -5,8 +5,12 @@
             @applyFlags="sendFlags"
             @close="closeRoomFlags"
         />
+        <vLeaveRoom
+            v-if="showLeaveModal"
+            @close="closeLeaveModal"
+        />
         <div class="room-header">
-            <vButton @click="leaveRoom">
+            <vButton @click="openLeaveRoom">
                 <i class="fas fa-arrow-left" slot="icon"></i>
             </vButton>
             <h1>[{{users.length}}/{{room.maxUsers}}]{{ room.name }}</h1>
@@ -91,6 +95,7 @@
 import { ipcRenderer } from "electron";
 import vButton from "@/components/vButton.vue";
 import vRoomFlags from "@/components/vRoomFlags.vue";
+import vLeaveRoom from "@/components/vLeaveRoom.vue";
 //import vTooltip from "@/components/vTooltip.vue"
 import vUserTooltip from "@/components/vUserTooltip.vue"
 export default {
@@ -98,11 +103,13 @@ export default {
         vButton,
         vRoomFlags,
         //vTooltip,
-        vUserTooltip
+        vUserTooltip,
+        vLeaveRoom
     },
     data() {
         return {
             showRoomFlags: false,
+            showLeaveModal: false,
             chatMsg: "",
             lastMsg: Date.now(),
             locked: false
@@ -180,8 +187,11 @@ export default {
         closeRoomFlags() {
             this.showRoomFlags = false;
         },
-        leaveRoom() {
-            this.$store.dispatch("leaveRoom");
+        openLeaveRoom() {
+            this.showLeaveModal = true;
+        },
+        closeLeaveModal() {
+            this.showLeaveModal = false;
         },
         kick(userId) {
             this.$store.dispatch("kickUser", { userId });
