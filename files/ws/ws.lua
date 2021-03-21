@@ -94,11 +94,11 @@ async_loop(function()
         end
         NT.player_count = PlayerCount
     end
-    local x, y = GetPlayerPos()
-    if (LastLocation.x ~= x or LastLocation.y ~= y) then
+    local x, y, scale_x = GetPlayerPos(true)
+    if (LastLocation.x ~= x or LastLocation.y ~= y or LastLocation.scale_x ~= scale_x) then
         loc_counter = loc_counter +1
-        SendWsEvent({event="PlayerMove", payload={x=x, y=y}})
-        LastLocation = {x=x, y=y}
+        SendWsEvent({event="PlayerMove", payload={x=x, y=y, scale_x=scale_x}})
+        LastLocation = {x=x, y=y, scale_x=scale_x}
     end
     UpdatePlayerStats()
     
