@@ -20,9 +20,15 @@ protocol.registerSchemesAsPrivileged([
     { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
 
-if (!app.isDefaultProtocolClient(NT_SCHEME)) {
-    app.setAsDefaultProtocolClient(NT_SCHEME)
+if (isDevelopment && process.platform === 'win32') {
+    app.removeAsDefaultProtocolClient(NT_SCHEME);
+    app.setAsDefaultProtocolClient(NT_SCHEME, process.execPath, [path.resolve(process.argv[1])]);
+} else {
+    if (!app.isDefaultProtocolClient(NT_SCHEME)) {
+        app.setAsDefaultProtocolClient(NT_SCHEME)
+    }
 }
+
 autoUpdater.on('update-downloaded', (info) => {
     appEvent("UPDATE_DOWNLOADED", "")
 });
@@ -61,7 +67,7 @@ async function createWindow() {
         autoUpdater.checkForUpdatesAndNotify()
     }
 
-    
+
 }
 
 ipcMain.on("update_mod", (event, gamePath) => {
@@ -92,8 +98,10 @@ if (!primaryInstance) {
 }
 else {
     app.on("second-instance", (event, commandLine, workingDirectory) => {
-        if (commandLine[2]) {//noitatogether://?display_name=test&token=abc321&refresh=idk456&id=1111
-            let url = new URL(commandLine[2])
+        const cmdIndex = isDevelopment ? 3 : 2
+        
+        if (commandLine[cmdIndex]) {//noitatogether://?display_name=test&token=abc321&refresh=idk456&id=1111
+            let url = new URL(commandLine[cmdIndex])
             let display_name = url.searchParams.get("display_name")
             let token = url.searchParams.get("token")
             let refreshToken = url.searchParams.get("refresh")
