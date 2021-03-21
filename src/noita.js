@@ -166,7 +166,7 @@ class NoitaGame extends EventEmitter {
     }
 
     updateFlags(data) {
-        const onDeathKick = data.some(flag => flag.id == "_ondeath_kick" && flag.value)
+        const onDeathKick = data.some(entry => entry.flag == "_ondeath_kick")
         if (this.isHost) {
             this.onDeathKick = onDeathKick
         }
@@ -333,7 +333,7 @@ class NoitaGame extends EventEmitter {
         const player = payload.userId == this.user.userId ? this.user : this.players[payload.userId]
         if (player) {
             sysMsg(`${player.name} has ${payload.isWin ? "won" : "died"}.`)
-            if (this.isHost && !payload.isWin && this.user.userId != payload.userId) {
+            if (this.isHost && this.onDeathKick && !payload.isWin && this.user.userId != payload.userId) {
                 this.emit("death_kick", payload.userId)
             }
         }
@@ -358,7 +358,7 @@ class NoitaGame extends EventEmitter {
         const player = payload.userId == this.user.userId ? this.user : this.players[payload.userId]
         if (player) {
             sysMsg(`${player.name} had to respawn against his will.`)
-            if (this.isHost && this.user.userId != payload.userId) {
+            if (this.isHost && this.onDeathKick && this.user.userId != payload.userId) {
                 this.emit("death_kick", payload.userId)
             }
         }

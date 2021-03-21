@@ -264,6 +264,7 @@ export default new Vuex.Store({
                 if (!flag) { return }
                 else {
                     if (typeof val.value == "number") { flag.value = val.value }
+                    if (flag.type == "boolean") { flag.value = true }
                     return flag
                 }
             }).filter(v => typeof v !== "undefined")
@@ -436,11 +437,16 @@ export default new Vuex.Store({
                 payload
             })
         },
+        sendFlags: ({ getters }) => {
+            const flags = getters.flags.map(val => {
+                    let flag = { flag: val.id }
                     if (typeof val.value == "number") { flag.uIntVal = val.value }//temp fix
+                    if (val.type == "boolean" && !val.value) {
+                        console.log({idk: val})
+                         flag = undefined
+                     }
                     return flag
-                })
-            //console.log("store")
-            //console.log({ flags })
+                }).filter(v => typeof v !== "undefined")
             ipcRenderer.send("CLIENT_MESSAGE", {
                 key: "cRoomFlagsUpdate",
                 payload: { flags }
