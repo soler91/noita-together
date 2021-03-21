@@ -436,11 +436,7 @@ export default new Vuex.Store({
                 payload
             })
         },
-        sendFlags: ({ state }) => {
-            const flags = state.roomFlags.filter(v => typeof v.value == v.type)
-                .map(val => {
-                    const flag = { flag: val.id }
-                    if (typeof val.value == "number") { flag.intVal = val.value }
+                    if (typeof val.value == "number") { flag.uIntVal = val.value }//temp fix
                     return flag
                 })
             //console.log("store")

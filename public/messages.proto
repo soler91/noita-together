@@ -542,6 +542,7 @@ message ClientRoomFlagsUpdate {
         optional string str_val = 2;
         optional float float_val = 3;
         optional bool bool_val = 4;
+        optional uint32 u_int_val = 5;
     }
 }
 
@@ -553,6 +554,7 @@ message ServerRoomFlagsUpdated {
         optional string str_val = 2;
         optional float float_val = 3;
         optional bool bool_val = 4;
+        optional uint32 u_int_val = 5;
     }
 }
 
