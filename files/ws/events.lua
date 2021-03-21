@@ -242,9 +242,9 @@ wsEvents = {
         dofile("mods/noita-together/files/scripts/remove_flags.lua")
         for _, entry in ipairs(data) do
             if (entry.flag == "sync_world_seed") then
-                ModSettingSet( "noita_together.seed", entry.intVal )
+                ModSettingSet( "noita_together.seed", entry.uIntVal )
                 local seed = tonumber(StatsGetValue("world_seed"))
-                if (entry.intVal > 0 and seed ~= entry.intVal) then
+                if (entry.uIntVal > 0 and seed ~= entry.uIntVal) then
                     GameTriggerGameOver()
                 --elseif (entry.intVal == seed) then messes up random perks/items sadge
                     --ModSettingSet( "noita_together.seed", 0 )
