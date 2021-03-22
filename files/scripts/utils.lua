@@ -338,7 +338,7 @@ function MovePlayerGhost(data)
             --local f1, f2 = ConvertStrToNumberTable(ComponentGetValue2(frames_comp, "value_string"))
             --local frames = f1 .. "," .. data.frames
             --ComponentSetValue2(frames_comp, "value_string", frames)
-            ComponentSetValue2(dest, "value_string", tostring(data.x) .. "," .. tostring(data.y) .. "," .. tostring(data.scale_x))
+            ComponentSetValue2(dest, "value_string", tostring(data.x) .. "," .. tostring(data.y) .. "," .. tostring(data.scaleX))
         end
     end
 end

@@ -152,7 +152,7 @@ wsEvents = {
     PlayerMove = function(data)
         PlayerList[data.userId].x = data.x
         PlayerList[data.userId].y = data.y
-        PlayerList[data.userId].scale_x = data.scale_x
+        PlayerList[data.userId].scale_x = data.scaleX
         MovePlayerGhost(data)
     end,
     PlayerUpdate = function(data)
