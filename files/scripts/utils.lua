@@ -10,8 +10,13 @@ function GetPlayer()
     end
 end
 
-function GetPlayerPos()
-    local x, y = EntityGetTransform(GetPlayer())
+function GetPlayerPos(do_return_scale)
+    local x, y, rot, scale_x = EntityGetTransform(GetPlayer())
+    if do_return_scale then
+        if (x ~= nil) then
+            return x, y, scale_x
+        end
+    end
     if (x ~= nil) then
         return x, y
     end
@@ -333,7 +338,7 @@ function MovePlayerGhost(data)
             --local f1, f2 = ConvertStrToNumberTable(ComponentGetValue2(frames_comp, "value_string"))
             --local frames = f1 .. "," .. data.frames
             --ComponentSetValue2(frames_comp, "value_string", frames)
-            ComponentSetValue2(dest, "value_string", tostring(data.x) .. "," .. tostring(data.y))
+            ComponentSetValue2(dest, "value_string", tostring(data.x) .. "," .. tostring(data.y) .. "," .. tostring(data.scale_x))
         end
     end
 end

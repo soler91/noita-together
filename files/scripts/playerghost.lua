@@ -70,7 +70,7 @@ end
 
 local entity_id = GetUpdatedEntityID()
 local x, y = EntityGetTransform(entity_id)--GetLastDest(entity_id)
-local dest_x, dest_y = GetDest(entity_id)
+local dest_x, dest_y, dest_scale_x = GetDest(entity_id)
 if (x ~= nil and y ~= nil and dest_x ~= nil and dest_y ~= nil) then
     if (x ~= dest_x) then
         if (math.abs(math.abs(x) - math.abs(dest_x)) > 250) then
@@ -91,6 +91,7 @@ if (x ~= nil and y ~= nil and dest_x ~= nil and dest_y ~= nil) then
             y = Step(y, dest_y, d)
         end
     end
-    EntitySetTransform(entity_id, x, y)
-    SetLastDest(entity_id, dest_x ..","..dest_y)
+    local scale_x = dest_scale_x or 1
+    EntitySetTransform(entity_id, x, y, 0, scale_x)
+    SetLastDest(entity_id, dest_x ..","..dest_y .. "," .. scale_x)
 end 

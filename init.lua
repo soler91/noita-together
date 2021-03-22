@@ -37,7 +37,7 @@ PlayerList = {}
 PlayerCount = 1 -- fix this later
 GamePaused = false
 LastUpdate = {location= "Mountain", curHp = 100, maxHp = 100}
-LastLocation = {x = 0, y = 0}
+LastLocation = {x = 0, y = 0, scale_x = 0}
 
 Respawning = false
 LastRespawn = 0
