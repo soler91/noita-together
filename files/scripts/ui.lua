@@ -120,10 +120,8 @@ if not initialized then
         local d = 10
         if (chest) then d = 15 end
         for i, inv in ipairs(flask) do
-            local translated_text = "beta only"
-            if (GameIsBetaBuild()) then
-                translated_text = GameTextGetTranslatedOrNot(CellFactory_GetUIName(inv.id))
-            end
+            local translated_text = ""
+            translated_text = GameTextGetTranslatedOrNot(CellFactory_GetUIName(inv.id))
             materials = materials .. string.format("%s%s %s\n",
             math.ceil(inv.amount / d),
             "%",

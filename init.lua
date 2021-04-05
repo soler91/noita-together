@@ -104,14 +104,14 @@ function OnPausePreUpdate()
         _ws_main()
     end
 end
-
+--[[
 function OnModInit() -- Temporal fix for beta branch
     if (GameIsBetaBuild()) then
         local action = ModTextFileGetContent("data/entities/misc/custom_cards/action.xml")
         ModTextFileSetContent("data/entities/misc/custom_cards/action.xml", string.gsub(action, "<Entity>", "<Entity tags=\"card_action\">"))
     end
 end
-
+]]
 function OnModPreInit()
     local seed = ModSettingGet( "noita_together.seed" )
 
