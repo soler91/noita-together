@@ -2,7 +2,11 @@ dofile( "data/scripts/perks/perk.lua" )
 customEvents = {
     TeamPerk = function(data)
         local list = dofile("mods/noita-together/files/scripts/perks.lua")
-        if (not GameHasFlagRun("NT_GAMEMODE_CO_OP") or not GameHasFlagRun("team_perks") or list[data.id] == false or list[data.id] == nil) then return nil end
+        if (not GameHasFlagRun("NT_GAMEMODE_CO_OP") or (not GameHasFlagRun("sync_perks") and not GameHasFlagRun("team_perks"))) then 
+            return nil
+        elseif (GameHasFlagRun("team_perks") and not GameHasFlagRun("sync_perks") and (list[data.id] == false or list[data.id] == nil)) then
+            return nil
+        end
         local user = PlayerList[data.userId]
         if (user ~= nil) then
             GamePrintImportant(user.name .. " sent you a perk", "enjoy")
