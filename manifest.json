@@ -110,7 +110,7 @@
         "files/ui/prev_page.png": "49d9d856f95592c15095e611fa308922343dbb031343195782c2a5f6fa627ab4",
         "files/ui/sampo.png": "c31ff349603eb169819838fdf70916d8ed4471e3720b58c4b7b045ba0b31ad28",
         "files/ui/sort.png": "5e3f729d1cfa2506449b27b783c0e133d80af784daa98f4d9bced2249f5694e0",
-        "files/ws/events.lua": "046ab54801c5d0c5a82fa758aa59db7b61c2f14cdc5da3e2d678215a2486c2e6",
+        "files/ws/events.lua": "10b9d65b9e00c1f4ecc31720d6620c6a974027189d542fc73afeb2949514ee62",
         "files/ws/host.lua": "3e7067808fb85f6398dd42249cc06c06c95c0af4f294590ab67224e31d218aa7",
         "files/ws/ws.lua": "fed40b130fafa7f537df1e6ae6d55ee25e4b8f8e64437854185413b6f4a53cd3",
         "init.lua": "3f8698d1771eaea88e7bba0bf3a559143d208153a50eaaffe9a32129811c7753",
