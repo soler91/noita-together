@@ -19,6 +19,7 @@ ModLuaFileAppend("data/scripts/biomes/temple_altar.lua", "mods/noita-together/fi
 ModLuaFileAppend("data/scripts/biomes/boss_arena.lua", "mods/noita-together/files/append/co_op_mail.lua")
 
 ModLuaFileAppend("data/scripts/biomes/snowcastle_cavern.lua", "mods/noita-together/files/append/snowcastle_cavern.lua")
+ModLuaFileAppend("data/scripts/biomes/snowcastle_hourglass_chamber.lua", "mods/noita-together/files/append/butcher_randomseed.lua")
 ModLuaFileAppend("data/entities/animals/boss_centipede/sampo_pickup.lua", "mods/noita-together/files/append/sampo_append.lua")
 ModLuaFileAppend("data/scripts/items/heart.lua", "mods/noita-together/files/append/heart_append.lua")
 ModLuaFileAppend("data/scripts/items/orb_init.lua", "mods/noita-together/files/append/orb_init.lua")
