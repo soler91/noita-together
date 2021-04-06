@@ -16,7 +16,7 @@ class NoitaGame extends EventEmitter {
     constructor() {
         super()
         this.setMaxListeners(0)
-        this.port = 1234
+        this.port = 25569
         this.server = null
 
         this.client = null
