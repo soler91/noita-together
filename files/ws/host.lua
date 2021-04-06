@@ -1,1 +1,1 @@
-HOST_URL = "ws://localhost:1234/"
+HOST_URL = "ws://localhost:25569/"
