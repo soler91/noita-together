@@ -93,6 +93,7 @@ message ClientPlayerUpdate {
     optional float cur_hp = 1;
     optional float max_hp = 2;
     optional string location = 3;
+    optional bool sampo = 4;
 }
 
 message ServerPlayerUpdate {
@@ -100,6 +101,7 @@ message ServerPlayerUpdate {
     optional float cur_hp = 1;
     optional float max_hp = 2;
     optional string location = 3;
+    optional bool sampo = 4;
 }
 
 message ClientPlayerUpdateInventory {
