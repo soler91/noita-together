@@ -11,4 +11,71 @@
 		value_int="0"
 		>
 	</VariableStorageComponent>
+
+    <Entity>
+        <InheritTransformComponent>
+			<Transform 
+				position.x="2" 
+				position.y="-10" >
+			</Transform>
+        </InheritTransformComponent>
+
+        <LuaComponent 
+            _enabled="1" 
+            execute_every_n_frame="10"
+            script_source_file="mods/noita-together/files/scripts/spell_eater_glow.lua" 
+            >
+        </LuaComponent>
+
+        <SpriteComponent
+            _enabled="0"
+            _tags="enabled_in_world"
+            image_file="data/fonts/font_pixel_white.xml"
+            emissive="1"
+            is_text_sprite="1"
+            offset_x="40"
+            offset_y="-60"
+            alpha="1"
+            update_transform="1"
+            update_transform_rotation="0"
+            text="Drop items to deposit"
+            has_special_scale="1"
+            special_scale_x="0.5"
+            special_scale_y="0.5"
+        >
+        </SpriteComponent>
+
+        <ParticleEmitterComponent 
+            emitted_material_name="glowstone_altar"
+            gravity.y="0"
+            lifetime_min="0.35"
+            lifetime_max="0.45"
+            x_vel_min="0"
+            x_vel_max="0"
+            y_vel_min="200"
+            y_vel_max="10"
+            y_pos_offset_max="-20"
+            count_min="3"
+            count_max="6"
+            render_on_grid="1"
+            fade_based_on_lifetime="0"
+            area_circle_radius.min="10"
+            area_circle_radius.max="10"
+            cosmetic_force_create="1"
+            collide_with_grid="0"
+            airflow_force="0.05"
+            airflow_time="1"
+            airflow_scale="0.03"
+            emission_interval_min_frames="3"
+            emission_interval_max_frames="3"
+            emission_chance="100"
+            emit_cosmetic_particles="1"
+            velocity_always_away_from_center="0"
+            friction="5"
+            render_back="1"
+            draw_as_long="1"
+            render_ultrabright="0"
+            is_emitting="0" >
+        </ParticleEmitterComponent>
+    </Entity>
 </Entity>
