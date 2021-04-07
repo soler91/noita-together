@@ -1,0 +1,27 @@
+<Entity tags="teleportable_NOT">
+	<LuaComponent 
+        _enabled="1" 
+        execute_every_n_frame="10"
+        script_source_file="mods/noita-together/files/scripts/start_run_hint.lua" 
+	>
+    </LuaComponent>
+	
+    <SpriteComponent
+            _enabled="1"
+            _tags="enabled_in_world"
+            image_file="data/fonts/font_pixel_white.xml"
+            emissive="1"
+            is_text_sprite="1"
+            offset_x="0"
+            offset_y="0"
+            alpha="1"
+            update_transform="1"
+            update_transform_rotation="0"
+            text="Waiting for host to start the run."
+            has_special_scale="1"
+            special_scale_x="0.8"
+            special_scale_y="0.8"
+            z_index="-9000"
+        >
+    </SpriteComponent>
+</Entity>

@@ -89,10 +89,14 @@ function OnPlayerSpawned(player_entity)
         })
         GameAddFlagRun("respawn_checkpoint_added")
 	end
-
+    
     local controls_component = EntityGetFirstComponent(player_entity, "ControlsComponent")
     if (controls_component ~= nil) then
         ComponentSetValue2(controls_component, "enabled", false)
+    end
+
+    if (ModSettingGet("noita-together.NT_HINTS")) then
+        EntityLoad("mods/noita-together/files/entities/start_run_hint.xml", res_x - 45, res_y + 30)
     end
 end
 
