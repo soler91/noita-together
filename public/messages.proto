@@ -396,6 +396,10 @@ message Wand {
         required float spread_degrees = 9;
         required float speed_multiplier = 10;
         required int32 fire_rate_wait = 11;
+        required tip_x = 12;
+        required tip_y = 13;
+        required grip_x = 14;
+        required grip_y = 15;
     }
 }
 
