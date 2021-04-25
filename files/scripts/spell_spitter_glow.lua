@@ -24,7 +24,7 @@ if (distance < 150) then
     local emitter = EntityGetFirstComponentIncludingDisabled(entity_id, "ParticleEmitterComponent")
     if (emitter == nil) then return end
     local emitting = ComponentGetValue2(emitter, "is_emitting")
-    if (#queue > 0 and not emitting) then
+    if ( (#queue > 0 or NT.gold_queue > 0) and not emitting) then
         ComponentSetValue2(emitter, "is_emitting", true)
         if (show_hints and hint_sprite ~= nil and not hint_active) then
             EntitySetComponentIsEnabled(entity_id, hint_sprite, true)
