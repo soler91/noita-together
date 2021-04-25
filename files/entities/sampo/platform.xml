@@ -1,0 +1,49 @@
+<Entity tags="" >
+  <Base file="data/entities/base_item_physics2.xml" >
+    <PhysicsBody2Component
+      kill_entity_after_initialized="0" 
+	  is_static="1"
+	  fixed_rotation="1"
+	  destroy_body_if_entity_destroyed="1"
+	  >
+    </PhysicsBody2Component>
+    <PhysicsImageShapeComponent
+      centered="1" 
+      image_file="data/props_gfx/temporary_platform.png"
+      material="rock_box2d_hard" >
+    </PhysicsImageShapeComponent>
+  </Base>
+  
+  <VelocityComponent
+		gravity_y="0"
+		air_friction="10"
+		mass="0.00"
+		>
+	</VelocityComponent> 
+  
+  <ParticleEmitterComponent 
+		emitted_material_name="spark_white"
+		gravity.y="0.0"
+		count_min="2"
+		count_max="2"
+		render_on_grid="1"
+		area_circle_radius.min="0"
+		area_circle_radius.max="0"
+		cosmetic_force_create="1"
+		airflow_force="0.151"
+		airflow_time="1.01"
+		airflow_scale="0.05"
+		emission_interval_min_frames="3"
+		emission_interval_max_frames="3"
+		emit_cosmetic_particles="1"
+		image_animation_file="data/particles/image_emitters/temporary_platform.png"
+		image_animation_speed="10"
+		image_animation_loop="1"
+		collide_with_grid="0"
+		x_vel_min="-20"
+		x_vel_max="20"
+		y_vel_min="0"
+		y_vel_max="0"
+		is_emitting="1" >
+	</ParticleEmitterComponent>
+</Entity>

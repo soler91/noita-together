@@ -17,6 +17,7 @@ ModLuaFileAppend("data/scripts/items/chest_random_super.lua", "mods/noita-togeth
 
 ModLuaFileAppend("data/scripts/biomes/temple_altar.lua", "mods/noita-together/files/append/co_op_mail.lua")
 ModLuaFileAppend("data/scripts/biomes/boss_arena.lua", "mods/noita-together/files/append/co_op_mail.lua")
+ModLuaFileAppend("data/scripts/biomes/boss_arena.lua", "mods/noita-together/files/append/boss_arena.lua")
 
 ModLuaFileAppend("data/scripts/biomes/snowcastle_cavern.lua", "mods/noita-together/files/append/snowcastle_cavern.lua")
 ModLuaFileAppend("data/scripts/biomes/snowcastle_hourglass_chamber.lua", "mods/noita-together/files/append/butcher_randomseed.lua")
@@ -65,10 +66,16 @@ function OnWorldPostUpdate()
     IsPlayerDead()
     if (_ws_main and is_valid_entity(world_state)) then
         _ws_main()
-        if (NT ~= nil and NT.sampo_pickup and NT.player_count == NT.players_sampo and NT.boss_fight == false) then
+        if (NT ~= nil) then
+            if (NT.sampo_proximity) then
+                local sampo_check = CheckSampoStatus()
+                if (sampo_check) then SpawnSampo() end
+            end
+            if (NT.sampo_pickup and NT.player_count == NT.players_sampo and NT.boss_fight == false) then
             StartBossFight()
         end
     end
+end
 end
 
 function OnPlayerSpawned(player_entity)

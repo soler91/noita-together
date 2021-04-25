@@ -1,0 +1,58 @@
+<Entity tags="teleportable_NOT,disabled_sampo">
+	<UIInfoComponent
+		name="All players must be close by"
+		>
+	</UIInfoComponent>
+	
+	<LuaComponent 
+		_enabled="1"
+		script_source_file="mods/noita-together/files/scripts/disabled_sampo.lua" 
+		execute_every_n_frame="10"
+		>
+	</LuaComponent>
+    
+	<SpriteComponent 
+		_tags="enabled_in_world,enabled_in_hand"
+		image_file="mods/noita-together/files/entities/sampo/disabled_sampo_sprite.xml" 
+		offset_x="12"
+		offset_y="12" 
+		z_index="0.5"
+		>
+	</SpriteComponent>
+
+	<ParticleEmitterComponent 
+		_tags="enabled_in_world"
+		emitted_material_name="spark_white"
+		gravity.y="0.0"
+		lifetime_min="1"
+		lifetime_max="3"
+		x_vel_min="-5"
+		x_vel_max="5"
+		y_vel_min="-20"
+		y_vel_max="5"
+		count_min="55"
+		count_max="55"
+		render_on_grid="1"
+		fade_based_on_lifetime="1"
+		cosmetic_force_create="1"
+		collide_with_grid="0"
+		airflow_force="0.151"
+		airflow_time="1.01"
+		airflow_scale="0.03"
+		emission_interval_min_frames="12"
+		emission_interval_max_frames="12"
+		emit_cosmetic_particles="1"
+		area_circle_radius.max="12"
+		render_back="1"
+		is_emitting="1" >
+	</ParticleEmitterComponent>
+
+    <MusicEnergyAffectorComponent
+    	energy_target="1.0"
+    	fade_range="600.0"
+    	fog_of_war_threshold="255" 
+    	energy_lerp_up_speed_multiplier="5.0"
+    	>
+    </MusicEnergyAffectorComponent>
+    
+</Entity>
