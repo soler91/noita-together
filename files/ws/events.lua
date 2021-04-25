@@ -33,7 +33,7 @@ customEvents = {
             PlayerList[data.userId].sampo = true
         end
         NT.players_sampo = NT.players_sampo + 1
-        GamePrintImportant(player .. " picked up the salt", "they wait for you")
+        GamePrint(player .. " picked up the salt, they wait for you")
     end,
     SecretHourglass = function (data)
         local player = GetPlayer()
