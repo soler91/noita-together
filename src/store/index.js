@@ -8,6 +8,10 @@ const ipcPlugin = (ipc) => {
         ipc.on("CONNECTED", (event, data) => {
             store.commit("setUser", data)
         })
+
+        ipc.on("USER_EXTRA", (event, data) => {
+            store.commit("setUserExtra", data)
+        })
         /*
         ipc.on("DEBUG_EVT", (event, data) => {
             // eslint-disable-next-line no-console
@@ -135,7 +139,8 @@ export default new Vuex.Store({
         },
         user: {
             name: "",
-            id: 0
+            id: 0,
+            extra: false
         },
         lobbies: [],
         room: {
@@ -184,6 +189,9 @@ export default new Vuex.Store({
         },
         userId: (state) => {
             return state.user.id
+        },
+        userExtra: (state) => {
+            return state.user.extra
         },
         roomId: (state) => {
             return state.room.id
@@ -238,6 +246,10 @@ export default new Vuex.Store({
         setUser: (state, payload) => {
             state.user.name = payload.display_name
             state.user.id = payload.id
+        },
+        setUserExtra: (state, payload) => {
+            console.log({extra: payload})
+            state.user.extra = payload
         },
         addRoom: (state, payload) => {
             state.lobbies.push(payload)

@@ -100,12 +100,17 @@ else {
     app.on("second-instance", (event, commandLine, workingDirectory) => {
         const cmdIndex = isDevelopment ? 3 : 2
         
-        if (commandLine[cmdIndex]) {//noitatogether://?display_name=test&token=abc321&refresh=idk456&id=1111
+        if (commandLine[cmdIndex]) {//noitatogether://?display_name=test&token=abc321&refresh=idk456&id=1111&e=true
             let url = new URL(commandLine[cmdIndex])
             let display_name = url.searchParams.get("display_name")
             let token = url.searchParams.get("token")
             let refreshToken = url.searchParams.get("refresh")
             let id = url.searchParams.get("id")
+            let extra = url.searchParams.get("e")
+
+            if (typeof extra === "string" && extra === "true") {
+                appEvent("USER_EXTRA", true)
+            }
             wsClient({
                 display_name,
                 token,

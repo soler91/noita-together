@@ -3,7 +3,7 @@
         <h1 slot="header">Create Room</h1>
         <template slot="body">
             <select class="slot-selector" v-model="toCreate.maxUsers">
-                <option v-for="slot in slots" :key="slot">
+                <option v-for="(slot, index) in slots" :key="index">
                     {{ slot }} slots
                 </option>
             </select>
@@ -35,7 +35,6 @@ export default {
     },
     data() {
         return {
-            slots: [5, 10, 15, 20, 25, 30],
             canCreate: true,
             toCreate: {
                 name: "",
@@ -44,6 +43,18 @@ export default {
                 maxUsers: "5 slots",
             },
         };
+    },
+    computed: {
+        userExtra() {
+            return this.$store.getters.userExtra;
+        },
+        slots() {
+            const slots = [5, 10, 15, 20, 25, 30]
+            if (this.userExtra) {
+                return slots.concat([45,60,75,90])
+            }
+            return slots
+        }
     },
     methods: {
         createRoom() {
