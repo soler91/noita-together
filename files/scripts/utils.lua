@@ -3,6 +3,7 @@ dofile("data/scripts/lib/utilities.lua")
 if not async then
     dofile("mods/noita-together/files/scripts/coroutines.lua")
 end
+
 function GetPlayer()
     local player = EntityGetWithTag("player_unit") or nil
     if player ~= nil then
@@ -505,6 +506,7 @@ function PlayerRespawn(entity_id, poly, weak)
                 if (max_hp < 1) then
                     --Send death
                     EndRun()
+                    ComponentSetValue2(damage_models, "hp", 0.0)
                     ComponentSetValue2(damage_models, "kill_now", true)
                     return
                 end
