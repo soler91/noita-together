@@ -11,6 +11,7 @@ if (NT.initialized ~= true) then
     NT.players = {}
     NT.current_location = "Mountain"
 
+    NT.sampo_proximity = false
     NT.sampo_pickup = false
     NT.players_sampo = 0 -- Players that have picked up the sampo
     NT.players_won = 0 -- Players that have killed the boss
