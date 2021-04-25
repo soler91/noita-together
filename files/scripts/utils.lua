@@ -429,7 +429,6 @@ function EndRun()
     if (NT.run_ended) then return end
     NT.run_ended = true
     local win = GameHasFlagRun("ending_game_completed")
-    print("Won the game? " .. tostring(win) )
     SendWsEvent({event="PlayerDeath", payload={isWin=win, gameTime=GameGetFrameNum()}})
 end
 
