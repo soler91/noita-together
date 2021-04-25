@@ -21,14 +21,14 @@ if not initialized then
     local last_inven_is_open = false
     local selected_player = ""
     local _wand_tooltip = {
-        "Shuffle",
-        "Spells/Cast",
-        "Cast Delay",
-        "Recharge Time",
-        "Mana Max",
-        "Mana chg spd",
-        "Capacity",
-        "Spread"
+        "$inventory_shuffle",
+        "$inventory_actionspercast",
+        "$inventory_castdelay",
+        "$inventory_rechargetime",
+        "$inventory_manamax",
+        "$inventory_manachargespeed",
+        "$inventory_capacity",
+        "$inventory_spread"
     }
     local biome_sprites = {
         ["Mountain"] = "mountain.png",
