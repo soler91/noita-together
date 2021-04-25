@@ -64,6 +64,9 @@ if not initialized then
         ["$biome_the_end"] = "hell_work.png", --maybe no worky
         ["$biome_the_end_sky"] = "sky_work.png", --maybe no worky
         ["$biome_wandcave"] = "wandcave.png",
+        ["$biome_winter"] = "winter.png",
+        ["$biome_fun"] = "fun.png",
+        ["$biome_robobase"] = "robobase.png",
     }
 
     local function reset_id()
