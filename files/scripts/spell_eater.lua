@@ -50,6 +50,7 @@ if (#wands > 0 and GameHasFlagRun("send_wands")) then
     for _, wand_id in ipairs(wands) do
         local wand = nil
         local wand_sprite = nil
+        local item_comp = nil
         local in_world = false
         local components = EntityGetComponent(wand_id, "SimplePhysicsComponent")
         if (components ~= nil) then
@@ -62,24 +63,30 @@ if (#wands > 0 and GameHasFlagRun("send_wands")) then
             if (distance < 24) then
                 wand = wand_id
                 local ability_comp = EntityGetFirstComponentIncludingDisabled(wand_id, "AbilityComponent")
-                wand_sprite = ComponentGetValue2(ability_comp, "sprite_file")
-                local sprite_id = string.match(wand_sprite, "wand_([0-9]+)")
-                if (sprite_id ~= nil) then
-                    wand_sprite = tonumber(sprite_id) + 1
-                    wand_sprite = math.min(wand_sprite, 1000)
-                else
-                    wand_sprite = Random(10,500)
+                item_comp = EntityGetFirstComponentIncludingDisabled(wand_id, "ItemComponent")
+                wand_sprite = ComponentGetValue2(item_comp, "ui_sprite")
+                if (wand_sprite ~= nil and #wand_sprite == 0) then
+                    wand_sprite = ComponentGetValue2(ability_comp, "sprite_file")
                 end
             end
         end
 
         if wand ~= nil then
             local serialized = {}
-    
+            
             local ability_comp = EntityGetFirstComponentIncludingDisabled(wand, "AbilityComponent")
-    
-            serialized.sprite = tostring(wand_sprite)
-            serialized.ui_name = ComponentGetValue2(ability_comp, "ui_name")
+            local sprite_comp = EntityGetFirstComponentIncludingDisabled(wand, "SpriteComponent")
+            local hotspot_comp = EntityGetFirstComponentIncludingDisabled( wand, "HotspotComponent", "shoot_pos" )
+            local named = ComponentGetValue2(item_comp, "always_use_item_name_in_ui")
+            if (named) then
+                serialized.named = true
+                serialized.ui_name = ComponentGetValue2(item_comp, "item_name")
+            else
+                serialized.named = false
+                serialized.ui_name = ""
+            end
+            serialized.sprite = wand_sprite
+            
             serialized.mana_max = ComponentGetValue2(ability_comp, "mana_max")
             serialized.mana_charge_speed = ComponentGetValue2(ability_comp, "mana_charge_speed")
     
@@ -91,7 +98,9 @@ if (#wands > 0 and GameHasFlagRun("send_wands")) then
             serialized.spread_degrees = ComponentObjectGetValue2(ability_comp, "gunaction_config", "spread_degrees")
             serialized.speed_multiplier = ComponentObjectGetValue2(ability_comp, "gunaction_config", "speed_multiplier")
             serialized.fire_rate_wait = ComponentObjectGetValue2(ability_comp, "gunaction_config", "fire_rate_wait")
-            
+            serialized.gripX = ComponentGetValue2(sprite_comp, "offset_x")
+            serialized.gripY = ComponentGetValue2(sprite_comp, "offset_y")
+            serialized.tipX, serialized.tipY = ComponentGetValue2(hotspot_comp, "offset")
             local childs = EntityGetAllChildren(wand)
             local always_cast = {}
             local deck = {}
@@ -110,6 +119,7 @@ if (#wands > 0 and GameHasFlagRun("send_wands")) then
                 end
             end
             table.insert(msg.payload.wands, {stats = serialized, always_cast = always_cast, deck = deck})
+            --print(json.encode(msg))
             send = true
             EntityLoad("data/entities/particles/poof_pink.xml", x, y)
             EntityKill(wand)

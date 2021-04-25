@@ -73,10 +73,10 @@ function OnWorldPostUpdate()
                 if (sampo_check) then SpawnSampo() end
             end
             if (NT.sampo_pickup and NT.player_count == NT.players_sampo and NT.boss_fight == false) then
-            StartBossFight()
+                StartBossFight()
+            end
         end
     end
-end
 end
 
 function OnPlayerSpawned(player_entity)
@@ -117,14 +117,17 @@ function OnPausePreUpdate()
         _ws_main()
     end
 end
---[[
-function OnModInit() -- Temporal fix for beta branch
+
+function OnModInit()
+    --[[
     if (GameIsBetaBuild()) then
         local action = ModTextFileGetContent("data/entities/misc/custom_cards/action.xml")
         ModTextFileSetContent("data/entities/misc/custom_cards/action.xml", string.gsub(action, "<Entity>", "<Entity tags=\"card_action\">"))
     end
+    ]]
+    _G._ModTextFileGetContent = ModTextFileGetContent
 end
-]]
+
 function OnModPreInit()
     local seed = ModSettingGet( "noita_together.seed" )
 

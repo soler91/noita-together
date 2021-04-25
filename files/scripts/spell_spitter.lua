@@ -2,7 +2,6 @@ dofile_once("mods/noita-together/files/scripts/item_list.lua")
 dofile_once("mods/noita-together/files/scripts/utils.lua")
 dofile_once("data/scripts/gun/procedural/gun_procedural.lua")
 dofile_once("data/scripts/gun/procedural/gun_action_utils.lua")
-dofile_once("data/scripts/gun/procedural/wands.lua")
 
 dofile_once("mods/noita-together/files/store.lua")
 dofile_once("mods/noita-together/files/scripts/json.lua")
@@ -33,15 +32,21 @@ function SpawnWand(wand, x, y)
     local force_unshuffle = GlobalsGetValue( "PERK_NO_MORE_SHUFFLE_WANDS", "0" ) == "1"
     local wand_entity = EntityLoad("mods/noita-together/files/entities/wand.xml")
     local ability_comp = EntityGetFirstComponentIncludingDisabled(wand_entity, "AbilityComponent")
+    local item_comp = EntityGetFirstComponentIncludingDisabled(wand_entity, "ItemComponent")
+    
     local always_casts = wand.alwaysCast or {}
     local deck = wand.deck or {}
     
     if (force_unshuffle) then
         wand.stats.shuffleDeckWhenEmpty = false
     end
-    local wand_info = wands[math.min(tonumber(wand.stats.sprite), 1000)]
-    SetWandSprite(wand_entity, ability_comp, wand_info.file, wand_info.grip_x, wand_info.grip_y, (wand_info.tip_x - wand_info.grip_x), (wand_info.tip_y - wand_info.grip_y))
+    
+    SetWandSprite(wand_entity, ability_comp, wand.stats.sprite, wand.stats.gripX, wand.stats.gripY, wand.stats.tipX, wand.stats.tipY)
     ComponentSetValue2(ability_comp, "ui_name", wand.stats.uiName)
+    if (wand.stats.named) then
+        ComponentSetValue2(item_comp, "always_use_item_name_in_ui", true)
+        ComponentSetValue2(item_comp, "item_name", wand.stats.uiName)
+    end
     ComponentObjectSetValue2(ability_comp, "gun_config", "reload_time", wand.stats.reloadTime)
     ComponentObjectSetValue2(ability_comp, "gunaction_config", "fire_rate_wait", wand.stats.fireRateWait)
     ComponentSetValue2(ability_comp, "mana_charge_speed", wand.stats.manaChargeSpeed)

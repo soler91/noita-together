@@ -1,6 +1,7 @@
 if initialized == nil then initialized = false; end
 
 if not initialized then
+    wand_cache = {}
     initialized = true
     dofile_once("mods/noita-together/files/scripts/item_list.lua")
     dofile_once("data/scripts/gun/procedural/wands.lua")
@@ -140,6 +141,23 @@ if not initialized then
         end
     end
 
+    local function get_wand_sprite(filename)
+        if (wand_cache[filename] ~= nil) then return wand_cache[filename] end
+        local wand = {}
+        wand.sprite = filename
+        if (filename:sub(-#".xml") == ".xml") then
+            wand.sprite = _ModTextFileGetContent(filename):match([[filename="([^"]+)]])
+        end
+
+        local w, h = GuiGetImageDimensions(gui, wand.sprite, 1)
+        local ox = ((w - 20) / 2) * -1
+        local oy = ((h - 20) / 2) * -1
+        wand.ox = ox
+        wand.oy = oy
+        wand_cache[filename] = wand
+        return wand_cache[filename]
+    end
+
     local function draw_item_sprite(item, x,y)
         GuiZSetForNextWidget(gui, 8)
         if (item.gameId ~= nil) then --spell
@@ -153,13 +171,9 @@ if not initialized then
             GuiTooltip(gui, spell.name, spell_description)
         elseif (item.stats ~= nil) then --wand
             GuiZSetForNextWidget(gui, 7)
-            local idx = tonumber(item.stats.sprite)
-            idx = math.min(idx, 1000)
-            local sprite = wands[idx].file
-            local w, h = GuiGetImageDimensions(gui, sprite, 1)
-            local ox = ((w - 20) / 2) * -1
-            local oy = ((h - 20) / 2) * -1
-            GuiImage(gui, next_id(), x + ox, y + oy, sprite, 1, 1, 1)
+            local wand = get_wand_sprite(item.stats.sprite)
+            GuiImage(gui, next_id(), x + wand.ox, y + wand.oy, wand.sprite, 1, 1, 1)--, GUI_RECT_ANIMATION_PLAYBACK.PlayToEndAndPause)
+            
             local left, right, hover = previous_data(gui)
             if (hover) then
                 local player = PlayerList[item.sentBy] or {name="Me"}
