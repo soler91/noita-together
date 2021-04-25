@@ -385,7 +385,7 @@ message Wand {
 
     message WandStats {
         required string sprite = 0;
-        //required float mana = 1;
+        required bool named = 1;
         required string ui_name = 2;
         required float mana_max = 3;
         required float mana_charge_speed = 4;
@@ -396,10 +396,10 @@ message Wand {
         required float spread_degrees = 9;
         required float speed_multiplier = 10;
         required int32 fire_rate_wait = 11;
-        required tip_x = 12;
-        required tip_y = 13;
-        required grip_x = 14;
-        required grip_y = 15;
+        required float tip_x = 12;
+        required float tip_y = 13;
+        required float grip_x = 14;
+        required float grip_y = 15;
     }
 }
 
