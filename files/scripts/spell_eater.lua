@@ -149,7 +149,7 @@ if (#flasks > 0 and GameHasFlagRun("send_flasks")) then
     if flask ~= nil then
         local count_per_material_type = ComponentGetValue2(flask_inventory, "count_per_material_type")
         local item_comp = EntityGetFirstComponent(flask, "ItemComponent")
-        local is_chest = ComponentGetValue2(item_comp, "item_name") == "$item_powder_stash"
+        local is_chest = ComponentGetValue2(item_comp, "item_name") == "$item_powder_stash_3"
         local serialized = {}
         local color = GameGetPotionColorUint(flask)
         serialized.color = color

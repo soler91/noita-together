@@ -203,13 +203,13 @@ if not initialized then
             
         elseif (item.content ~= nil) then --flask
             local player = PlayerList[item.sentBy] or {name="Me"}
-            local container_name = item.isChest and "Powder Stash" or "Flask"
+            local container_name = item.isChest and "Powder Pouch" or "Flask"
             if (player ~= nil) then
                 container_name = container_name .. "\nSent by: " .. player.name
             end
             GuiZSetForNextWidget(gui, 7)
             if (item.isChest) then
-                GuiImage(gui, next_id(), x + 2, y + 2, "data/ui_gfx/items/powder_stash.png", 1, 1, 1)
+                GuiImage(gui, next_id(), x + 2, y + 2, "data/ui_gfx/items/material_pouch.png", 1, 1, 1)
             else
                 GuiColorSetForNextWidget(gui, item.color.r, item.color.g, item.color.b, 1)
                 GuiImage(gui, next_id(), x + 2, y + 2, "data/ui_gfx/items/potion.png", 1, 1, 1)
