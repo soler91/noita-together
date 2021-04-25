@@ -12,15 +12,21 @@ if not initialized then
     local screen_width, screen_height = GuiGetScreenDimensions(gui)
     local show_player_list = false
     local show_bank = false
+    local show_message = false
+    local caps_lock = false
     local radar_on = true
     local hidden_chat = false
     local hoveredFrames = 0
+    local last_player_msg = 0
     local bankfilter = ""
+    local player_msg = ""
     local filteredItems = {}
     local gold_amount = "1"
     local bank_offset = 0
     local last_inven_is_open = false
     local selected_player = ""
+    local numbers = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0"}
+    local alphabet = {"q","w","e","r","t","y","u","i","o","p","a","s","d","f","g","h","j","k","l","z","x","c","v","b","n","m"}
     local _wand_tooltip = {
         "$inventory_shuffle",
         "$inventory_actionspercast",
@@ -464,6 +470,73 @@ if not initialized then
         GuiOptionsClear(gui)
     end
 
+    function draw_player_message()
+        local pos_x, pos_y = (screen_width / 2) - 90, (screen_height/2) - 90
+        local offx, offy = 1, 20
+        GuiOptionsAdd(gui, GUI_OPTION.NoPositionTween)
+        GuiZSetForNextWidget(gui, 9)
+        GuiImageNinePiece(gui, next_id(), pos_x, pos_y, 160, 100, 1, "mods/noita-together/files/ui/background.png")
+        GuiZSetForNextWidget(gui, 8)
+        if (GuiImageButton(gui, next_id(), pos_x + 151, pos_y, "", "mods/noita-together/files/ui/close.png")) then
+            player_msg = ""
+            show_message = false
+        end
+        GuiZSetForNextWidget(gui, 8)
+        player_msg = GuiTextInput(gui, next_id(), pos_x, pos_y, player_msg, 150, 99, "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm0123456789 ")
+        for _, num in pairs(numbers) do
+            if (GuiButton(gui, next_id(), pos_x + offx, pos_y + offy, "["..num.."]")) then
+                player_msg = player_msg .. num
+            end
+            offx = offx + 16
+        end
+        offy = offy + 12
+        offx = 1
+        for idx, _letter in pairs(alphabet) do
+            local letter = caps_lock and string.upper(_letter) or _letter
+            if (GuiButton(gui, next_id(), pos_x + offx, pos_y + offy, "["..letter.."]")) then
+                player_msg = player_msg .. letter
+            end
+            offx = offx + 16
+            if (idx % 10 == 0 and idx % 20 == 10) then
+                offx = 4
+                offy = offy + 12
+            elseif (idx % 19 == 0) then
+                offx = 0
+                offy = offy + 12
+                if (GuiButton(gui, next_id(), pos_x + offx, pos_y + offy, "[CAPS]")) then
+                    caps_lock = not caps_lock
+                end
+                offx = 35
+            end
+        end
+        offy = offy + 12
+        if (GuiButton(gui, next_id(), pos_x + 60, pos_y + offy, "[SPACE]")) then
+            player_msg = player_msg .. " "
+        end
+        offy = offy + 15
+        GuiZSetForNextWidget(gui, 8)
+        if (GuiImageButton(gui, next_id(), pos_x + 60, pos_y + offy, "", "mods/noita-together/files/ui/button.png")) then
+            local px, py = GetPlayerPos()
+            py = py - 10
+            if (#player_msg > 0 and GameGetFrameNum() >= last_player_msg and px ~= nil and py ~= nil and NT ~= nil and NT.run_started) then
+                if (CanSpawnPoi(px, py)) then
+                    SpawnPoi("My messsage", player_msg,  px, py)
+                    SendWsEvent({event="CustomModEvent", payload={name="PlayerPOI", message=player_msg, x=px, y=py}})
+                    show_message = false
+                    player_msg = ""
+                    GamePrint("message sent")
+                    last_player_msg = GameGetFrameNum() + 60*30
+                else
+                    GamePrint("can't send message too close to another message")
+                end
+            else
+                GamePrint("can't send message yet")
+            end
+        end
+        GuiZSetForNextWidget(gui, 7)
+        GuiText(gui, pos_x + 69 , pos_y + offy + 4, "SEND")
+    end
+
     function draw_gui()
         --local frame = GameGetFrameNum()
         reset_id()
@@ -513,11 +586,18 @@ if not initialized then
         if (show_bank and GamePaused) then
             show_bank = false
         end
-
         local ghost_button = HideGhosts and "hide_player_ghosts.png" or "player_ghosts.png"
         local chat_button = HideChat and "hide_chat.png" or "chat.png"
         local ghost_tooltip = HideGhosts and "No player ghosts" or "Showing player ghosts"
         local chat_tooltip = HideChat and "Ignoring chat messages" or "Showing chat messages"
+        
+        if (GuiImageButton(gui, next_id(), 80, 0, "", "mods/noita-together/files/ui/buttons/keyboard.png")) then
+            show_message = not show_message
+            if (not show_message) then
+                player_msg = ""
+            end
+        end
+        GuiTooltip(gui, "leave a message here", "")
 
         if (GuiImageButton(gui, next_id(), 100, 0, "", "mods/noita-together/files/ui/buttons/" .. ghost_button)) then
             HideGhosts = not HideGhosts
@@ -543,6 +623,10 @@ if not initialized then
             show_bank = not show_bank
         end
         GuiTooltip(gui, "Item Bank", "")
+
+        if (show_message) then
+            draw_player_message()
+        end
 
         if (show_player_list) then
             draw_player_list(PlayerList)

@@ -1,0 +1,72 @@
+<Entity tags="teleportable_NOT, NT_POI">
+	<BookComponent>
+	</BookComponent>
+
+	<UIInfoComponent
+		name="message"
+	></UIInfoComponent>
+
+    <InteractableComponent
+        ui_text="REEEEE $0"
+    >
+    </InteractableComponent>
+	<ItemComponent
+		_tags="enabled_in_world"
+		max_child_items="0"
+		is_pickable="1"
+		is_equipable_forced="0"
+		item_name=""
+		ui_description=""
+        play_spinning_animation="0"
+        play_pick_sound="0"
+   		stats_count_as_item_pick_up="0"
+        item_pickup_radius="100"
+	></ItemComponent>
+  
+	<SpriteComponent 
+		_tags="enabled_in_world,enabled_in_hand"
+		image_file="mods/noita-together/files/entities/poi/poi.png" 
+        alpha="0.7"
+		offset_x="18.5"
+		offset_y="11" 
+		z_index="0.5"
+		>
+	</SpriteComponent>
+	
+	<ParticleEmitterComponent 
+		_enabled="1"
+		emitted_material_name="spark_red"
+		gravity.y="0.0"
+		lifetime_min="0.5"
+		lifetime_max="1"
+		count_min="1"
+		count_max="1"
+		render_on_grid="1"
+		fade_based_on_lifetime="1"
+		area_circle_radius.min="0"
+		area_circle_radius.max="0"
+		cosmetic_force_create="0"
+		emission_interval_min_frames="1"
+		emission_interval_max_frames="1"
+		emit_cosmetic_particles="1"
+		image_animation_file="mods/noita-together/files/entities/poi/poi_emitter.png" 
+		image_animation_speed="5"
+		image_animation_loop="1"
+        emission_chance="60"
+		is_emitting="0"
+		render_back="1"
+		>
+	</ParticleEmitterComponent>
+
+    <LuaComponent 
+        _enabled="1" 
+        execute_every_n_frame="10"
+        script_source_file="mods/noita-together/files/entities/poi/poi.lua" 
+        >
+    </LuaComponent>
+
+    <LuaComponent
+        _tags="perk_reroll_disable"
+        script_item_picked_up="mods/noita-together/files/entities/poi/poi_removal.lua" >
+    </LuaComponent>
+</Entity>

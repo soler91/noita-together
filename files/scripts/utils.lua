@@ -690,3 +690,16 @@ function PlayerWalletInfo()
         return wallet, gold
     end
 end
+
+function SpawnPoi(name, message,  x, y)
+    local poi = EntityLoad("mods/noita-together/files/entities/poi/poi.xml")
+    local item_comp = EntityGetFirstComponent(poi, "ItemComponent")
+    ComponentSetValue2(item_comp, "item_name", name)
+    ComponentSetValue2(item_comp, "ui_description", message)
+    EntitySetTransform(poi, x, y)
+end
+
+function CanSpawnPoi(x, y)
+    local pois = EntityGetInRadiusWithTag(x, y, 50, "NT_POI") or {}
+    return #pois == 0
+end

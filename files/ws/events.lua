@@ -1,5 +1,12 @@
 dofile( "data/scripts/perks/perk.lua" )
 customEvents = {
+    PlayerPOI = function(data)
+        local user = PlayerList[data.userId]
+        if (user == nil) then
+            return nil
+        end
+        SpawnPoi(user.name .. "'s message", data.message, data.x, data.y)
+    end,
     TeamPerk = function(data)
         local list = dofile("mods/noita-together/files/scripts/perks.lua")
         if (not GameHasFlagRun("NT_GAMEMODE_CO_OP") or (not GameHasFlagRun("sync_perks") and not GameHasFlagRun("team_perks"))) then 
