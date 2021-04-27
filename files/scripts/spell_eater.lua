@@ -24,7 +24,8 @@ if (#card_actions > 0) then
 
         if (in_world) then
             local distance = math.abs(x - tx) + math.abs(y - ty)
-            if (distance < 24) then
+            local parent = EntityGetParent(spell_id)
+            if (distance < 24 and parent == 0) then
                 local item = EntityGetFirstComponent(spell_id, "ItemComponent")
                 local item_component = EntityGetFirstComponent(spell_id, "ItemActionComponent")
                 local uses_remaining = ComponentGetValue2(item, "uses_remaining")
