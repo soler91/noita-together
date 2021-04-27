@@ -62,7 +62,7 @@
         "files/scripts/playerghost.lua": "5a7a5a50e32ece8d31683770a5413e161338bee15b5663084df4862ae67546c6",
         "files/scripts/playerghostbackup.lua": "51f471e393abbca2698baf0a8ece411b3140dfa68abb7768e384524e11776686",
         "files/scripts/remove_flags.lua": "d31c05646c49cbbfb7ac17a914416917c68aa2b02c2138b14a916221dd9f459d",
-        "files/scripts/spell_eater.lua": "3889786a2040a81165b76aaba53c6fb6b8e38ef3bf84d17570b344f8a71d4f02",
+        "files/scripts/spell_eater.lua": "7b234d34237fafbeee4245e29db82d7ffdb9d7d14fbcdbaea85e58002fdc46d3",
         "files/scripts/spell_eater_glow.lua": "933f40e6d782a00ddbc06f57644dedeb682787c3005c311ea013b50b05fcaf7e",
         "files/scripts/spell_spitter.lua": "0e10a9c76984dc3e4b0a4f3d3b634123a16ffb26f256088bdee33e42f9cdb022",
         "files/scripts/spell_spitter_glow.lua": "4dc1a7112bfe16208e8f61185c29e4d6db0a0f8c8c29ad0ee8f8a4121630dfee",
