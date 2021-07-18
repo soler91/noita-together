@@ -8,14 +8,11 @@
         <vErrDialog v-if="showErrDialog">
             <h1 slot="header">{{ errDialog.title }}</h1>
             <p slot="body">{{ errDialog.body }}</p>
-            <div slot="footer">
-                <vButton
-                    class="right-aligned"
-                    @click="closeErrDialog"
-                    v-if="errDialog.canClose"
+            <div slot="footer" class="right-aligned">
+                <vButton @click="closeErrDialog" v-if="errDialog.canClose"
                     >Close</vButton
                 >
-                <p class="centered" v-else>App needs to be restarted.</p>
+                <vButton @click="closeApp" v-else>Exit App</vButton>
             </div>
         </vErrDialog>
     </div>
@@ -48,6 +45,9 @@ export default {
     methods: {
         closeErrDialog() {
             this.$store.commit("showErrDialog", false);
+        },
+        closeApp() {
+            window.close();
         },
     },
 };
