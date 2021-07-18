@@ -57,8 +57,8 @@
                         @dblclick="joinRoom(room.id, room.protected)"
                     >
                         <td>
-                            <i class="fas fa-ban" v-if="room.locked"> </i>
                             <i class="fas fa-lock" v-if="room.protected"> </i>
+                            <i class="fas fa-ban" v-if="room.locked"> </i>
                             <span>{{ room.name }}</span>
                         </td>
                         <td>{{ room.owner }}</td>
