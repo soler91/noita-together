@@ -2,12 +2,14 @@
     <vModal>
         <h1 slot="header">Leave Room?</h1>
         <template slot="body">
-            <p v-if="isHost">The room will be deleted, and the item bank will be lost.</p>
+            <p v-if="isHost">
+                The room will be deleted, and the item bank will be lost.
+            </p>
             <p v-else>Are you sure you want to leave the room?</p>
         </template>
-        <div slot="footer" class="centered">
-            <vButton @click="leaveRoom">Leave</vButton>
+        <div slot="footer" class="right-aligned">
             <vButton @click="close">Cancel</vButton>
+            <vButton @click="leaveRoom">Leave</vButton>
         </div>
     </vModal>
 </template>
@@ -19,7 +21,7 @@ export default {
     name: "vRoomCreation",
     components: {
         vButton,
-        vModal
+        vModal,
     },
     computed: {
         isHost() {
@@ -32,10 +34,9 @@ export default {
         },
         close() {
             this.$emit("close");
-        }
+        },
     },
 };
 </script>
 
-<style>
-</style>
+<style></style>

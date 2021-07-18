@@ -2,22 +2,24 @@
     <vModal>
         <h1 slot="header">Create Room</h1>
         <template slot="body">
-            <select class="slot-selector" v-model="toCreate.maxUsers">
-                <option v-for="(slot, index) in slots" :key="index">
-                    {{ slot }} slots
-                </option>
-            </select>
-            <vInput
-                v-model="toCreate.name"
-                label="room name"
-                :validate="validateLength"
-                @valid="isValid"
-            />
-            <vInput v-model="toCreate.password" label="room password" />
+            <div class="create-ui-body">
+                <vInput
+                    v-model="toCreate.name"
+                    label="room name"
+                    :validate="validateLength"
+                    @valid="isValid"
+                />
+                <vInput v-model="toCreate.password" label="room password" />
+                <select class="slot-selector" v-model="toCreate.maxUsers">
+                    <option v-for="(slot, index) in slots" :key="index">
+                        {{ slot }} slots
+                    </option>
+                </select>
+            </div>
         </template>
-        <div slot="footer" class="centered">
-            <vButton @click="createRoom" :disabled="!canCreate">Create</vButton>
+        <div class="right-aligned" slot="footer">
             <vButton @click="close">Cancel</vButton>
+            <vButton @click="createRoom" :disabled="!canCreate">Create</vButton>
         </div>
     </vModal>
 </template>
@@ -49,12 +51,12 @@ export default {
             return this.$store.getters.userExtra;
         },
         slots() {
-            const slots = [5, 10, 15, 20, 25, 30]
+            const slots = [5, 10, 15, 20, 25, 30];
             if (this.userExtra) {
-                return slots.concat([45,60,75,90])
+                return slots.concat([45, 60, 75, 90]);
             }
-            return slots
-        }
+            return slots;
+        },
     },
     methods: {
         createRoom() {
@@ -86,4 +88,11 @@ export default {
 </script>
 
 <style>
+.create-ui-body {
+    width: 100%;
+}
+
+.create-ui-body > select {
+    margin: 1rem 0;
+}
 </style>

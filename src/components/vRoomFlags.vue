@@ -26,25 +26,33 @@
                     v-model="payload.game[entry.id].value"
                     :disabled="!isHost"
                 >
-                    <span
-                        >{{ entry.name }}
-                    </span>
+                    <span>{{ entry.name }} </span>
                     <vTooltip
                         ><span>{{ entry.tooltip }}</span></vTooltip
                     >
                 </vSwitch>
             </div>
 
-            <h2>World seed <vTooltip><span>{{ payload.world.sync_world_seed.tooltip }}</span></vTooltip>
+            <h2>
+                World seed
+                <vTooltip
+                    ><span>{{
+                        payload.world.sync_world_seed.tooltip
+                    }}</span></vTooltip
+                >
             </h2>
             <div class="world-seed">
-                <vInput v-model="payload.world.sync_world_seed.value" ref="seedInput"></vInput>
+                <vInput
+                    label="seed"
+                    v-model="payload.world.sync_world_seed.value"
+                    ref="seedInput"
+                ></vInput>
                 <vButton @click="randomizeSeed">Random</vButton>
             </div>
         </template>
-        <div slot="footer" class="centered">
-            <vButton @click="applyFlags">Apply</vButton>
+        <div class="right-aligned" slot="footer">
             <vButton @click="close">Cancel</vButton>
+            <vButton @click="applyFlags">Apply</vButton>
         </div>
     </vModal>
 </template>
@@ -55,7 +63,8 @@ import vModal from "../components/vModal.vue";
 import vButton from "../components/vButton.vue";
 import vTooltip from "../components/vTooltip.vue";
 import vInput from "../components/vInput.vue";
-export default {//braincells where'd ya go
+export default {
+    //braincells where'd ya go
     name: "vRoomPassword",
     components: {
         vButton,
@@ -66,13 +75,15 @@ export default {//braincells where'd ya go
     },
     beforeMount() {
         this.payload = this.flags;
-        const deathFlag = this.storeFlags.find(v => v.id.startsWith("death_penalty") && v.value)
-        this.deathFlag = deathFlag.name
+        const deathFlag = this.storeFlags.find(
+            (v) => v.id.startsWith("death_penalty") && v.value
+        );
+        this.deathFlag = deathFlag.name;
     },
     data() {
         return {
             payload: null,
-            deathFlag: ""
+            deathFlag: "",
         };
     },
     computed: {
@@ -80,7 +91,7 @@ export default {//braincells where'd ya go
             return this.$store.getters.isHost;
         },
         storeFlags() {
-            return this.$store.getters.flags
+            return this.$store.getters.flags;
         },
         flags() {
             const flags = this.storeFlags;
@@ -119,11 +130,10 @@ export default {//braincells where'd ya go
             //console.log({a: flags.death})
             for (const flag in flags.death) {
                 if (flags.death[flag].name == this.deathFlag) {
-                    flags.death[flag].value = true
+                    flags.death[flag].value = true;
                     payload.push({ flag: flags.death[flag].id });
-                }
-                else {
-                    flags.death[flag].value = false
+                } else {
+                    flags.death[flag].value = false;
                 }
             }
             for (const flag in flags.game) {
@@ -135,18 +145,23 @@ export default {//braincells where'd ya go
                 }
             }
             for (const flag in flags.world) {
-                let val = Number(flags.world[flag].value)
-                if (isNaN(val)) { val = 0 }
-                payload.push({flag: flags.world[flag].id, value: Math.min(val, 4294967295)})
+                let val = Number(flags.world[flag].value);
+                if (isNaN(val)) {
+                    val = 0;
+                }
+                payload.push({
+                    flag: flags.world[flag].id,
+                    value: Math.min(val, 4294967295),
+                });
             }
             //console.log({ flags: payload })
             this.$emit("applyFlags", { flags: payload });
         },
         randomizeSeed() {
-            const seed = Math.floor(Math.random() * 4294967295) + 1
+            const seed = Math.floor(Math.random() * 4294967295) + 1;
             // not an amazing way to do it
-            this.$refs.seedInput.$refs.input.value = seed
-            this.$refs.seedInput.$refs.input.dispatchEvent(new Event('input'))
+            this.$refs.seedInput.$refs.input.value = seed;
+            this.$refs.seedInput.$refs.input.dispatchEvent(new Event("input"));
         },
         close() {
             this.$emit("close");
@@ -177,7 +192,7 @@ export default {//braincells where'd ya go
     width: 100%;
 }
 
-.world-seed .labeled-input{
+.world-seed .labeled-input {
     margin-top: auto;
     padding-bottom: 0;
     margin-right: 0;

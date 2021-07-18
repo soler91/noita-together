@@ -4,9 +4,9 @@
         <template slot="body">
             <vInput v-model="password" label="room password" />
         </template>
-        <div slot="footer" class="centered">
-            <vButton @click="join">Join</vButton>
+        <div class="right-aligned" slot="footer">
             <vButton @click="close">Cancel</vButton>
+            <vButton @click="join">Join</vButton>
         </div>
     </vModal>
 </template>
@@ -46,4 +46,7 @@ export default {
 </script>
 
 <style>
+.password-ui-actions > button {
+    margin: 0 0.4rem;
+}
 </style>
