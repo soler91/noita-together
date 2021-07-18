@@ -5,15 +5,12 @@
             @applyFlags="sendFlags"
             @close="closeRoomFlags"
         />
-        <vLeaveRoom
-            v-if="showLeaveModal"
-            @close="closeLeaveModal"
-        />
+        <vLeaveRoom v-if="showLeaveModal" @close="closeLeaveModal" />
         <div class="room-header">
             <vButton @click="openLeaveRoom">
                 <i class="fas fa-arrow-left" slot="icon"></i>
             </vButton>
-            <h1>[{{users.length}}/{{room.maxUsers}}]{{ room.name }}</h1>
+            <h1>[{{ users.length }}/{{ room.maxUsers }}] {{ room.name }}</h1>
             <div class="room-edit">
                 <vButton @click="lockRoom" :disabled="!isHost">
                     <i class="fas fa-lock" slot="icon" v-if="room.locked"></i>
@@ -22,7 +19,11 @@
                 <vButton @click="openRoomFlags">
                     <template>
                         <i class="fas fa-edit" slot="icon" v-if="isHost"></i>
-                        <i class="far fa-question-circle" slot="icon" v-else></i>
+                        <i
+                            class="far fa-question-circle"
+                            slot="icon"
+                            v-else
+                        ></i>
                     </template>
                 </vButton>
             </div>
@@ -97,14 +98,14 @@ import vButton from "@/components/vButton.vue";
 import vRoomFlags from "@/components/vRoomFlags.vue";
 import vLeaveRoom from "@/components/vLeaveRoom.vue";
 //import vTooltip from "@/components/vTooltip.vue"
-import vUserTooltip from "@/components/vUserTooltip.vue"
+import vUserTooltip from "@/components/vUserTooltip.vue";
 export default {
     components: {
         vButton,
         vRoomFlags,
         //vTooltip,
         vUserTooltip,
-        vLeaveRoom
+        vLeaveRoom,
     },
     data() {
         return {
@@ -112,7 +113,7 @@ export default {
             showLeaveModal: false,
             chatMsg: "",
             lastMsg: Date.now(),
-            locked: false
+            locked: false,
         };
     },
     beforeCreate() {
@@ -126,7 +127,7 @@ export default {
         });
     },
     created() {
-        ipcRenderer.send("game_listen")
+        ipcRenderer.send("game_listen");
     },
     watch: {
         chat() {
@@ -161,8 +162,8 @@ export default {
         },
     },
     methods: {
-        lockRoom(){
-            this.$store.dispatch("updateRoom", {locked: !this.room.locked})
+        lockRoom() {
+            this.$store.dispatch("updateRoom", { locked: !this.room.locked });
         },
         sendChat(e) {
             if (e.key != "Enter" || !this.chatMsg.trim()) {
@@ -200,8 +201,8 @@ export default {
             this.$store.dispatch("banUser", { userId });
         },
         startRun(forced) {
-            this.$store.dispatch("startRun", {forced})
-        }
+            this.$store.dispatch("startRun", { forced });
+        },
     },
 };
 </script>
