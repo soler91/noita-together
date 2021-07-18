@@ -112,6 +112,16 @@ ipcMain.on("TRY_LOGIN", async (event, account) => {
     }
 })
 
+ipcMain.on("DELETE_USER", async (event, account) => {
+    try {
+        keytar.deletePassword("Noita Together", account)
+        appEvent("SAVED_USER", undefined);
+    } catch (error) {
+        console.error(error)
+        appEvent("DELETE_USER_FAILED", "")
+    }
+})
+
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
     // On macOS it is common for applications and their menu bar

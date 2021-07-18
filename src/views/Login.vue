@@ -1,35 +1,40 @@
 <template>
   <div class="content">
-    <div
-      class="twitch-login"
-      :class="{ hax: !savedUser }"
-      @click="OpenLoginPage"
-    >
-      <div class="twitch-logo">
-        <i class="fas fa-spinner fa-spin fa-pulse" v-if="clicked"></i>
-        <i class="fab fa-twitch" v-else></i>
+    <div class="login-ui">
+      <div class="intro">
+        <img v-bind:src="'./icon/icon.png'" />
       </div>
-      <span class="twitch-login-text"> Login with Twitch.tv </span>
-    </div>
-    <div class="remember-login">
-      <input
-        type="checkbox"
-        id="remember-user"
-        name="remember-user"
-        v-model="reeemember"
-      />
-      <label for="remember-user">Remember me</label>
-    </div>
-
-    <div
-      class="twitch-login remembered-login"
-      @click="ContinueSavedUser"
-      v-if="savedUser"
-    >
-      <div class="twitch-logo">
-        <i class="fab fa-twitch"></i>
+      <div class="login-button" v-if="savedUser">
+        <div class="twitch-login" @click="ContinueSavedUser">
+          <div class="twitch-logo">
+            <i class="fab fa-twitch"></i>
+          </div>
+          <span class="twitch-login-text">
+            Continue as {{ savedUserName }}
+          </span>
+        </div>
+        <div class="delete-saved-user" @click="DeleteSavedUser">
+          <i class="fas fa-sign-out-alt"></i>
+        </div>
       </div>
-      <span class="twitch-login-text"> Continue as {{ savedUserName }} </span>
+      <div class="login-button">
+        <div class="twitch-login" @click="OpenLoginPage">
+          <div class="twitch-logo">
+            <i class="fas fa-spinner fa-spin fa-pulse" v-if="clicked"></i>
+            <i class="fab fa-twitch" v-else></i>
+          </div>
+          <span class="twitch-login-text"> Login with Twitch.tv </span>
+        </div>
+      </div>
+      <div class="remember-login">
+        <input
+          type="checkbox"
+          id="remember-user"
+          name="remember-user"
+          v-model="reeemember"
+        />
+        <label for="remember-user">Remember me</label>
+      </div>
     </div>
   </div>
 </template>
@@ -70,6 +75,9 @@ export default {
     ContinueSavedUser() {
       this.$store.dispatch("continueSavedUser");
     },
+    DeleteSavedUser() {
+      this.$store.dispatch("deleteSavedUser");
+    },
   },
   watch: {
     reeemember(oldVal, newVal) {
@@ -80,12 +88,30 @@ export default {
 </script>
 
 <style>
-.twitch-login.hax {
-  margin-top: 40vh;
+.login-ui {
+  margin: auto;
 }
-.twitch-login.remembered-login {
+
+.login-ui i {
+  font-size: 1.5rem;
+}
+
+.login-button {
+  display: flex;
   margin-top: auto;
-  align-self: stretch;
+  align-self: center;
+  cursor: pointer;
+  margin: 1em;
+}
+
+.intro {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.intro > img {
+  height: auto;
+  max-width: 10rem;
 }
 
 .twitch-login {
@@ -101,10 +127,6 @@ export default {
   background-color: #503484;
 }
 
-.twitch-login > div > i {
-  font-size: 1.5rem;
-}
-
 .twitch-logo {
   padding: 1rem;
   background-color: #503484;
@@ -115,8 +137,31 @@ export default {
   align-self: center;
 }
 
+.saved-user {
+  display: flex;
+}
+
+.delete-saved-user {
+  padding: 1rem;
+  background-color: #843434;
+}
+
+.delete-saved-user:hover {
+  padding: 1rem;
+  background-color: #9e3434;
+}
+
 .remember-login {
-  padding: 0.5rem;
-  align-self: center;
+  text-align: center;
+}
+
+.remember-login > label {
+  margin: 0.5rem;
+}
+
+input[type="checkbox"] {
+  vertical-align: middle;
+  position: relative;
+  bottom: 0.1rem;
 }
 </style>
