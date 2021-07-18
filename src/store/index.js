@@ -12,13 +12,17 @@ const ipcPlugin = (ipc) => {
         ipc.on("USER_EXTRA", (event, data) => {
             store.commit("setUserExtra", data)
         })
+
+        ipc.on("SAVED_USER", (event, data) => {
+            store.commit("setSavedUserName", data)
+        })
         /*
         ipc.on("DEBUG_EVT", (event, data) => {
             // eslint-disable-next-line no-console
             console.log(data)
         })
         */
-        
+
         ipc.on("UPDATE_DOWNLOADED", () => {
             store.dispatch("errDialog", {
                 title: "Update available",
@@ -142,6 +146,8 @@ export default new Vuex.Store({
             id: 0,
             extra: false
         },
+        savedUser: false,
+        savedUserName: "",
         lobbies: [],
         room: {
             id: "",
@@ -224,6 +230,12 @@ export default new Vuex.Store({
         }
     },
     mutations: {
+        setSavedUserName: (state, value) => {
+            if (value) {
+                state.savedUser = true
+            }
+            state.savedUserName = value
+        },
         setLoading: (state, value) => {
             state.loading = value
         },
@@ -237,7 +249,7 @@ export default new Vuex.Store({
                     user.seed = payload.seed
                     user.mods = payload.mods
                     user.version = payload.version,
-                    user.beta = payload.beta
+                        user.beta = payload.beta
                 }
                 return user
             })
@@ -248,7 +260,6 @@ export default new Vuex.Store({
             state.user.id = payload.id
         },
         setUserExtra: (state, payload) => {
-            console.log({extra: payload})
             state.user.extra = payload
         },
         addRoom: (state, payload) => {
@@ -338,6 +349,18 @@ export default new Vuex.Store({
         }
     },
     actions: {
+        continueSavedUser: ({state, commit, dispatch}) => {
+            commit("setLoading", true)
+            ipcRenderer.send("TRY_LOGIN", state.savedUserName)
+            ipcRenderer.once("TRY_LOGIN_FAILED", () => {
+                dispatch("errDialog", {
+                    title: "Failed to login",
+                    body: "Login manually with the remember me checkbox checked to refresh your login info.",
+                    canClose: true
+                })
+                commit("setLoading", false)
+            })
+        },
         errDialog: ({ commit }, payload) => {
             commit("setErrDialog", payload)
             commit("showErrDialog", true)
@@ -451,14 +474,13 @@ export default new Vuex.Store({
         },
         sendFlags: ({ getters }) => {
             const flags = getters.flags.map(val => {
-                    let flag = { flag: val.id }
-                    if (typeof val.value == "number") { flag.uIntVal = val.value }//temp fix
-                    if (val.type == "boolean" && !val.value) {
-                        console.log({idk: val})
-                         flag = undefined
-                     }
-                    return flag
-                }).filter(v => typeof v !== "undefined")
+                let flag = { flag: val.id }
+                if (typeof val.value == "number") { flag.uIntVal = val.value }//temp fix
+                if (val.type == "boolean" && !val.value) {
+                    flag = undefined
+                }
+                return flag
+            }).filter(v => typeof v !== "undefined")
             ipcRenderer.send("CLIENT_MESSAGE", {
                 key: "cRoomFlagsUpdate",
                 payload: { flags }

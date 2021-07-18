@@ -9,9 +9,9 @@ import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import { updateMod } from "./update.js"
 const appEvent = require("./appEvent")
 const wsClient = require("./ws.js")
-// Use later ?
-// import keytar from "keytar"
-
+const keytar = require("keytar")
+const got = require("got")
+let rememberUser = false
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const primaryInstance = app.requestSingleInstanceLock()
 let mainWindow = null
@@ -71,11 +71,45 @@ async function createWindow() {
 }
 
 ipcMain.on("update_mod", (event, gamePath) => {
+    keytar.findCredentials("Noita Together").then(credentials => {
+        if (credentials.length > 0) {
+            const username = credentials[0].account
+            appEvent("SAVED_USER", username)
+        }
+    })
     if (gamePath) {
         const userDataPath = path.join(app.getPath("userData"), "/gamePath.json")
         fs.writeFileSync(userDataPath, JSON.stringify(gamePath))
     }
     updateMod(gamePath)
+})
+
+ipcMain.on("remember_user", (event, val) => {
+    rememberUser = val
+})
+
+ipcMain.on("TRY_LOGIN", async (event, account) => {
+    try {
+        const token = await keytar.getPassword("Noita Together", account)
+        const { body } = await got.post("https://nt.unicast.link:42069/auth/refresh", {
+            json: {
+                ticket: token
+            },
+            responseType: 'json'
+        })
+        const { display_name, ticket, id, e } = body
+        if (typeof e === "string" && e === "true") {
+            appEvent("USER_EXTRA", true)
+        }
+        wsClient({
+            display_name,
+            token: ticket,
+            id
+        })
+    } catch (error) {
+        console.error(error)
+        appEvent("TRY_LOGIN_FAILED", "")
+    }
 })
 
 // Quit when all windows are closed.
@@ -99,7 +133,7 @@ if (!primaryInstance) {
 else {
     app.on("second-instance", (event, commandLine, workingDirectory) => {
         const cmdIndex = isDevelopment ? 3 : 2
-        
+
         if (commandLine[cmdIndex]) {//noitatogether://?display_name=test&token=abc321&refresh=idk456&id=1111&e=true
             let url = new URL(commandLine[cmdIndex])
             let display_name = url.searchParams.get("display_name")
@@ -107,14 +141,15 @@ else {
             let refreshToken = url.searchParams.get("refresh")
             let id = url.searchParams.get("id")
             let extra = url.searchParams.get("e")
-
+            if (rememberUser) {
+                keytar.setPassword("Noita Together", display_name, refreshToken)
+            }
             if (typeof extra === "string" && extra === "true") {
                 appEvent("USER_EXTRA", true)
             }
             wsClient({
                 display_name,
                 token,
-                refreshToken,
                 id
             })
         }

@@ -1,68 +1,122 @@
 <template>
-    <div class="content">
-        <div id="twitch-login" @click="OpenLoginPage">
-            <div id="twitch-logo">
-                <i class="fas fa-spinner fa-spin fa-pulse" v-if="clicked"></i>
-                <i class="fab fa-twitch" v-else></i>
-            </div>
-            <span id="twitch-login-text"> Login with Twitch.tv </span>
-        </div>
+  <div class="content">
+    <div
+      class="twitch-login"
+      :class="{ hax: !savedUser }"
+      @click="OpenLoginPage"
+    >
+      <div class="twitch-logo">
+        <i class="fas fa-spinner fa-spin fa-pulse" v-if="clicked"></i>
+        <i class="fab fa-twitch" v-else></i>
+      </div>
+      <span class="twitch-login-text"> Login with Twitch.tv </span>
     </div>
+    <div class="remember-login">
+      <input
+        type="checkbox"
+        id="remember-user"
+        name="remember-user"
+        v-model="reeemember"
+      />
+      <label for="remember-user">Remember me</label>
+    </div>
+
+    <div
+      class="twitch-login remembered-login"
+      @click="ContinueSavedUser"
+      v-if="savedUser"
+    >
+      <div class="twitch-logo">
+        <i class="fab fa-twitch"></i>
+      </div>
+      <span class="twitch-login-text"> Continue as {{ savedUserName }} </span>
+    </div>
+  </div>
 </template>
 
 <script>
-import { shell } from "electron";
+import { shell, ipcRenderer } from "electron";
 export default {
-    data() {
-        return {
-            loginUrl: "https://nt.unicast.link:42069/auth/login",
-            clicked: false
-        };
+  data() {
+    return {
+      loginUrl: "https://nt.unicast.link:42069/auth/login",
+      reeemember: false,
+      clicked: false,
+    };
+  },
+  beforeCreate() {
+    const unsub = this.$store.subscribe((mutation, state) => {
+      if (mutation.type == "setUser" && state.user.id > 0) {
+        unsub();
+        this.clicked = false;
+        this.$router.replace({ path: "/lobby" });
+        this.$store.commit("setLoading", false);
+      }
+    });
+  },
+  computed: {
+    savedUser() {
+      return this.$store.state.savedUser;
     },
-    beforeCreate() {
-        const unsub = this.$store.subscribe((mutation, state) => {
-            if (mutation.type == "setUser" && state.user.id > 0) {
-                unsub();
-                this.clicked = false
-                this.$router.replace({ path: "/lobby" });
-            }
-        });
+    savedUserName() {
+      return this.$store.state.savedUserName;
     },
-    methods: {
-        OpenLoginPage() {
-            this.clicked = true
-            shell.openExternal(this.loginUrl);
-        },
+  },
+  methods: {
+    OpenLoginPage() {
+      this.clicked = true;
+      shell.openExternal(this.loginUrl);
     },
+    ContinueSavedUser() {
+      this.$store.dispatch("continueSavedUser");
+    },
+  },
+  watch: {
+    reeemember(oldVal, newVal) {
+      ipcRenderer.send("remember_user", !newVal);
+    },
+  },
 };
 </script>
 
 <style>
-#twitch-login {
-    display: flex;
-    min-width: 300px;
-    background-color: #6441a5;
-
-    align-self: center;
-    margin: auto;
-    cursor: pointer;
+.twitch-login.hax {
+  margin-top: 40vh;
+}
+.twitch-login.remembered-login {
+  margin-top: auto;
+  align-self: stretch;
 }
 
-#twitch-login:hover {
-    background-color: #503484;
+.twitch-login {
+  display: flex;
+  min-width: 300px;
+  background-color: #6441a5;
+  margin-top: auto;
+  align-self: center;
+  cursor: pointer;
 }
 
-#twitch-login > div > i {
-    font-size: 1.5rem;
+.twitch-login:hover {
+  background-color: #503484;
 }
 
-#twitch-logo {
-    padding: 1rem;
-    background-color: #503484;
+.twitch-login > div > i {
+  font-size: 1.5rem;
 }
 
-#twitch-login-text {
-    margin: auto;
-    align-self: center;
+.twitch-logo {
+  padding: 1rem;
+  background-color: #503484;
+}
+
+.twitch-login-text {
+  margin: auto;
+  align-self: center;
+}
+
+.remember-login {
+  padding: 0.5rem;
+  align-self: center;
 }
 </style>
