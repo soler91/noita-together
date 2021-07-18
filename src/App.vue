@@ -85,6 +85,16 @@ body {
     margin: auto;
 }
 
+.left-aligned {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.right-aligned {
+    margin-left: auto;
+    margin-right: 0;
+}
+
 table {
     border-collapse: collapse;
     width: 100%;
