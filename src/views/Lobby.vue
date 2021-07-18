@@ -16,22 +16,22 @@
             <div class="lobby-controls">
                 <vInput v-model="roomFilter" label="filter" />
                 <div>
-                <vButton @click="openRoomCreation">
-                    <template slot="icon">
-                        <i class="fas fa-plus-square"></i>
-                    </template>
-                    Create
-                </vButton>
-                <vButton @click="refreshRooms">
-                    <template slot="icon">
-                        <i
-                            class="fas fa-spinner fa-spin fa-pulse"
-                            v-if="refreshing"
-                        ></i>
-                        <i class="fas fa-sync" v-else></i>
-                    </template>
-                    Refresh
-                </vButton>
+                    <vButton @click="refreshRooms">
+                        <template slot="icon">
+                            <i
+                                class="fas fa-spinner fa-spin fa-pulse"
+                                v-if="refreshing"
+                            ></i>
+                            <i class="fas fa-sync" v-else></i>
+                        </template>
+                        Refresh
+                    </vButton>
+                    <vButton @click="openRoomCreation">
+                        <template slot="icon">
+                            <i class="fas fa-plus-square"></i>
+                        </template>
+                        Create
+                    </vButton>
                 </div>
             </div>
         </div>
@@ -61,7 +61,7 @@
                             <i class="fas fa-lock" v-if="room.protected"> </i>
                             <span>{{ room.name }}</span>
                         </td>
-                        <td>{{room.owner}}</td>
+                        <td>{{ room.owner }}</td>
                         <td>{{ gamemode(room.gamemode) }}</td>
                         <td>{{ room.curUsers }}/{{ room.maxUsers }}</td>
                     </tr>
@@ -81,7 +81,7 @@ export default {
         vButton,
         vRoomCreation,
         vRoomPassword,
-        vInput
+        vInput,
     },
     data() {
         return {
@@ -89,7 +89,7 @@ export default {
             showRoomCreation: false,
             refreshing: false,
             clickedRoom: "",
-            roomFilter: ""
+            roomFilter: "",
         };
     },
     beforeCreate() {
@@ -110,14 +110,17 @@ export default {
             return this.$store.state.lobbies;
         },
         filteredRooms() {
-            const filterKey = this.roomFilter && this.roomFilter.toLowerCase()
-            let data = this.rooms
-            data = data.filter(room => {
-                return room.name.toLowerCase().includes(filterKey) || room.owner.toLowerCase().includes(filterKey)
-            })
+            const filterKey = this.roomFilter && this.roomFilter.toLowerCase();
+            let data = this.rooms;
+            data = data.filter((room) => {
+                return (
+                    room.name.toLowerCase().includes(filterKey) ||
+                    room.owner.toLowerCase().includes(filterKey)
+                );
+            });
 
-            return data
-        }
+            return data;
+        },
     },
     methods: {
         openRoomCreation() {
@@ -179,11 +182,11 @@ export default {
 
 .lobby-controls {
     display: flex;
-    flex-flow:  row wrap;
+    flex-flow: row wrap;
     margin-left: auto;
 }
 
-.lobby-controls .labeled-input{
+.lobby-controls .labeled-input {
     min-width: 20%;
     margin-top: auto;
     padding-bottom: 0;
@@ -213,5 +216,9 @@ export default {
 
 .lobbies-wrapper table td:nth-child(3n + 0) {
     width: 25%;
+}
+
+.lobbies-wrapper table td i {
+    margin: 0 0.2rem;
 }
 </style>
