@@ -122,6 +122,7 @@ export default {
 }
 
 .labeled-input > .input-validation-err {
+    margin-top: 0.3rem;
     color: tomato;
     position: absolute;
     transform: translate(0, 1.8em);
