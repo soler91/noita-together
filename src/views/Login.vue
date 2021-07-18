@@ -2,7 +2,7 @@
     <div class="content">
         <div class="login-ui">
             <div class="intro">
-                <img v-bind:src="'./icon/icon.png'" />
+                <vAppLogo />
             </div>
             <div class="login-button" v-if="savedUser">
                 <div class="twitch-login" @click="ContinueSavedUser">
@@ -46,7 +46,9 @@
 
 <script>
 import { shell, ipcRenderer } from "electron";
+import vAppLogo from "../components/vAppLogo.vue";
 export default {
+    components: { vAppLogo },
     data() {
         return {
             loginUrl: "https://nt.unicast.link:42069/auth/login",
@@ -110,13 +112,7 @@ export default {
 }
 
 .intro {
-    text-align: center;
     margin-bottom: 2rem;
-}
-
-.intro > img {
-    height: auto;
-    max-width: 10rem;
 }
 
 .twitch-login {
