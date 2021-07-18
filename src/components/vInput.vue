@@ -1,6 +1,13 @@
 <template>
     <div class="labeled-input">
-        <input placeholder="idk" ref="input" :type="inputType" @input="handleInput" :value="content" :disabled="disabled"/>
+        <input
+            placeholder="idk"
+            ref="input"
+            :type="inputType"
+            @input="handleInput"
+            :value="content"
+            :disabled="disabled"
+        />
         <label v-if="label">{{ label }}</label>
         <span v-if="errMsg" class="input-validation-err">{{ errMsg }}</span>
     </div>
@@ -44,16 +51,16 @@ export default {
     },
     methods: {
         handleInput() {
-            this.content = this.$refs.input.value
+            this.content = this.$refs.input.value;
             if (typeof this.validate == "function") {
                 const validated = this.validate(this.content);
                 if (typeof validated == "string") {
                     this.errMsg = validated;
-                    this.$emit("valid", false)
+                    this.$emit("valid", false);
                     return;
                 }
             }
-            this.$emit("valid", true)
+            this.$emit("valid", true);
             this.$emit("input", this.content);
             this.errMsg = "";
         },
@@ -66,8 +73,7 @@ export default {
     display: flex;
     position: relative;
     padding: 1em 0;
-    min-width: 15em;
-    margin-right: 1em;
+    flex: 1 1 auto;
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -87,6 +93,7 @@ export default {
     width: 100%;
     display: block;
     border: none;
+    padding: 0.2em;
     border-bottom: solid 1px rgba(255, 255, 255, 0.3);
     -webkit-transition: all 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
     transition: all 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
