@@ -7,7 +7,7 @@
         />
         <vRoomPassword
             v-if="showPasswordModal"
-            :id="clickedRoom"
+            :room="clickedRoom"
             @join="joinRoom"
             @close="closePasswordModal"
         />
@@ -54,7 +54,7 @@
                         v-else
                         v-for="room in filteredRooms"
                         :key="room.id"
-                        @dblclick="joinRoom(room.id, room.protected)"
+                        @dblclick="joinRoom(room)"
                     >
                         <td>
                             <i class="fas fa-lock" v-if="room.protected"> </i>
@@ -88,7 +88,7 @@ export default {
             showPasswordModal: false,
             showRoomCreation: false,
             refreshing: false,
-            clickedRoom: "",
+            clickedRoom: undefined,
             roomFilter: "",
         };
     },
@@ -135,15 +135,15 @@ export default {
         closePasswordModal() {
             this.showPasswordModal = false;
         },
-        joinRoom(id, password) {
-            if (typeof password == "boolean" && password) {
-                this.clickedRoom = id;
+        joinRoom(room, password) {
+            if (room.protected && !password) {
+                this.clickedRoom = room;
                 this.openPasswordModal();
                 return;
             }
             try {
                 this.$store.dispatch("joinRoom", {
-                    id,
+                    id: room.id,
                     password: password ? password : undefined,
                 });
             } catch (error) {
