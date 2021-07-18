@@ -1,7 +1,7 @@
 <template>
     <div class="content">
         <div class="login-ui">
-            <div class="intro">
+            <div class="login-ui-logo">
                 <vAppLogo />
             </div>
             <div class="login-button" v-if="savedUser">
@@ -111,7 +111,7 @@ export default {
     margin: 1em;
 }
 
-.intro {
+.login-ui-logo {
     margin-bottom: 2rem;
 }
 
