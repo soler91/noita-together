@@ -8,11 +8,14 @@
         <vErrDialog v-if="showErrDialog">
             <h1 slot="header">{{ errDialog.title }}</h1>
             <p slot="body">{{ errDialog.body }}</p>
-            <div slot="footer" class="centered">
-                <vButton @click="closeErrDialog" v-if="errDialog.canClose"
+            <div slot="footer">
+                <vButton
+                    class="right-aligned"
+                    @click="closeErrDialog"
+                    v-if="errDialog.canClose"
                     >Close</vButton
                 >
-                <p v-else>App needs to be restarted.</p>
+                <p class="centered" v-else>App needs to be restarted.</p>
             </div>
         </vErrDialog>
     </div>
