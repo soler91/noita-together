@@ -1,7 +1,7 @@
 <template>
     <div class="header">
         <div id="app-icon">
-            <i class="fab fa-twitch"></i>
+            <img v-bind:src="'./icon/icon_simple.png'" />
         </div>
 
         <div id="app-title">{{ title }}</div>
@@ -46,6 +46,12 @@ export default {
 
 #app-icon {
     padding: 8px;
+    text-align: center;
+}
+
+#app-icon > img {
+    width: auto;
+    max-height: 1.2rem;
 }
 
 #app-title {
