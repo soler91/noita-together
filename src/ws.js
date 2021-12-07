@@ -4,11 +4,11 @@ const ws = require("ws")
 const messageHandler = require("./proto/messageHandler")
 const appEvent = require("./appEvent")
 const noita = require("./noita")
-const host = "wss://nt.unicast.link:42069/"
+const host = "wss://ntdev.unicast.link/"
 const print = true
 module.exports = (data) => {
     const user = { userId: data.id, name: data.display_name }
-    noita.setUser({userId: user.userId, name: user.name, host: false})
+    noita.setUser({ userId: user.userId, name: user.name, host: false })
     let isHost = false
     let client = new ws(`${host}${data.token}`)
     const lobby = {
@@ -124,7 +124,7 @@ module.exports = (data) => {
     })
 
     noita.on("death_kick", (userId) => {
-        const msg = messageHandler.encodeLobbyMsg("cKickUser", {userId})
+        const msg = messageHandler.encodeLobbyMsg("cKickUser", { userId })
         sendMsg(msg)
     })
 
@@ -205,11 +205,11 @@ module.exports = (data) => {
         }
         else if (event.wands) {
             const wands = event.wands.map(mapWands)
-            payload.wands = {list: wands}
+            payload.wands = { list: wands }
         }
         else if (event.objects) {
             const objects = event.objects.map(mapObjects)
-            payload.objects = {list: objects}
+            payload.objects = { list: objects }
         }
         const msg = messageHandler.encodeGameMsg("cPlayerAddItem", payload)
         sendMsg(msg)
@@ -232,7 +232,7 @@ module.exports = (data) => {
 
     noita.on("CustomModEvent", (event) => {
         const payload = JSON.stringify(event)
-        const msg = messageHandler.encodeGameMsg("cCustomModEvent", {payload})
+        const msg = messageHandler.encodeGameMsg("cCustomModEvent", { payload })
         sendMsg(msg)
     })
 

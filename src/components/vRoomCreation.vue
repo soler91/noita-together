@@ -2,12 +2,15 @@
     <vModal>
         <h1 slot="header">Create Room</h1>
         <template slot="body">
+            <select class="slot-selector" v-model="toCreate.gamemode">
+                <option>Co-op</option>
+                <option>Nemesis PROTOTYPE</option>
+            </select>
             <select class="slot-selector" v-model="toCreate.maxUsers">
-                <option v-for="(slot, index) in slots" :key="index">
-                    {{ slot }} slots
-                </option>
+                <option v-for="(slot, index) in slots" :key="index">{{ slot }} slots</option>
             </select>
             <vInput
+                v-if="userExtra > 0"
                 v-model="toCreate.name"
                 label="room name"
                 :validate="validateLength"
@@ -38,7 +41,7 @@ export default {
             canCreate: true,
             toCreate: {
                 name: "",
-                gamemode: 0,
+                gamemode: "Co-op",
                 password: "",
                 maxUsers: "5 slots",
             },
@@ -50,8 +53,8 @@ export default {
         },
         slots() {
             const slots = [5, 10, 15, 20, 25, 30]
-            if (this.userExtra) {
-                return slots.concat([45,60,75,90])
+            if (this.userExtra > 1) {
+                return slots.concat([45, 60, 75, 90])
             }
             return slots
         }
@@ -61,6 +64,9 @@ export default {
             const payload = { ...this.toCreate };
             let maxUsers = payload.maxUsers.split(" ")[0];
             payload.maxUsers = Number(maxUsers);
+            if (!payload.name) { payload.name = "eeeeeee" }
+            if (payload.gamemode == "Co-op") { payload.gamemode = 0 }
+            if (payload.gamemode == "Nemesis PROTOTYPE") { payload.gamemode = 2 }
             this.$emit("createRoom", payload);
         },
         close() {

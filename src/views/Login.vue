@@ -1,35 +1,22 @@
 <template>
   <div class="content">
-    <div
-      class="twitch-login"
-      :class="{ hax: !savedUser }"
-      @click="OpenLoginPage"
-    >
+    <div class="twitch-login" :class="{ hax: !savedUser }" @click="OpenLoginPage">
       <div class="twitch-logo">
         <i class="fas fa-spinner fa-spin fa-pulse" v-if="clicked"></i>
         <i class="fab fa-twitch" v-else></i>
       </div>
-      <span class="twitch-login-text"> Login with Twitch.tv </span>
+      <span class="twitch-login-text">Login with Twitch.tv</span>
     </div>
     <div class="remember-login">
-      <input
-        type="checkbox"
-        id="remember-user"
-        name="remember-user"
-        v-model="reeemember"
-      />
+      <input type="checkbox" id="remember-user" name="remember-user" v-model="reeemember" />
       <label for="remember-user">Remember me</label>
     </div>
 
-    <div
-      class="twitch-login remembered-login"
-      @click="ContinueSavedUser"
-      v-if="savedUser"
-    >
+    <div class="twitch-login remembered-login" @click="ContinueSavedUser" v-if="savedUser">
       <div class="twitch-logo">
         <i class="fab fa-twitch"></i>
       </div>
-      <span class="twitch-login-text"> Continue as {{ savedUserName }} </span>
+      <span class="twitch-login-text">Continue as {{ savedUserName }}</span>
     </div>
   </div>
 </template>
@@ -39,7 +26,7 @@ import { shell, ipcRenderer } from "electron";
 export default {
   data() {
     return {
-      loginUrl: "https://nt.unicast.link:42069/auth/login",
+      loginUrl: "https://ntdev.unicast.link/auth/login",
       reeemember: false,
       clicked: false,
     };

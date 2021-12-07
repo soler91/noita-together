@@ -3,13 +3,17 @@
         <!-- TODO show personal alert for user -->
         <div ref="content">
             <span :class="user.ready ? 'user-ready' : 'user-not-ready'">
-                <i v-if="isHost && host.ready && user.ready && matchHost.length > 0" class="fas fa-exclamation-triangle" slot="content"></i>
+                <i
+                    v-if="host.ready && user.ready && matchHost.length > 0"
+                    class="fas fa-exclamation-triangle"
+                    slot="content"
+                ></i>
                 {{ user.ready ? "Ready" : "Not Ready" }}
             </span>
         </div>
         <div class="info" ref="info">
             <div v-if="user.ready">
-                <template v-if="isHost && host.ready && matchHost.length > 0">
+                <template v-if="host.ready && matchHost.length > 0">
                     <p v-for="entry in matchHost" :key="entry">{{ entry }}</p>
                 </template>
                 <p>Seed: {{ user.seed }}</p>
@@ -19,7 +23,7 @@
                 <p v-for="mod in user.mods" :key="mod">{{ mod }}</p>
             </div>
             <div v-else>
-                <p>Waiting for game...</p>
+                <p>Waiting for game (make sure noita-together mod is enabled in game)...</p>
             </div>
         </div>
     </div>
@@ -29,8 +33,8 @@
 import { createPopper } from "@popperjs/core";
 export default {
     props: {
-        user: {
-            type: Object,
+        userId: {
+            type: String,
             required: true,
         },
     },
@@ -49,19 +53,40 @@ export default {
                 seed: {
                     hostMsg: "User is not in the same seed.",
                     userMsg: "You are not in the same seed as the host."
+                },
+                nemesis_notfound: {
+                    hostMsg: "noita-nemesis mod needs to be enabled",
+                    userMsg: "noita-nemesis mod needs to be enabled"
+                },
+                nemesis_order: {
+                    hostMsg: "noita-nemesis needs to be above noita-together in the game's mod list order",
+                    userMsg: "noita-nemesis needs to be above noita-together in the game's mod list order"
                 }
             },
         };
     },
     computed: {
+        user() {
+            const users = this.$store.state.room.users;
+            let found = undefined
+            for (const user of users) {
+                if (user.userId == this.userId) {
+                    found = user
+                }
+            }
+            return found
+        },
         isHost() {
             return this.$store.getters.isHost;
+        },
+        mode() {
+            return this.$store.getters.roomGamemode;
         },
         seed() {
             const flags = this.$store.getters.flags
             let seed = 0
             for (const flag of flags) {
-                if (flag.id == "sync_world_seed") { 
+                if (flag.id == "sync_world_seed") {
                     seed = flag.value
                 }
             }
@@ -99,6 +124,23 @@ export default {
             if (this.seed > 0 && this.host.seed != this.user.seed) {
                 messages.push(this.matches.seed[msg])
             }
+            if (this.mode == 2) {
+                let found = false
+                let order = false
+                for (const mod of this.mods) {
+                    if (mod == "noita-nemesis") { found = true }
+                    if (found && mod == "noita-together") {
+                        order = true
+                    }
+                }
+
+                if (!found) {
+                    messages.push(this.matches.nemesis_notfound[msg])
+                }
+                if (!order) {
+                    messages.push(this.matches.nemesis_order[msg])
+                }
+            }
             return messages;
         },
     },
@@ -106,8 +148,8 @@ export default {
         if (this.$refs.info) {
             const content = this.$refs.content;
             this.tooltip = createPopper(content, this.$refs.info, {
-                placement: "left",
-                modifiers: [{ name: "offset", options: { offset: [0, 15] } }],
+                placement: "auto",
+                modifiers: [{ name: "offset", options: { offset: [0, 20] } }],
             });
         }
     },

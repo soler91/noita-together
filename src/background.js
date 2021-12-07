@@ -91,16 +91,14 @@ ipcMain.on("remember_user", (event, val) => {
 ipcMain.on("TRY_LOGIN", async (event, account) => {
     try {
         const token = await keytar.getPassword("Noita Together", account)
-        const { body } = await got.post("https://nt.unicast.link:42069/auth/refresh", {
+        const { body } = await got.post("https://ntdev.unicast.link/auth/refresh", {
             json: {
                 ticket: token
             },
             responseType: 'json'
         })
         const { display_name, ticket, id, e } = body
-        if (typeof e === "string" && e === "true") {
-            appEvent("USER_EXTRA", true)
-        }
+        appEvent("USER_EXTRA", e)
         wsClient({
             display_name,
             token: ticket,
@@ -134,7 +132,7 @@ else {
     app.on("second-instance", (event, commandLine, workingDirectory) => {
         const cmdIndex = isDevelopment ? 3 : 2
 
-        if (commandLine[cmdIndex]) {//noitatogether://?display_name=test&token=abc321&refresh=idk456&id=1111&e=true
+        if (commandLine[cmdIndex]) {//noitatogether://?display_name=test&token=abc321&refresh=idk456&id=1111&e=0
             let url = new URL(commandLine[cmdIndex])
             let display_name = url.searchParams.get("display_name")
             let token = url.searchParams.get("token")
@@ -144,9 +142,7 @@ else {
             if (rememberUser) {
                 keytar.setPassword("Noita Together", display_name, refreshToken)
             }
-            if (typeof extra === "string" && extra === "true") {
-                appEvent("USER_EXTRA", true)
-            }
+            appEvent("USER_EXTRA", extra)
             wsClient({
                 display_name,
                 token,

@@ -134,6 +134,13 @@ export default new Vuex.Store({
                 { id: "death_penalty_weak_respawn", name: "Respawn Penalty", tooltip: "Player respawns and everyone takes a % drop on their max hp, once it goes below certain threshold on the weakest player the run ends for everyone.", type: "boolean", value: true },
                 { id: "death_penalty_full_respawn", name: "Respawn", tooltip: "Player will respawn on their last checkpoint and no penalties.", type: "boolean", value: true },
                 { id: "_ondeath_kick", name: "Kick on death", tooltip: "Kicks whoever dies, more customisable soon™.", type: "boolean", value: false }
+            ],
+            2: [
+                { id: "sync_steve", name: "Sync Steve", tooltip: "Angers the gods for everyone.", type: "boolean", value: false },
+                { id: "sync_orbs", name: "Sync Orbs", tooltip: "When someone picks up an orb everyone else gets it too.", type: "boolean", value: false },
+                { id: "sync_world_seed", name: "Sync Seed", tooltip: "All players play in the same world seed (requires everyone to start a new game) 0 means random seed.", type: "number", value: 0 },
+                { id: "death_penalty_weak_respawn", name: "Last noita standing.", tooltip: "Run ends when there's only one player left.", type: "boolean", value: true },
+                { id: "_ondeath_kick", name: "Kick on death (do not disable)", tooltip: "Kicks whoever dies, more customisable soon™.", type: "boolean", value: true }
             ]
         },
         gamemodes: {
@@ -144,7 +151,7 @@ export default new Vuex.Store({
         user: {
             name: "",
             id: 0,
-            extra: false
+            extra: 0
         },
         savedUser: false,
         savedUserName: "",
@@ -343,13 +350,13 @@ export default new Vuex.Store({
             }
         },
         setDefaultFlags: (state, mode) => {
-            if (mode == 0) {
+            if (mode == 0 || mode == 2) {
                 state.roomFlags = [...state.defaultFlags[mode]]
             }
         }
     },
     actions: {
-        continueSavedUser: ({state, commit, dispatch}) => {
+        continueSavedUser: ({ state, commit, dispatch }) => {
             commit("setLoading", true)
             ipcRenderer.send("TRY_LOGIN", state.savedUserName)
             ipcRenderer.once("TRY_LOGIN_FAILED", () => {

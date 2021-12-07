@@ -1,19 +1,12 @@
 <template>
     <div class="content" id="room">
-        <vRoomFlags
-            v-if="showRoomFlags"
-            @applyFlags="sendFlags"
-            @close="closeRoomFlags"
-        />
-        <vLeaveRoom
-            v-if="showLeaveModal"
-            @close="closeLeaveModal"
-        />
+        <vRoomFlags v-if="showRoomFlags" @applyFlags="sendFlags" @close="closeRoomFlags" />
+        <vLeaveRoom v-if="showLeaveModal" @close="closeLeaveModal" />
         <div class="room-header">
             <vButton @click="openLeaveRoom">
                 <i class="fas fa-arrow-left" slot="icon"></i>
             </vButton>
-            <h1>[{{users.length}}/{{room.maxUsers}}]{{ room.name }}</h1>
+            <h1>[{{ users.length }}/{{ room.maxUsers }}]{{ room.name }}</h1>
             <div class="room-edit">
                 <vButton @click="lockRoom" :disabled="!isHost">
                     <i class="fas fa-lock" slot="icon" v-if="room.locked"></i>
@@ -41,13 +34,10 @@
                     <tr v-for="user in users" :key="user.userId">
                         <td>{{ user.name }}</td>
                         <td>
-                            <vUserTooltip :user="user"></vUserTooltip>
+                            <vUserTooltip :userId="user.userId"></vUserTooltip>
                         </td>
                         <td v-if="isHost && user.userId != userId">
-                            <vButton
-                                @click="kick(user.userId)"
-                                size="btn-small"
-                            >
+                            <vButton @click="kick(user.userId)" size="btn-small">
                                 <i class="fas fa-times" slot="icon"></i>
                                 kick
                             </vButton>
@@ -57,9 +47,7 @@
                             </vButton>
                         </td>
                         <td v-else-if="isHost">
-                            <vButton @click="startRun(false)" size="btn-small">
-                                Start Run
-                            </vButton>
+                            <vButton @click="startRun(false)" size="btn-small">Start Run</vButton>
                         </td>
                     </tr>
                 </tbody>
@@ -68,19 +56,11 @@
 
         <div class="chat-wrapper">
             <div class="chatbox" @keydown="sendChat">
-                <input
-                    type="text"
-                    v-model="chatMsg"
-                    placeholder="Send Message"
-                />
+                <input type="text" v-model="chatMsg" placeholder="Send Message" />
             </div>
             <div class="room-chat" ref="chat">
                 <template v-if="chat.length > 0">
-                    <div
-                        class="chat-entry"
-                        v-for="(entry, index) in chat"
-                        :key="index"
-                    >
+                    <div class="chat-entry" v-for="(entry, index) in chat" :key="index">
                         <span class="chat-name">{{ entry.name }}</span>
                         <span class="chat-message">{{ entry.message }}</span>
                     </div>
@@ -161,8 +141,8 @@ export default {
         },
     },
     methods: {
-        lockRoom(){
-            this.$store.dispatch("updateRoom", {locked: !this.room.locked})
+        lockRoom() {
+            this.$store.dispatch("updateRoom", { locked: !this.room.locked })
         },
         sendChat(e) {
             if (e.key != "Enter" || !this.chatMsg.trim()) {
@@ -200,7 +180,7 @@ export default {
             this.$store.dispatch("banUser", { userId });
         },
         startRun(forced) {
-            this.$store.dispatch("startRun", {forced})
+            this.$store.dispatch("startRun", { forced })
         }
     },
 };

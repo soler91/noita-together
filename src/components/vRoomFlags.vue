@@ -4,18 +4,12 @@
         <template slot="body" class="flags-body">
             <h2>
                 Death Penalty
-                <vTooltip
-                    ><span>{{ deathTooltip }}</span></vTooltip
-                >
+                <vTooltip>
+                    <span>{{ deathTooltip }}</span>
+                </vTooltip>
             </h2>
-            <select
-                class="slot-selector"
-                :disabled="!isHost"
-                v-model="deathFlag"
-            >
-                <option v-for="option in payload.death" :key="option.id">
-                    {{ option.name }}
-                </option>
+            <select class="slot-selector" :disabled="!isHost" v-model="deathFlag">
+                <option v-for="option in payload.death" :key="option.id">{{ option.name }}</option>
             </select>
 
             <h2>Run Options</h2>
@@ -26,16 +20,18 @@
                     v-model="payload.game[entry.id].value"
                     :disabled="!isHost"
                 >
-                    <span
-                        >{{ entry.name }}
-                    </span>
-                    <vTooltip
-                        ><span>{{ entry.tooltip }}</span></vTooltip
-                    >
+                    <span>{{ entry.name }}</span>
+                    <vTooltip>
+                        <span>{{ entry.tooltip }}</span>
+                    </vTooltip>
                 </vSwitch>
             </div>
 
-            <h2>World seed <vTooltip><span>{{ payload.world.sync_world_seed.tooltip }}</span></vTooltip>
+            <h2>
+                World seed
+                <vTooltip>
+                    <span>{{ payload.world.sync_world_seed.tooltip }}</span>
+                </vTooltip>
             </h2>
             <div class="world-seed">
                 <vInput v-model="payload.world.sync_world_seed.value" ref="seedInput"></vInput>
@@ -67,6 +63,7 @@ export default {//braincells where'd ya go
     beforeMount() {
         this.payload = this.flags;
         const deathFlag = this.storeFlags.find(v => v.id.startsWith("death_penalty") && v.value)
+        console.log({ f: this.storeFlags })
         this.deathFlag = deathFlag.name
     },
     data() {
@@ -137,7 +134,7 @@ export default {//braincells where'd ya go
             for (const flag in flags.world) {
                 let val = Number(flags.world[flag].value)
                 if (isNaN(val)) { val = 0 }
-                payload.push({flag: flags.world[flag].id, value: Math.min(val, 4294967295)})
+                payload.push({ flag: flags.world[flag].id, value: Math.min(val, 4294967295) })
             }
             //console.log({ flags: payload })
             this.$emit("applyFlags", { flags: payload });
@@ -177,7 +174,7 @@ export default {//braincells where'd ya go
     width: 100%;
 }
 
-.world-seed .labeled-input{
+.world-seed .labeled-input {
     margin-top: auto;
     padding-bottom: 0;
     margin-right: 0;

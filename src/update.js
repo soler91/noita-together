@@ -1,16 +1,16 @@
 const appEvent = require("./appEvent")
-let branch = "mod" //'master';
+//let branch = "mod" //'master';
 let updatelog = true;
 let noselfupdate = false;
 function updateLog(data) {
     appEvent("update_log", data)
 }
 
-exports.updateMod = async (gamePath) => {
+function updaterSetup(branch, gamePath) {
     delete require.cache[require.resolve('./updater')];
     const Updater = require('./updater');
 
-    let error = false;
+    let error = false; //eeee
 
     const updater = new Updater(branch, gamePath);
     updater.on('gamepath_error', () => {
@@ -40,12 +40,34 @@ exports.updateMod = async (gamePath) => {
     updater.on('execute_finish', () => { if (updatelog) updateLog(`[update] Update installation finished`); });
     updater.on('run_finish', (success) => {
         updateLog(`[update] Self-update ${success ? 'finished' : 'failed'}`);
-        appEvent("update_done", success)
+
     });
 
-    const filesChanged = await updater.run();
-    if (error)
-        return false;
-    
+    return updater
+}
+
+exports.updateMod = async (gamePath) => {
+    // i wan die
+    let error = false
+    let coopReady = false
+    let memesisReady = false
+    const coop = updaterSetup("mod", gamePath);
+    const memesis = updaterSetup("memesis", gamePath);
+    coop.on('download_error', () => { error = true })
+    coop.on('install_error', () => { error = true })
+    coop.on('run_finish', () => {
+        coopReady = true
+    })
+    memesis.on('download_error', () => { error = true })
+    memesis.on('install_error', () => { error = true })
+    memesis.on('run_finish', () => {
+        memesisReady = true
+    })
+
+    const coopstuff = await coop.run()
+    const memesisstuff = await memesis.run()
+    if (coopReady && memesisReady && !error) {
+        appEvent("update_done", success)
+    }
     return true;
 }
