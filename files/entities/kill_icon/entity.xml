@@ -1,0 +1,19 @@
+<Entity>
+
+	<SpriteComponent 
+		_tags="enabled_in_world"
+		image_file="" 
+        alpha="0.6"
+		offset_x="8"
+		offset_y="8" 
+		z_index="0.5"
+		emissive="1"
+		visible="1"
+		>
+	</SpriteComponent>
+
+    <LuaComponent
+        script_source_file="mods/noita-nemesis/files/entities/kill_icon/script.lua"
+		execute_every_n_frame="1">
+    </LuaComponent>
+</Entity>

@@ -1,0 +1,16 @@
+<Entity name="nemesis_earthquake"> <!-- Use to find appended entity to prevent multiples if its not supposed to stack -->
+
+	<LuaComponent
+		script_source_file="mods/noita-nemesis/files/entities/earthquake/start.lua"
+		execute_every_n_frame="5"
+		execute_times="1"
+    >
+	</LuaComponent>
+
+	<LuaComponent
+		script_source_file="mods/noita-nemesis/files/entities/earthquake/end.lua"
+		execute_every_n_frame="50"
+		execute_times="1"
+    >
+	</LuaComponent>
+</Entity>

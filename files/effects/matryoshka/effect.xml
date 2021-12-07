@@ -1,0 +1,24 @@
+<Entity name="nemesis_matryoshka"> <!-- Use to find appended entity to prevent multiples if its not supposed to stack -->
+	
+	<LuaComponent
+		script_source_file="mods/noita-nemesis/files/effects/matryoshka/effect.lua"
+		execute_every_n_frame="2"
+    >
+	</LuaComponent>
+
+	<UIIconComponent
+		icon_sprite_file="mods/noita-nemesis/files/badges/matryoshka.png"
+		name="Matryoshka"
+		description="Enemyception or whatever"
+		display_above_head="0"
+		display_in_hud="1"
+		is_perk="0"
+    >
+	</UIIconComponent>
+	<!--
+    <LifetimeComponent
+		lifetime="69"
+	>
+	</LifetimeComponent>
+	-->
+</Entity>

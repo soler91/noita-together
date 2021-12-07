@@ -1,0 +1,18 @@
+<Sprite 
+	filename="mods/noita-nemesis/files/entities/items/pickup/sanic/sprite.png" 
+	default_animation="default"
+	>
+	
+	<RectAnimation
+		name="default"
+		pos_x="0"
+		pos_y="0"
+		frame_count="8"
+		frame_width="32"
+		frame_height="32"
+		frame_wait="0.06"
+		frames_per_row="8"
+		loop="1"
+		>
+  </RectAnimation>
+</Sprite>

@@ -1,0 +1,17 @@
+<Entity name="nemesis_confusion">
+	<InheritTransformComponent only_position="1" />
+	<GameEffectComponent 
+		effect="CONFUSION"
+		frames="-1">
+	</GameEffectComponent>
+
+    <UIIconComponent
+		icon_sprite_file="mods/noita-nemesis/files/badges/confusion.png"
+		name="Confused"
+		description="ehhhhhh"
+		display_above_head="1"
+		display_in_hud="1"
+		is_perk="0"
+    >
+	</UIIconComponent>
+</Entity>

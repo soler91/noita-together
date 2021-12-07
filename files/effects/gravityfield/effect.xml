@@ -1,0 +1,30 @@
+<Entity name="nemesis_gravityfield"> <!-- Use to find appended entity to prevent multiples if its not supposed to stack -->
+	<InheritTransformComponent >
+			<Transform 
+				position.x="0" 
+				position.y="0" >
+			</Transform>
+    </InheritTransformComponent>
+	<LuaComponent
+		script_source_file="mods/noita-nemesis/files/effects/gravityfield/start.lua"
+		execute_every_n_frame="-1"
+		execute_on_added="1"
+    >
+	</LuaComponent>
+
+	<UIIconComponent
+		icon_sprite_file="mods/noita-nemesis/files/badges/gravityfield.png"
+		name="Gravity field"
+		description="You pull stuff"
+		display_above_head="0"
+		display_in_hud="1"
+		is_perk="0"
+    >
+	</UIIconComponent>
+	<!--
+    <LifetimeComponent
+		lifetime="69"
+	>
+	</LifetimeComponent>
+	-->
+</Entity>

@@ -1,0 +1,20 @@
+<Entity name="nemesis_slowpoke">
+	<InheritTransformComponent>
+    </InheritTransformComponent>	
+    
+    <GameEffectComponent 
+    	effect="MOVEMENT_SLOWER"
+    	frames="600"
+    >
+	</GameEffectComponent >
+	
+	<UIIconComponent
+		name="Slowpoke"
+		description="You are slow"
+		icon_sprite_file="mods/noita-nemesis/files/badges/slowpoke.png"
+		is_perk="0"
+		display_above_head="0"
+		display_in_hud="1"
+		>
+	</UIIconComponent>
+</Entity>

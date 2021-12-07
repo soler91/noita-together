@@ -1,0 +1,19 @@
+<Entity name="nemesis_grounded">
+
+	<LuaComponent
+		script_source_file="mods/noita-nemesis/files/effects/grounded/start.lua"
+		execute_every_n_frame="1"
+		execute_on_added="1"
+    >
+	</LuaComponent>
+
+	<UIIconComponent
+		icon_sprite_file="mods/noita-nemesis/files/badges/grounded.png"
+		name="Grounded"
+		description="Can't fly anymore."
+		display_above_head="1"
+		display_in_hud="1"
+		is_perk="0"
+    >
+	</UIIconComponent>
+</Entity>

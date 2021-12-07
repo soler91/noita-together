@@ -1,0 +1,159 @@
+<Entity name="unknown" tags="item_physics,gold_nugget" >
+
+	<!-- physical presence -->
+	<UIInfoComponent
+		name="Sanic Ring">
+	</UIInfoComponent>
+
+	<PhysicsBodyComponent 
+		_tags="enabled_in_world"
+		uid="1" 
+		allow_sleep="1" 
+		linear_damping="1" 
+		angular_damping="1" 
+		fixed_rotation="1" 
+		is_bullet="0" 
+		linear_damping="0"
+		auto_clean="0"
+		go_through_sand="0"
+		hax_fix_going_through_ground="1"
+		on_death_leave_physics_body="1" >
+	</PhysicsBodyComponent>
+
+	<PhysicsShapeComponent 
+		is_circle="1"
+		is_based_on_sprite="1">
+	</PhysicsShapeComponent>
+
+	<VariableStorageComponent
+		name="gold_value"
+		value_int="1" >
+	</VariableStorageComponent>
+
+	
+	<!-- item -->
+	
+	<ItemComponent
+		_tags="enabled_in_world"
+		auto_pickup="1"
+		item_name="Sanic Ring"
+		stats_count_as_item_pick_up="0"
+		max_child_items="0"
+		is_pickable="1"
+		ui_sprite="data/ui_gfx/items/goldnugget.png"
+		ui_description="Lorem ipsum"
+		play_pick_sound="0"
+		play_spinning_animation="0"
+		preferred_inventory="FULL" >
+	</ItemComponent>
+
+	<SpriteComponent 
+		_tags="enabled_in_world,character" 
+		alpha="1" 
+		image_file="mods/noita-nemesis/files/entities/items/pickup/sanic/sprite.xml" 
+		next_rect_animation="" 
+		rect_animation="" 
+		offset_x="16"
+		offset_y="31"
+		z_index="20"
+		rect_animation="default"
+		has_special_scale="1"
+		special_scale_x="0.3"
+		special_scale_y="0.3">
+	</SpriteComponent>
+	
+	<HitboxComponent 
+		_tags="enabled_in_world"
+		aabb_min_x="-3" 
+		aabb_max_x="3" 
+		aabb_min_y="-5" 
+		aabb_max_y="0" >
+	</HitboxComponent>
+
+	<LifetimeComponent
+		lifetime="1600" >
+	</LifetimeComponent>
+	
+	<LuaComponent 
+		script_item_picked_up="data/scripts/items/gold_pickup.lua" >
+	</LuaComponent>
+
+	<!-- particle glitter -->
+	<SpriteParticleEmitterComponent
+		sprite_file="data/particles/shine_07.xml"
+		lifetime="0.3"
+		emission_interval_min_frames="20"
+		emission_interval_max_frames="250"
+		count_min="1"
+		count_max="1"
+		additive="1"
+		emissive="0"
+		scale.x="1.0"
+		scale.y="1.0"
+		sprite_random_rotation="1"
+		randomize_scale.min_x="-0.1" 
+		randomize_scale.max_x="0.1" 
+		randomize_scale.min_y="-0.1" 
+		randomize_scale.max_y="0.1" 
+		randomize_position.min_y="-8" 
+		randomize_position.max_y="8"
+		randomize_position.min_x="-8"  
+		randomize_position.max_x="8"
+		randomize_animation_speed_coeff.min="0.667"  
+		randomize_animation_speed_coeff.max="1.0" 
+		>
+	</SpriteParticleEmitterComponent>
+
+	<SpriteParticleEmitterComponent
+		sprite_file="data/particles/shine_08.xml"
+		lifetime="0.2"
+		randomize_lifetime.min="0.1"
+		randomize_lifetime.max="0.8"
+		emission_interval_min_frames="10"
+		emission_interval_max_frames="100"
+		count_min="1"
+		count_max="1"
+		additive="1"
+		emissive="0"
+		scale.x="1.0"
+		scale.y="1.0"
+		sprite_random_rotation="1"
+		randomize_scale.min_x="-0.1" 
+		randomize_scale.max_x="0.1" 
+		randomize_scale.min_y="-0.1" 
+		randomize_scale.max_y="0.1" 
+		randomize_position.min_y="-7" 
+		randomize_position.max_y="7"
+		randomize_position.min_x="-7"  
+		randomize_position.max_x="7"
+		randomize_animation_speed_coeff.min="0.667"  
+		randomize_animation_speed_coeff.max="1.0" 
+		>
+	</SpriteParticleEmitterComponent>
+
+	<SpriteParticleEmitterComponent
+		sprite_file="data/particles/shine_06.xml"
+		lifetime="0.56"
+		emission_interval_min_frames="100"
+		emission_interval_max_frames="600"
+		additive="1"
+		emissive="0"
+		scale.x="1.0"
+		scale.y="1.0"
+		count_min="1"
+		count_max="1"
+		sprite_random_rotation="1"
+		randomize_scale.min_x="-0.1" 
+		randomize_scale.max_x="0.1" 
+		randomize_scale.min_y="-0.1" 
+		randomize_scale.max_y="0.1" 
+		randomize_position.min_y="-8" 
+		randomize_position.max_y="8"
+		randomize_position.min_x="-8"  
+		randomize_position.max_x="8"
+		randomize_animation_speed_coeff.min="0.667"  
+		randomize_animation_speed_coeff.max="1.0" 
+		>
+	</SpriteParticleEmitterComponent>
+
+</Entity>

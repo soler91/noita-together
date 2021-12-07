@@ -1,0 +1,19 @@
+<Entity name="nemesis_heavyspread">
+	<InheritTransformComponent>
+    </InheritTransformComponent>	
+    
+    <ShotEffectComponent
+        extra_modifier="extreme_spread"
+		>
+	</ShotEffectComponent>
+
+    <UIIconComponent
+		icon_sprite_file="mods/noita-nemesis/files/badges/heavyspread.png"
+		name="Heavy spread"
+		description="we spreadin"
+		display_above_head="1"
+		display_in_hud="1"
+		is_perk="0"
+    >
+	</UIIconComponent>
+</Entity>

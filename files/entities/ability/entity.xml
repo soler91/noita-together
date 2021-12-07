@@ -1,0 +1,40 @@
+<Entity tags="teleportable_NOT, NEMESIS_ABILITY">
+	<UIInfoComponent
+		name="Ability"
+	></UIInfoComponent>
+
+    <InteractableComponent
+        ui_text="Press $0 to buy ability"
+    >
+    </InteractableComponent>
+
+	<SpriteComponent 
+		_tags="enabled_in_world,enabled_in_hand"
+		image_file="mods/noita-nemesis/files/entities/ability/sprite.png" 
+        alpha="1"
+		offset_x="8"
+		offset_y="8" 
+		z_index="0.5"
+		>
+	</SpriteComponent>
+
+	<SpriteComponent 
+		_tags="enabled_in_world,enabled_in_hand,badge"
+		image_file="mods/noita-nemesis/files/badges/enemyrandomizer.png"
+        alpha="1"
+		offset_x="6"
+		offset_y="6" 
+		z_index="0.4"
+		>
+	</SpriteComponent>
+
+	<LuaComponent
+		script_source_file="mods/noita-nemesis/files/entities/ability/kill_check.lua"
+		execute_every_n_frame="1"
+    >
+	</LuaComponent>
+
+    <LuaComponent
+        script_interacting="mods/noita-nemesis/files/scripts/buy_ability.lua">
+    </LuaComponent>
+</Entity>
