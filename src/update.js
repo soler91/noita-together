@@ -67,7 +67,7 @@ exports.updateMod = async (gamePath) => {
     const coopstuff = await coop.run()
     const memesisstuff = await memesis.run()
     if (coopReady && memesisReady && !error) {
-        appEvent("update_done", success)
+        appEvent("update_done", true)
     }
     return true;
 }
