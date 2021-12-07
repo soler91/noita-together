@@ -4,7 +4,7 @@ const ws = require("ws")
 const messageHandler = require("./proto/messageHandler")
 const appEvent = require("./appEvent")
 const noita = require("./noita")
-const host = "wss://ntdev.unicast.link/"
+const host = "wss://nt.unicast.link/"
 const print = true
 module.exports = (data) => {
     const user = { userId: data.id, name: data.display_name }

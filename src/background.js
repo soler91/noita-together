@@ -91,7 +91,7 @@ ipcMain.on("remember_user", (event, val) => {
 ipcMain.on("TRY_LOGIN", async (event, account) => {
     try {
         const token = await keytar.getPassword("Noita Together", account)
-        const { body } = await got.post("https://ntdev.unicast.link/auth/refresh", {
+        const { body } = await got.post("https://nt.unicast.link/auth/refresh", {
             json: {
                 ticket: token
             },

@@ -27,7 +27,7 @@ function FindGameFolder() {
             gamePaths.push(data.toString())
         });
         child.stdin.end()
-        child.on("error", () => {}) // do nothing on error and let it default to blank on close
+        child.on("error", () => { }) // do nothing on error and let it default to blank on close
         child.on("close", () => {
             let gamePath = gamePaths.shift() || ""
             if (gamePath) { gamePath = gamePath.replace("\r\n", "") }
@@ -134,8 +134,9 @@ class Updater extends EventEmitter {
             }
         }
         if (fs.existsSync(path.join(this.gamePath, "/noita.exe"))) {
-
-            this.gamePath = path.join(this.gamePath, "/mods/noita-together/")
+            let folder = "noita-together"
+            if (this.branch == "nemesis") { folder = "noita-nemesis" }
+            this.gamePath = path.join(this.gamePath, "/mods/" + folder + "/")
             return true
         }
         else { return false }

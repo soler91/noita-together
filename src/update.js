@@ -52,7 +52,7 @@ exports.updateMod = async (gamePath) => {
     let coopReady = false
     let memesisReady = false
     const coop = updaterSetup("mod", gamePath);
-    const memesis = updaterSetup("memesis", gamePath);
+    const memesis = updaterSetup("nemesis", gamePath);
     coop.on('download_error', () => { error = true })
     coop.on('install_error', () => { error = true })
     coop.on('run_finish', () => {
