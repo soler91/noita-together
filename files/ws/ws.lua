@@ -23,7 +23,7 @@ end
 SendWsEvent = function(data)
     if main_socket then
         if main_socket:status() == "open" then
-            local encoded = json.encode(data)
+            local encoded = jankson.encode(data)
             main_socket:send(encoded)
         end
     end
@@ -52,7 +52,7 @@ _ws_main = function()
             increase_count()
             return
         end
-        local decoded, data = pcall(json.decode, msg)
+        local decoded, data = pcall(jankson.decode, msg)
         if (decoded) then
             if (data.event == "CustomModEvent") then
                 local evt = customEvents[data.payload.name]

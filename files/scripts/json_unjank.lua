@@ -12,11 +12,11 @@
 --
 -- USAGE:
 -- This module exposes three functions:
---   json.encode(obj)
---     Accepts Lua value (table/string/boolean/number/nil/json.null/json.empty) and returns JSON string.
---   json.decode(s)
+--   jankson.encode(obj)
+--     Accepts Lua value (table/string/boolean/number/nil/jankson.null/jankson.empty) and returns JSON string.
+--   jankson.decode(s)
 --     Accepts JSON (as string or as loader function) and returns Lua object.
---   json.traverse(s, callback)
+--   jankson.traverse(s, callback)
 --     Accepts JSON (as string or as loader function) and user-supplied callback function, returns nothing
 --     Traverses the JSON, sends each item to callback function, no memory-consuming Lua objects are being created.
 
@@ -28,7 +28,7 @@
 --   1.2.1   Now you can partially decode JSON while traversing it (callback function should return true).
 --   1.2.0   Some improvements made to be able to use this module on RAM restricted devices:
 --             To read large JSONs, you can now provide "loader function" instead of preloading whole JSON as Lua string.
---             Added json.traverse() to traverse JSON using callback function (without creating arrays/objects in Lua).
+--             Added jankson.traverse() to traverse JSON using callback function (without creating arrays/objects in Lua).
 --             Now, instead of decoding whole JSON, you can decode its arbitrary element (e.g, array or object)
 --                by specifying the position where this element starts.
 --                In order to do that, at first you have to traverse JSON to get all positions you need.
@@ -43,10 +43,10 @@
 --           Encoder now accepts both 0-based and 1-based Lua arrays (but decoder always converts JSON arrays to 1-based Lua arrays).
 --           Some minor bugs fixed.
 --   1.1.0   Modifications made by Egor Skriptunoff, based on version 1.0.0 taken from
---              https://github.com/craigmj/json4lua/blob/40fb13b0ec4a70e36f88812848511c5867bed857/json/json.lua.
+--              https://github.com/craigmj/json4lua/blob/40fb13b0ec4a70e36f88812848511c5867bed857/json/jankson.lua.
 --           Added Lua 5.2 and Lua 5.3 compatibility.
 --           Removed Lua 5.0 compatibility.
---           Introduced json.empty (Lua counterpart for empty JSON object)
+--           Introduced jankson.empty (Lua counterpart for empty JSON object)
 --           Bugs fixed:
 --              Attempt to encode Lua table {[10^9]=0} raises an out-of-memory error.
 --              Zero bytes '\0' in Lua strings are not escaped by encoder.
@@ -57,8 +57,8 @@
 --   0.9.30  Changed to MIT Licence.
 --   0.9.20  Introduction of local Lua functions for private functions (removed _ function prefix).
 --           Fixed Lua 5.1 compatibility issues.
---           Introduced json.null to have null values in associative arrays.
---           json.encode() performance improvement (more than 50%) through table_concat rather than ..
+--           Introduced jankson.null to have null values in associative arrays.
+--           jankson.encode() performance improvement (more than 50%) through table_concat rather than ..
 --           Introduced decode ability to ignore /**/ comments in the JSON string.
 --   0.9.10  Fix to array encoding / decoding to correctly manage nil/null values in arrays.
 --   0.9.00  First release
@@ -68,7 +68,7 @@
 -----------------------------------------------------------------------------
 -- Module declaration
 -----------------------------------------------------------------------------
-json = {}
+jankson = {}
 
 do
    -----------------------------------------------------------------------------
@@ -84,31 +84,31 @@ do
    -----------------------------------------------------------------------------
    -- Public functions
    -----------------------------------------------------------------------------
-   -- function  json.encode(obj)       encodes Lua value to JSON, returns JSON as string.
-   -- function  json.decode(s, pos)    decodes JSON, returns the decoded result as Lua value (may be very memory-consuming).
+   -- function  jankson.encode(obj)       encodes Lua value to JSON, returns JSON as string.
+   -- function  jankson.decode(s, pos)    decodes JSON, returns the decoded result as Lua value (may be very memory-consuming).
 
-   --    Both functions json.encode() and json.decode() work with "special" Lua values json.null and json.empty
-   --       special Lua value  json.null    =  JSON value  null
-   --       special Lua value  json.empty   =  JSON value  {}     (empty JSON object)
+   --    Both functions jankson.encode() and jankson.decode() work with "special" Lua values jankson.null and jankson.empty
+   --       special Lua value  jankson.null    =  JSON value  null
+   --       special Lua value  jankson.empty   =  JSON value  {}     (empty JSON object)
    --       regular Lua empty table         =  JSON value  []     (empty JSON array)
 
    --    Empty JSON objects and JSON nulls require special handling upon sending (encoding).
-   --       Please make sure that you send empty JSON objects as json.empty (instead of empty Lua table).
+   --       Please make sure that you send empty JSON objects as jankson.empty (instead of empty Lua table).
    --       Empty Lua tables will be encoded as empty JSON arrays, not as empty JSON objects!
-   --          json.encode( {empt_obj = json.empty, empt_arr = {}} )   -->   {"empt_obj":{},"empt_arr":[]}
-   --       Also make sure you send JSON nulls as json.null (instead of nil).
-   --          json.encode( {correct = json.null, incorrect = nil} )   -->   {"correct":null}
+   --          jankson.encode( {empt_obj = jankson.empty, empt_arr = {}} )   -->   {"empt_obj":{},"empt_arr":[]}
+   --       Also make sure you send JSON nulls as jankson.null (instead of nil).
+   --          jankson.encode( {correct = jankson.null, incorrect = nil} )   -->   {"correct":null}
 
    --    Empty JSON objects and JSON nulls require special handling upon receiving (decoding).
    --       After receiving the result of decoding, every Lua table returned (including nested tables) should firstly
-   --       be compared with special Lua values json.empty/json.null prior to making operations on these values.
+   --       be compared with special Lua values jankson.empty/jankson.null prior to making operations on these values.
    --       If you don't need to distinguish between empty JSON objects and empty JSON arrays,
-   --       json.empty may be replaced with newly created regular empty Lua table.
-   --          v = (v == json.empty) and {} or v
-   --       If you don't need special handling of JSON nulls, you may replace json.null with nil to make them disappear.
-   --          if v == json.null then v = nil end
+   --       jankson.empty may be replaced with newly created regular empty Lua table.
+   --          v = (v == jankson.empty) and {} or v
+   --       If you don't need special handling of JSON nulls, you may replace jankson.null with nil to make them disappear.
+   --          if v == jankson.null then v = nil end
 
-   -- Function  json.traverse(s, callback, pos)  traverses JSON using user-supplied callback function, returns nothing.
+   -- Function  jankson.traverse(s, callback, pos)  traverses JSON using user-supplied callback function, returns nothing.
    --    Traverse is useful to reduce memory usage: no memory-consuming objects are being created in Lua while traversing.
    --    Each item found inside JSON will be sent to callback function passing the following arguments:
    --    (path, json_type, value, pos, pos_last)
@@ -127,19 +127,19 @@ do
 
    -- Traverse examples:
 
-   --    json.traverse([[ 42 ]], callback)
+   --    jankson.traverse([[ 42 ]], callback)
    --    will invoke callback 1 time:
    --                 path        json_type  value           pos  pos_last
    --                 ----------  ---------  --------------  ---  --------
    --       callback( {},         "number",  42,             2,   3   )
    --
-   --    json.traverse([[ {"a":true, "b":null, "c":["one","two"], "d":{ "e":{}, "f":[] } } ]], callback)
+   --    jankson.traverse([[ {"a":true, "b":null, "c":["one","two"], "d":{ "e":{}, "f":[] } } ]], callback)
    --    will invoke callback 9 times:
    --                 path        json_type  value           pos  pos_last
    --                 ----------  ---------  --------------  ---  --------
    --       callback( {},         "object",  nil,            2,   nil )
    --       callback( {"a"},      "boolean", true,           7,   10  )
-   --       callback( {"b"},      "null",    json.null,      17,  20  )   -- special Lua value for JSON null
+   --       callback( {"b"},      "null",    jankson.null,      17,  20  )   -- special Lua value for JSON null
    --       callback( {"c"},      "array",   nil,            27,  nil )
    --       callback( {"c", 1},   "string",  "one",          28,  32  )
    --       callback( {"c", 2},   "string",  "two",          34,  38  )
@@ -147,30 +147,30 @@ do
    --       callback( {"d", "e"}, "object",  nil,            52,  nil )
    --       callback( {"d", "f"}, "array",   nil,            60,  nil )
    --
-   --    json.traverse([[ {"a":true, "b":null, "c":["one","two"], "d":{ "e":{}, "f":[] } } ]], callback)
+   --    jankson.traverse([[ {"a":true, "b":null, "c":["one","two"], "d":{ "e":{}, "f":[] } } ]], callback)
    --    will invoke callback 9 times if callback returns true when invoked for array "c" and object "e":
    --                 path        json_type  value           pos  pos_last
    --                 ----------  ---------  --------------  ---  --------
    --       callback( {},         "object",  nil,            2,   nil )
    --       callback( {"a"},      "boolean", true,           7,   10  )
-   --       callback( {"b"},      "null",    json.null,      17,  20  )
+   --       callback( {"b"},      "null",    jankson.null,      17,  20  )
    --       callback( {"c"},      "array",   nil,            27,  nil )  -- this callback returned true (user wants to decode this array)
    --       callback( {"c"},      "array",   {"one", "two"}, 27,  39  )  -- the next invocation brings the result of decoding
    --       callback( {"d"},      "object",  nil,            46,  nil )
    --       callback( {"d", "e"}, "object",  nil,            52,  nil )  -- this callback returned true (user wants to decode this object)
-   --       callback( {"d", "e"}, "object",  json.empty,     52,  53  )  -- the next invocation brings the result of decoding (special Lua value for empty JSON object)
+   --       callback( {"d", "e"}, "object",  jankson.empty,     52,  53  )  -- the next invocation brings the result of decoding (special Lua value for empty JSON object)
    --       callback( {"d", "f"}, "array",   nil,            60,  nil )
 
-   -- Both decoder functions json.decode(s) and json.traverse(s, callback) can accept JSON (argument s)
+   -- Both decoder functions jankson.decode(s) and jankson.traverse(s, callback) can accept JSON (argument s)
    --    as a "loader function" instead of a string.
-   --    This function will be called repeatedly to return next parts (substrings) of JSON.
-   --    An empty string, nil, or no value returned from "loader function" means the end of JSON.
+   --    This function will be called repeatedly to return next parts (substrings) of jankson.
+   --    An empty string, nil, or no value returned from "loader function" means the end of jankson.
    --    This may be useful for low-memory devices or for traversing huge JSON files.
 
-   --- The json.null table allows one to specify a null value in an associative array (which is otherwise
-   -- discarded if you set the value with 'nil' in Lua. Simply set t = { first=json.null }
-   local null = {"This Lua table is used to designate JSON null value, compare your values with json.null to determine JSON nulls"}
-   json.null =
+   --- The jankson.null table allows one to specify a null value in an associative array (which is otherwise
+   -- discarded if you set the value with 'nil' in Lua. Simply set t = { first=jankson.null }
+   local null = {"This Lua table is used to designate JSON null value, compare your values with jankson.null to determine JSON nulls"}
+   jankson.null =
       setmetatable(
       null,
       {
@@ -180,11 +180,11 @@ do
       }
    )
 
-   --- The json.empty table allows one to specify an empty JSON object.
+   --- The jankson.empty table allows one to specify an empty JSON object.
    -- To encode empty JSON array use usual empty Lua table.
-   -- Example: t = { empty_object=json.empty, empty_array={} }
+   -- Example: t = { empty_object=jankson.empty, empty_array={} }
    local empty = {}
-   json.empty =
+   jankson.empty =
       setmetatable(
       empty,
       {
@@ -192,7 +192,7 @@ do
             return "{}"
          end,
          __newindex = function()
-            error("json.empty is an read-only Lua table", 2)
+            error("jankson.empty is an read-only Lua table", 2)
          end
       }
    )
@@ -218,9 +218,9 @@ do
    -- PUBLIC FUNCTIONS
    -----------------------------------------------------------------------------
    --- Encodes an arbitrary Lua object / variable.
-   -- @param   obj     Lua value (table/string/boolean/number/nil/json.null/json.empty) to be JSON-encoded.
+   -- @param   obj     Lua value (table/string/boolean/number/nil/jankson.null/jankson.empty) to be JSON-encoded.
    -- @return  string  String containing the JSON encoding.
-   function json.encode(obj)
+   function jankson.encode(obj)
       -- Handle nil and null values
       if obj == nil or obj == null then
          return "null"
@@ -235,7 +235,7 @@ do
 
       -- Handle strings
       if obj_type == "string" then
-         return "'" .. encodeString(obj) .. "'"
+         return '"' .. encodeString(obj) .. '"'
       end
 
       -- Handle booleans
@@ -256,12 +256,12 @@ do
          local bArray, maxCount = isArray(obj)
          if bArray then
             for i = obj[0] ~= nil and 0 or 1, maxCount do
-               table_insert(rval, json.encode(obj[i]))
+               table_insert(rval, jankson.encode(obj[i]))
             end
          else -- An object, not an array
             for i, j in pairs(obj) do
                if isConvertibleToString(i) and isEncodable(j) then
-                  table_insert(rval, "'" .. encodeString(i) .. "':" .. json.encode(j))
+                  table_insert(rval, '"' .. encodeString(i) .. '":' .. jankson.encode(j))
                end
             end
          end
@@ -296,8 +296,8 @@ do
    --- Decodes a JSON string and returns the decoded value as a Lua data structure / value.
    -- @param   s           The string to scan (or "loader function" for getting next substring).
    -- @param   pos         (optional) The position inside s to start scan, default = 1.
-   -- @return  Lua object  The object that was scanned, as a Lua table / string / number / boolean / json.null / json.empty.
-   function json.decode(s, pos)
+   -- @return  Lua object  The object that was scanned, as a Lua table / string / number / boolean / jankson.null / jankson.empty.
+   function jankson.decode(s, pos)
       return (decode(create_state(s), pos or 1))
    end
 
@@ -305,7 +305,7 @@ do
    -- @param   s           The string to scan (or "loader function" for getting next substring).
    -- @param   callback    The user-supplied callback function which accepts arguments (path, json_type, value, pos, pos_last).
    -- @param   pos         (optional) The position inside s to start scan, default = 1.
-   function json.traverse(s, callback, pos)
+   function jankson.traverse(s, callback, pos)
       decode(create_state(s), pos or 1, {path = {}, callback = callback})
    end
 
@@ -395,9 +395,9 @@ do
    --- Decodes a JSON string and returns the decoded value as a Lua data structure / value.
    -- @param   state             The state of JSON reader.
    -- @param   startPos          Starting position where the JSON string is located.
-   -- @param   traverse          (optional) table with fields "path" and "callback" for traversing JSON.
+   -- @param   traverse          (optional) table with fields "path" and "callback" for traversing jankson.
    -- @param   decode_key        (optional) boolean flag for decoding key inside JSON object.
-   -- @return  Lua_object,int    The object that was scanned, as a Lua table / string / number / boolean / json.null / json.empty,
+   -- @return  Lua_object,int    The object that was scanned, as a Lua table / string / number / boolean / jankson.null / jankson.empty,
    --                            and the position of the first character after the scanned JSON object.
    function decode(state, startPos, traverse, decode_key)
       local curChar, value, nextPos
@@ -420,7 +420,7 @@ do
             return false, endPos
          end
          return decode_scanArray(state, startPos, traverse)
-      elseif curChar == "'" then
+      elseif curChar == '"' then
          -- String
          value, nextPos = decode_scanString(state, startPos)
          if traverse then
@@ -456,7 +456,7 @@ do
    -- Returns the array and the next starting position
    -- @param   state       The state of JSON reader.
    -- @param   startPos    The starting position for the scan.
-   -- @param   traverse    (optional) table with fields "path" and "callback" for traversing JSON.
+   -- @param   traverse    (optional) table with fields "path" and "callback" for traversing jankson.
    -- @return  table,int   The scanned array as a table, and the position of the next character to scan.
    function decode_scanArray(state, startPos, traverse)
       local array = not traverse and {} -- The return value
@@ -505,7 +505,7 @@ do
    -- Returns the appropriate Lua type, and the position of the next character to read.
    -- @param  state        The state of JSON reader.
    -- @param  startPos     The position in the string at which to start scanning.
-   -- @return object, int  The object (true, false or json.null) and the position at which the next character should be scanned.
+   -- @return object, int  The object (true, false or jankson.null) and the position at which the next character should be scanned.
    function decode_scanConstant(state, startPos)
       local w5 = get_word(state, startPos, 5)
       local w4 = string_sub(w5, 1, 4)
@@ -610,11 +610,11 @@ do
    function decode_scanString(state, startPos)
       local t, idx, surrogate_pair_started, regular_part = {}, startPos + 1
       while true do
-         regular_part, idx = match_with_pattern(state, idx, "^[^'\\]+", "read")
+         regular_part, idx = match_with_pattern(state, idx, '^[^"\\]+', "read")
          table_insert(t, regular_part)
          local w6 = get_word(state, idx, 6)
          local c = string_sub(w6, 1, 1)
-         if c == "'" then
+         if c == '"' then
             return table_concat(t), idx + 1
          elseif c == "\\" then
             local esc = string_sub(w6, 2, 2)
@@ -736,7 +736,7 @@ do
    end
 
    --- Determines whether the given Lua object / table / value can be JSON encoded.
-   -- The only types that are JSON encodable are: string, boolean, number, nil, table and special tables json.null and json.empty.
+   -- The only types that are JSON encodable are: string, boolean, number, nil, table and special tables jankson.null and jankson.empty.
    -- @param   o        The object to examine.
    -- @return  boolean  True if the object should be JSON encoded, false if it should be ignored.
    function isEncodable(o)
@@ -745,7 +745,7 @@ do
    end
 
    --- Determines whether the given Lua object / table / variable can be a JSON key.
-   -- Integer Lua numbers are allowed to be considered as valid string keys in JSON.
+   -- Integer Lua numbers are allowed to be considered as valid string keys in jankson.
    -- @param   o        The object to examine.
    -- @return  boolean  True if the object can be converted to a string, false if it should be ignored.
    function isConvertibleToString(o)
@@ -756,7 +756,7 @@ do
    local is_Inf_or_NaN = {[tostring(1 / 0)] = true, [tostring(-1 / 0)] = true, [tostring(0 / 0)] = true, [tostring(-(0 / 0))] = true}
    --- Determines whether the given Lua number is a regular number or Inf/Nan.
    -- @param   v        The number to examine.
-   -- @return  boolean  True if the number is a regular number which may be encoded in JSON.
+   -- @return  boolean  True if the number is a regular number which may be encoded in jankson.
    function isRegularNumber(v)
       return not is_Inf_or_NaN[tostring(v)]
    end

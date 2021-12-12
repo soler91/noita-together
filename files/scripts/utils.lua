@@ -1,4 +1,5 @@
 dofile("mods/noita-together/files/scripts/json.lua")
+dofile("mods/noita-together/files/scripts/json_unjank.lua")
 dofile("data/scripts/lib/utilities.lua")
 if not async then
     dofile("mods/noita-together/files/scripts/coroutines.lua")
