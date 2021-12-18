@@ -27,7 +27,7 @@
 
   <VariableStorageComponent
   name="dest"
-  value_string="3,4"
+  value_string="{}"
   >
   </VariableStorageComponent>
 

@@ -54,6 +54,10 @@ nt_items = {
         name = "$item_sunseed",
         sprite = "data/ui_gfx/items/sunseed.png"
     },
+    ["data/entities/items/pickup/stonestone.xml"] = {
+        name = "$item_stonestone",
+        sprite = "data/ui_gfx/items/stonestone.png"
+    },
 
     -- E G G
     ["data/entities/items/pickup/egg_fire.xml"] = {
@@ -110,5 +114,30 @@ nt_items = {
         name = "$item_safe_haven",
         sprite = "data/ui_gfx/items/safe_haven.png"
     },
+    ["data/entities/items/pickup/beamstone.xml"] = {
+        name="$item_mega_beam_stone",
+        sprite="data/ui_gfx/items/beamstone.png"
+    },
+    ["data/entities/items/pickup/sun/sunseed.xml"] = {
+        name='$item_sunseed',
+        sprite="data/ui_gx/items/sunseed.png"},
+    ["data/entities/items/pickup/sun/sunstone.xml"] = {
+        name='$item_seed_c',
+        sprite="data/ui_gx/items/sunseed_2.png"
+    },
+
+    ["data/entities/items/books/book_00.xml"] = {name="$booktitle00", sprite="data/ui_gfx/items/emerald_tablet.png"},
+    ["data/entities/items/books/book_01.xml"] = {name="$booktitle01", sprite="data/ui_gfx/items/emerald_tablet.png"},
+    ["data/entities/items/books/book_02.xml"] = {name="$booktitle02", sprite="data/ui_gfx/items/emerald_tablet.png"},
+    ["data/entities/items/books/book_03.xml"] = {name="$booktitle03", sprite="data/ui_gfx/items/emerald_tablet.png"},
+    ["data/entities/items/books/book_04.xml"] = {name="$booktitle04", sprite="data/ui_gfx/items/emerald_tablet.png"},
+    ["data/entities/items/books/book_05.xml"] = {name="$booktitle05", sprite="data/ui_gfx/items/emerald_tablet.png"},
+    ["data/entities/items/books/book_06.xml"] = {name="$booktitle06", sprite="data/ui_gfx/items/emerald_tablet.png"},
+    ["data/entities/items/books/book_07.xml"] = {name="$booktitle07", sprite="data/ui_gfx/items/emerald_tablet.png"},
+    ["data/entities/items/books/book_08.xml"] = {name="$booktitle08", sprite="data/ui_gfx/items/emerald_tablet.png"},
+    ["data/entities/items/books/book_09.xml"] = {name="$booktitle09", sprite="data/ui_gfx/items/emerald_tablet.png"},
+    ["data/entities/items/books/book_10.xml"] = {name="$booktitle10", sprite="data/ui_gfx/items/emerald_tablet.png"},
+    ["data/entities/items/books/book_11.xml"] = {name="$booktitle11", sprite="data/ui_gfx/items/emerald_tablet.png"},
+    ["data/entities/items/books/book_12.xml"] = {name="$booktitle12", sprite="data/ui_gfx/items/emerald_tablet.png"}
 
 }

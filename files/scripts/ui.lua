@@ -16,11 +16,13 @@ if not initialized then
     local caps_lock = false
     local radar_on = true
     local hidden_chat = false
+    local show_wands = false
     local hoveredFrames = 0
     local last_player_msg = 0
     local bankfilter = ""
     local player_msg = ""
     local filteredItems = {}
+    local wand_displayer = {}
     local gold_amount = "1"
     local bank_offset = 0
     local last_inven_is_open = false
@@ -75,7 +77,53 @@ if not initialized then
         ["$biome_fun"] = "fun.png",
         ["$biome_robobase"] = "robobase.png",
     }
+    local selectedTab = "all"
+    local bankTabs = {
+        {id="all", icon = "all.png"},
+        {id="wands", icon = "wands.png"},
+        {id="spells", icon = "spells.png"},
+        {id="items", icon = "items.png"}
+    }
+    local sortKeyHax = "" -- dont do this eww
+    local function sort_shuffle(a,b)
+        if (a.stats == nil or b.stats == nil) then return false end
+        return not a.stats[sortKeyHax] and b.stats[sortKeyHax]
+    end
 
+    local function sort_bicc(a,b)
+        if (a.stats == nil or b.stats == nil) then return false end
+        return a.stats[sortKeyHax] > b.stats[sortKeyHax]
+    end
+
+    local function sort_smol(a,b)
+        if (a.stats == nil or b.stats == nil) then return false end
+        return a.stats[sortKeyHax] < b.stats[sortKeyHax]
+    end
+    
+    local tabToggles = {
+        all={},
+        wands={
+            {icon="mods/noita-together/files/ui/wands_sorting/icon_gun_shuffle-1.png", tooltip="Shuffle", key="shuffleDeckWhenEmpty", enabled=true, fn=sort_shuffle},
+            {icon="mods/noita-together/files/ui/wands_sorting/icon_gun_actions_per_round-1.png", tooltip="Casts", key="actionsPerRound", enabled=true, fn=sort_smol},
+            {icon="mods/noita-together/files/ui/wands_sorting/icon_fire_rate_wait-1.png", tooltip="Cast Delay", key="fireRateWait", enabled=true, fn=sort_smol},
+            {icon="mods/noita-together/files/ui/wands_sorting/icon_reload_time-1.png", tooltip="Recharge Time", key="reloadTime", enabled=true, fn=sort_smol},
+            {icon="mods/noita-together/files/ui/wands_sorting/icon_mana_max-1.png", tooltip="Mana Max", key="manaMax", enabled=false, fn=sort_bicc},
+            {icon="mods/noita-together/files/ui/wands_sorting/icon_mana_charge_speed-1.png", tooltip="Mana Charge Speed", key="manaChargeSpeed", enabled=false, fn=sort_bicc},
+            {icon="mods/noita-together/files/ui/wands_sorting/icon_gun_capacity-1.png", tooltip="Capacity", key="deckCapacity", enabled=false, fn=sort_bicc},
+            {icon="mods/noita-together/files/ui/wands_sorting/icon_spread_degrees-1.png", tooltip="Spread", key="spreadDegrees", enabled=false, fn=sort_smol},
+        },
+        spells={
+            {icon="mods/noita-together/files/ui/buttons/light_bullet_trigger.png", tooltip="Projectiles", enabled=true},
+            {icon="mods/noita-together/files/ui/buttons/polymorph_field.png", tooltip="Static Projectiles", enabled=true},
+            {icon="mods/noita-together/files/ui/buttons/bloodlust.png", tooltip="Modifiers", enabled=true},
+            {icon="mods/noita-together/files/ui/buttons/burst_4.png", tooltip="Multicasts", enabled=true},
+            {icon="mods/noita-together/files/ui/buttons/material_water.png", tooltip="Materials", enabled=true},
+            {icon="mods/noita-together/files/ui/buttons/alpha.png", tooltip="Other", enabled=true},
+            {icon="mods/noita-together/files/ui/buttons/x_ray.png", tooltip="Utility", enabled=true},
+            {icon="mods/noita-together/files/ui/buttons/torch.png", tooltip="Passive", enabled=true},
+        },
+        items={}
+    }
     local function reset_id()
         gui_id = 6969
     end
@@ -164,6 +212,64 @@ if not initialized then
         return wand_cache[filename]
     end
 
+    local function render_wand(item, x, y, nx, ny, show_owner, force)
+        GuiZSetForNextWidget(gui, 7)
+        local wand = get_wand_sprite(item.stats.sprite)
+        if (not force) then
+            GuiImage(gui, next_id(), x + wand.ox, y + wand.oy, wand.sprite, 1, 1, 1)
+        end
+        local left, right, hover = previous_data(gui)
+        if (hover or force) then
+
+            local player = PlayerList[item.sentBy] or {name="Me"}
+            local nox, nyx = 5, 0
+            GuiZSetForNextWidget(gui, 6)
+            GuiImageNinePiece(gui, next_id, nx, ny, 160, 160, 1)
+            GuiImage(gui, next_id(), nx + 125, ny + 80, wand.sprite, 1, 2.2, 0, -1.5708)
+            GuiZSetForNextWidget(gui, 5)
+            if (not force) then
+                GuiText(gui, nx + nox, ny + nyx, "Sent By " .. player.name)
+            end
+            nyx = nyx + 15
+            
+            for key, value in ipairs(wand_tooltip(item.stats))do
+                GuiZSetForNextWidget(gui, 5)
+                GuiText(gui, nx + nox, ny + nyx, _wand_tooltip[key])
+                GuiZSetForNextWidget(gui, 5)
+                GuiText(gui, nx + 80, ny + nyx, tostring(value))
+                nyx = nyx + 10
+            end
+            nyx = nyx + 10
+            local always_casts = item.alwaysCast or {}
+            local deck = item.deck or {}
+            if (#always_casts > 0) then
+                GuiZSetForNextWidget(gui, 5)
+                GuiText(gui, nx + 5, ny + nyx, "Always casts")
+                nox = 60
+                for index, value in ipairs(always_casts) do
+                    if (value.gameId ~= "0") then
+                        GuiZSetForNextWidget(gui, 5)
+                        GuiImage(gui, next_id(), nx + nox, ny + nyx, SpellSprites[value.gameId].sprite, 1, 0.8, 0.8)
+                        nox = nox + 15
+                    end
+                end
+                nox = 5
+                nyx = nyx + 15
+            end
+            for index, value in ipairs(deck) do
+                if (value.gameId ~= "0") then
+                    GuiZSetForNextWidget(gui, 5)
+                    GuiImage(gui, next_id(), nx + nox, ny + nyx, SpellSprites[value.gameId].sprite, 1, 0.8, 0.8)
+                    nox = nox + 15
+                    if (index % 10 == 0) then
+                        nyx = nyx + 20
+                        nox = 5
+                    end
+                end
+            end
+        end
+    end
+
     local function draw_item_sprite(item, x,y)
         GuiZSetForNextWidget(gui, 8)
         if (item.gameId ~= nil) then --spell
@@ -176,54 +282,8 @@ if not initialized then
             GuiImage(gui, next_id(), x +2, y +2,  spell.sprite, 1,1,1)--SpellSprites[item.gameId], 1)
             GuiTooltip(gui, spell.name, spell_description)
         elseif (item.stats ~= nil) then --wand
-            GuiZSetForNextWidget(gui, 7)
-            local wand = get_wand_sprite(item.stats.sprite)
-            GuiImage(gui, next_id(), x + wand.ox, y + wand.oy, wand.sprite, 1, 1, 1)--, GUI_RECT_ANIMATION_PLAYBACK.PlayToEndAndPause)
-            
-            local left, right, hover = previous_data(gui)
-            if (hover) then
-                local player = PlayerList[item.sentBy] or {name="Me"}
-                local nx, ny = (screen_width / 2) - 260, (screen_height/2) - 95
-                local nox, nyx = 5, 0
-                GuiZSetForNextWidget(gui, 6)
-                GuiImageNinePiece(gui, next_id, nx, ny, 160, 160, 1)
-                GuiZSetForNextWidget(gui, 5)
-                GuiText(gui, nx + nox, ny + nyx, "Sent By " .. player.name)
-                nyx = nyx + 15
-                
-                for key, value in ipairs(wand_tooltip(item.stats))do
-                    GuiZSetForNextWidget(gui, 5)
-                    GuiText(gui, nx + nox, ny + nyx, _wand_tooltip[key])
-                    GuiZSetForNextWidget(gui, 5)
-                    GuiText(gui, nx + 80, ny + nyx, tostring(value))
-                    nyx = nyx + 10
-                end
-                nyx = nyx + 10
-                local always_casts = item.alwaysCast or {}
-                local deck = item.deck or {}
-                if (#always_casts > 0) then
-                    GuiZSetForNextWidget(gui, 5)
-                    GuiText(gui, nx + 5, ny + nyx, "Always casts")
-                    nox = 60
-                    for index, value in ipairs(always_casts) do
-                        GuiZSetForNextWidget(gui, 5)
-                        GuiImage(gui, next_id(), nx + nox, ny + nyx, SpellSprites[value.gameId].sprite, 1, 0.8, 0.8)
-                        nox = nox + 15
-                    end
-                    nox = 5
-                    nyx = nyx + 15
-                end
-                for index, value in ipairs(deck) do
-                    GuiZSetForNextWidget(gui, 5)
-                    GuiImage(gui, next_id(), nx + nox, ny + nyx, SpellSprites[value.gameId].sprite, 1, 0.8, 0.8)
-                    nox = nox + 15
-                    if (index % 10 == 0) then
-                        nyx = nyx + 20
-                        nox = 5
-                    end
-                end
-            end
-            
+            local nx, ny = (screen_width / 2) - 260, (screen_height/2) - 95
+            render_wand(item, x, y, nx, ny, true)      
         elseif (item.content ~= nil) then --flask
             local player = PlayerList[item.sentBy] or {name="Me"}
             local container_name = item.isChest and "Powder Pouch" or "Flask"
@@ -255,14 +315,14 @@ if not initialized then
     end
 
     local function draw_bank_item(x, y, i)
-        local item_offset = i + bank_offset * 25
+        local item_offset = i + bank_offset * 40
         local item = filteredItems[item_offset]
         if (item ~= nil) then
             draw_item_sprite(item, x, y)
         end
 
         GuiZSetForNextWidget(gui, 9)
-        if (GuiImageButton(gui, next_id(), x, y, "", "data/ui_gfx/inventory/full_inventory_box.png")) then
+        if (GuiImageButton(gui, next_id(), x, y, "", "mods/noita-together/files/ui/slot.png")) then
             if (item ~= nil) then
                 SendWsEvent({event="PlayerTake", payload={id=item.id}})
             end
@@ -271,17 +331,47 @@ if not initialized then
 
     local function filterItems()
         local filterkey = bankfilter
-        if (filterkey == "") then
+        if (filterkey == "" and selectedTab == "all") then
             filteredItems = BankItems
             return
         end
+        local idk = {}
         local ret = {}
 
         for _, item in ipairs(BankItems) do
+            if ((selectedTab == "wands" or selectedTab == "all") and item.stats ~= nil) then
+                table.insert(idk, item)
+            elseif ((selectedTab == "spells" or selectedTab == "all") and item.gameId ~= nil) then
+                local spell = SpellSprites[item.gameId]
+                if (tabToggles[selectedTab][spell.type + 1].enabled) then
+                    table.insert(idk, item)
+                end
+            elseif ((selectedTab == "items" or selectedTab == "all") and (item.path ~= nil or item.content ~= nil)) then
+                table.insert(idk, item)
+            end
+        end
+        if (selectedTab == "wands") then
+            local wandFilters = tabToggles[selectedTab]
+            for _, filter in pairs(wandFilters) do
+                if (filter.enabled) then 
+                    sortKeyHax = filter.key -- ewww dont do
+                    table.sort(idk, filter.fn)
+                end
+            end
+        end
+
+        if (filterkey == "") then 
+            filteredItems = idk
+            return
+        end
+
+        for _, item in ipairs(idk) do
             if (item.gameId ~= nil) then -- spell
                 local spell = SpellSprites[item.gameId]
                 if (string.find(string.lower(spell.name), string.lower(filterkey))) then
-                    table.insert(ret, item)
+                    if (selectedTab == "spells") then
+                        table.insert(ret, item)
+                    end
                 end
             elseif (item.stats ~= nil) then -- wand
                 local found = false
@@ -347,42 +437,91 @@ if not initialized then
         end)
     end
 
-    local function draw_item_bank()
-        local pos_x, pos_y = (screen_width / 2) - 90, (screen_height/2) - 90
-        local offx, offy = 20, 20
-        GuiOptionsAdd(gui, GUI_OPTION.NoPositionTween)
-        GuiZSetForNextWidget(gui, 10)
-        GuiImageNinePiece(gui, next_id(), pos_x, pos_y, 160, 170, 1, "mods/noita-together/files/ui/background.png")
+    local function draw_tab(id, icon, x, y)
+        local background = "deselected.png"
+        if (id == selectedTab) then background = "selected.png" end
         GuiZSetForNextWidget(gui, 9)
-        if (GuiImageButton(gui, next_id(), pos_x + 147, pos_y, "", "mods/noita-together/files/ui/close.png")) then
+        GuiImage(gui, next_id(), x-8, y-8, "mods/noita-together/files/ui/" .. background, 1, 1, 1)
+        GuiZSetForNextWidget(gui, 8)
+        if (GuiImageButton(gui, next_id(), x-3, y-3, "", "mods/noita-together/files/ui/" .. icon)) then
+            selectedTab = id
+        end
+        GuiTooltip(gui, id, "")
+    end
+
+    local function draw_item_bank()
+        local pos_x, pos_y = (screen_width / 3), (screen_height/4) - 30
+        local offx, offy = 35, 50
+        GuiOptionsAdd(gui, GUI_OPTION.NoPositionTween)
+        GuiZSetForNextWidget(gui, 12)
+        GuiImageNinePiece(gui, next_id(), pos_x, pos_y, 254, 224, 1, "mods/noita-together/files/ui/outer.png")
+        GuiZSetForNextWidget(gui, 10)
+        GuiImageNinePiece(gui, next_id(), pos_x+33, pos_y+28, 200, 180, 1, "mods/noita-together/files/ui/middle.png")
+        GuiZSetForNextWidget(gui, 9)
+        if (GuiImageButton(gui, next_id(), pos_x + 243, pos_y, "", "mods/noita-together/files/ui/close.png")) then
             show_bank = not show_bank
         end
         GuiZSetForNextWidget(gui, 9)
-        if (GuiImageButton(gui, next_id(), pos_x + 10, pos_y, "", "mods/noita-together/files/ui/sort.png")) then
+        GuiText(gui, pos_x + 26, pos_y + 5, "BANK")
+        GuiZSetForNextWidget(gui, 9)
+        if (GuiImageButton(gui, next_id(), pos_x + 52, pos_y + 5, "", "mods/noita-together/files/ui/sort.png")) then
             sortItems()
         end
+        GuiTooltip(gui, "SORT", "")
+        local tabOff = 0
+        for _, tab in ipairs(bankTabs) do
+            draw_tab(tab.id, tab.icon, pos_x+11, pos_y + 34 + tabOff)
+            tabOff = tabOff + 28
+        end
+        local offy_hax = false
+        for i, toggle in ipairs(tabToggles[selectedTab]) do
+            GuiZSetForNextWidget(gui, 9)
+            if (GuiImageButton(gui, next_id(), pos_x + offx+1, pos_y + 25, "", "mods/noita-together/files/ui/buttons/button.png")) then
+                tabToggles[selectedTab][i].enabled = not toggle.enabled
+            end
+            GuiTooltip(gui, toggle.tooltip, "")
+            GuiZSetForNextWidget(gui, 8)
+            if (toggle.enabled == false) then
+                GuiColorSetForNextWidget( gui, 0.5, 0.5, 0.5, 0.5 )
+            end
+            GuiImage(gui, next_id(), pos_x + offx+3, pos_y + 27, toggle.icon, 1, 1, 1)
+            if (i > 1 and not offy_hax) then 
+                offy = offy + 10 
+                offy_hax = true
+            end 
+            offx = offx + 25
+        end
+        offx = 35
         GuiZSetForNextWidget(gui, 9)
-        bankfilter = GuiTextInput(gui, next_id(), pos_x + 30, pos_y, bankfilter, 100, 32)
+        GuiText(gui, pos_x + 119, pos_y + 5, "filter")
+        GuiZSetForNextWidget(gui, 9)
+        bankfilter = GuiTextInput(gui, next_id(), pos_x + 140, pos_y + 5, bankfilter, 100, 32)
+        if (bankfilter == " ") then bankfilter = "" end
         filterItems()
-        local pages = math.floor(#filteredItems / 25)
+        local pages = math.floor(#filteredItems / 40)
         if (bank_offset > pages) then bank_offset = pages end
-        for i = 1, 25 do
+        for i = 1, 40 do
             draw_bank_item(pos_x + offx,pos_y + offy, i)
             
             offx = offx + 25
 
-            if (i % 5 == 0) then
-                offx = 20
+            if (i % 8 == 0) then
+                offx = 35
                 offy = offy + 25
             end
-        end        
-        offy = offy + 5
-        if (GuiImageButton(gui, next_id(), pos_x, pos_y + offy, "", "mods/noita-together/files/ui/prev_page.png")) then
+        end
+        if (GuiImageButton(gui, next_id(), pos_x + 45, pos_y + 190, "", "mods/noita-together/files/ui/arrows/arrow_back.png")) then
+            change_bank_offset(-10, pages)
+        end
+        if (GuiImageButton(gui, next_id(), pos_x + 85, pos_y + 190, "", "mods/noita-together/files/ui/arrows/arrow_back_alt.png")) then
             change_bank_offset(-1, pages)
         end
-        GuiText(gui, pos_x + 75, pos_y + offy + 5, tostring(bank_offset+1) .. "/" .. tostring(pages+1))
-        if GuiImageButton(gui, next_id(), pos_x + 140, pos_y + offy, "", "mods/noita-together/files/ui/next_page.png")then
+        GuiText(gui, pos_x + 126, pos_y + 195, tostring(bank_offset+1) .. "/" .. tostring(pages+1))
+        if GuiImageButton(gui, next_id(), pos_x + 160, pos_y + 190, "", "mods/noita-together/files/ui/arrows/arrow_alt.png")then
             change_bank_offset(1, pages)
+        end
+        if GuiImageButton(gui, next_id(), pos_x + 200, pos_y + 190, "", "mods/noita-together/files/ui/arrows/arrow.png")then
+            change_bank_offset(10, pages)
         end
         GuiOptionsClear(gui)
     end
@@ -399,9 +538,19 @@ if not initialized then
             GuiImage(gui, next_id(), 80, 0, "mods/noita-together/files/ui/biomes/" .. biome_sprites[player.location] , 0.8, 1, 1)
         end
         GuiZSetForNextWidget(gui, 10)
-
-        if (GuiButton(gui, next_id(), 0,0, player.name)) then
+        local lfck, rtck = GuiButton(gui, next_id(), 0,0, player.name)
+        if (lfck) then
             follow_player(userId, player.name)
+        end
+        if (rtck) then
+            show_wands = not show_wands
+        end
+        local _c, _cr, _hover = previous_data(gui)
+        local inven = PlayerList[userId].inven
+        if (_hover and show_wands and inven ~= nil) then
+            wand_displayer = inven
+        else
+            wand_displayer = {}
         end
         
         local location = GameTextGetTranslatedOrNot(player.location)
@@ -430,10 +579,10 @@ if not initialized then
     end
 
     local function draw_gold_bank()
-        local pos_x, pos_y = (screen_width / 2) + 85, (screen_height/2) - 90
+        local pos_x, pos_y = (screen_width / 2) - 240, (screen_height/2) - 120
         GuiOptionsAdd(gui, GUI_OPTION.NoPositionTween)
         GuiZSetForNextWidget(gui, 10)
-        GuiImageNinePiece(gui, next_id(), pos_x, pos_y, 120, 65, 1, "mods/noita-together/files/ui/background.png")
+        GuiImageNinePiece(gui, next_id(), pos_x, pos_y, 120, 65, 1, "mods/noita-together/files/ui/outer.png")
         GuiZSetForNextWidget(gui, 9)
         GuiText(gui, pos_x, pos_y, "Gold: " .. tostring(BankGold))
 
@@ -444,18 +593,23 @@ if not initialized then
         
         
         GuiZSetForNextWidget(gui, 9)
-        if (GuiImageButton(gui, next_id(), pos_x, pos_y + 45, "", "mods/noita-together/files/ui/button.png")) then
+        GuiImageNinePiece(gui, next_id(), pos_x + 10, pos_y + 54, 30, 5, 1, "mods/noita-together/files/ui/inner_darker.png")
+        GuiZSetForNextWidget(gui, 10)
+        if (GuiImageButton(gui, next_id(), pos_x+5, pos_y + 47, "", "mods/noita-together/files/ui/button.png")) then
             local amount = tonumber(gold_amount)
             if (amount <= BankGold) then
                 SendWsEvent({event="TakeGold", payload={amount=amount}})
                 gold_amount = "1"
             end
         end
+
         GuiZSetForNextWidget(gui, 8)
-        GuiText(gui, pos_x + 8 , pos_y +50, "TAKE")
+        GuiText(gui, pos_x + 12 , pos_y +52, "TAKE")
 
         GuiZSetForNextWidget(gui, 9)
-        if (GuiImageButton(gui, next_id(), pos_x + 80, pos_y + 45, "", "mods/noita-together/files/ui/button.png")) then
+        GuiImageNinePiece(gui, next_id(), pos_x + 85, pos_y + 54, 30, 5, 1, "mods/noita-together/files/ui/inner_darker.png")
+        GuiZSetForNextWidget(gui, 10)
+        if (GuiImageButton(gui, next_id(), pos_x + 80, pos_y + 47, "", "mods/noita-together/files/ui/button.png")) then
             local wallet, gold = nil, 0
             local amount = tonumber(gold_amount)
             wallet, gold = PlayerWalletInfo()
@@ -466,7 +620,7 @@ if not initialized then
             end
         end
         GuiZSetForNextWidget(gui, 8)
-        GuiText(gui, pos_x + 80 , pos_y +50, "DEPOSIT")
+        GuiText(gui, pos_x + 80 , pos_y +52, "DEPOSIT")
         GuiOptionsClear(gui)
     end
 
@@ -475,7 +629,7 @@ if not initialized then
         local offx, offy = 1, 20
         GuiOptionsAdd(gui, GUI_OPTION.NoPositionTween)
         GuiZSetForNextWidget(gui, 9)
-        GuiImageNinePiece(gui, next_id(), pos_x, pos_y, 160, 100, 1, "mods/noita-together/files/ui/background.png")
+        GuiImageNinePiece(gui, next_id(), pos_x, pos_y, 160, 100, 1, "mods/noita-together/files/ui/outer.png")
         GuiZSetForNextWidget(gui, 8)
         if (GuiImageButton(gui, next_id(), pos_x + 151, pos_y, "", "mods/noita-together/files/ui/close.png")) then
             player_msg = ""
@@ -514,8 +668,8 @@ if not initialized then
             player_msg = player_msg .. " "
         end
         offy = offy + 15
-        GuiZSetForNextWidget(gui, 8)
-        if (GuiImageButton(gui, next_id(), pos_x + 60, pos_y + offy, "", "mods/noita-together/files/ui/button.png")) then
+        GuiZSetForNextWidget(gui, 10)
+        if (GuiImageButton(gui, next_id(), pos_x + 59, pos_y + offy - 2, "", "mods/noita-together/files/ui/button.png")) then
             local px, py = GetPlayerPos()
             py = py - 10
             if (#player_msg > 0 and GameGetFrameNum() >= last_player_msg and px ~= nil and py ~= nil and NT ~= nil and NT.run_started) then
@@ -533,8 +687,10 @@ if not initialized then
                 GamePrint("can't send message yet")
             end
         end
+        GuiZSetForNextWidget(gui, 9)
+        GuiImageNinePiece(gui, next_id(), pos_x + 64, pos_y + offy + 5, 30, 5, 1, "mods/noita-together/files/ui/inner_darker.png")
         GuiZSetForNextWidget(gui, 7)
-        GuiText(gui, pos_x + 69 , pos_y + offy + 4, "SEND")
+        GuiText(gui, pos_x + 68 , pos_y + offy + 2, "SEND")
     end
 
     function draw_gui()
@@ -586,12 +742,13 @@ if not initialized then
         if (show_bank and GamePaused) then
             show_bank = false
         end
-        local ghost_button = HideGhosts and "hide_player_ghosts.png" or "player_ghosts.png"
+        local ghost_button = HideGhosts and "hide_players.png" or "players.png"
         local chat_button = HideChat and "hide_chat.png" or "chat.png"
         local ghost_tooltip = HideGhosts and "No player ghosts" or "Showing player ghosts"
         local chat_tooltip = HideChat and "Ignoring chat messages" or "Showing chat messages"
         
-        if (GuiImageButton(gui, next_id(), 80, 0, "", "mods/noita-together/files/ui/buttons/keyboard.png")) then
+        if (GuiImageButton(gui, next_id(), 79, 0, "", "mods/noita-together/files/ui/buttons/keyboard.png")) then
+            if (show_bank) then show_bank = false end
             show_message = not show_message
             if (not show_message) then
                 player_msg = ""
@@ -620,6 +777,7 @@ if not initialized then
         GuiTooltip(gui, "Player List", "")
 
         if (GuiImageButton(gui, next_id(), 160, 0, "", "mods/noita-together/files/ui/buttons/bank.png")) then
+            if (show_message) then show_message = false end
             show_bank = not show_bank
         end
         GuiTooltip(gui, "Item Bank", "")
@@ -677,6 +835,19 @@ if not initialized then
                     GuiImage(gui, next_id(), indicator_x, indicator_y, "mods/noita-together/files/ui/player_ghost.png", 1, 1, 1)
                     GuiTooltip(gui, (PlayerList[user_id].name or ""), string.format("%.0fm", math.floor(dist/10)))
                 end
+            end
+        end
+        if (#wand_displayer > 0) then
+            local wand_offset = 0
+            local wand_offset_y = 0
+            for _, item in ipairs(wand_displayer) do
+                local nx, ny = (screen_width / 4) + 30 + wand_offset, (screen_height/2) - 160
+                render_wand(item, x, y, nx, ny + wand_offset_y, false, true) 
+                wand_offset = wand_offset + 165
+                if (_ % 2 == 0) then 
+                    wand_offset = 0
+                    wand_offset_y = 165
+                 end
             end
         end
 

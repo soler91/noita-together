@@ -1,0 +1,250 @@
+<Entity 
+  name="DEBUG_NAME:NT_player"
+  tags="nt_ghost"
+  serialize="0" >
+  
+  <HotspotComponent
+      _tags="hand"
+      sprite_hotspot_name="hand"
+  ></HotspotComponent>
+
+  <HotspotComponent
+    _tags="shoot_pos"
+    offset.x="0"
+    offset.y="-2"
+  ></HotspotComponent>
+
+  <HotspotComponent
+    _tags="kick_pos"
+    offset.x="0"
+    offset.y="2"
+  ></HotspotComponent>
+  
+  <HotspotComponent
+    _tags="crouch_sensor"
+    offset.x="0"
+    offset.y="-14"
+  ></HotspotComponent>
+
+  <SpriteComponent 
+    _tags="character,lukki_disable" 
+    alpha="1" 
+    image_file="data/enemies_gfx/player.xml" 
+    next_rect_animation="" 
+    offset_x="6" 
+    offset_y="14" 
+    rect_animation="walk" 
+    z_index="0.6"
+  ></SpriteComponent>
+  
+  <SpriteComponent 
+    _tags="character,lukki_enable"
+	  _enabled="0"
+    alpha="1" 
+    image_file="data/enemies_gfx/player_lukky.xml" 
+    next_rect_animation="" 
+    offset_x="6" 
+    offset_y="14" 
+    rect_animation="walk" 
+    z_index="0.6"
+  ></SpriteComponent>
+
+  <HotspotComponent
+    _tags="right_arm_root"
+    sprite_hotspot_name="right_arm_start"
+    transform_with_scale="1"
+  ></HotspotComponent>
+
+  <Entity serialize="0" name="arm_r" tags="player_arm_r">
+
+    <SpriteComponent 
+      _tags="with_item" 
+      alpha="1" 
+      image_file="data/enemies_gfx/player_arm.xml" 
+      next_rect_animation="" 
+      rect_animation="default" 
+      z_index="0.59"
+    ></SpriteComponent>
+
+    <InheritTransformComponent
+      parent_hotspot_tag="right_arm_root"
+      only_position="1"
+    ></InheritTransformComponent>
+
+    <HotspotComponent
+      _tags="hand"
+      sprite_hotspot_name="hand"
+      transform_with_scale="1"
+    ></HotspotComponent>
+
+  </Entity>
+
+  <Entity name="held_item" serialize="0">
+    <HotspotComponent
+      _enabled="1" 
+      _tags="shoot_pos" 
+      offset.x="8" 
+      offset.y="-0.5" 
+      sprite_hotspot_name="" 
+      transform_with_scale="0" >
+    </HotspotComponent>
+
+    <InheritTransformComponent
+      parent_hotspot_tag="right_arm_root"
+      only_position="1"
+    ></InheritTransformComponent>  
+
+    <SpriteComponent 
+        _enabled="1" 
+        _tags="enabled_in_world,enabled_in_hand,item" 
+        additive="0" 
+        alpha="1" 
+        emissive="0" 
+        fog_of_war_hole="0" 
+        has_special_scale="0" 
+        image_file="" 
+        is_text_sprite="0" 
+        kill_entity_after_finished="0" 
+        never_ragdollify_on_death="0" 
+        next_rect_animation="" 
+        offset_animator_offset.x="0" 
+        offset_animator_offset.y="0" 
+        offset_x="0" 
+        offset_y="0" 
+        rect_animation="default" 
+        smooth_filtering="0" 
+        special_scale_x="1" 
+        special_scale_y="1" 
+        text="" 
+        transform_offset.x="0" 
+        transform_offset.y="0" 
+        ui_is_parent="0" 
+        update_transform="1" 
+        update_transform_rotation="1" 
+        visible="1" 
+        z_index="0.575" >
+
+      </SpriteComponent>
+  </Entity>
+
+  
+
+	<Base file="data/entities/base_jetpack_nosound.xml">
+
+    <ParticleEmitterComponent
+        offset.x="-2"
+        offset.y="5"
+        lifetime_min="0.0" 
+    ></ParticleEmitterComponent>
+  
+  </Base>
+
+  <VelocityComponent
+    updates_velocity="0"
+    displace_liquid="0"
+  affect_physics_bodies="0"
+  ></VelocityComponent>
+  
+  <!-- cape -->
+
+  <HotspotComponent
+      _tags="cape_root"
+      sprite_hotspot_name="cape" >
+  </HotspotComponent>
+
+  <Entity name="cape" serialize="0">  
+      <Base file="data/entities/verlet_chains/cape/cape.xml">
+      </Base>
+  </Entity>
+  
+  <!-- belt -->
+  
+  <HotspotComponent
+    _tags="belt_root"
+    sprite_hotspot_name="belt"
+  ></HotspotComponent>
+	
+	<SpriteComponent 
+		_tags="character,player_amulet" 
+		alpha="1" 
+		image_file="data/enemies_gfx/player_amulet.xml" 
+		next_rect_animation="" 
+		offset_x="6" 
+		offset_y="14" 
+		rect_animation="walk" 
+		z_index="0.59"
+		_enabled="0"
+	></SpriteComponent>
+	
+	<SpriteComponent 
+		_tags="character,player_amulet_gem" 
+		alpha="1" 
+		image_file="data/enemies_gfx/player_amulet_gem.xml" 
+		next_rect_animation="" 
+		offset_x="6" 
+		offset_y="14" 
+		rect_animation="walk" 
+		z_index="0.58"
+		_enabled="0"
+	></SpriteComponent>
+	
+	<SpriteComponent 
+		_tags="character,player_hat"
+		alpha="1" 
+		image_file="data/enemies_gfx/player_hat.xml" 
+		next_rect_animation="" 
+		offset_x="6" 
+		offset_y="14" 
+		rect_animation="walk" 
+		z_index="0.59"
+		_enabled="0"
+	></SpriteComponent>
+	
+	<SpriteComponent 
+		_tags="character,player_hat2"
+		alpha="1" 
+		image_file="data/enemies_gfx/player_hat2.xml" 
+		next_rect_animation="" 
+		offset_x="6" 
+		offset_y="14" 
+		rect_animation="walk" 
+		z_index="0.58"
+		_enabled="0"
+	></SpriteComponent>
+	
+	<SpriteComponent 
+		_tags="character,player_hat2_shadow"
+		alpha="1" 
+		image_file="data/enemies_gfx/player_hat2_shadow.xml" 
+		next_rect_animation="" 
+		offset_x="6" 
+		offset_y="14" 
+		rect_animation="walk" 
+		z_index="0.58"
+		_enabled="0"
+	></SpriteComponent>
+
+  <VariableStorageComponent
+  name="userId"
+  value_string=""
+  >
+  </VariableStorageComponent>
+
+  <VariableStorageComponent
+  name="dest"
+  value_string="{}"
+  >
+  </VariableStorageComponent>
+
+  <VariableStorageComponent
+  name="inven"
+  value_string="{}"
+  >
+  </VariableStorageComponent>
+
+<LuaComponent
+    script_source_file="mods/noita-together/files/scripts/playerghost.lua"
+    execute_every_n_frame="1"
+   >
+  </LuaComponent>
+</Entity>

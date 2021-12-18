@@ -97,7 +97,9 @@ function ConvertStrToTable(data)
 end
 
 function GetPlayerWands()
-    local childs = EntityGetAllChildren(get_player())
+    local player = GetPlayer()
+    if (player == nil) then return {} end
+    local childs = EntityGetAllChildren(player)
     local inven = nil
     if childs ~= nil then
         for _, child in ipairs(childs) do
@@ -108,7 +110,7 @@ function GetPlayerWands()
     end
     local wands = {}
     if inven ~= nil then
-        local items = EntityGetAllChildren(inven)
+        local items = EntityGetAllChildren(inven) or {}
         for _, child_item in ipairs(items) do
             if EntityHasTag(child_item, "wand") then
                 wands[_] = child_item
@@ -120,7 +122,7 @@ function GetPlayerWands()
 end
 
 function GetPlayerInventory()
-    local childs = EntityGetAllChildren(get_player())
+    local childs = EntityGetAllChildren(GetPlayer())
     local inven = nil
     if childs ~= nil then
         for _, child in ipairs(childs) do
@@ -202,89 +204,6 @@ function PlayerOrbPickup(id, userId)
     )
 end
 
-function SerializeWandStats(id)
-    local serialized = {}
-
-    local ability_comp = EntityGetFirstComponentIncludingDisabled(id, "AbilityComponent")
-    serialized.sprite = ComponentGetValue2(ability_comp, "sprite_file")
-    serialized.ui_name = ComponentGetValue2(ability_comp, "ui_name")
-    serialized.mana_max = ComponentGetValue2(ability_comp, "mana_max")
-    serialized.mana_charge_speed = ComponentGetValue2(ability_comp, "mana_charge_speed")
-
-    serialized.reload_time = ComponentObjectGetValue2(ability_comp, "gun_config", "reload_time")
-    serialized.actions_per_round = ComponentObjectGetValue2(ability_comp, "gun_config", "actions_per_round")
-    serialized.deck_capacity = ComponentObjectGetValue2(ability_comp, "gun_config", "deck_capacity")
-    serialized.shuffle_deck_when_empty = ComponentObjectGetValue2(ability_comp, "gun_config", "shuffle_deck_when_empty")
-
-    serialized.spread_degrees = ComponentObjectGetValue2(ability_comp, "gunaction_config", "spread_degrees")
-    serialized.speed_multiplier = ComponentObjectGetValue2(ability_comp, "gunaction_config", "speed_multiplier")
-    serialized.fire_rate_wait = ComponentObjectGetValue2(ability_comp, "gunaction_config", "fire_rate_wait")
-    return serialized
-end
-
-function SerializeWandSpells(id)
-    local childs = EntityGetAllChildren(id)
-    local always_cast = {}
-    local deck = {}
-    if childs ~= nil then
-        local last_slot = 0
-        for _, child in ipairs(childs) do
-            local item_comp = EntityGetFirstComponentIncludingDisabled(child, "ItemComponent")
-            local item_action_component = EntityGetFirstComponentIncludingDisabled(child, "ItemActionComponent")
-            local is_always_cast = ComponentGetValue2(item_comp, "permanently_attached")
-            local action_id = ComponentGetValue2(item_action_component, "action_id")
-            local slot = ComponentGetValue2(item_comp, "inventory_slot")
-            local empty_slots = slot - last_slot
-
-            if empty_slots > 0 then
-                for s = 1, empty_slots do
-                    table.insert(deck, "0")
-                    last_slot = last_slot + 1
-                end
-            end
-            if (is_always_cast) then
-                table.insert(always_cast, action_id)
-            else
-                table.insert(deck, action_id)
-                last_slot = last_slot + 1
-            end
-        end
-    end
-    return always_cast, deck
-end
-
-function SerializeInventorySpells()
-    local inven = get_inventory()
-    if inven == nil then
-        return
-    end
-
-    local inven_slots = EntityGetAllChildren(inven)
-    local inventory = {}
-    if inven_slots == nil then
-        return
-    end
-
-    local last_slot = 0
-    for _, child in ipairs(inven_slots) do
-        local item_comp = EntityGetFirstComponentIncludingDisabled(child, "ItemComponent")
-        local item_action_component = EntityGetFirstComponentIncludingDisabled(child, "ItemActionComponent")
-        local action_id = ComponentGetValue2(item_action_component, "action_id")
-        local slot = ComponentGetValue2(item_comp, "inventory_slot")
-        local empty_slots = slot - last_slot
-        if empty_slots > 0 then
-            for s = 1, empty_slots do
-                table.insert(inventory, "0")
-                last_slot = last_slot + 1
-            end
-        end
-
-        table.insert(inventory, action_id)
-        last_slot = last_slot + 1
-    end
-    return inventory
-end
-
 function SpawnPlayerGhosts(player_list)
     for userId, player in pairs(player_list) do
         SpawnPlayerGhost(player, userId)
@@ -292,13 +211,16 @@ function SpawnPlayerGhosts(player_list)
 end
 
 function SpawnPlayerGhost(player, userId)
-    local ghost = EntityLoad("mods/noita-together/files/entities/playerghost.xml", 0, 0)
+    local ghost = EntityLoad("mods/noita-together/files/entities/ntplayer.xml", 0, 0)
     AppendName(ghost, player.name)
     local vars = EntityGetComponent(ghost, "VariableStorageComponent")
     for _, var in pairs(vars) do
         local name = ComponentGetValue2(var, "name")
         if (name == "userId") then
             ComponentSetValue2(var, "value_string", userId)
+        end
+        if (name == "inven") then
+            ComponentSetValue2(var, "value_string", json.encode(PlayerList[userId].inven))
         end
     end
     if (player.x ~= nil and player.y ~= nil) then
@@ -335,12 +257,40 @@ function MovePlayerGhost(data)
         local userId = ComponentGetValue2(id_comp, "value_string")
         if (userId == data.userId) then
             local dest = get_variable_storage_component(ghost, "dest")
-            local dest_str = ComponentGetValue2(dest, "value_string")
+            --local dest_str = ComponentGetValue2(dest, "value_string")
             --local frames_comp = get_variable_storage_component(ghost, "uFrames")
             --local f1, f2 = ConvertStrToNumberTable(ComponentGetValue2(frames_comp, "value_string"))
             --local frames = f1 .. "," .. data.frames
             --ComponentSetValue2(frames_comp, "value_string", frames)
-            ComponentSetValue2(dest, "value_string", tostring(data.x) .. "," .. tostring(data.y) .. "," .. tostring(data.scaleX))
+            ComponentSetValue2(dest, "value_string", json.encode(data.movement))
+        end
+    end
+end
+
+function UpdatePlayerGhost(data)
+    local ghosts = EntityGetWithTag("nt_ghost")
+
+    for _, ghost in pairs(ghosts) do
+        local id_comp = get_variable_storage_component(ghost, "userId")
+        local userId = ComponentGetValue2(id_comp, "value_string")
+        if (userId == data.userId) then
+            local dest = get_variable_storage_component(ghost, "inven")
+            print("INVEN #" .. tostring(#data.inven))
+            ComponentSetValue2(dest, "value_string", json.encode(data.inven))
+        end
+    end
+end
+
+function UpdatePlayerGhostCosmetic(data)
+    local ghosts = EntityGetWithTag("nt_ghost")
+
+    for _, ghost in pairs(ghosts) do
+        local id_comp = get_variable_storage_component(ghost, "userId")
+        local userId = ComponentGetValue2(id_comp, "value_string")
+        if (userId == data.userId) then
+            for __, flag in pairs(data.flags) do
+                EntitySetComponentsWithTagEnabled( ghost, flag, true )
+            end
         end
     end
 end
@@ -400,11 +350,13 @@ function GetItemWithId(target, id)
 end
 
 function PopulateSpellList()
+    dofile_once("data/scripts/gun/gun_enums.lua")
     dofile_once("data/scripts/gun/gun_actions.lua")
     for _, spell in ipairs(actions) do
         SpellSprites[spell.id] = {
             name = GameTextGetTranslatedOrNot(spell.name),
-            sprite = spell.sprite
+            sprite = spell.sprite,
+            type = spell.type
         }
     end
 end
@@ -704,4 +656,138 @@ end
 function CanSpawnPoi(x, y)
     local pois = EntityGetInRadiusWithTag(x, y, 50, "NT_POI") or {}
     return #pois == 0
+end
+
+function GetWandStats(id)
+    local serialized = {}
+
+    local ability_comp = EntityGetFirstComponentIncludingDisabled(id, "AbilityComponent")
+    serialized.sprite = ComponentGetValue2(ability_comp, "sprite_file")
+    serialized.uiName = ComponentGetValue2(ability_comp, "ui_name")
+    serialized.manaMax = ComponentGetValue2(ability_comp, "mana_max")
+    serialized.manaChargeSpeed = ComponentGetValue2(ability_comp, "mana_charge_speed")
+
+    serialized.reloadTime = ComponentObjectGetValue2(ability_comp, "gun_config", "reload_time")
+    serialized.actionsPerRound = ComponentObjectGetValue2(ability_comp, "gun_config", "actions_per_round")
+    serialized.deckCapacity = ComponentObjectGetValue2(ability_comp, "gun_config", "deck_capacity")
+    serialized.shuffleDeckWhenEmpty = ComponentObjectGetValue2(ability_comp, "gun_config", "shuffle_deck_when_empty")
+
+    serialized.spreadDegrees = ComponentObjectGetValue2(ability_comp, "gunaction_config", "spread_degrees")
+    serialized.speedMultiplier = ComponentObjectGetValue2(ability_comp, "gunaction_config", "speed_multiplier")
+    serialized.fireRateWait = ComponentObjectGetValue2(ability_comp, "gunaction_config", "fire_rate_wait")
+    local item_comp = EntityGetFirstComponentIncludingDisabled(id, "ItemComponent")
+    serialized.inven_slot = ComponentGetValue2(item_comp, "inventory_slot")
+    return serialized
+end
+
+function GetWandSpells(id)
+    if (id == nil or id == 0) then return {}, {} end
+    local childs = EntityGetAllChildren(id)
+    local always_cast = {}
+    local deck = {}
+    if childs ~= nil then
+        local last_slot = 0
+        for _, child in ipairs(childs) do
+            local item_comp = EntityGetFirstComponentIncludingDisabled(child, "ItemComponent")
+            local item_action_component = EntityGetFirstComponentIncludingDisabled(child, "ItemActionComponent")
+            local is_always_cast = ComponentGetValue2(item_comp, "permanently_attached")
+            local action_id = ComponentGetValue2(item_action_component, "action_id")
+            local slot = ComponentGetValue2(item_comp, "inventory_slot")
+            local empty_slots = slot - last_slot
+
+            if empty_slots > 0 then
+                for s = 1, empty_slots do
+                    table.insert(deck, {gameId="0"})
+                    last_slot = last_slot + 1
+                end
+            end
+            if (is_always_cast) then
+                table.insert(always_cast, {gameId=action_id})
+            else
+                table.insert(deck, {gameId=action_id})
+                last_slot = last_slot + 1
+            end
+        end
+    end
+    return always_cast, deck
+end
+
+function find_the_wand_held( entity_id )
+	local children = EntityGetAllChildren( entity_id )
+	if ( children == nil ) then return 0 end
+
+	local backup_result = 0
+
+	-- Inventory2Component
+	-- mActiveItem
+	local inventory2_comp = EntityGetFirstComponentIncludingDisabled( entity_id, "Inventory2Component" )
+	if ( inventory2_comp ~= nil ) then
+		local active_item = ComponentGetValue( inventory2_comp, "mActiveItem" )
+		if ( EntityHasTag( active_item, "wand" ) ) then
+			return active_item
+		end
+	end
+	
+	-- if that doesn't work (e.g. player is holding something else than a wand)
+	for i,child in ipairs( children ) do
+		if( EntityHasTag( child, "wand" ) ) then
+			if ( EntityGetFirstComponent( child, "ItemComponent") ~= nil ) then
+				return child
+			end
+			if ( ComponentGetIsEnabled( EntityGetFirstComponentIncludingDisabled( child, "ItemComponent") ) ) then
+				backup_result = child
+			end
+		else
+			local temp_result = find_the_wand_held( child )
+			if ( temp_result ~= 0 ) then
+				if ( EntityGetFirstComponent( temp_result, "ItemComponent") ~= nil ) then
+					return temp_result
+				else
+					backup_result = temp_result
+				end
+			end
+		end
+	end
+
+	return backup_result
+end
+
+function GetWandSlot(player)
+    local held_id = find_the_wand_held( player )
+    if (held_id == 0) then return 0 end
+    local item_comp = EntityGetFirstComponentIncludingDisabled(held_id, "ItemComponent")
+    if (item_comp ~= nil and item_comp > 0) then
+        local slot = ComponentGetValue2(item_comp, "inventory_slot")
+        return slot
+    end
+end
+
+function SerializeWands()
+    local player = GetPlayer()
+    if (player == nil) then
+        return "";
+    end
+    local serialized = {}
+    local wands_ids = GetPlayerWands()
+
+    for _, wand in ipairs(wands_ids) do
+        local stats = GetWandStats(wand)
+        local always_cast, deck = GetWandSpells(wand)
+        table.insert( serialized, {stats=stats, alwaysCast=always_cast, deck=deck} )
+    end
+    return jankson.encode(serialized)
+end
+
+function CosmeticFlags()
+    local data = {}
+    if HasFlagPersistent( "secret_amulet" ) then
+        table.insert(data, "player_amulet")
+    end
+    if HasFlagPersistent( "secret_amulet_gem" ) then
+        table.insert(data, "player_amulet_gem")
+    end
+    if HasFlagPersistent( "secret_hat" ) then
+        table.insert(data, "player_hat2")
+    end
+    return data
 end

@@ -80,7 +80,7 @@ _ws_main = function()
     end
     increase_count()
 end
-local loc_counter = 0
+last_wands = ""
 async_loop(function()
     if (NT ~= nil) then
         local queue = json.decode(NT.wsQueue)
@@ -94,13 +94,14 @@ async_loop(function()
         end
         NT.player_count = PlayerCount
     end
-    local x, y, scale_x = GetPlayerPos(true)
-    if (LastLocation.x ~= x or LastLocation.y ~= y or LastLocation.scale_x ~= scale_x) then
-        loc_counter = loc_counter +1
-        SendWsEvent({event="PlayerMove", payload={x=x, y=y, scaleX=scale_x}})
-        LastLocation = {x=x, y=y, scale_x=scale_x}
-    end
+    --SendWsEvent({event="PlayerMove", payload={x=x, y=y, scaleX=scale_x}})
+    SendWsEvent({event="CustomModEvent", payload={name="PlayerMove", movement=loc_tracker}})
+    loc_tracker = {}
     UpdatePlayerStats()
-    
-    wait(35)
+    local serialized = SerializeWands()
+    if (last_wands ~= serialized and serialized ~= "") then
+        last_wands = serialized
+        SendWsEvent({event="CustomModEvent", payload={name="PlayerInven", inven=serialized}})
+    end
+    wait(30)
 end)
