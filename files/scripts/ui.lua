@@ -549,8 +549,6 @@ if not initialized then
         local inven = PlayerList[userId].inven
         if (_hover and show_wands and inven ~= nil) then
             wand_displayer = inven
-        else
-            wand_displayer = {}
         end
         
         local location = GameTextGetTranslatedOrNot(player.location)
@@ -849,6 +847,7 @@ if not initialized then
                     wand_offset_y = 165
                  end
             end
+            wand_displayer = {}
         end
 
         GuiIdPop(gui)
