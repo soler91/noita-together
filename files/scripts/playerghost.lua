@@ -1,5 +1,40 @@
 dofile_once("data/scripts/lib/utilities.lua")
-dofile_once("mods/noita-together/files/scripts/json.lua")
+function ConvertStrToTable(data)
+    local ret = {}
+    for value in string.gmatch(data, "([^,]+)") do
+        table.insert(ret, value)
+    end
+    return ret
+end
+function ConvertTableToStr(data)
+    local ret = ","
+    for _, value in pairs(data) do
+        ret = ret .. value .. ","
+    end
+    return ret
+end
+function GetStuff(data, remove)
+    local ret = {arm={}}
+    if (#data < 7) then return nil end
+    ret.arm.r = tonumber(remove and table.remove(data,1) or data[1])
+    ret.arm.sy = tonumber(remove and table.remove(data,1) or data[2])
+    ret.x = tonumber(remove and table.remove(data,1) or data[3])
+    ret.y = tonumber(remove and table.remove(data,1) or data[4])
+    ret.scale_x = tonumber(remove and table.remove(data,1) or data[5])
+    ret.a = tonumber(remove and table.remove(data,1) or data[6])
+    ret.h = tonumber(remove and table.remove(data,1) or data[7])
+    return ret
+end
+
+function Wands(data)
+    local ret = {}
+    repeat
+        local slot = tonumber(data[1] and table.remove(data, 1) or -2)
+        local sprite = table.remove(data,1)
+        table.insert(ret, {slot=slot, sprite=sprite})
+    until(#data == 0)
+    return ret
+end
 local anims_n = {
     stand = 1,
     walk = 2,
@@ -114,48 +149,65 @@ local anims_s = {
 }
 local entity_id = GetUpdatedEntityID()
 local x, y = EntityGetTransform(entity_id)
-local platcomp = EntityGetComponent( entity_id, "SpriteComponent", "character" )
+local visible = is_in_camera_bounds(x, y, 60)
 local dest_varcomp =get_variable_storage_component(entity_id, "dest")
-local inven_varcomp =get_variable_storage_component(entity_id, "inven")
-local movement = json.decode(ComponentGetValue2(dest_varcomp, "value_string"))
-local inven = json.decode(ComponentGetValue2(inven_varcomp, "value_string"))
-local current = table.remove(movement,1)
-local next = movement[1]
-held = -1
-if (current ~= nil) then
-    arm = current.arm
-    held = current.h
-end
-local held_wand = ""
-for _, wand in pairs(inven) do
-    if (wand.stats.inven_slot == held) then 
-        held_wand = wand.stats.sprite
-        break
+local movement = ConvertStrToTable(ComponentGetValue2(dest_varcomp, "value_string"))
+local current = GetStuff(movement, true)
+if (visible) then
+    local platcomp = EntityGetComponent( entity_id, "SpriteComponent", "character" )
+    local inven_varcomp =get_variable_storage_component(entity_id, "inven")
+    local inven = Wands(ConvertStrToTable(ComponentGetValue2(inven_varcomp, "value_string")))
+    local next = GetStuff(movement, false)
+    held = -1
+    if (current ~= nil) then
+        arm = current.arm
+        held = current.h + 1
     end
-end
-
-if (next ~= nil) then current = next end
-
-if (x ~= nil and y ~= nil and current ~= nil) then
-    local anim = anims_s[current.a] or anims_s[1]
-    tx, ty = vec_lerp(x, y, current.x, current.y, 0.869)
-    EntitySetTransform(entity_id, tx, ty, 0, current.scale_x)
-    for _, compid in pairs(platcomp) do
-        ComponentSetValue2(compid, "rect_animation", anim)
+    local held_wand = ""
+    for _, wand in pairs(inven or {}) do
+        if (wand.slot+1 == held) then 
+            held_wand = wand.sprite
+            break
+        end
     end
-    for _, child in pairs(EntityGetAllChildren(entity_id)) do
-        local name = EntityGetName(child)
-        if (name == "held_item") then
-            local sprite_comp = EntityGetFirstComponent(child, "SpriteComponent")
-            local sprite = ComponentGetValue2(sprite_comp, "image_file")
-            if (sprite ~= held_wand and held_wand ~= "") then
-                ComponentSetValue2(sprite_comp, "image_file", held_wand)
+    if (next ~= nil) then current = next end
+
+    if (x ~= nil and y ~= nil and current ~= nil) then
+        movement = ConvertTableToStr(movement)
+        local anim = anims_s[current.a] or anims_s[1]
+        tx, ty = vec_lerp(x, y, current.x, current.y, 0.869)
+        EntitySetTransform(entity_id, tx, ty, 0, current.scale_x)
+        for _, compid in pairs(platcomp) do
+            ComponentSetValue2(compid, "rect_animation", anim)
+        end
+        for _, child in pairs(EntityGetAllChildren(entity_id)) do
+            local name = EntityGetName(child)
+            if (name == "held_item") then
+                local sprite_comp = EntityGetFirstComponent(child, "SpriteComponent")
+                local sprite = ComponentGetValue2(sprite_comp, "image_file")
+                if (sprite ~= held_wand and held_wand ~= "") then
+                    ComponentSetValue2(sprite_comp, "image_file", held_wand)
+                end
+            end
+            if (name == "arm_r" or name == "held_item") then
+                local ax, ay = EntityGetTransform(child)
+                EntitySetTransform(child, ax, ay, arm.r, 1, arm.sy)
             end
         end
-        if (name == "arm_r" or name == "held_item") then
-            local ax, ay = EntityGetTransform(child)
-            EntitySetTransform(child, ax, ay, arm.r, 1, arm.sy)
-        end
+        ComponentSetValue2(dest_varcomp, "value_string", movement)
     end
-    ComponentSetValue2(dest_varcomp, "value_string", json.encode(movement))
-end 
+else
+    if (x ~= nil and y ~= nil and current ~= nil) then
+        local hax = true
+        while hax do
+            local nextmov = GetStuff(movement, true)
+            if (nextmov == nil) then 
+                hax = false
+            else
+                current = nextmov 
+            end
+        end
+        EntitySetTransform(entity_id, current.x, current.y, 0, current.scale_x)
+        ComponentSetValue2(dest_varcomp, "value_string", ",")
+    end
+end

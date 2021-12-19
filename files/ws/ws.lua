@@ -96,7 +96,7 @@ async_loop(function()
     end
     --SendWsEvent({event="PlayerMove", payload={x=x, y=y, scaleX=scale_x}})
     SendWsEvent({event="CustomModEvent", payload={name="PlayerMove", movement=loc_tracker}})
-    loc_tracker = {}
+    loc_tracker = ","
     UpdatePlayerStats()
     local serialized = SerializeWands()
     if (last_wands ~= serialized and serialized ~= "") then

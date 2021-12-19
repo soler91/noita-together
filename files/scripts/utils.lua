@@ -262,21 +262,24 @@ function MovePlayerGhost(data)
             --local f1, f2 = ConvertStrToNumberTable(ComponentGetValue2(frames_comp, "value_string"))
             --local frames = f1 .. "," .. data.frames
             --ComponentSetValue2(frames_comp, "value_string", frames)
-            ComponentSetValue2(dest, "value_string", json.encode(data.movement))
+            ComponentSetValue2(dest, "value_string", data.movement)
         end
     end
 end
 
 function UpdatePlayerGhost(data)
     local ghosts = EntityGetWithTag("nt_ghost")
-
+    local stuff = {}
+    local inven = ","
+    for i, wand in ipairs(data.inven) do
+        inven = inven .. "," .. tostring(wand.stats.inven_slot) .. "," .. wand.stats.sprite .. ","
+    end
     for _, ghost in pairs(ghosts) do
         local id_comp = get_variable_storage_component(ghost, "userId")
         local userId = ComponentGetValue2(id_comp, "value_string")
         if (userId == data.userId) then
             local dest = get_variable_storage_component(ghost, "inven")
-            print("INVEN #" .. tostring(#data.inven))
-            ComponentSetValue2(dest, "value_string", json.encode(data.inven))
+            ComponentSetValue2(dest, "value_string", inven)
         end
     end
 end
@@ -790,4 +793,31 @@ function CosmeticFlags()
         table.insert(data, "player_hat2")
     end
     return data
+end
+
+function ConvertStrToTable(data)
+    local ret = {}
+    for value in string.gmatch(data, "([^,]+)") do
+        table.insert(ret, tonumber(value))
+    end
+    return ret
+end
+function ConvertTableToStr(data)
+    local ret = ","
+    for _, value in pairs(data) do
+        ret = ret .. value .. ","
+    end
+    return ret
+end
+function GetStuff(data)
+    local ret = {arm={}}
+    if (#data < 7) then return nil end
+    ret.arm.r = tonumber(table.remove(data,1))
+    ret.arm.sy = tonumber(table.remove(data,1))
+    ret.x = tonumber(table.remove(data,1))
+    ret.y = tonumber(table.remove(data,1))
+    ret.scale_x = tonumber(table.remove(data,1))
+    ret.anim = tonumber(table.remove(data,1))
+    ret.h = tonumber(table.remove(data,1))
+    return ret
 end

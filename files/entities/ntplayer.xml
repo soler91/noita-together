@@ -202,13 +202,13 @@
 
   <VariableStorageComponent
   name="dest"
-  value_string="{}"
+  value_string=","
   >
   </VariableStorageComponent>
 
   <VariableStorageComponent
   name="inven"
-  value_string="{}"
+  value_string=","
   >
   </VariableStorageComponent>
 

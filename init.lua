@@ -60,7 +60,7 @@ function OnWorldPreUpdate()
     dofile("mods/noita-together/files/scripts/ui.lua")
 end
 
-loc_tracker = {}
+loc_tracker = ","
 local anims_n = {
     stand = 1,
     walk = 2,
@@ -140,16 +140,17 @@ function OnWorldPostUpdate()
             local spritecomp = EntityGetFirstComponentIncludingDisabled(player, "SpriteComponent", "character")
             local rect_anim = ComponentGetValue2(spritecomp, "rect_animation")
             local anim = anims_n[rect_anim] or 1
-            local arm = {}
+            local mov = ""
             local held = GetWandSlot( player )
             for _, child in pairs(EntityGetAllChildren(player)) do
                 if (EntityGetName(child) == "arm_r") then
                     local ax, ay, ar, asx, asy = EntityGetTransform(child)
-                    arm = {r=ar, sy=asy}
+                    mov = mov .. tostring(ar) .. "," .. tostring(asy) .. ","
                     break
                 end
             end
-            table.insert(loc_tracker, {x=x, y=y, scale_x = scale_x, a=anim, arm=arm, h=held})
+            mov = mov .. tostring(x) .. "," .. tostring(y) .. "," .. tostring(scale_x) .. "," .. tostring(anim) .. "," .. tostring(held) .. ","
+            loc_tracker = loc_tracker .. mov
         end
     end
 end
