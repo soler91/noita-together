@@ -165,8 +165,8 @@ if (visible) then
     end
     local held_wand = ""
     for _, wand in pairs(inven or {}) do
-        if (wand.slot+1 == held) then 
-            held_wand = wand.sprite
+        if (wand.slot and wand.slot+1 == held) then 
+            held_wand = wand.sprite or ""
             break
         end
     end
