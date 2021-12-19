@@ -126,36 +126,6 @@
 
       </SpriteComponent>
   </Entity>
-
-  
-
-	<Base file="data/entities/base_jetpack_nosound.xml">
-
-    <ParticleEmitterComponent
-        offset.x="-2"
-        offset.y="5"
-        lifetime_min="0.0" 
-    ></ParticleEmitterComponent>
-  
-  </Base>
-
-  <VelocityComponent
-    updates_velocity="0"
-    displace_liquid="0"
-  affect_physics_bodies="0"
-  ></VelocityComponent>
-  
-  <!-- cape -->
-
-  <HotspotComponent
-      _tags="cape_root"
-      sprite_hotspot_name="cape" >
-  </HotspotComponent>
-
-  <Entity name="cape" serialize="0">  
-      <Base file="data/entities/verlet_chains/cape/cape.xml">
-      </Base>
-  </Entity>
   
   <!-- belt -->
   
