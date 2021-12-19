@@ -30,7 +30,7 @@
         "files/entities/hourglass_charm.xml": "3129064e4420567db86ecec3352b2ca4efab255da8f633d6bff1b12290c1f98c",
         "files/entities/hourglass_confusion.xml": "ae0b1d1595c875303cf10eba50fc4cec5ee4f247e664b6a734ee6aaf219f93d3",
         "files/entities/hourglass_speed.xml": "71e9d5b7748b4a00f5e02ac5268d0fff5be899059c3b52321be90d042f1b7608",
-        "files/entities/ntplayer.xml": "633F2C58A93D563612CDA8A3982F040651A545F156F2E291BBBAB928FE592456",
+        "files/entities/ntplayer.xml": "917de5c088f868b3ccbdba129070a89419dcc20b5e8995b9024b6cc09d5cad46",
         "files/entities/playerghost.xml": "76a05847cdd622dbbd6bac37aadf2be00383899c6ecded1cae51711f21329d9d",
         "files/entities/playerghost_target.xml": "39d81049295191228b7e76bf6394fd57da0e59b4ab383d691aa9afd9710e9c99",
         "files/entities/poi/poi.lua": "4c5c86bfabee0242305e618f9ef55c1af8a90ab99a7b5b698f478dc7baa347c7",
@@ -171,11 +171,12 @@
         "files/ui/wands_sorting/icon_mana_max-1.png": "d90ea85b527f319926c1cd35f1f01dc825e6676e138b0fe5773f33d474cda3a0",
         "files/ui/wands_sorting/icon_reload_time-1.png": "00e8b6aa863cbaa8ba740285dac84dc8e3b33f11481f5b3c01b1a1f7e49f8097",
         "files/ui/wands_sorting/icon_spread_degrees-1.png": "976c73a6ad67b1bad26d82b78c7f31f58a9d7b3c377177eebe39a0de7f6b234b",
-        "files/ws/events.lua": "5662306DBEF1741BA5AFBB240DAE64D58A091F4045BC595F004DF88DA2D287E4",
+        "files/ws/events.lua": "3eb0e3d55c788adfd5620b560f6268f30ec472c037d80dcb0960b807055d5d76",
         "files/ws/host.lua": "3e7067808fb85f6398dd42249cc06c06c95c0af4f294590ab67224e31d218aa7",
         "files/ws/ws.lua": "827fa0073f9676256c17775bec74ba839019031c7db6b9c9983c501db8b88a10",
         "init.lua": "9e6770273d11500fcdfe3c780ba6889150d58bfae89791063cdb6286bed09d7d",
         "mod.xml": "bb32c00f2074ccf690547230e833fe5963bcc4bee0a7628991811e51b9e92693",
+        "module.json": "26c87956e336cada833b084dec91c1f0ae6c1282ee6f9311a01815cbbc59097e",
         "settings.lua": "48c75c25ea5b9aaa89442bc88d2c0b3a61d71676afb96643f201d92e7825f140"
     }
 }
