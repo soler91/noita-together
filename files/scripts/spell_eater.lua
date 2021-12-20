@@ -9,8 +9,15 @@ local x, y = EntityGetTransform(entity_id)
 -- tags -> card_actions | tablet | wand | item_physics
 local card_actions = EntityGetWithTag("card_action")
 local wands = EntityGetWithTag("wand")
-local flasks = EntityGetWithTag("item_physics")
-
+local tablets = EntityGetWithTag("tablet") or {}
+local moons = EntityGetWithTag("moon_energy") or {}
+local flasks = EntityGetWithTag("item_physics") or {}
+for _, id in pairs(tablets) do
+    table.insert(flasks, id)
+end
+for _, id in pairs(moons) do
+    table.insert(flasks, id)
+end
 if (#card_actions > 0) then
     local msg = {event="SendItems", payload={spells={}}}
     local send = false
