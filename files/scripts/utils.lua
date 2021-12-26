@@ -435,6 +435,10 @@ end
 function PlayerRespawn(entity_id, poly, weak)
     if (Respawning == true) then return end
     async(function()
+        local cx, cy = GameGetCameraPos()
+        GameSetCameraFree(true)
+        
+        EntityLoad("mods/noita-together/files/entities/death_cam.xml", cx, cy)
         Respawning = true
         if (poly) then
             local children = EntityGetAllChildren(entity_id)
@@ -478,7 +482,7 @@ function PlayerRespawn(entity_id, poly, weak)
         end
         local effect_entity = LoadGameEffectEntityTo(player, "data/entities/misc/effect_protection_all.xml")
         local effect_comp = EntityGetFirstComponent(effect_entity, "GameEffectComponent")
-        ComponentSetValue2(effect_comp, "frames", 60*30)
+        ComponentSetValue2(effect_comp, "frames", 60*40)
         EntityAddComponent2(effect_entity, "UIIconComponent", {
             icon_sprite_file = "data/ui_gfx/status_indicators/protection_all.png",
             name = "Respawn Protection",

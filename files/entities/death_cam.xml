@@ -1,0 +1,63 @@
+<Entity >
+  <_Transform 
+    position.x="0" 
+    position.y="0" 
+    rotation="0" 
+    scale.x="1" 
+    scale.y="1" >
+  </_Transform>
+
+  <SpriteComponent
+    _tags="enabled_in_world"
+    _enabled="1" 
+    alpha="0.9" 
+    emissive="1"
+    offset_x ="100"
+    offset_y ="20"
+    has_special_scale="1" 
+    special_scale_x = "0.95",
+    special_scale_y = "0.95",
+    image_file="data/fonts/font_pixel_white.xml"
+    is_text_sprite="1" 
+    kill_entity_after_finished="0" 
+    ui_is_parent="0" 
+    update_transform="1" 
+    update_transform_rotation="0" 
+    text="You died and will be sent to your last checkpoint soon."
+    visible="1" 
+    z_index="-9000"
+     >
+  </SpriteComponent>
+  <SpriteComponent
+    _tags="enabled_in_world"
+    _enabled="1" 
+    alpha="0.9" 
+    emissive="1"
+    offset_x ="220"
+    offset_y ="10"
+    has_special_scale="1" 
+    special_scale_x = "0.8",
+    special_scale_y = "0.8",
+    image_file="data/fonts/font_pixel_white.xml"
+    is_text_sprite="1" 
+    kill_entity_after_finished="0" 
+    ui_is_parent="0" 
+    update_transform="1" 
+    update_transform_rotation="0" 
+    text="if host has kick on death active you are already out of the run but will continue to see ghosts and unable to interact."
+    visible="1" 
+    z_index="-9000"
+     >
+  </SpriteComponent>
+
+  <LuaComponent
+    script_source_file="mods/noita-together/files/scripts/death_cam.lua"
+    execute_every_n_frame="1"
+   >
+  </LuaComponent>
+  <LuaComponent
+    execute_every_n_frame="599"
+    script_source_file="mods/noita-together/files/scripts/death_cam2.lua" >
+   >
+  </LuaComponent>
+</Entity>
