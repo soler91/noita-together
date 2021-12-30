@@ -3,6 +3,18 @@ import Vuex from 'vuex'
 import { ipcRenderer } from 'electron'
 
 Vue.use(Vuex)
+const colors = [
+    "#698935",
+    "#358969",
+    "#356989",
+    "#693589",
+    "#893569",
+    "#893535",
+    "#896935"
+]
+const randomColor = () => {
+    return colors[Math.floor(Math.random() * colors.length)]
+}
 const ipcPlugin = (ipc) => {
     return store => {
         ipc.on("CONNECTED", (event, data) => {
@@ -280,6 +292,9 @@ export default new Vuex.Store({
         },
         setRoom: (state, payload) => {
             state.room = payload
+            for (const user of state.room.users) {
+                user.color = randomColor()
+            }
         },
         roomUpdated: (state, payload) => {
             let room = Object.assign(state.room)
@@ -317,6 +332,7 @@ export default new Vuex.Store({
                 userId: payload.userId,
                 name: payload.name,
                 owner: false,
+                color: randomColor(),
                 readyState: {
                     ready: false,
                     seed: "",
@@ -339,11 +355,21 @@ export default new Vuex.Store({
             state.showErrDialog = payload
         },
         pushChat: (state, payload) => {
+            const time = new Date()
+            let timeStr = ("0" + time.getHours()).slice(-2) + ":" + ("0" + time.getMinutes()).slice(-2)
+            const found = state.room.users.find(user => user.userId == payload.userId)
+            let color = randomColor()
+            color = found && found.color || color
+
+            if (payload.userId === "-1") { color = "#e69569" }
+            console.log({ color, found })
             state.roomChat.push({
                 id: payload.id,
+                time: timeStr,
                 userId: payload.userId,
                 name: payload.name.trim(),
-                message: payload.message.trim()
+                message: payload.message.trim(),
+                color
             })
             if (state.roomChat.length > 250) {
                 state.roomChat.shift()
