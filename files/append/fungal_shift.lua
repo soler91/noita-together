@@ -47,6 +47,7 @@ function fungal_shift( entity, x, y, debug_no_limits )
     if(GameHasFlagRun("NT_GAMEMODE_CO_OP") and GameHasFlagRun("sync_shift")) then
         local queue = json.decode(NT.wsQueue)
         table.insert(queue, {event="CustomModEvent", payload={name="FungalShift", to=to, from=from}})
+		NT.wsQueue = json.encode(queue)
     end
 	-- apply effects
 	for i,it in ipairs(from.materials) do
