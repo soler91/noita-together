@@ -4,7 +4,7 @@ const ws = require("ws")
 const messageHandler = require("./proto/messageHandler")
 const appEvent = require("./appEvent")
 const noita = require("./noita")
-const host = "wss://nt.unicast.link:42069/"
+const host = `wss://${process.env.VUE_APP_HOSTNAME}/`
 const print = true
 module.exports = (data) => {
     const user = { userId: data.id, name: data.display_name }

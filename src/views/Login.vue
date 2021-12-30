@@ -26,7 +26,7 @@ import { shell, ipcRenderer } from "electron";
 export default {
   data() {
     return {
-      loginUrl: "https://nt.unicast.link:42069/auth/login",
+      loginUrl: `https://${process.env.VUE_APP_HOSTNAME}/auth/login`,
       reeemember: false,
       clicked: false,
     };
