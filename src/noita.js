@@ -12,6 +12,16 @@ function sysMsg(message) {
         message
     })
 }
+
+function lerp(a, b, weight) {
+    return a * weight + b * (1 - weight)
+}
+
+function rotLerp(a, b, weight) {
+    const pi2 = Math.PI * 2
+    const shortest = ((a - b) + Math.PI) % pi2 - Math.PI
+    return b + (shortest * weight) % pi2
+}
 class NoitaGame extends EventEmitter {
     constructor() {
         super()
@@ -161,7 +171,7 @@ class NoitaGame extends EventEmitter {
         if (this.queue.length > 0) {
             setTimeout(() => {
                 this.toGame(this.queue.shift())
-            }, this.queueDelay);
+            }, this.queueDelay)
         }
     }
 
@@ -230,10 +240,40 @@ class NoitaGame extends EventEmitter {
     }
 
     sPlayerMove(payload) {
+        try {
+            if (payload.userId == this.user.userId || !this.client) {
+                return
+            }
+            const frames = []
+            for (const [index, current] of payload.frames.entries()) {
+                frames.push(current)
+                const next = payload.frames[index + 1]
+                if (typeof next !== "undefined") {
+                    const med = {
+                        x: lerp(current.x, next.x, 0.869),
+                        y: lerp(current.y, next.y, 0.869),
+                        armR: rotLerp(current.armR, next.armR, 0.869),
+                        armScaleY: current.armScaleY,
+                        scaleX: next.scaleX,
+                        anim: next.anim,
+                        held: next.held
+                    }
+                    frames.push(med)
+                }
+            }
+            const jank = frames.map(current => {
+                return `${current.armR},${current.armScaleY},${current.x},${current.y},${current.scaleX},${current.anim},${current.held},`
+            }).join(",")
+            this.sendEvt("PlayerMove", { userId: payload.userId, frames, jank })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    sPlayerPos(payload) {
         if (payload.userId == this.user.userId || !this.client) {
             return
         }
-        this.sendEvt("PlayerMove", payload)
+        this.sendEvt("PlayerPos", payload)
     }
     sPlayerUpdate(payload) {
         if (payload.userId == this.user.userId) {
