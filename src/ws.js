@@ -10,7 +10,7 @@ module.exports = (data) => {
     const user = { userId: data.id, name: data.display_name }
     noita.setUser({ userId: user.userId, name: user.name, host: false })
     let isHost = false
-    let client = new ws(`${host}${data.token}`)
+    let client = new ws(`${host}${data.token}`, { perMessageDeflate: false })
     const lobby = {
         sHostStart: (payload) => {
             if (isHost) {
