@@ -856,7 +856,7 @@ function StartRun()
     end
 end
 
-DoFungalShift(from, to)
+function DoFungalShift(from, to)
     local entity = GetPlayer()
 
 	local frame = GameGetFrameNum()
