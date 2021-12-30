@@ -137,6 +137,7 @@ export default new Vuex.Store({
                 { id: "sync_steve", name: "Sync Steve", tooltip: "Angers the gods for everyone.", type: "boolean", value: true },
                 { id: "sync_hearts", name: "Sync Hearts", tooltip: "When someone picks up a heart everyone else gets it too.", type: "boolean", value: true },
                 { id: "sync_orbs", name: "Sync Orbs", tooltip: "When someone picks up an orb everyone else gets it too.", type: "boolean", value: true },
+                { id: "sync_shift", name: "Sync Shifts", tooltip: "When someone fungal shifts everyone also gets the same shift, cooldown also applies.", type: "boolean", value: true },
                 { id: "send_wands", name: "Send Wands", tooltip: "Allow players to deposit/take wands.", type: "boolean", value: true },
                 { id: "send_flasks", name: "Send Flasks", tooltip: "Allow players to deposit/take flasks.", type: "boolean", value: true },
                 { id: "send_gold", name: "Send Gold", tooltip: "Allow players to deposit/take gold.", type: "boolean", value: true },
