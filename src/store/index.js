@@ -499,10 +499,16 @@ export default new Vuex.Store({
                 payload: { page: payload && payload > 0 ? payload : 0 }
             })
         },
-        sendChat: (context, payload) => {
+        sendChat: ({ commit, state }, payload) => {
             ipcRenderer.send("CLIENT_CHAT", {
                 key: "cChat",
                 payload
+            })
+            commit("pushChat", {
+                id: payload.id,
+                userId: state.user.id,
+                name: state.user.name.trim(),
+                message: payload.message.trim()
             })
         },
         sendFlags: ({ getters }) => {
