@@ -7,6 +7,11 @@ customEvents = {
         end
         SpawnPoi(user.name .. "'s message", data.message, data.x, data.y)
     end,
+    FungalShift = function(data)
+        if(GameHasFlagRun("NT_GAMEMODE_CO_OP") and GameHasFlagRun("sync_shift")) then
+            DoFungalShift(data.from, data.to)
+        end
+    end,
     TeamPerk = function(data)
         local list = dofile("mods/noita-together/files/scripts/perks.lua")
         if (not GameHasFlagRun("NT_GAMEMODE_CO_OP") or (not GameHasFlagRun("sync_perks") and not GameHasFlagRun("team_perks"))) then 
