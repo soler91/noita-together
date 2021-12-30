@@ -21,8 +21,8 @@ protocol.registerSchemesAsPrivileged([
 ])
 
 if (isDevelopment && process.platform === 'win32') {
-    app.removeAsDefaultProtocolClient(NT_SCHEME);
-    app.setAsDefaultProtocolClient(NT_SCHEME, process.execPath, [path.resolve(process.argv[1])]);
+    app.removeAsDefaultProtocolClient(NT_SCHEME)
+    app.setAsDefaultProtocolClient(NT_SCHEME, process.execPath, [path.resolve(process.argv[1])])
 } else {
     if (!app.isDefaultProtocolClient(NT_SCHEME)) {
         app.setAsDefaultProtocolClient(NT_SCHEME)
@@ -31,7 +31,7 @@ if (isDevelopment && process.platform === 'win32') {
 
 autoUpdater.on('update-downloaded', (info) => {
     appEvent("UPDATE_DOWNLOADED", "")
-});
+})
 async function createWindow() {
     // Create the browser window.
     mainWindow = new BrowserWindow({

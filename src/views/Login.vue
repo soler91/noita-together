@@ -22,48 +22,48 @@
 </template>
 
 <script>
-import { shell, ipcRenderer } from "electron";
+import { shell, ipcRenderer } from "electron"
 export default {
   data() {
     return {
       loginUrl: `https://${process.env.VUE_APP_HOSTNAME}/auth/login`,
       reeemember: false,
       clicked: false,
-    };
+    }
   },
   beforeCreate() {
     const unsub = this.$store.subscribe((mutation, state) => {
       if (mutation.type == "setUser" && state.user.id > 0) {
-        unsub();
-        this.clicked = false;
-        this.$router.replace({ path: "/lobby" });
-        this.$store.commit("setLoading", false);
+        unsub()
+        this.clicked = false
+        this.$router.replace({ path: "/lobby" })
+        this.$store.commit("setLoading", false)
       }
-    });
+    })
   },
   computed: {
     savedUser() {
-      return this.$store.state.savedUser;
+      return this.$store.state.savedUser
     },
     savedUserName() {
-      return this.$store.state.savedUserName;
+      return this.$store.state.savedUserName
     },
   },
   methods: {
     OpenLoginPage() {
-      this.clicked = true;
-      shell.openExternal(this.loginUrl);
+      this.clicked = true
+      shell.openExternal(this.loginUrl)
     },
     ContinueSavedUser() {
-      this.$store.dispatch("continueSavedUser");
+      this.$store.dispatch("continueSavedUser")
     },
   },
   watch: {
     reeemember(oldVal, newVal) {
-      ipcRenderer.send("remember_user", !newVal);
+      ipcRenderer.send("remember_user", !newVal)
     },
   },
-};
+}
 </script>
 
 <style>

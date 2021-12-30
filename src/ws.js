@@ -24,6 +24,7 @@ module.exports = (data) => {
                 sendMsg(msg)
             }
             noita.sendEvt("StartRun")
+
         },
         sUserBanned: (payload) => {
             if (payload.userId == user.userId) {
@@ -300,15 +301,15 @@ module.exports = (data) => {
     function toCamel(str) {
         return str.replace(/([_][a-z])/ig, ($1) => {
             return $1.toUpperCase()
-                .replace('_', '');
-        });
+                .replace('_', '')
+        })
     }
 
     function keysToCamel(obj) {
-        const n = {};
+        const n = {}
         for (const key of Object.keys(obj)) {
             n[toCamel(key)] = obj[key]
         }
-        return n;
+        return n
     }
 }
