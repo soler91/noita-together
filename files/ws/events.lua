@@ -36,6 +36,7 @@ customEvents = {
         GamePrint(player .. " picked up the salt, they wait for you")
     end,
     PlayerMove = function(data)
+        --[[
         local md = GetStuff(ConvertStrToTable(data.movement))
         if (md ~= nil) then
             PlayerList[data.userId].x = md.x
@@ -43,6 +44,7 @@ customEvents = {
             PlayerList[data.userId].scale_x = md.scaleX
             MovePlayerGhost(data)
         end
+        ]]
     end,
     PlayerInven = function(data)
         local inven = jankson.decode(data.inven)
@@ -182,10 +184,17 @@ wsEvents = {
         PopulateSpellList()
     end,
     PlayerMove = function(data)
+        local last = data.frames[math.floor(#data.frames/2)]
+        PlayerList[data.userId].x = last.x
+        PlayerList[data.userId].y = last.y
+        PlayerList[data.userId].scale_x = last.scaleX
+        MovePlayerGhost(data)
+    end,
+    PlayerPos = function(data)
         PlayerList[data.userId].x = data.x
         PlayerList[data.userId].y = data.y
-        PlayerList[data.userId].scale_x = data.scaleX
-        MovePlayerGhost(data)
+        PlayerList[data.userId].scale_x = 1
+        TeleportPlayerGhost(data)
     end,
     PlayerUpdate = function(data)
         if (PlayerList[data.userId] ~= nil) then
