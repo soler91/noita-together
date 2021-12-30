@@ -69,24 +69,34 @@ message GameAction {
 
         ClientAngerySteve c_angery_steve = 38;
         ServerAngerySteve s_angery_steve = 39;
+
+        ServerPlayerPos s_player_pos = 40;
     }
 }
 
+message PlayerFrame {
+    optional float x = 1;
+    optional float y = 2;
+    optional float arm_r = 3;
+    optional float arm_scale_y = 4;
+    optional float scale_x = 5;
+    optional int32 anim = 6;
+    optional int32 held = 7;
+}
+
+message ServerPlayerPos {
+    required string user_id = 0;
+    required float x = 1;
+    required float y = 2;
+}
+
 message ClientPlayerMove {
-    optional float x = 0;
-    optional float y = 1;
-    optional float speed = 2;
-    optional uint32 frames = 3;
-    optional float scale_x = 4;
+    repeated PlayerFrame frames = 1; 
 }
 
 message ServerPlayerMove {
     required string user_id = 0;
-    optional float x = 1;
-    optional float y = 2;
-    optional float speed = 3; 
-    optional uint32 frames = 4;
-    optional float scale_x = 5;
+    repeated PlayerFrame frames = 1;
 }
 
 message ClientPlayerUpdate {
@@ -479,7 +489,13 @@ message LobbyAction {
 
         ServerDisconnected s_disconnected = 30;
         ServerRoomAddToList s_room_add_to_list = 31;
+
+        ClientRunOver c_run_over = 32;
     }
+}
+
+message ClientRunOver {
+    optional bool idk = 1;
 }
 
 message ServerDisconnected {
