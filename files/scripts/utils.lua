@@ -249,6 +249,19 @@ function DespawnPlayerGhost(userId)
     end
 end
 
+function TeleportPlayerGhost(data)
+    local ghosts = EntityGetWithTag("nt_ghost")
+
+    for _, ghost in pairs(ghosts) do
+        local id_comp = get_variable_storage_component(ghost, "userId")
+        local userId = ComponentGetValue2(id_comp, "value_string")
+        if (userId == data.userId) then
+            EntitySetTransform(ghost, data.x, data.y)
+            break
+        end
+    end
+end
+
 function MovePlayerGhost(data)
     local ghosts = EntityGetWithTag("nt_ghost")
 
@@ -257,12 +270,9 @@ function MovePlayerGhost(data)
         local userId = ComponentGetValue2(id_comp, "value_string")
         if (userId == data.userId) then
             local dest = get_variable_storage_component(ghost, "dest")
-            --local dest_str = ComponentGetValue2(dest, "value_string")
-            --local frames_comp = get_variable_storage_component(ghost, "uFrames")
-            --local f1, f2 = ConvertStrToNumberTable(ComponentGetValue2(frames_comp, "value_string"))
-            --local frames = f1 .. "," .. data.frames
-            --ComponentSetValue2(frames_comp, "value_string", frames)
-            ComponentSetValue2(dest, "value_string", data.movement)
+            
+            ComponentSetValue2(dest, "value_string", data.jank)
+            break
         end
     end
 end
@@ -280,6 +290,7 @@ function UpdatePlayerGhost(data)
         if (userId == data.userId) then
             local dest = get_variable_storage_component(ghost, "inven")
             ComponentSetValue2(dest, "value_string", inven)
+            break
         end
     end
 end
@@ -294,6 +305,7 @@ function UpdatePlayerGhostCosmetic(data)
             for __, flag in pairs(data.flags) do
                 EntitySetComponentsWithTagEnabled( ghost, flag, true )
             end
+            break
         end
     end
 end
@@ -570,7 +582,7 @@ function CheckSampoStatus()
     end
     local enable_sampo = true
     local x, y = EntityGetTransform(disabled_sampo)
-    print("player list " .. tostring(#PlayerList))
+    --print("player list " .. tostring(#PlayerList))
     for _, player in pairs(PlayerList) do
         local distance = 999
         distance = math.abs(x - player.x) + math.abs(y - player.y)
@@ -592,7 +604,7 @@ function SpawnSampo()
     EntityKill(disabled_sampo)
     NT.sampo_proximity = false
     local has_platform = RaytracePlatforms(x,y, x, y + 50)
-    print("has platform " .. tostring(has_platform))
+    --print("has platform " .. tostring(has_platform))
     if (not has_platform) then
         EntityLoad( "mods/noita-together/files/entities/sampo/platform.xml", x, y + 50)
     end
