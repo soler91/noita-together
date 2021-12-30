@@ -61,7 +61,8 @@
             <div class="room-chat" ref="chat">
                 <template v-if="chat.length > 0">
                     <div class="chat-entry" v-for="(entry, index) in chat" :key="index">
-                        <span class="chat-name">{{ entry.name }}</span>
+                        <span class="chat-time">[{{ entry.time }}]</span>
+                        <span class="chat-name" :style="{ color: entry.color }">{{ entry.name }}</span>
                         <span class="chat-message">{{ entry.message }}</span>
                     </div>
                 </template>
@@ -72,10 +73,10 @@
 </template>
 
 <script>
-import { ipcRenderer } from "electron";
-import vButton from "@/components/vButton.vue";
-import vRoomFlags from "@/components/vRoomFlags.vue";
-import vLeaveRoom from "@/components/vLeaveRoom.vue";
+import { ipcRenderer } from "electron"
+import vButton from "@/components/vButton.vue"
+import vRoomFlags from "@/components/vRoomFlags.vue"
+import vLeaveRoom from "@/components/vLeaveRoom.vue"
 //import vTooltip from "@/components/vTooltip.vue"
 import vUserTooltip from "@/components/vUserTooltip.vue"
 export default {
@@ -93,17 +94,15 @@ export default {
             chatMsg: "",
             lastMsg: Date.now(),
             locked: false
-        };
+        }
     },
     beforeCreate() {
         const unsub = this.$store.subscribe((mutation) => {
             if (mutation.type == "resetRoom") {
-                unsub();
-                this.$router.replace({ path: "/lobby" });
-            } else if (mutation.type == "userJoinedRoom") {
-                this.$store.dispatch("sendFlags");
+                unsub()
+                this.$router.replace({ path: "/lobby" })
             }
-        });
+        })
     },
     created() {
         ipcRenderer.send("game_listen")
@@ -111,33 +110,33 @@ export default {
     watch: {
         chat() {
             this.$nextTick(() => {
-                const container = this.$refs.chat;
+                const container = this.$refs.chat
                 if (container) {
                     if (container.scrollHeight - container.scrollTop < 700) {
-                        container.scrollTop = container.scrollHeight;
+                        container.scrollTop = container.scrollHeight
                     }
                 }
-            });
+            })
         },
     },
     computed: {
         room() {
-            return this.$store.state.room;
+            return this.$store.state.room
         },
         flags() {
-            return this.$store.state.roomFlags;
+            return this.$store.state.roomFlags
         },
         chat() {
-            return this.$store.state.roomChat;
+            return this.$store.state.roomChat
         },
         userId() {
-            return this.$store.getters.userId;
+            return this.$store.getters.userId
         },
         isHost() {
-            return this.$store.getters.isHost;
+            return this.$store.getters.isHost
         },
         users() {
-            return this.$store.state.room.users;
+            return this.$store.state.room.users
         },
     },
     methods: {
@@ -146,44 +145,44 @@ export default {
         },
         sendChat(e) {
             if (e.key != "Enter" || !this.chatMsg.trim()) {
-                return;
+                return
             }
-            if (Date.now() - this.lastMsg < 600) {
-                console.log("TOO FAST MANG");
-                return;
+            if (Date.now() - this.lastMsg < 400) {
+                console.log("TOO FAST MANG")
+                return
             }
-            this.$store.dispatch("sendChat", { message: this.chatMsg.trim() });
-            this.lastMsg = Date.now();
-            this.chatMsg = "";
+            this.$store.dispatch("sendChat", { message: this.chatMsg.trim() })
+            this.lastMsg = Date.now()
+            this.chatMsg = ""
         },
         sendFlags(payload) {
-            this.$store.commit("roomFlagsUpdated", payload);
-            this.$store.dispatch("sendFlags");
-            this.closeRoomFlags();
+            this.$store.commit("roomFlagsUpdated", payload)
+            this.$store.dispatch("sendFlags")
+            this.closeRoomFlags()
         },
         openRoomFlags() {
-            this.showRoomFlags = true;
+            this.showRoomFlags = true
         },
         closeRoomFlags() {
-            this.showRoomFlags = false;
+            this.showRoomFlags = false
         },
         openLeaveRoom() {
-            this.showLeaveModal = true;
+            this.showLeaveModal = true
         },
         closeLeaveModal() {
-            this.showLeaveModal = false;
+            this.showLeaveModal = false
         },
         kick(userId) {
-            this.$store.dispatch("kickUser", { userId });
+            this.$store.dispatch("kickUser", { userId })
         },
         ban(userId) {
-            this.$store.dispatch("banUser", { userId });
+            this.$store.dispatch("banUser", { userId })
         },
         startRun(forced) {
             this.$store.dispatch("startRun", { forced })
         }
     },
-};
+}
 </script>
 
 <style>
@@ -265,6 +264,11 @@ export default {
 
 .chat-entry > p {
     display: inline-block;
+}
+
+.chat-time {
+    font-weight: 500;
+    margin-right: 0.3em;
 }
 
 .chat-name {
