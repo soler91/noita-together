@@ -171,6 +171,10 @@ module.exports = (data) => {
 
     noita.on("RunOver", () => {
         unready()
+        if (isHost) {
+            const msg = messageHandler.encodeLobbyMsg("cRunOver", { idk: false })
+            sendMsg(msg)
+        }
     })
 
     noita.on("SendGold", (event) => {
