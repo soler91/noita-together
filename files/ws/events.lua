@@ -136,17 +136,7 @@ wsEvents = {
     end,
     StartRun = function ()
         last_wands = ""
-        local player = GetPlayer()
-        local controls_component = EntityGetFirstComponent(player, "ControlsComponent")
-        if (controls_component ~= nil) then
-            if (NT ~= nil and NT.run_started == false) then
-                GamePrintImportant("Run Started", "Have fun")
-                NT.run_started = true
-            end
-            ComponentSetValue2(controls_component, "enabled", true)
-        end
-        local cosmetics = CosmeticFlags()
-        SendWsEvent({event="CustomModEvent", payload={name="PlayerCosmeticFlags", flags=cosmetics}})
+        _start_run = true
     end,
     ItemBank = function(data)
         BankItems = data.items

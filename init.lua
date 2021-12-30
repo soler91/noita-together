@@ -46,6 +46,8 @@ LastLocation = {x = 0, y = 0, scale_x = 0}
 loc_counter = 0
 Respawning = false
 LastRespawn = 0
+_start_run = false
+_started = false
 function InGameChatAddMsg(data)
     table.insert(InGameChat, data)
     if (#InGameChat > 100) then
@@ -127,6 +129,9 @@ function OnWorldPostUpdate()
     if (_ws_main and is_valid_entity(world_state)) then
         _ws_main()
         if (NT ~= nil) then
+            if (_start_run and not started) then
+                StartRun()
+            end
             if (NT.sampo_proximity) then
                 local sampo_check = CheckSampoStatus()
                 if (sampo_check) then SpawnSampo() end
