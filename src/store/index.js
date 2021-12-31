@@ -363,7 +363,6 @@ export default new Vuex.Store({
             color = found && found.color || color
 
             if (payload.userId === "-1") { color = "#e69569" }
-            console.log({ color, found })
             state.roomChat.push({
                 id: payload.id,
                 time: timeStr,

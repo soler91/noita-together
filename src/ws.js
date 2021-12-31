@@ -4,13 +4,13 @@ const ws = require("ws")
 const messageHandler = require("./proto/messageHandler")
 const appEvent = require("./appEvent")
 const noita = require("./noita")
-const host = `wss://${process.env.VUE_APP_HOSTNAME}/`
+const host = `ws://${process.env.VUE_APP_HOSTNAME}${process.env.VUE_APP_WS_PORT}/`
 const print = true
 module.exports = (data) => {
     const user = { userId: data.id, name: data.display_name }
     noita.setUser({ userId: user.userId, name: user.name, host: false })
     let isHost = false
-    let client = new ws(`${host}${data.token}`, { perMessageDeflate: false })
+    let client = new ws(`${host}${data.token}`)
     const lobby = {
         sHostStart: (payload) => {
             if (isHost) {
