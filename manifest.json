@@ -76,7 +76,7 @@
         "files/scripts/spell_spitter_glow.lua": "4dc1a7112bfe16208e8f61185c29e4d6db0a0f8c8c29ad0ee8f8a4121630dfee",
         "files/scripts/start_run_hint.lua": "42fd4653a6486d7aabd1c5f55aa3b3aa9c373647aef6e99db229b51cc1a6a955",
         "files/scripts/ui.lua": "1d69e46772c50d61cf4e78429c5cd27b5392da0d03081b9f85c004943c72700e",
-        "files/scripts/utils.lua": "96006a9a8aea232b05f04a640e36616468531bb1fa22d8cf6587294f96df3d3f",
+        "files/scripts/utils.lua": "982ffaaf73d46cecd374097be77e2a13f4cc727029aeb096087fd9ce84fc43f7",
         "files/store.lua": "3e508fa82a23b52358cbb9dd685782f6db09042fd4d82feebadea9c44a5c6eee",
         "files/stringstore/noitaglobalstore.lua": "df6663bed01bc62a918f994d2a9ec0ad2847e799366c9ce9a371973226d1299a",
         "files/stringstore/stringstore.lua": "7934f19bd537a87b1b9476cb30fa506f7d48b37953011980630a9eb37df4060f",
