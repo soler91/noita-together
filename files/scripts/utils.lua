@@ -858,7 +858,7 @@ end
 
 function DoFungalShift(from, to)
     local entity = GetPlayer()
-
+    local x, y = GetPlayerOrCameraPos()
 	local frame = GameGetFrameNum()
 	local last_frame = tonumber( GlobalsGetValue( "fungal_shift_last_frame", "-1000000" ) )
 	if frame < last_frame + 60*60*5 and not debug_no_limits then
