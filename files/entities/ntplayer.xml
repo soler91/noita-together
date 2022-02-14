@@ -1,6 +1,6 @@
 <Entity 
   name="DEBUG_NAME:NT_player"
-  tags="nt_ghost"
+  tags="nt_ghost, nt_follow"
   serialize="0" >
   
   <HotspotComponent
