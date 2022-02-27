@@ -920,7 +920,7 @@ function DoFungalShift(from, to)
 			log_msg = GameTextGet( "$logdesc_reality_mutation", from_material_name )
 			GamePrint( log_msg )
 		end
-		GamePrintImportant( random_from_array( log_messages ), log_msg, "data/ui_gfx/decorations/3piece_fungal_shift.png" )
+		--GamePrintImportant( random_from_array( log_messages ), log_msg, "data/ui_gfx/decorations/3piece_fungal_shift.png" ) do we really want to annoy everyone with this?
 		GlobalsSetValue( "fungal_shift_last_frame", tostring(frame) )
 
 		-- add ui icon
