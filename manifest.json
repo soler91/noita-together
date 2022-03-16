@@ -55,7 +55,7 @@
         "files/effects/matryoshka/effect.xml": "f2ed61e8fbd52ca8bb5bea1c8dffa6b365f5a8477f2601cde55b9871bf6b4342",
         "files/effects/sanic/damage.lua": "a8c0492571641fb75584e09e6e284ec514b5c82674725821a88e37960a615aed",
         "files/effects/sanic/effect.xml": "af61a408ee9bf92b4955bd4a95796c43ea572e51cfc528a7fdaba4ed78fb0855",
-        "files/effects/sanic/end.lua": "745c559b48d83093dbefb41d2c7bee3cc3e8bdf9a36b92805c910e8afb7a7b28",
+        "files/effects/sanic/end.lua": "110c0ed730a6483a24a46cec2384c12d75d246a00566e6a8cb757239497b1558",
         "files/effects/sanic/start.lua": "116ca47388414eafa2131796cfc36de64104f22b51c5239d79a386c8e6e1bbb0",
         "files/effects/slowpoke/effect.xml": "cce81a2a60dbaa3c671411c79925e40e9518bddbe0ba50640a5d0261e11cc148",
         "files/effects/template/effect.xml": "faf37424c9ad93c80ed9add891705f9206efceacd66534f71a4eb7ae590855b0",
@@ -87,6 +87,6 @@
         "files/scripts/utils.lua": "aad56a4493fccccb4b5a1c517f405f75ea64cb96380f36d68520d0cd42976ef6",
         "files/store.lua": "5a43eb5495ae5663c4a39329933153838402f6fd02b341196d3f17c13acac001",
         "init.lua": "f21c13b4c87c85c36069aec8fb0b136ab8070df2d1535baf9cd17832b4d5b2d6",
-        "mod.xml": "8e0a997108c07f77243c717f1513035531a5f7c48fa885b6fefa7a05894efa77"
+        "mod.xml": "24a8c7558fe7d9ea33cff54b0f6259f0846e605ac0d507fad7697a344388d630"
     }
 }
