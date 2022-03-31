@@ -851,6 +851,7 @@ function StartRun()
         end
         local cosmetics = CosmeticFlags()
         SendWsEvent({event="CustomModEvent", payload={name="PlayerCosmeticFlags", flags=cosmetics}})
+        GameAddFlagRun("NT_unlocked_controls")
         _start_run = false
         _started = true
     end
