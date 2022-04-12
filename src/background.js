@@ -11,6 +11,7 @@ const appEvent = require("./appEvent")
 const wsClient = require("./ws.js")
 const keytar = require("keytar")
 const got = require("got")
+const http = require("http")
 let rememberUser = false
 const isDevelopment = process.env.NODE_ENV !== 'production'
 const primaryInstance = app.requestSingleInstanceLock()
@@ -19,7 +20,7 @@ let mainWindow = null
 protocol.registerSchemesAsPrivileged([
     { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
-
+/*
 if (isDevelopment && process.platform === 'win32') {
     app.removeAsDefaultProtocolClient(NT_SCHEME)
     app.setAsDefaultProtocolClient(NT_SCHEME, process.execPath, [path.resolve(process.argv[1])])
@@ -28,10 +29,46 @@ if (isDevelopment && process.platform === 'win32') {
         app.setAsDefaultProtocolClient(NT_SCHEME)
     }
 }
+*/
+const loginserv = http.createServer(function (req, res) {
+    let url = new URL("noitatogether:/" + req.url)
+    let display_name = url.searchParams.get("display_name")
+    let token = url.searchParams.get("token")
+    let refreshToken = url.searchParams.get("refresh")
+    let id = url.searchParams.get("id")
+    let extra = url.searchParams.get("e")
+    if (!display_name) {
+        res.writeHead(404, { 'Content-Type': 'text/html' })
+        res.end('nothing here.')
+        return
+    }
+    if (rememberUser) {
+        keytar.setPassword("Noita Together", display_name, refreshToken)
+    }
+    appEvent("USER_EXTRA", extra)
+    wsClient({
+        display_name,
+        token,
+        id
+    })
+
+    if (mainWindow) {
+        if (mainWindow.isMinimized()) {
+            mainWindow.restore()
+        }
+        mainWindow.focus()
+    }
+
+    res.writeHead(200, { 'Content-Type': 'text/html' })
+    res.end('You can close this.')
+    //loginserv.close()
+})
+
 
 autoUpdater.on('update-downloaded', (info) => {
     appEvent("UPDATE_DOWNLOADED", "")
 })
+
 async function createWindow() {
     // Create the browser window.
     mainWindow = new BrowserWindow({
@@ -59,9 +96,11 @@ async function createWindow() {
         if (!process.env.IS_TEST) mainWindow.webContents.openDevTools()
     } else {
         createProtocol('app')
+        /*
         protocol.registerHttpProtocol(NT_SCHEME, (req, cb) => {
             dialog.showErrorBox(`NT: ${req.url}`)
         })
+        */
         // Load the index.html when not in development
         mainWindow.loadURL('app://./index.html')
         autoUpdater.checkForUpdatesAndNotify()
@@ -157,35 +196,8 @@ else {
             mainWindow.focus()
         }*/
     })
-    const http = require("http")
-    const loginserv = http.createServer((req, res) => {
-        let url = new URL("noitatogether:/" + req.url)
-        let display_name = url.searchParams.get("display_name")
-        let token = url.searchParams.get("token")
-        let refreshToken = url.searchParams.get("refresh")
-        let id = url.searchParams.get("id")
-        let extra = url.searchParams.get("e")
-        if (rememberUser) {
-            keytar.setPassword("Noita Together", display_name, refreshToken)
-        }
-        appEvent("USER_EXTRA", extra)
-        wsClient({
-            display_name,
-            token,
-            id
-        })
 
-        if (mainWindow) {
-            if (mainWindow.isMinimized()) {
-                mainWindow.restore()
-            }
-            mainWindow.focus()
-        }
-        //console.log(url)
-        res.writeHead(200, { 'Content-Type': 'text/html' })
-        res.end('You can close this.')
-        loginserv.close()
-    }).listen(25669, "0.0.0.0")
+
     // This method will be called when Electron has finished
     // initialization and is ready to create browser windows.
     // Some APIs can only be used after this event occurs.
@@ -198,6 +210,7 @@ else {
                 console.error('Vue Devtools failed to install:', e.toString())
             }
         }
+        loginserv.listen(25669)
         createWindow()
     })
 }
