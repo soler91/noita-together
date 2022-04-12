@@ -130,8 +130,9 @@ if (!primaryInstance) {
 }
 else {
     app.on("second-instance", (event, commandLine, workingDirectory) => {
+        /*
         const cmdIndex = isDevelopment ? 3 : 2
-
+        
         if (commandLine[cmdIndex]) {//noitatogether://?display_name=test&token=abc321&refresh=idk456&id=1111&e=0
             let url = new URL(commandLine[cmdIndex])
             let display_name = url.searchParams.get("display_name")
@@ -154,8 +155,37 @@ else {
                 mainWindow.restore()
             }
             mainWindow.focus()
-        }
+        }*/
     })
+    const http = require("http")
+    const loginserv = http.createServer((req, res) => {
+        let url = new URL("noitatogether:/" + req.url)
+        let display_name = url.searchParams.get("display_name")
+        let token = url.searchParams.get("token")
+        let refreshToken = url.searchParams.get("refresh")
+        let id = url.searchParams.get("id")
+        let extra = url.searchParams.get("e")
+        if (rememberUser) {
+            keytar.setPassword("Noita Together", display_name, refreshToken)
+        }
+        appEvent("USER_EXTRA", extra)
+        wsClient({
+            display_name,
+            token,
+            id
+        })
+
+        if (mainWindow) {
+            if (mainWindow.isMinimized()) {
+                mainWindow.restore()
+            }
+            mainWindow.focus()
+        }
+        //console.log(url)
+        res.writeHead(200, { 'Content-Type': 'text/html' })
+        res.end('You can close this.')
+        loginserv.close()
+    }).listen(25669, "0.0.0.0")
     // This method will be called when Electron has finished
     // initialization and is ready to create browser windows.
     // Some APIs can only be used after this event occurs.
