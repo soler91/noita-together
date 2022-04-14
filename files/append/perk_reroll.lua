@@ -2,7 +2,7 @@ local _item_pickup = item_pickup
 
 function item_pickup( entity_item, entity_who_picked, item_name )
 	local seed = ModSettingGet( "noita_together.seed" )
-    if (seed ~= nil and seed > 0) then
+    if (seed ~= nil and seed > 0 and GameHasFlagRun("world_randomize_loot")) then
         local _SetRandomSeed = SetRandomSeed;
         SetRandomSeed = function( x, y )
             return _SetRandomSeed( x + GameGetFrameNum(), y );

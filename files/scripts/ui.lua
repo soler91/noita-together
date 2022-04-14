@@ -797,7 +797,7 @@ if not initialized then
         
         local seed = ModSettingGet( "noita_together.seed" )
         local current_seed = tonumber(StatsGetValue("world_seed"))
-        if (current_seed ~= seed and seed > 0) then
+        if (current_seed ~= seed and seed > 0 and GameHasFlagRun("world_randomize_loot")) then
             GuiImageNinePiece(gui, next_id(), (screen_width / 2) - 90, 50, 180, 20, 0.8)
             GuiText(gui, (screen_width / 2) - 80, 55, "Host changed world seed, start a new game")
         end

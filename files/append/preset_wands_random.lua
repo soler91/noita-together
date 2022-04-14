@@ -1,7 +1,7 @@
 function spawn_trapwand(x, y)
 	local options = { "wands/level_01/wand_001", "wands/level_01/wand_002", "wands/level_01/wand_003", "wands/level_01/wand_004", "wands/level_01/wand_005", "wands/level_01/wand_006", "wands/level_01/wand_007", "wands/level_01/wand_008", "wands/level_01/wand_009", "wand_level_01" }
 	local seed = ModSettingGet( "noita_together.seed" )
-    if (seed ~= nil and seed > 0) then
+    if (seed ~= nil and seed > 0 and GameHasFlagRun("world_randomize_loot")) then
         SetRandomSeed( x + GameGetFrameNum(), y );
     else
         SetRandomSeed( x, y );

@@ -27,7 +27,7 @@ end
 
 function spawn_all_shopitems(x, y)
     local seed = ModSettingGet( "noita_together.seed" )
-    if (seed ~= nil and seed > 0) then
+    if (seed ~= nil and seed > 0 and GameHasFlagRun("world_randomize_loot")) then
         SetRandomSeed(GameGetFrameNum(), 69420 + deaths)
         local rx, ry = Random(0,3), Random(0,5)
         _spawn_all_shopitems(x-rx, y-ry);
@@ -38,7 +38,7 @@ end
 
 function spawn_all_perks(x, y)
     local seed = ModSettingGet( "noita_together.seed" )
-    if (seed ~= nil and seed > 0) then
+    if (seed ~= nil and seed > 0 and GameHasFlagRun("world_randomize_loot")) then
         local _SetRandomSeed = SetRandomSeed;
         SetRandomSeed = function( x, y )
             return _SetRandomSeed( x + GameGetFrameNum(), y );
