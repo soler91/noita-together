@@ -70,6 +70,7 @@ ModLuaFileAppend("mods/noita-together/files/append/co_op_mail.lua", "mods/noita-
 ModTextFileSetContent("mods/noita-together/files/append/boss_arena.lua", "-- noop")
 ModTextFileSetContent("mods/noita-together/files/append/sampo_append.lua", "-- noop")
 ModTextFileSetContent("mods/noita-together/files/scripts/ui.lua", "-- noop")
+ModLuaFileAppend("mods/noita-together/files/scripts/remove_flags.lua", "mods/noita-nemesis/files/append/flags.lua")
 ModLuaFileAppend("mods/noita-together/files/scripts/ui.lua", "mods/noita-nemesis/files/append/ui.lua")
 ModLuaFileAppend("data/entities/animals/boss_centipede/death_check.lua", "mods/noita-nemesis/files/append/boss_death.lua")
 ModLuaFileAppend( "mods/noita-together/files/ws/events.lua", "mods/noita-nemesis/files/events.lua" ) 
