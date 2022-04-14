@@ -77,4 +77,4 @@ ModLuaFileAppend( "mods/noita-together/files/ws/events.lua", "mods/noita-nemesis
 ModLuaFileAppend("mods/noita-together/files/scripts/utils.lua", "mods/noita-nemesis/files/append/utils.lua" )
 ModLuaFileAppend("data/scripts/buildings/workshop_exit.lua", "mods/noita-nemesis/files/append/workshop_exit.lua" )
 ModLuaFileAppend("data/scripts/buildings/workshop_exit_final.lua", "mods/noita-nemesis/files/append/workshop_exit.lua" )
-
+ModLuaFileAppend("data/scripts/perks/perk.lua", "mods/noita-nemesis/files/append/perk.lua" )

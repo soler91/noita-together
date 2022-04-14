@@ -50,6 +50,7 @@ function spawn_spell_spitter(x,y)
 end
 
 function SpawnNemesisAbility(x,y, rnd)
+    if (not GameHasFlagRun("nemesis_abilities")) then return end
     local level = math.floor(y/512) -- 2, 5, 9, 12, 16, 20
     local tier = biomes[level]
     local ability = pick_random_from_table_weighted(rnd, abilities[tier])
