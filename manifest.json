@@ -2,7 +2,9 @@
     "files": {
         "files/append/boss_arena.lua": "d6e00fcb0036ffe04d61362ba9ca4f4dd456e4510befa3b0072773a74c08b384",
         "files/append/boss_death.lua": "5fa450f2bf2c35c4df98c928485944bb716478bb4e1ea4e21bf5442b5624776b",
-        "files/append/disable_mail.lua": "d6d996086747a2027a90b82015cee4343e1a8d4e1fc38967a355f7e93fca61ab",
+        "files/append/disable_mail.lua": "0226416b9ae8811052c11ab14d2ee3917f83749039cce7d61e1790cc21350b4e",
+        "files/append/flags.lua": "47134d88b627ee6f819e53372f4b621f9cfa4802e982587ec33ecff15c69b660",
+        "files/append/perk.lua": "e882682c8be5e5ad33707f7e6a3fd0b384a2eace4cf3d52fb1c782e039843e7d",
         "files/append/ui.lua": "997cadad41f6423aa94b3b7a1648f92505baf0f21c2f01368a418423a5c49f29",
         "files/append/utils.lua": "c50a854a32a8e38783e7cdcf4d724a41664cd4856a98f68b4b6593cc7ca94dae",
         "files/append/workshop_exit.lua": "b5bbfe0b6d0483e3827ee2db741ce95a741cc9a31f442253018c5a78b3183d21",
@@ -81,12 +83,12 @@
         "files/entities/removewand/start.lua": "4cbe9ff18ce84bb601cfb4db0c92ca2dccdb4715f7fb0a6079dce1e6da31131a",
         "files/entities/replacewand/entity.xml": "95ae41bc948c859722192d7729020bd3c5b7b8ee9a8fba6fde119bf8fbe7d3f4",
         "files/entities/replacewand/start.lua": "b921fc03add9aefea09931a116bc2be03f1e95c91a2648c49250e7b3e5f1802f",
-        "files/events.lua": "698cfeabdf5e29db1c05f34b73873ca08cd4ba556e703ed510402e78d0ca4295",
+        "files/events.lua": "284d863b943f36eaa43aedfa3c9894590fb1041e764ec9ce1fff770abb858c66",
         "files/scripts/buy_ability.lua": "23ecda80bade391118076b668b27a0b83c4904e1d124f70b1e65f591a9d73511",
         "files/scripts/ui.lua": "bdbab7fc4402b080ebc9c131c49ea3294d1ff318e1327397181f4c5e03f6c417",
         "files/scripts/utils.lua": "aad56a4493fccccb4b5a1c517f405f75ea64cb96380f36d68520d0cd42976ef6",
         "files/store.lua": "5a43eb5495ae5663c4a39329933153838402f6fd02b341196d3f17c13acac001",
-        "init.lua": "f21c13b4c87c85c36069aec8fb0b136ab8070df2d1535baf9cd17832b4d5b2d6",
-        "mod.xml": "24a8c7558fe7d9ea33cff54b0f6259f0846e605ac0d507fad7697a344388d630"
+        "init.lua": "efe15538be22d24bb08fb7676a38025b7c36e3895a33e1126eb9a64142758786",
+        "mod.xml": "956efe2de1282cc694b4df390222f1cc705cd10814b86db6b421cfac49a18d1b"
     }
 }
