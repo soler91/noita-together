@@ -105,8 +105,10 @@ async function createWindow() {
         mainWindow.loadURL('app://./index.html')
         autoUpdater.checkForUpdatesAndNotify()
     }
+}
 
-
+function isDisplayableName(username) {
+    return !/[^#$%&=@()!?_<>\[\]A-Z0-9a-z]/.test(username)
 }
 
 ipcMain.on("update_mod", (event, gamePath) => {
@@ -136,7 +138,10 @@ ipcMain.on("TRY_LOGIN", async (event, account) => {
             },
             responseType: 'json'
         })
-        const { display_name, ticket, id, e } = body
+
+        const { ticket, id, e } = body
+        const display_name = isDisplayableName(body.display_name) ? body.display_name : account
+
         appEvent("USER_EXTRA", e)
         wsClient({
             display_name,
