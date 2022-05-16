@@ -422,7 +422,7 @@ if not initialized then
 
     local function draw_player_list(players)
         GuiZSetForNextWidget(gui, 10)
-        GuiBeginScrollContainer(gui, next_id(), 5, 50, 100, 150, false, 1, 1)
+        GuiBeginScrollContainer(gui, next_id(), 5, 50, 100, math.min( math.max(PlayerCount - 1, 1) * 20, 150 ), false, 1, 1)
         GuiLayoutBeginVertical(gui, 0, 0)
         for userId, player in pairs(players) do
             draw_player_info(player, userId)
