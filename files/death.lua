@@ -3,6 +3,18 @@ dofile_once("mods/noita-nemesis/files/store.lua")
 dofile_once("mods/noita-together/files/scripts/json.lua")
 dofile_once("mods/noita-nemesis/files/scripts/utils.lua")
 
+local spawn_exclusion = {
+    "data/entities/projectiles/polyorb.xml", 
+}
+
+local function is_spawn_exclusion(entity_file) 
+    for _,v in pairs(spawn_exclusion) do
+        if v == entity_file then
+            return true
+        end
+    end
+end
+
 function death( dmg_type, dmg_msg, entity_thats_responsible, drop_items )
     local player = get_player()
     if (entity_thats_responsible ~= player and EntityGetParent(entity_thats_responsible) ~= player) then
@@ -13,6 +25,11 @@ function death( dmg_type, dmg_msg, entity_thats_responsible, drop_items )
 	local x, y = EntityGetTransform( entity_id )
     local px, py = get_player_pos()
     local entity_file = EntityGetFilename( entity_id )
+
+    if (is_spawn_exclusion(entity_file)) then
+        return
+    end
+
     local entity_name = EntityGetName(entity_id)
     local damagecomp = EntityGetFirstComponentIncludingDisabled(entity_id, "DamageModelComponent")
     if (damagecomp ~= nil) then
