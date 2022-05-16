@@ -4,7 +4,7 @@ local _perk_spawn_many = perk_spawn_many
 local _perk_spawn_random = perk_spawn_random 
 local _perk_reroll_perks = perk_reroll_perks
 function heck_invis()
-    for idx, _perk in ipairs(perk_list) then
+    for idx, _perk in ipairs(perk_list) do
         if (_perk.id == "INVISIBILITY") then 
             table.remove(perk_list, idx)
         end
