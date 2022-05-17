@@ -3,6 +3,22 @@ dofile_once("mods/noita-nemesis/files/store.lua")
 dofile_once("mods/noita-together/files/scripts/json.lua")
 dofile_once("mods/noita-nemesis/files/scripts/utils.lua")
 
+local function get_entity_name_from_entity_file(entity_file)
+    if ( string.len( entity_file ) > 0 ) then
+        local entity_name = ""
+        for j=1,string.len(entity_file) do
+            local letter = string.sub( entity_file, string.len( entity_file ) - ( j - 1 ), string.len( entity_file ) - ( j - 1 ) )
+            if ( letter ~= "/" ) then
+                entity_name = letter .. entity_name
+            else
+                break
+            end
+        end
+        entity_name = string.sub( entity_name, 1, string.len( entity_name ) - 4 )
+        return entity_name
+    end
+end
+
 function death( dmg_type, dmg_msg, entity_thats_responsible, drop_items )
     local player = get_player()
     if (entity_thats_responsible ~= player and EntityGetParent(entity_thats_responsible) ~= player) then
@@ -33,7 +49,16 @@ function death( dmg_type, dmg_msg, entity_thats_responsible, drop_items )
     end
     local cx, cy = GameGetCameraPos()
     local icon = string.gsub(entity_name, "$animal_", "")
+    if (icon == nil or icon == "") then
+        icon = get_entity_name_from_entity_file(entity_file)
+    end
     icon = "data/ui_gfx/animal_icons/" .. icon .. ".png"
+
+    -- polyorb's entity_name is $projectile_default, and dosn's got a animal icon
+    if (entity_file == "data/entities/projectiles/polyorb.xml") then
+        icon = "mods/noita-nemesis/files/entities/kill_icon/polyorb.png"
+    end
+
     local icon_entity = EntityLoad("mods/noita-nemesis/files/entities/kill_icon/entity.xml")
     local sprite = EntityGetFirstComponent(icon_entity, "SpriteComponent")
     ComponentSetValue2(sprite, "image_file", icon)
