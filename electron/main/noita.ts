@@ -1,9 +1,9 @@
-import ws from "ws";
+import ws, { WebSocketServer } from "ws";
 import { v4 as uuidv4 } from "uuid";
 import { appEvent } from "./appEvent";
 import { ipcMain } from "electron";
 import { EventEmitter } from "events";
-function sysMsg(message) {
+function sysMsg(message: string) {
   appEvent("sChat", {
     id: uuidv4(),
     userId: "-1",
@@ -22,37 +22,38 @@ function rotLerp(a: number, b: number, weight: number) {
   return b + ((shortest * weight) % pi2);
 }
 class NoitaGame extends EventEmitter {
+  port = 25569;
+  server: WebSocketServer | null = null;
+
+  client = null;
+  paused = false;
+  queue = [];
+  queueDelay = 5000;
+
+  rejectConnections = true;
+  user = { userId: 0, name: "", host: false };
+  spellList = [];
+  gameFlags = [];
+  players = {};
+  bank = {
+    wands: [],
+    spells: [],
+    flasks: [],
+    objects: [],
+    gold: 0,
+  };
+  onDeathKick = false;
+
   constructor() {
     super();
     this.setMaxListeners(0);
-    this.port = 25569;
-    this.server = null;
 
-    this.client = null;
-    this.paused = false;
-    this.queue = [];
-    this.queueDelay = 5000;
-
-    this.rejectConnections = true;
-    this.user = { userId: 0, name: "", host: false };
-    this.spellList = [];
-    this.gameFlags = [];
-    this.players = {};
-    this.bank = {
-      wands: [],
-      spells: [],
-      flasks: [],
-      objects: [],
-      gold: 0,
-    };
-    this.onDeathKick = false;
     ipcMain.once("game_listen", () => {
       this.gameListen();
     });
   }
 
-  isConnectionLocalhost(ws) {
-    const addr = ws._socket.remoteAddress;
+  isConnectionLocalhost(addr: string | undefined) {
     return (
       addr == "::1" ||
       addr == "127.0.0.1" ||
@@ -63,11 +64,14 @@ class NoitaGame extends EventEmitter {
 
   gameListen() {
     if (!this.server) {
-      this.server = new ws.Server({ port: this.port });
+      this.server = new WebSocketServer({ port: this.port });
     }
-    this.server.on("connection", (socket) => {
+    this.server.on("connection", (socket, req) => {
       //console.log("[Game WS] New connection(?)")
-      if (!this.isConnectionLocalhost(socket) || this.rejectConnections) {
+      if (
+        !this.isConnectionLocalhost(req.socket.remoteAddress) ||
+        this.rejectConnections
+      ) {
         //console.log("terminate")
         socket.terminate();
         return;

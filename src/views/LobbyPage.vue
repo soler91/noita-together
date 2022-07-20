@@ -59,7 +59,7 @@
               <span>{{ room.name }}</span>
             </td>
             <td>{{ room.owner }}</td>
-            <td>{{ gamemode(room.gamemode) }}</td>
+            <td>{{ gamemodeName(room.gamemode) }}</td>
             <td>{{ room.curUsers }}/{{ room.maxUsers }}</td>
           </tr>
         </tbody>
@@ -75,7 +75,7 @@ import vRoomCreation from "../components/vRoomCreation.vue";
 import vRoomPassword from "../components/vRoomPassword.vue";
 import { ref, computed, onMounted, watch, nextTick } from "vue";
 import { useRouter } from "vue-router";
-import useStore from "../store";
+import useStore, { Gamemode, GamemodeNames } from "../store";
 const store = useStore();
 const router = useRouter();
 const showPasswordModal = ref(false);
@@ -140,8 +140,8 @@ function joinRoom(id, password) {
     console.log(error);
   }
 }
-function gamemode(id) {
-  return store.state.gamemodes[id];
+function gamemodeName(id: Gamemode) {
+  return GamemodeNames[id];
 }
 function createRoom(payload) {
   store.dispatch("createRoom", payload);

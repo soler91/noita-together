@@ -42,5 +42,8 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
       host: pkg.env.VITE_DEV_SERVER_HOST,
       port: pkg.env.VITE_DEV_SERVER_PORT,
     },
+    build: {
+      target: "esnext",
+    },
   };
 });

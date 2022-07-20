@@ -15,21 +15,21 @@ const randomColor = () => {
   return colors[Math.floor(Math.random() * colors.length)];
 };
 
-const Gamemodes = {
+export const Gamemodes = {
   Coop: 0,
   Race: 1,
   Nemesis: 2,
 } as const;
 
-const GamemodeNames = {
+export const GamemodeNames = {
   [Gamemodes.Coop]: "Co-op",
   [Gamemodes.Race]: "Race",
   [Gamemodes.Nemesis]: "Nemesis",
-};
+} as const;
 
-type Gamemode = typeof Gamemodes[keyof typeof Gamemodes];
+export type Gamemode = typeof Gamemodes[keyof typeof Gamemodes];
 
-type GameFlag =
+export type GameFlag =
   | {
       id: string;
       name: string;
@@ -347,11 +347,6 @@ const useStore = defineStore("store", () => {
   });
 
   const state = reactive({
-    gamemodes: {
-      "0": "Co-op",
-      "1": "Race",
-      "2": "Nemesis",
-    },
     user: {
       name: "",
       id: 0,
@@ -435,7 +430,7 @@ const useStore = defineStore("store", () => {
           if (!found && flag.type == "boolean") {
             return { ...flag, value: false };
           } else if (found) {
-            return flag;
+            return found;
           } else {
             return undefined;
           }
@@ -503,7 +498,7 @@ const useStore = defineStore("store", () => {
       }
       state.roomFlags = payload.flags
         .map((val) => {
-          const flag = fDefaults.find((f) => f.id == val.flag);
+          const flag = { ...fDefaults.find((f) => f.id == val.flag) };
           if (!flag) {
             return;
           } else {
@@ -587,7 +582,9 @@ const useStore = defineStore("store", () => {
     },
     setDefaultFlags: (mode) => {
       if (mode == 0 || mode == 2) {
-        state.roomFlags = structuredClone(defaultFlags[mode]);
+        state.roomFlags = defaultFlags[mode].map((flag) => {
+          return { ...flag };
+        });
       }
     },
   };
