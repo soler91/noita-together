@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { ipcRenderer as ipc } from "electron-better-ipc";
 
 import Update from "../views/UpdatePage.vue";
 import Login from "../views/LoginPage.vue";

@@ -12,11 +12,11 @@ function sysMsg(message) {
   });
 }
 
-function lerp(a, b, weight) {
+function lerp(a: number, b: number, weight: number) {
   return a * weight + b * (1 - weight);
 }
 
-function rotLerp(a, b, weight) {
+function rotLerp(a: number, b: number, weight: number) {
   const pi2 = Math.PI * 2;
   const shortest = ((a - b + Math.PI) % pi2) - Math.PI;
   return b + ((shortest * weight) % pi2);

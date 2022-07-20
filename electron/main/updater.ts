@@ -7,7 +7,7 @@ import { EventEmitter } from "events";
 import { spawn } from "child_process";
 import { app } from "electron";
 
-function FindGameFolder() {
+function findGameFolder() {
   return new Promise((res) => {
     forcedirSync(app.getPath("userData"));
     const userDataPath = path.join(app.getPath("userData"), "/gamePath.json");
@@ -145,7 +145,7 @@ class Updater extends EventEmitter {
 
   async resolveGamePath() {
     if (!this.gamePath) {
-      const gamePath = await FindGameFolder();
+      const gamePath = await findGameFolder();
       if (gamePath) {
         this.gamePath = gamePath;
       }

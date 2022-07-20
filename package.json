@@ -25,6 +25,8 @@
     "ws": "^8.8.1"
   },
   "devDependencies": {
+    "@types/uuid": "^8.3.4",
+    "@types/ws": "^8.5.3",
     "@typescript-eslint/eslint-plugin": "5.30.7",
     "@vitejs/plugin-vue": "^3.0.1",
     "@vue/eslint-config-prettier": "^7.0.0",
@@ -37,7 +39,7 @@
     "vite": "3.0.2",
     "vite-plugin-electron": "^0.8.0",
     "vue": "^3.2.37",
-    "vue-tsc": "^0.38.8"
+    "vue-tsc": "^0.38.9"
   },
   "env": {
     "VITE_DEV_SERVER_HOST": "127.0.0.1",

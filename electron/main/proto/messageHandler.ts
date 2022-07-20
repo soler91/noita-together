@@ -36,13 +36,13 @@ export function encode(obj) {
 export function encodeGameMsg(type, data) {
   const payload = { gameAction: {} };
   payload.gameAction[type] = data;
-  return this.encode(payload);
+  return encode(payload);
 }
 
 export function encodeLobbyMsg(type, data) {
   const payload = { lobbyAction: {} };
   payload.lobbyAction[type] = data;
-  return this.encode(payload);
+  return encode(payload);
 }
 
 export default {

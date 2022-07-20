@@ -3,7 +3,7 @@
     <div
       class="twitch-login"
       :class="{ hax: !savedUser }"
-      @click="OpenLoginPage"
+      @click="openLoginPage"
     >
       <div class="twitch-logo">
         <i class="fas fa-spinner fa-spin fa-pulse" v-if="clicked"></i>
@@ -15,7 +15,7 @@
       <input
         id="remember-user"
         type="checkbox"
-        v-model="reeemember"
+        v-model="rememberUser"
         name="remember-user"
       />
       <label for="remember-user">Remember me</label>
@@ -23,7 +23,7 @@
 
     <div
       class="twitch-login remembered-login"
-      @click="ContinueSavedUser"
+      @click="continueSavedUser"
       v-if="savedUser"
     >
       <div class="twitch-logo">
@@ -41,7 +41,7 @@ import { useRouter } from "vue-router";
 import useStore from "../store";
 const router = useRouter();
 const store = useStore();
-const reeemember = ref(false);
+const rememberUser = ref(false);
 const clicked = ref(false);
 
 watch(
@@ -61,15 +61,15 @@ const savedUser = computed(() => {
 const savedUserName = computed(() => {
   return store.state.savedUserName;
 });
-function OpenLoginPage() {
+function openLoginPage() {
   clicked.value = true;
   ipcRenderer.send("open-login-twitch");
 }
-function ContinueSavedUser() {
+function continueSavedUser() {
   store.dispatch("continueSavedUser", undefined);
 }
 
-watch(reeemember, (newVal) => {
+watch(rememberUser, (newVal) => {
   ipcRenderer.send("remember_user", newVal);
 });
 </script>
