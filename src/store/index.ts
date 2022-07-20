@@ -1,6 +1,6 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { ipcRenderer } from "electron";
-import { reactive, computed, ref } from "vue";
+import { reactive, computed, ref, readonly } from "vue";
 
 const colors = [
   "#698935",
@@ -14,6 +14,36 @@ const colors = [
 const randomColor = () => {
   return colors[Math.floor(Math.random() * colors.length)];
 };
+
+const Gamemodes = {
+  Coop: 0,
+  Race: 1,
+  Nemesis: 2,
+} as const;
+
+const GamemodeNames = {
+  [Gamemodes.Coop]: "Co-op",
+  [Gamemodes.Race]: "Race",
+  [Gamemodes.Nemesis]: "Nemesis",
+};
+
+type Gamemode = typeof Gamemodes[keyof typeof Gamemodes];
+
+type GameFlag =
+  | {
+      id: string;
+      name: string;
+      tooltip: string;
+      type: "boolean";
+      value: boolean;
+    }
+  | {
+      id: string;
+      name: string;
+      tooltip: string;
+      type: "number";
+      value: number;
+    };
 
 // callbacks for when IPC does stuff
 const ipcPlugin = (ipc) => {
@@ -125,197 +155,198 @@ const ipcPlugin = (ipc) => {
 };
 
 const useStore = defineStore("store", () => {
+  const defaultFlags = readonly<{ [key in Gamemode]: GameFlag[] }>({
+    [Gamemodes.Coop]: [
+      {
+        id: "sync_perks",
+        name: "Share all perks",
+        tooltip: "When grabbing perks the whole team will also get them.",
+        type: "boolean",
+        value: false,
+      },
+      {
+        id: "team_perks",
+        name: "Team Perks",
+        tooltip:
+          "When grabbing certain perks (not all) the whole team will also get them.",
+        type: "boolean",
+        value: true,
+      },
+      {
+        id: "sync_steve",
+        name: "Sync Steve",
+        tooltip: "Angers the gods for everyone.",
+        type: "boolean",
+        value: true,
+      },
+      {
+        id: "sync_hearts",
+        name: "Sync Hearts",
+        tooltip: "When someone picks up a heart everyone else gets it too.",
+        type: "boolean",
+        value: true,
+      },
+      {
+        id: "sync_orbs",
+        name: "Sync Orbs",
+        tooltip: "When someone picks up an orb everyone else gets it too.",
+        type: "boolean",
+        value: true,
+      },
+      {
+        id: "sync_shift",
+        name: "Sync Shifts",
+        tooltip:
+          "When someone fungal shifts everyone also gets the same shift, cooldown also applies.",
+        type: "boolean",
+        value: true,
+      },
+      {
+        id: "send_wands",
+        name: "Send Wands",
+        tooltip: "Allow players to deposit/take wands.",
+        type: "boolean",
+        value: true,
+      },
+      {
+        id: "send_flasks",
+        name: "Send Flasks",
+        tooltip: "Allow players to deposit/take flasks.",
+        type: "boolean",
+        value: true,
+      },
+      {
+        id: "send_gold",
+        name: "Send Gold",
+        tooltip: "Allow players to deposit/take gold.",
+        type: "boolean",
+        value: true,
+      },
+      {
+        id: "send_items",
+        name: "Send Items",
+        tooltip: "Allow players to deposit/take items.",
+        type: "boolean",
+        value: true,
+      },
+      {
+        id: "world_randomize_loot",
+        name: "Randomize loot",
+        tooltip:
+          "Only applies when playing on the same seed, makes it so everyone gets different loot.",
+        type: "boolean",
+        value: true,
+      },
+      {
+        id: "sync_world_seed",
+        name: "Sync Seed",
+        tooltip:
+          "All players play in the same world seed (requires everyone to start a new game) 0 means random seed.",
+        type: "number",
+        value: 0,
+      },
+      {
+        id: "death_penalty_end",
+        name: "End run",
+        tooltip: "Run ends for all players when someone dies.",
+        type: "boolean",
+        value: true,
+      },
+      {
+        id: "death_penalty_weak_respawn",
+        name: "Respawn Penalty",
+        tooltip:
+          "Player respawns and everyone takes a % drop on their max hp, once it goes below certain threshold on the weakest player the run ends for everyone.",
+        type: "boolean",
+        value: true,
+      },
+      {
+        id: "death_penalty_full_respawn",
+        name: "Respawn",
+        tooltip:
+          "Player will respawn on their last checkpoint and no penalties.",
+        type: "boolean",
+        value: true,
+      },
+      {
+        id: "_ondeath_kick",
+        name: "Kick on death",
+        tooltip: "Kicks whoever dies, more customisable soon™.",
+        type: "boolean",
+        value: false,
+      },
+    ],
+    [Gamemodes.Race]: [],
+    [Gamemodes.Nemesis]: [
+      {
+        id: "ban_ambrosia",
+        name: "Ban Ambrosia",
+        tooltip: "will shift ambrosia away.",
+        type: "boolean",
+        value: true,
+      },
+      {
+        id: "ban_invis",
+        name: "Ban Invisibility",
+        tooltip: "will shift invisibility away and remove the perk.",
+        type: "boolean",
+        value: true,
+      },
+      {
+        id: "nemesis_abilities",
+        name: "Nemesis abilities",
+        tooltip: "Abilities will appear in each holy mountain with an NP cost.",
+        type: "boolean",
+        value: true,
+      },
+      {
+        id: "sync_steve",
+        name: "Sync Steve",
+        tooltip: "Angers the gods for everyone.",
+        type: "boolean",
+        value: false,
+      },
+      {
+        id: "sync_orbs",
+        name: "Sync Orbs",
+        tooltip: "When someone picks up an orb everyone else gets it too.",
+        type: "boolean",
+        value: false,
+      },
+      {
+        id: "world_randomize_loot",
+        name: "Randomize loot",
+        tooltip:
+          "Only applies when playing on the same seed, makes it so everyone gets different loot.",
+        type: "boolean",
+        value: true,
+      },
+      {
+        id: "sync_world_seed",
+        name: "Sync Seed",
+        tooltip:
+          "All players play in the same world seed (requires everyone to start a new game) 0 means random seed.",
+        type: "number",
+        value: 0,
+      },
+      {
+        id: "death_penalty_weak_respawn",
+        name: "Last noita standing.",
+        tooltip: "Run ends when there's only one player left.",
+        type: "boolean",
+        value: true,
+      },
+      {
+        id: "_ondeath_kick",
+        name: "Kick on death (do not disable)",
+        tooltip: "Kicks whoever dies, more customisable soon™.",
+        type: "boolean",
+        value: true,
+      },
+    ],
+  });
+
   const state = reactive({
-    defaultFlags: {
-      0: [
-        {
-          id: "sync_perks",
-          name: "Share all perks",
-          tooltip: "When grabbing perks the whole team will also get them.",
-          type: "boolean",
-          value: false,
-        },
-        {
-          id: "team_perks",
-          name: "Team Perks",
-          tooltip:
-            "When grabbing certain perks (not all) the whole team will also get them.",
-          type: "boolean",
-          value: true,
-        },
-        {
-          id: "sync_steve",
-          name: "Sync Steve",
-          tooltip: "Angers the gods for everyone.",
-          type: "boolean",
-          value: true,
-        },
-        {
-          id: "sync_hearts",
-          name: "Sync Hearts",
-          tooltip: "When someone picks up a heart everyone else gets it too.",
-          type: "boolean",
-          value: true,
-        },
-        {
-          id: "sync_orbs",
-          name: "Sync Orbs",
-          tooltip: "When someone picks up an orb everyone else gets it too.",
-          type: "boolean",
-          value: true,
-        },
-        {
-          id: "sync_shift",
-          name: "Sync Shifts",
-          tooltip:
-            "When someone fungal shifts everyone also gets the same shift, cooldown also applies.",
-          type: "boolean",
-          value: true,
-        },
-        {
-          id: "send_wands",
-          name: "Send Wands",
-          tooltip: "Allow players to deposit/take wands.",
-          type: "boolean",
-          value: true,
-        },
-        {
-          id: "send_flasks",
-          name: "Send Flasks",
-          tooltip: "Allow players to deposit/take flasks.",
-          type: "boolean",
-          value: true,
-        },
-        {
-          id: "send_gold",
-          name: "Send Gold",
-          tooltip: "Allow players to deposit/take gold.",
-          type: "boolean",
-          value: true,
-        },
-        {
-          id: "send_items",
-          name: "Send Items",
-          tooltip: "Allow players to deposit/take items.",
-          type: "boolean",
-          value: true,
-        },
-        {
-          id: "world_randomize_loot",
-          name: "Randomize loot",
-          tooltip:
-            "Only applies when playing on the same seed, makes it so everyone gets different loot.",
-          type: "boolean",
-          value: true,
-        },
-        {
-          id: "sync_world_seed",
-          name: "Sync Seed",
-          tooltip:
-            "All players play in the same world seed (requires everyone to start a new game) 0 means random seed.",
-          type: "number",
-          value: 0,
-        },
-        {
-          id: "death_penalty_end",
-          name: "End run",
-          tooltip: "Run ends for all players when someone dies.",
-          type: "boolean",
-          value: true,
-        },
-        {
-          id: "death_penalty_weak_respawn",
-          name: "Respawn Penalty",
-          tooltip:
-            "Player respawns and everyone takes a % drop on their max hp, once it goes below certain threshold on the weakest player the run ends for everyone.",
-          type: "boolean",
-          value: true,
-        },
-        {
-          id: "death_penalty_full_respawn",
-          name: "Respawn",
-          tooltip:
-            "Player will respawn on their last checkpoint and no penalties.",
-          type: "boolean",
-          value: true,
-        },
-        {
-          id: "_ondeath_kick",
-          name: "Kick on death",
-          tooltip: "Kicks whoever dies, more customisable soon™.",
-          type: "boolean",
-          value: false,
-        },
-      ],
-      2: [
-        {
-          id: "ban_ambrosia",
-          name: "Ban Ambrosia",
-          tooltip: "will shift ambrosia away.",
-          type: "boolean",
-          value: true,
-        },
-        {
-          id: "ban_invis",
-          name: "Ban Invisibility",
-          tooltip: "will shift invisibility away and remove the perk.",
-          type: "boolean",
-          value: true,
-        },
-        {
-          id: "nemesis_abilities",
-          name: "Nemesis abilities",
-          tooltip:
-            "Abilities will appear in each holy mountain with an NP cost.",
-          type: "boolean",
-          value: true,
-        },
-        {
-          id: "sync_steve",
-          name: "Sync Steve",
-          tooltip: "Angers the gods for everyone.",
-          type: "boolean",
-          value: false,
-        },
-        {
-          id: "sync_orbs",
-          name: "Sync Orbs",
-          tooltip: "When someone picks up an orb everyone else gets it too.",
-          type: "boolean",
-          value: false,
-        },
-        {
-          id: "world_randomize_loot",
-          name: "Randomize loot",
-          tooltip:
-            "Only applies when playing on the same seed, makes it so everyone gets different loot.",
-          type: "boolean",
-          value: true,
-        },
-        {
-          id: "sync_world_seed",
-          name: "Sync Seed",
-          tooltip:
-            "All players play in the same world seed (requires everyone to start a new game) 0 means random seed.",
-          type: "number",
-          value: 0,
-        },
-        {
-          id: "death_penalty_weak_respawn",
-          name: "Last noita standing.",
-          tooltip: "Run ends when there's only one player left.",
-          type: "boolean",
-          value: true,
-        },
-        {
-          id: "_ondeath_kick",
-          name: "Kick on death (do not disable)",
-          tooltip: "Kicks whoever dies, more customisable soon™.",
-          type: "boolean",
-          value: true,
-        },
-      ],
-    },
     gamemodes: {
       "0": "Co-op",
       "1": "Race",
@@ -397,7 +428,7 @@ const useStore = defineStore("store", () => {
     }),
     flags: computed(() => {
       const mode = state.room.gamemode;
-      const fDefaults = state.defaultFlags[mode];
+      const fDefaults = defaultFlags[mode];
       return fDefaults
         .map((flag) => {
           const found = state.roomFlags.find((f) => f.id == flag.id);
@@ -466,7 +497,7 @@ const useStore = defineStore("store", () => {
     },
     roomFlagsUpdated: (payload) => {
       const mode = state.room.gamemode;
-      const fDefaults = state.defaultFlags[mode];
+      const fDefaults = defaultFlags[mode];
       if (!fDefaults) {
         return;
       }
@@ -556,7 +587,7 @@ const useStore = defineStore("store", () => {
     },
     setDefaultFlags: (mode) => {
       if (mode == 0 || mode == 2) {
-        state.roomFlags = [...state.defaultFlags[mode]];
+        state.roomFlags = structuredClone(defaultFlags[mode]);
       }
     },
   };
