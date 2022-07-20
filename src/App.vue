@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="wrapper">
     <vHeader :title="title" />
-    <router-view />
+    <RouterView />
     <vFooter />
 
     <vLoading v-if="loading" />
@@ -30,6 +30,7 @@ import vFooter from "./components/vFooter.vue";
 import vLoading from "./components/vLoading.vue";
 import vErrDialog from "./components/vErrDialog.vue";
 import vButton from "./components/vButton.vue";
+import { RouterView } from "vue-router";
 import { ref, computed } from "vue";
 import useStore from "./store";
 const store = useStore();

@@ -96,6 +96,7 @@ async function createWindow() {
 
   if (import.meta.env.PROD) {
     win.loadFile(join(distFolder, "index.html"));
+    win.webContents.openDevTools();
   } else {
     win.loadURL(
       `http://${process.env.VITE_DEV_SERVER_HOST}:${process.env.VITE_DEV_SERVER_PORT}`
