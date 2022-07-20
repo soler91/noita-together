@@ -1,17 +1,26 @@
 module.exports = {
   root: true,
   env: {
-    node: true
+    es2021: true,
+    node: true,
+    browser: false,
   },
-  'extends': [
-    'plugin:vue/essential',
-    'eslint:recommended'
+  extends: [
+    "eslint:recommended",
+    /** @see https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin#recommended-configs */
+    "plugin:@typescript-eslint/recommended",
   ],
+  parser: "@typescript-eslint/parser",
   parserOptions: {
-    ecmaVersion: 2020
+    ecmaVersion: 12,
+    sourceType: "module",
   },
+  plugins: ["@typescript-eslint"],
+  ignorePatterns: ["node_modules/**", "**/dist/**"],
   rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
-  }
-}
+    "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
+    "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "linebreak-style": "off",
+  },
+};

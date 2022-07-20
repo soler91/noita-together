@@ -1,49 +1,44 @@
 <template>
-    <vModal>
-        <h1 slot="header">Room Password</h1>
-        <template slot="body">
-            <vInput v-model="password" label="room password" />
-        </template>
-        <div slot="footer" class="centered">
-            <vButton @click="join">Join</vButton>
-            <vButton @click="close">Cancel</vButton>
-        </div>
-    </vModal>
+  <vModal>
+    <template v-slot:header>
+      <h1>Room Password</h1>
+    </template>
+    <template v-slot:body>
+      <vInput v-model="password" label="room password" />
+    </template>
+    <template v-slot:footer>
+      <div class="centered">
+        <vButton @click="join">Join</vButton>
+        <vButton @click="close">Cancel</vButton>
+      </div>
+    </template>
+  </vModal>
 </template>
 
-<script>
+<script setup lang="ts">
 import vModal from "../components/vModal.vue";
 import vButton from "../components/vButton.vue";
 import vInput from "../components/vInput.vue";
-export default {
-    name: "vRoomPassword",
-    components: {
-        vButton,
-        vModal,
-        vInput,
-    },
-    props: {
-        id: {
-            type: String,
-            required: true,
-        },
-    },
-    data() {
-        return {
-            password: "",
-        };
-    },
-    methods: {
-        join() {
-            this.$emit("join", this.id, this.password);
-        },
-        close() {
-            this.password = "";
-            this.$emit("close");
-        },
-    },
-};
+import { ref, computed } from "vue";
+
+const props = defineProps<{
+  id: string;
+}>();
+
+const emit = defineEmits<{
+  (e: "join", id: string, password: string): void;
+  (e: "close"): void;
+}>();
+
+const password = ref("");
+
+function join() {
+  emit("join", props.id, password.value);
+}
+function close() {
+  password.value = "";
+  emit("close");
+}
 </script>
 
-<style>
-</style>
+<style></style>
