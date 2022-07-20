@@ -1,7 +1,7 @@
 <template>
   <div class="footer">
     <span id="app-version">v{{ version }}</span>
-    <div class="donate" @click="OpenKofi">
+    <div class="donate" @click="openKofi">
       <span>Support me on ko-fi <i class="fas fa-heart"></i></span>
     </div>
   </div>
@@ -15,7 +15,7 @@ const version = ref("");
 ipcRenderer.invoke("get-version").then((v) => (version.value = v));
 
 const kofiUrl = ref("https://ko-fi.com/soler91");
-function OpenKofi() {
+function openKofi() {
   shell.openExternal(kofiUrl.value);
 }
 </script>

@@ -25,7 +25,7 @@ import vInput from "../components/vInput.vue";
 import { ipcRenderer } from "electron";
 import path from "path";
 import fs from "fs";
-import { ref, computed } from "vue";
+import { ref } from "vue";
 
 const emit = defineEmits<{
   (e: "setPath", value: string): void;

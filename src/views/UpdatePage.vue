@@ -6,7 +6,7 @@
         <p v-for="(msg, index) in logs" :key="index">{{ msg }}</p>
       </div>
     </div>
-    <vButton :disabled="!success" @click="ContinueLogin">Continue</vButton>
+    <vButton :disabled="!success" @click="continueLogin">Continue</vButton>
   </div>
 </template>
 
@@ -14,12 +14,12 @@
 import { ipcRenderer } from "electron";
 import vButton from "../components/vButton.vue";
 import vGamePath from "../components/vGamePath.vue";
-import { ref, computed, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 
-const logs = ref([]);
+const logs = ref<string[]>([]);
 const success = ref(false);
 const showPathModal = ref(false);
 
@@ -39,10 +39,10 @@ onMounted(() => {
   ipcRenderer.send("update_mod");
 });
 
-function ContinueLogin() {
+function continueLogin() {
   router.replace({ path: "/login" });
 }
-function setPathAndUpdate(path) {
+function setPathAndUpdate(path: string) {
   showPathModal.value = false;
   ipcRenderer.send("update_mod", path);
 }

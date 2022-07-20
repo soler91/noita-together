@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { ipcRenderer as ipc } from "electron-better-ipc";
 
 import Update from "../views/UpdatePage.vue";
 import Login from "../views/LoginPage.vue";
@@ -29,11 +30,6 @@ const router = createRouter({
       component: Room,
     },
   ],
-});
-
-router.beforeEach((to, from, next) => {
-  document.title = "Noita Together";
-  next();
 });
 
 export default router;

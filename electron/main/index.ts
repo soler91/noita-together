@@ -1,8 +1,7 @@
 import { distFolder, publicFolder } from "./root-path";
 import { app, BrowserWindow, shell, ipcMain, dialog } from "electron";
-import { release } from "os";
 import { join } from "path";
-import * as fs from "fs";
+import fs from "fs";
 import { autoUpdater } from "electron-updater";
 import { updateMod } from "./update";
 import { appEvent } from "./appEvent";
@@ -10,6 +9,7 @@ import wsClient from "./ws";
 import keytar from "keytar";
 import got from "got";
 import http from "http";
+import { ipc } from "./ipc-main";
 
 let rememberUser = false;
 
@@ -19,24 +19,24 @@ if (!process.env["VITE_APP_HOSTNAME"]) {
   );
 }
 
-// Disable GPU Acceleration for Windows 7
-if (release().startsWith("6.1")) app.disableHardwareAcceleration();
-
-// Set application name for Windows 10+ notifications
-if (process.platform === "win32") app.setAppUserModelId(app.getName());
-
+// Only a single instance of the app can be running at a time.
 if (!app.requestSingleInstanceLock()) {
   app.quit();
   process.exit(0);
 }
+app.on("second-instance", showOrCreateWindow);
 
+// Not sure about this, I've seen a few people complain about various driver bugs
+// and other issues that are related to Electron/Chrome hardware acceleration.
+app.disableHardwareAcceleration();
+
+// Set application name for Windows 10+ notifications
+if (process.platform === "win32") app.setAppUserModelId(app.getName());
+
+// Browser window
 let win: BrowserWindow | null = null;
-// Here, you can also use other preload
-const preload = join(__dirname, "../preload/index.js");
-const url = `http://${process.env.VITE_DEV_SERVER_HOST}:${process.env.VITE_DEV_SERVER_PORT}`;
-const indexHtml = join(distFolder, "index.html");
 
-const loginserv = http.createServer((req, res) => {
+const loginServer = http.createServer((req, res) => {
   const url = new URL("noitatogether:/" + req.url);
   const display_name = url.searchParams.get("display_name");
   const token = url.searchParams.get("token");
@@ -49,7 +49,11 @@ const loginserv = http.createServer((req, res) => {
     return;
   }
   if (rememberUser) {
-    keytar.setPassword("Noita Together", display_name, refreshToken);
+    if (refreshToken) {
+      keytar.setPassword("Noita Together", display_name, refreshToken);
+    } else {
+      console.error("Login - Missing refresh token");
+    }
   }
   appEvent("USER_EXTRA", extra);
   wsClient({
@@ -84,20 +88,21 @@ async function createWindow() {
     backgroundColor: "#2e2c29",
     resizable: true,
     webPreferences: {
-      preload,
+      preload: join(__dirname, "../preload/index.js"),
       nodeIntegration: true,
       contextIsolation: false,
     },
   });
 
   if (import.meta.env.PROD) {
-    win.loadFile(indexHtml);
+    win.loadFile(join(distFolder, "index.html"));
   } else {
-    win.loadURL(url);
+    win.loadURL(
+      `http://${process.env.VITE_DEV_SERVER_HOST}:${process.env.VITE_DEV_SERVER_PORT}`
+    );
     win.webContents.openDevTools();
   }
 
-  // Test actively push message to the Electron-Renderer
   win.webContents.on("did-finish-load", () => {
     win?.webContents.send("main-process-message", new Date().toLocaleString());
   });
@@ -146,23 +151,8 @@ ipcMain.on("TRY_LOGIN", async (event, account) => {
   }
 });
 
-// new window example arg: new windows url
-ipcMain.handle("open-win", (event, arg) => {
-  const childWindow = new BrowserWindow({
-    webPreferences: {
-      preload,
-    },
-  });
-
-  if (import.meta.env.PROD) {
-    childWindow.loadFile(indexHtml, { hash: arg });
-  } else {
-    childWindow.loadURL(`${url}/#${arg}`);
-  }
-});
-
 ipcMain.on("minimize-window", () => {
-  win.minimize();
+  win?.minimize();
 });
 
 ipcMain.handle("open-directory-dialog", () => {
@@ -178,21 +168,19 @@ ipcMain.on("open-login-twitch", () => {
   shell.openExternal(loginUrl);
 });
 
-app
-  .whenReady()
-  .then(() => {
-    loginserv.listen(25669);
-    createWindow();
-  })
-  .catch((e) => console.error("Failed create window:", e));
-
 autoUpdater.on("update-downloaded", () => {
   appEvent("UPDATE_DOWNLOADED", "");
 });
 
-/**
- * Install Vue.js or some other devtools in development mode only
- */
+app
+  .whenReady()
+  .then(showOrCreateWindow)
+  .catch((e) => console.error("Failed create window:", e));
+
+app.on("ready", async () => {
+  loginServer.listen(25669);
+});
+
 if (import.meta.env.DEV) {
   // TODO: https://codybontecou.com/electron-app-with-vue-devtools.html#running-the-vue-devtools-as-a-dependency
   /*
@@ -209,9 +197,6 @@ if (import.meta.env.DEV) {
     .catch((e) => console.error("Failed install extension:", e));*/
 }
 
-/**
- * Check new app version in production mode only
- */
 if (import.meta.env.PROD) {
   app
     .whenReady()
@@ -222,22 +207,18 @@ if (import.meta.env.PROD) {
 
 app.on("window-all-closed", () => {
   win = null;
-  if (process.platform !== "darwin") app.quit();
-});
-
-app.on("second-instance", () => {
-  if (win) {
-    // Focus on the main window if the user tried to open another
-    if (win.isMinimized()) win.restore();
-    win.focus();
+  if (process.platform !== "darwin") {
+    app.quit();
   }
 });
 
-app.on("activate", () => {
+app.on("activate", showOrCreateWindow);
+
+async function showOrCreateWindow() {
   const allWindows = BrowserWindow.getAllWindows();
-  if (allWindows.length) {
+  if (allWindows.length > 0) {
     allWindows[0].focus();
   } else {
-    createWindow();
+    await createWindow();
   }
-});
+}
