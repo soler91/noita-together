@@ -9,6 +9,7 @@ rmSync("dist", { recursive: true, force: true }); // v14.14.0
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode, ssrBuild }) => {
+  // TODO: Remove this hack once https://github.com/electron-vite/vite-plugin-electron/issues/37 gets fixed
   const env = loadEnv(mode, process.cwd());
   process.env = { ...process.env, ...env };
 

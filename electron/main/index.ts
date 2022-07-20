@@ -13,7 +13,7 @@ import { ipc } from "./ipc-main";
 
 let rememberUser = false;
 
-if (!process.env["VITE_APP_HOSTNAME"]) {
+if (!process.env.VITE_APP_HOSTNAME) {
   console.error(
     "Please set the VITE_APP_HOSTNAME and the VITE_APP_WS_PORT environment variables"
   );
