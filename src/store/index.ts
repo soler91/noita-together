@@ -397,6 +397,7 @@ const useStore = defineStore("store", () => {
       }
       return false;
     }),
+    user: computed(() => state.user),
     userName: computed(() => {
       return state.user.name;
     }),

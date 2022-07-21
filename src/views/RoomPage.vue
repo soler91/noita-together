@@ -104,7 +104,6 @@ const showRoomFlags = ref(false);
 const showLeaveModal = ref(false);
 const chatMsg = ref("");
 const lastMsg = ref(Date.now());
-const locked = ref(false);
 
 watch(
   () => store.state.room.id,
@@ -150,7 +149,7 @@ watch(chat, (chat) => {
 function lockRoom() {
   store.dispatch("updateRoom", { locked: !room.value.locked });
 }
-function sendChat(e) {
+function sendChat(e: KeyboardEvent) {
   if (e.key != "Enter" || !chatMsg.value.trim()) {
     return;
   }
@@ -179,13 +178,13 @@ function openLeaveRoom() {
 function closeLeaveModal() {
   showLeaveModal.value = false;
 }
-function kick(userId) {
+function kick(userId: number) {
   store.dispatch("kickUser", { userId });
 }
-function ban(userId) {
+function ban(userId: number) {
   store.dispatch("banUser", { userId });
 }
-function startRun(forced) {
+function startRun(forced: boolean) {
   store.dispatch("startRun", { forced });
 }
 </script>

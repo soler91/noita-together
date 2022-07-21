@@ -94,16 +94,16 @@ const branch = computed(() => {
 const matchHost = computed(() => {
   const messages = [];
   const msg = isHost.value ? "hostMsg" : "userMsg";
-  for (const key in matches.value) {
+  for (const key in errorMessages) {
     if (key == "seed") {
       continue;
     }
     if (user.value[key] != host.value[key]) {
-      messages.push(matches.value[key][msg]);
+      messages.push(errorMessages[key][msg]);
     }
   }
   if (seed.value > 0 && host.value.seed != user.value.seed) {
-    messages.push(matches.value.seed[msg]);
+    messages.push(errorMessages.seed[msg]);
   }
   if (mode.value == 2) {
     let found = false;
@@ -118,16 +118,16 @@ const matchHost = computed(() => {
     }
 
     if (!found) {
-      messages.push(matches.value.nemesis_notfound[msg]);
+      messages.push(errorMessages.nemesis_notfound[msg]);
     }
     if (!order) {
-      messages.push(matches.value.nemesis_order[msg]);
+      messages.push(errorMessages.nemesis_order[msg]);
     }
   }
   return messages;
 });
 
-const matches = ref({
+const errorMessages = {
   version: {
     hostMsg: "User is not on the same mod version.",
     userMsg: "You are not in the samge game branch as the host.",
@@ -150,7 +150,7 @@ const matches = ref({
     userMsg:
       "noita-nemesis needs to be above noita-together in the game's mod list order",
   },
-});
+};
 </script>
 
 <style>
