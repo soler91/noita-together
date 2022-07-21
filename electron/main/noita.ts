@@ -1,8 +1,12 @@
-import ws, { WebSocketServer } from "ws";
+import { WebSocket, WebSocketServer } from "ws";
 import { v4 as uuidv4 } from "uuid";
 import { appEvent } from "./appEvent";
 import { ipcMain } from "electron";
 import { EventEmitter } from "events";
+
+// TODO: Check out https://github.com/stephenh/ts-proto
+// Or check out https://github.com/timostamm/protobuf-ts
+
 function sysMsg(message: string) {
   appEvent("sChat", {
     id: uuidv4(),
@@ -21,14 +25,15 @@ function rotLerp(a: number, b: number, weight: number) {
   const shortest = ((a - b + Math.PI) % pi2) - Math.PI;
   return b + ((shortest * weight) % pi2);
 }
+
 class NoitaGame extends EventEmitter {
   port = 25569;
   server: WebSocketServer | null = null;
 
-  client = null;
+  client: WebSocket | null = null;
   paused = false;
-  queue = [];
-  queueDelay = 5000;
+  #queue: string[] = [];
+  #queueDelay = 5000;
 
   rejectConnections = true;
   user = { userId: 0, name: "", host: false };
@@ -118,7 +123,7 @@ class NoitaGame extends EventEmitter {
   }
   // event and ping
   // {event: "", payload: {}}
-  gameMessage(data, socket) {
+  gameMessage(data, socket: WebSocket) {
     let dataJSON = null;
     if (data.slice(0, 1) == ">") {
       if (data == ">RES> [no value]") {
@@ -168,23 +173,26 @@ class NoitaGame extends EventEmitter {
     this.user.host = val;
   }
 
-  sendEvt(key, payload = {}) {
-    this.toGame({ event: key, payload });
+  sendEvt(key: string, payload: any = {}) {
+    const data = JSON.stringify({ event: key, payload });
+    this.toGame(data);
   }
 
-  toGame(obj = {}) {
-    const evt = JSON.stringify(obj);
+  toGame(data: string) {
     if (!this.client) {
       //console.log("[Game] Pushed code to queue.")
-      this.queue.push(evt);
+      this.#queue.push(data);
       return;
     }
-    this.client.send(evt);
+    this.client.send(data);
 
-    if (this.queue.length > 0) {
+    if (this.#queue.length > 0) {
       setTimeout(() => {
-        this.toGame(this.queue.shift());
-      }, this.queueDelay);
+        const dataInQueue = this.#queue.shift();
+        if (dataInQueue) {
+          this.toGame(dataInQueue);
+        }
+      }, this.#queueDelay);
     }
   }
 
