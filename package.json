@@ -22,6 +22,7 @@
     "ws": "^8.8.1"
   },
   "devDependencies": {
+    "@fortawesome/fontawesome-free": "^6.1.1",
     "@types/uuid": "^8.3.4",
     "@types/ws": "^8.5.3",
     "@typescript-eslint/eslint-plugin": "5.30.7",
@@ -32,15 +33,14 @@
     "electron-builder": "^23.1.0",
     "eslint": "8.20.0",
     "eslint-plugin-vue": "9.2.0",
+    "pinia": "^2.0.16",
     "typescript": "^4.7.4",
     "vite": "3.0.2",
     "vite-plugin-electron": "^0.8.0",
     "vue": "^3.2.37",
-    "vue-tsc": "^0.38.9",
     "vue-router": "^4.1.2",
-    "vue3-popper": "^1.5.0",
-    "pinia": "^2.0.16",
-    "@fortawesome/fontawesome-free": "^6.1.1"
+    "vue-tsc": "^0.38.9",
+    "vue3-popper": "^1.5.0"
   },
   "env": {
     "VITE_DEV_SERVER_HOST": "127.0.0.1",

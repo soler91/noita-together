@@ -1,9 +1,9 @@
-import { rmSync } from "fs";
-import { join } from "path";
 import { defineConfig, loadEnv } from "vite";
 import vue from "@vitejs/plugin-vue";
 import electron from "vite-plugin-electron";
 import pkg from "./package.json";
+import { rmSync } from "fs";
+import { join } from "path";
 
 rmSync("dist", { recursive: true, force: true }); // v14.14.0
 
@@ -22,6 +22,12 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
           vite: {
             build: {
               outDir: "dist/electron/main",
+            },
+            define: {
+              "process.env.VITE_APP_HOSTNAME": JSON.stringify(
+                env.VITE_APP_HOSTNAME
+              ),
+              "process.env.VITE_APP_WS_PORT": JSON.stringify(env.VITE_APP_PORT),
             },
           },
         },
