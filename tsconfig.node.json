@@ -4,10 +4,11 @@
     "composite": true,
     "module": "ESNext",
     "moduleResolution": "Node",
+    "jsx": "preserve",
     "resolveJsonModule": true,
     "strict": true,
     "allowSyntheticDefaultImports": true,
     "types": ["vite/client"]
   },
-  "include": ["vite.config.ts", "electron", "package.json"]
+  "include": ["vite.config.ts", "electron", "package.json", "electron/**/*"]
 }
