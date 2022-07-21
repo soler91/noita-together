@@ -9,15 +9,16 @@
     "dev": "vite",
     "build": "vue-tsc --noEmit -p tsconfig.node.json --composite false && vue-tsc --noEmit && vite build && electron-builder --config .electron-builder.config.js",
     "build-force": "vite build && electron-builder --config .electron-builder.config.js",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --ignore-path .gitignore"
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --ignore-path .gitignore",
+    "type-gen": "protoc --ts_out . --proto_path public public/messages.proto"
   },
   "dependencies": {
+    "@protobuf-ts/plugin": "^2.7.0",
     "dexie": "^3.2.2",
     "electron-better-ipc": "^2.0.1",
     "electron-updater": "5.0.5",
     "got": "^12.1.0",
     "keytar": "^7.9.0",
-    "protobufjs": "^7.0.0",
     "uuid": "^8.3.2",
     "ws": "^8.8.1"
   },

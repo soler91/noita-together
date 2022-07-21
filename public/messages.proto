@@ -1,5 +1,5 @@
-package NT;
 syntax = "proto3";
+package NT;
 
 message Envelope {
     oneof kind {

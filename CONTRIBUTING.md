@@ -4,6 +4,45 @@
 master branch: Electron app
 mod branch: Noita together mod
 
+## Getting started
+
+Clone this repository and do
+
+```sh
+npm install
+```
+
+### Developing
+
+```sh
+npm run dev
+```
+
+### Building
+
+```sh
+npm run build
+```
+
+or if there are a million Typescript errors and you can't fix them all
+
+```sh
+npm run build-force
+```
+
+### Linting your code
+
+```sh
+npm run lint
+```
+
+### Re-generating Protobuf Types
+
+```sh
+npm run type-gen
+```
+
+
 
 ## Directory
 
