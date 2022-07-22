@@ -85,9 +85,9 @@ message PlayerFrame {
 }
 
 message ServerPlayerPos {
-    required string user_id = 1;
-    required float x = 2;
-    required float y = 3;
+    string user_id = 1;
+    float x = 2;
+    float y = 3;
 }
 
 message ClientPlayerMove {
@@ -95,7 +95,7 @@ message ClientPlayerMove {
 }
 
 message ServerPlayerMove {
-    required string user_id = 1;
+    string user_id = 1;
     repeated PlayerFrame frames = 2;
 }
 
@@ -107,7 +107,7 @@ message ClientPlayerUpdate {
 }
 
 message ServerPlayerUpdate {
-    required string user_id = 1;
+    string user_id = 1;
     optional float cur_hp = 2;
     optional float max_hp = 3;
     optional string location = 4;
@@ -120,40 +120,40 @@ message ClientPlayerUpdateInventory {
     repeated InventorySpell spells = 3;
 
     message InventoryWand {
-        required uint32 index = 1;
-        required Wand wand = 2;
+        uint32 index = 1;
+        Wand wand = 2;
     }
 
     message InventoryItem {
-        required uint32 index = 3;
-        required Item item = 4;
+        uint32 index = 3;
+        Item item = 4;
     }
 
     message InventorySpell {
-        required uint32 index = 1;
-        required Spell spell = 2;
+        uint32 index = 1;
+        Spell spell = 2;
     }
 }
 
 message ServerPlayerUpdateInventory {
-    required string user_id = 1;
+    string user_id = 1;
     repeated InventoryWand wands = 2;
     repeated InventoryItem items = 3;
     repeated InventorySpell spells = 4;
 
     message InventoryWand {
-        required uint32 index = 1;
-        required Wand wand = 2;
+        uint32 index = 1;
+        Wand wand = 2;
     }
 
     message InventoryItem {
-        required uint32 index = 1;
-        required Item item = 2;
+        uint32 index = 1;
+        Item item = 2;
     }
 
     message InventorySpell {
-        required uint32 index = 1;
-        required Spell spell = 2;
+        uint32 index = 1;
+        Spell spell = 2;
     }
 }
 
@@ -174,45 +174,45 @@ message ServerHostItemBank {
 }
 
 message ClientHostUserTake {
-    required string user_id = 1;
-    required string id = 2;
-    required bool success = 3;
+    string user_id = 1;
+    string id = 2;
+    bool success = 3;
 }
 
 message ServerHostUserTake {
-    required string user_id = 1;
-    required string id = 2;
-    required bool success = 3;
+    string user_id = 1;
+    string id = 2;
+    bool success = 3;
 }
 
 message ClientHostUserTakeGold {
-    required string user_id = 1;
-    required uint32 amount = 2;
-    required bool success = 3;
+    string user_id = 1;
+    uint32 amount = 2;
+    bool success = 3;
 }
 
 message ServerHostUserTakeGold {
-    required string user_id = 1;
-    required uint32 amount = 2;
-    required bool success = 3;
+    string user_id = 1;
+    uint32 amount = 2;
+    bool success = 3;
 }
 
 message ClientPlayerAddGold {
-    required uint32 amount = 1;
+    uint32 amount = 1;
 }
 
 message ServerPlayerAddGold {
-    required string user_id = 1;
-    required uint32 amount = 2;
+    string user_id = 1;
+    uint32 amount = 2;
 }
 
 message ClientPlayerTakeGold {
-    required uint32 amount = 1;
+    uint32 amount = 1;
 }
 
 message ServerPlayerTakeGold {
-    required string user_id = 1;
-    required uint32 amount = 2;
+    string user_id = 1;
+    uint32 amount = 2;
 }
 
 message ClientPlayerAddItem {
@@ -238,7 +238,7 @@ message ClientPlayerAddItem {
 }
 
 message ServerPlayerAddItem {
-    required string user_id = 1;
+    string user_id = 1;
     oneof item {
         Spells spells = 2;
         Wands wands = 3;
@@ -261,23 +261,23 @@ message ServerPlayerAddItem {
 }
 
 message ClientPlayerTakeItem {
-    required string id = 1;
+    string id = 1;
 }
 
 message ServerPlayerTakeItem {
-    required string user_id = 1;
-    required string id = 2;
+    string user_id = 1;
+    string id = 2;
 }
 
 message ClientChat {
-    required string message = 1;
+    string message = 1;
 }
 
 message ServerChat {
-    required string id = 1;
-    required string user_id = 2;
-    required string name = 3;
-    required string message = 4;
+    string id = 1;
+    string user_id = 2;
+    string name = 3;
+    string message = 4;
 }
 
 
@@ -288,11 +288,11 @@ message ClientPlayerPickup {
     }
 
     message HeartPickup {
-        required bool hp_perk = 1;
+        bool hp_perk = 1;
     }
 
     message OrbPickup {
-        required uint32 id = 1;
+        uint32 id = 1;
     }
 }
 
@@ -304,89 +304,89 @@ message ServerPlayerPickup {
     }
 
     message HeartPickup {
-        required bool hp_perk = 1;
+        bool hp_perk = 1;
     }
 
     message OrbPickup {
-        required uint32 id = 1;
+        uint32 id = 1;
     }
 }
 
 message ClientNemesisPickupItem {
-    required string game_id = 1;
+    string game_id = 1;
 }
 
 message ServerNemesisPickupItem {
-    required string user_id = 1;
-    required string game_id = 2;
+    string user_id = 1;
+    string game_id = 2;
 }
 
 message ClientNemesisAbility {
-    required string game_id = 1;
+    string game_id = 1;
 }
 
 message ServerNemesisAbility {
-    required string user_id = 1;
-    required string game_id = 2;
+    string user_id = 1;
+    string game_id = 2;
 }
 
 message ClientPlayerDeath {
-    required bool is_win = 1;
+    bool is_win = 1;
     optional uint32 game_time = 2;
 }
 
 message ServerPlayerDeath {
-    required string user_id = 1;
-    required bool is_win = 2;
+    string user_id = 1;
+    bool is_win = 2;
     optional uint32 game_time = 3;
 }
 
 message ClientPlayerNewGamePlus {
-    required uint32 amount = 1;
+    uint32 amount = 1;
 }
 
 message ServerPlayerNewGamePlus {
     string user_id = 1;
-    required uint32 amount = 2;
+    uint32 amount = 2;
 }
 
 message ClientPlayerSecretHourglass {
-    required string material = 1;
+    string material = 1;
 }
 
 message ServerPlayerSecretHourglass {
-    required string user_id = 1;
-    required string material = 2;
+    string user_id = 1;
+    string material = 2;
 }
 
 message ClientCustomModEvent {
-    required string payload = 1;
+    string payload = 1;
 }
 
 message ServerCustomModEvent {
-    required string user_id = 1;
-    required string payload = 2;
+    string user_id = 1;
+    string payload = 2;
 }
 
 message ClientRespawnPenalty {
-    required uint32 deaths = 1;
+    uint32 deaths = 1;
 }
 
 message ServerRespawnPenalty {
-    required string user_id = 1;
-    required uint32 deaths = 2;
+    string user_id = 1;
+    uint32 deaths = 2;
 }
 
 message ClientAngerySteve {
-    required bool idk = 1;
+    bool idk = 1;
 }
 
 message ServerAngerySteve {
-    required string user_id = 1;
+    string user_id = 1;
 }
 
 message Wand {
-    required string id = 1;
+    string id = 1;
     WandStats stats = 2;
     repeated Spell always_cast = 3;
     repeated Spell deck = 4;
@@ -394,56 +394,56 @@ message Wand {
     optional string contributed_by = 6;
 
     message WandStats {
-        required string sprite = 1;
-        required bool named = 2;
-        required string ui_name = 3;
-        required float mana_max = 4;
-        required float mana_charge_speed = 5;
-        required int32 reload_time = 6;
-        required uint32 actions_per_round = 7;
-        required uint32 deck_capacity = 8;
-        required bool shuffle_deck_when_empty = 9;
-        required float spread_degrees = 10;
-        required float speed_multiplier = 11;
-        required int32 fire_rate_wait = 12;
-        required float tip_x = 13;
-        required float tip_y = 14;
-        required float grip_x = 15;
-        required float grip_y = 16;
+        string sprite = 1;
+        bool named = 2;
+        string ui_name = 3;
+        float mana_max = 4;
+        float mana_charge_speed = 5;
+        int32 reload_time = 6;
+        uint32 actions_per_round = 7;
+        uint32 deck_capacity = 8;
+        bool shuffle_deck_when_empty = 9;
+        float spread_degrees = 10;
+        float speed_multiplier = 11;
+        int32 fire_rate_wait = 12;
+        float tip_x = 13;
+        float tip_y = 14;
+        float grip_x = 15;
+        float grip_y = 16;
     }
 }
 
 message Spell {
-    required string id = 1;
-    required string game_id = 2;
+    string id = 1;
+    string game_id = 2;
     optional string sent_by = 3;
     optional string contributed_by = 4;
-    required int32 uses_remaining = 5;
+    int32 uses_remaining = 5;
 }
 
 message Item {
-    required string id = 1;
-    required Color color = 2;
+    string id = 1;
+    Color color = 2;
     repeated Material content = 3;
     optional string sent_by = 4;
     optional string contributed_by = 5;
-    required bool is_chest = 6;
+    bool is_chest = 6;
 
     message Color {
-        required float r = 1;
-        required float g = 2;
-        required float b = 3;
+        float r = 1;
+        float g = 2;
+        float b = 3;
     }
     message Material {
-        required uint32 id = 1;
-        required uint32 amount = 2;
+        uint32 id = 1;
+        uint32 amount = 2;
     }
 }
 
 message EntityItem {
-    required string id = 1;
-    required string path = 2;
-    required string sprite = 3;
+    string id = 1;
+    string path = 2;
+    string sprite = 3;
     optional string sent_by = 4;
 }
 
@@ -503,34 +503,34 @@ message ServerDisconnected {
 }
 
 message ClientRoomDelete {
-    required string id = 1;
+    string id = 1;
 }
 
 message ServerRoomDeleted {
-    required string id = 1;
+    string id = 1;
 }
 
 message ClientRoomCreate {
-    required string name = 1;
-    required uint32 gamemode = 2;
-    required uint32 max_users = 3;
+    string name = 1;
+    uint32 gamemode = 2;
+    uint32 max_users = 3;
     optional string password = 4;
 }
 
 message ServerRoomCreated {
-    required string id = 1;
-    required string name = 2;
-    required uint32 gamemode = 3;
-    required uint32 max_users = 4;
+    string id = 1;
+    string name = 2;
+    uint32 gamemode = 3;
+    uint32 max_users = 4;
     optional string password = 5;
-    required bool locked = 6;
+    bool locked = 6;
     repeated User users = 7;
 
     message User {
-        required string user_id = 1;
-        required string name = 2;
-        required bool ready = 3;
-        required bool owner = 4;
+        string user_id = 1;
+        string name = 2;
+        bool ready = 3;
+        bool owner = 4;
     }
 }
 
@@ -561,7 +561,7 @@ message ServerRoomUpdateFailed{
 message ClientRoomFlagsUpdate {
     repeated GameFlag flags = 1;
     message GameFlag {
-        required string flag = 1;
+        string flag = 1;
         optional int32 int_val = 2;
         optional string str_val = 3;
         optional float float_val = 4;
@@ -573,7 +573,7 @@ message ClientRoomFlagsUpdate {
 message ServerRoomFlagsUpdated {
     repeated GameFlag flags = 1;
     message GameFlag {
-        required string flag = 1;
+        string flag = 1;
         optional int32 int_val = 2;
         optional string str_val = 3;
         optional float float_val = 4;
@@ -587,24 +587,24 @@ message ServerRoomFlagsUpdateFailed {
 }
 
 message ClientJoinRoom {
-    required string id = 1;
+    string id = 1;
     optional string password = 2;
 }
 
 message ServerJoinRoomSuccess {
-    required string id = 1;
-    required string name = 2;
-    required uint32 gamemode = 3;
-    required uint32 max_users = 4;
+    string id = 1;
+    string name = 2;
+    uint32 gamemode = 3;
+    uint32 max_users = 4;
     optional string password = 5;
-    required bool locked = 6;
+    bool locked = 6;
     repeated User users = 7;
 
     message User {
-        required string user_id = 1;
-        required string name = 2;
-        required bool ready = 3;
-        required bool owner = 4;
+        string user_id = 1;
+        string name = 2;
+        bool ready = 3;
+        bool owner = 4;
     }
 }
 
@@ -613,36 +613,36 @@ message ServerJoinRoomFailed {
 }
 
 message ServerUserJoinedRoom {
-    required string user_id = 1;
-    required string name = 2;
+    string user_id = 1;
+    string name = 2;
 }
 
 message ClientLeaveRoom {
-    required string user_id = 1; //should be empty msg
+    string user_id = 1; //should be empty msg
 }
 
 message ServerUserLeftRoom {
-    required string user_id = 1;
+    string user_id = 1;
 }
 
 message ClientKickUser {
-    required string user_id = 1;
+    string user_id = 1;
 }
 
 message ServerUserKicked {
-    required string user_id = 1;
+    string user_id = 1;
 }
 
 message ClientBanUser {
-    required string user_id = 1;
+    string user_id = 1;
 }
 
 message ServerUserBanned {
-    required string user_id = 1;
+    string user_id = 1;
 }
 
 message ClientReadyState {
-    required bool ready = 1;
+    bool ready = 1;
     optional string seed = 2;
     repeated string mods = 3;
     optional string version = 4;
@@ -650,8 +650,8 @@ message ClientReadyState {
 }
 
 message ServerUserReadyState {
-    required string user_id = 1;
-    required bool ready = 2;
+    string user_id = 1;
+    bool ready = 2;
     optional string seed = 3;
     repeated string mods = 4;
     optional string version = 5;
@@ -659,42 +659,42 @@ message ServerUserReadyState {
 }
 
 message ClientStartRun {
-    required bool forced = 1;
+    bool forced = 1;
 }
 
 message ServerHostStart {
-    required bool forced = 1;
+    bool forced = 1;
 }
 
 message ClientRequestRoomList {
-    required uint32 page = 1;
+    uint32 page = 1;
 }
 
 message ServerRoomList {
     repeated Room rooms = 1;
     optional uint32 pages = 2;
     message Room {
-        required string id = 1;
-        required string name = 2;
-        required uint32 gamemode = 3;
-        required uint32 cur_users = 4;
-        required uint32 max_users = 5;
-        required bool protected = 6;
-        required string owner = 7;
-        required bool locked = 8;
+        string id = 1;
+        string name = 2;
+        uint32 gamemode = 3;
+        uint32 cur_users = 4;
+        uint32 max_users = 5;
+        bool protected = 6;
+        string owner = 7;
+        bool locked = 8;
     }
 }
 
 message ServerRoomAddToList {
-    required Room room = 1;
+    Room room = 1;
     message Room {
-        required string id = 1;
-        required string name = 2;
-        required uint32 gamemode = 3;
-        required uint32 cur_users = 4;
-        required uint32 max_users = 5;
-        required bool protected = 6;
-        required string owner = 7;
-        required bool locked = 8;
+        string id = 1;
+        string name = 2;
+        uint32 gamemode = 3;
+        uint32 cur_users = 4;
+        uint32 max_users = 5;
+        bool protected = 6;
+        string owner = 7;
+        bool locked = 8;
     }
 }
