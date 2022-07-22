@@ -21,15 +21,27 @@ export function encode(obj: NT.IEnvelope) {
   }
 }
 
-export function encodeGameMsg(type, data) {
-  const payload = { gameAction: {} };
-  payload.gameAction[type] = data;
+export function encodeGameMsg(
+  type: NonNullable<NT.GameAction["action"]>,
+  data
+) {
+  const payload = {
+    gameAction: {
+      [type]: data,
+    },
+  };
   return encode(payload);
 }
 
-export function encodeLobbyMsg(type, data) {
-  const payload = { lobbyAction: {} };
-  payload.lobbyAction[type] = data;
+export function encodeLobbyMsg(
+  type: NonNullable<NT.LobbyAction["action"]>,
+  data
+) {
+  const payload = {
+    lobbyAction: {
+      [type]: data,
+    },
+  };
   return encode(payload);
 }
 

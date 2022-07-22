@@ -4,11 +4,10 @@ import ws from "ws";
 import messageHandler from "./proto/messageHandler";
 import { appEvent } from "./appEvent";
 import noita from "./noita";
-import { GameAction } from "./proto/messages";
 const host = `ws://${process.env["VITE_APP_HOSTNAME"]}${
   process.env["VITE_APP_WS_PORT"] ? ":" + process.env["VITE_APP_WS_PORT"] : ""
 }/`;
-const print = true;
+
 export default (data) => {
   const user = { userId: data.id, name: data.display_name };
   noita.setUser({ userId: user.userId, name: user.name, host: false });
