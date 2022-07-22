@@ -87,28 +87,25 @@ export default (data) => {
   // We know it's an Uint8Array, because we're using that binary type
   client.on("message", (data: Uint8Array) => {
     try {
-      const message = messageHandler.decode(data).kind;
-      if (message.oneofKind === "gameAction") {
-        const key = message.gameAction.action.oneofKind;
-        if (key === undefined) {
-          throw new Error("No game message key");
-        }
-        const payload = message.gameAction.action[key];
+      const { gameAction, lobbyAction } = messageHandler.decode(data);
+      let payload;
+      let key;
+      if (gameAction) {
+        // One hell of a hack to figure out which game action is set
+        key = Object.keys(gameAction).shift();
+        payload = gameAction[key];
         if (key == "sChat") {
-          appEvent(key, payload); // TODO: is the payload usable & can it be sent to the render thread?
+          appEvent(key, payload);
         }
         if (typeof noita[key] == "function") {
           noita[key](payload);
         }
-      } else if (message.oneofKind === "lobbyAction") {
-        const key = message.lobbyAction.action.oneofKind;
-        if (key === undefined) {
-          throw new Error("No lobby message key");
-        }
-        const payload = message.lobbyAction.action[key];
+      } else if (lobbyAction) {
+        key = Object.keys(lobbyAction).shift();
+        payload = lobbyAction[key];
         if (key && payload) {
           if (typeof lobby[key] == "function") {
-            lobby[key](payload); // TODO: is the payload usable & can it be sent to the render thread?
+            lobby[key](payload);
           }
           appEvent(key, payload);
         }

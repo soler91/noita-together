@@ -1,30 +1,26 @@
-import { Envelope } from "./messages";
-
+import { NT } from "./messages";
 /**
  * @throws {Error} if the message is not a valid envelope
  */
-export function decode(buf: Uint8Array): Envelope {
-  const decoded = Envelope.fromBinary(buf);
-  if (decoded === undefined) {
-    throw new Error(
-      "No message was decoded, buffer with length " +
-        buf.byteLength +
-        " was sent"
-    );
-  }
+export function decode(buf: Uint8Array): NT.IEnvelope {
+  const decoded = NT.Envelope.decode(buf);
   return decoded;
 }
 
-export function encode(obj: Envelope) {
+export function encode(obj: NT.IEnvelope) {
   try {
-    const encoded = Envelope.toBinary(obj);
-    return encoded;
+    const error = NT.Envelope.verify(obj);
+    if (error) {
+      throw error;
+    } else {
+      const encoded = NT.Envelope.encode(obj).finish();
+      return encoded;
+    }
   } catch (err) {
     console.log(`Something fked up encoding ${err}`);
   }
 }
 
-// TODO: Finish this
 export function encodeGameMsg(type, data) {
   const payload = { gameAction: {} };
   payload.gameAction[type] = data;
