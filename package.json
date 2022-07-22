@@ -10,10 +10,9 @@
     "build": "vue-tsc --noEmit -p tsconfig.node.json --composite false && vue-tsc --noEmit && vite build && electron-builder --config .electron-builder.config.js",
     "build-force": "vite build && electron-builder --config .electron-builder.config.js",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --ignore-path .gitignore",
-    "type-gen": "protoc --ts_out . --proto_path public public/messages.proto"
+    "type-gen": "protoc --ts_out electron/main/proto --ts_opt optimize_code_size --proto_path public public/messages.proto"
   },
   "dependencies": {
-    "@protobuf-ts/plugin": "^2.7.0",
     "dexie": "^3.2.2",
     "electron-better-ipc": "^2.0.1",
     "electron-updater": "5.0.5",
@@ -24,6 +23,7 @@
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^6.1.1",
+    "@protobuf-ts/plugin": "^2.7.0",
     "@types/uuid": "^8.3.4",
     "@types/ws": "^8.5.3",
     "@typescript-eslint/eslint-plugin": "5.30.7",

@@ -4,6 +4,7 @@ import ws from "ws";
 import messageHandler from "./proto/messageHandler";
 import { appEvent } from "./appEvent";
 import noita from "./noita";
+import { GameAction } from "./proto/messages";
 const host = `ws://${process.env["VITE_APP_HOSTNAME"]}${
   process.env["VITE_APP_WS_PORT"] ? ":" + process.env["VITE_APP_WS_PORT"] : ""
 }/`;
@@ -12,7 +13,7 @@ export default (data) => {
   const user = { userId: data.id, name: data.display_name };
   noita.setUser({ userId: user.userId, name: user.name, host: false });
   let isHost = false;
-  let client = new ws(`${host}${data.token}`);
+  let client: ws | null = new ws(`${host}${data.token}`);
   const lobby = {
     sHostStart: (payload) => {
       if (isHost) {
@@ -83,26 +84,31 @@ export default (data) => {
     client = null;
   });
 
-  client.on("message", (data) => {
+  // We know it's an Uint8Array, because we're using that binary type
+  client.on("message", (data: Uint8Array) => {
     try {
-      const { gameAction, lobbyAction } = messageHandler.decode(data);
-      let payload;
-      let key;
-      if (gameAction) {
-        key = Object.keys(gameAction).shift();
-        payload = gameAction[key];
+      const message = messageHandler.decode(data).kind;
+      if (message.oneofKind === "gameAction") {
+        const key = message.gameAction.action.oneofKind;
+        if (key === undefined) {
+          throw new Error("No game message key");
+        }
+        const payload = message.gameAction.action[key];
         if (key == "sChat") {
-          appEvent(key, payload);
+          appEvent(key, payload); // TODO: is the payload usable & can it be sent to the render thread?
         }
         if (typeof noita[key] == "function") {
           noita[key](payload);
         }
-      } else if (lobbyAction) {
-        key = Object.keys(lobbyAction).shift();
-        payload = lobbyAction[key];
+      } else if (message.oneofKind === "lobbyAction") {
+        const key = message.lobbyAction.action.oneofKind;
+        if (key === undefined) {
+          throw new Error("No lobby message key");
+        }
+        const payload = message.lobbyAction.action[key];
         if (key && payload) {
           if (typeof lobby[key] == "function") {
-            lobby[key](payload);
+            lobby[key](payload); // TODO: is the payload usable & can it be sent to the render thread?
           }
           appEvent(key, payload);
         }
@@ -113,7 +119,7 @@ export default (data) => {
       //console.log()
     } catch (error) {
       //eugh
-      console.log(error);
+      console.error("something went wrong while getting the message", error);
     }
   });
 
@@ -300,14 +306,14 @@ export default (data) => {
     };
   }
 
-  function toCamel(str) {
+  function toCamel(str: string) {
     return str.replace(/([_][a-z])/gi, ($1) => {
       return $1.toUpperCase().replace("_", "");
     });
   }
 
-  function keysToCamel(obj) {
-    const n = {};
+  function keysToCamel(obj: { [key: string]: any }) {
+    const n: { [key: string]: any } = {};
     for (const key of Object.keys(obj)) {
       n[toCamel(key)] = obj[key];
     }
