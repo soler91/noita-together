@@ -9,7 +9,7 @@
         <option>Nemesis PROTOTYPE</option>
       </select>
       <select class="slot-selector" v-model="toCreate.maxUsers">
-        <option v-for="(slot, index) in slots" :key="index">
+        <option v-for="slot in roomSizes" :key="slot" :value="slot">
           {{ slot }} slots
         </option>
       </select>
@@ -49,22 +49,20 @@ const toCreate = ref({
   name: "",
   gamemode: "Co-op",
   password: "",
-  maxUsers: "5 slots",
+  maxUsers: 5,
 });
 const userExtra = computed(() => {
   return store.getters.userExtra;
 });
-const slots = computed(() => {
-  const slots = [5, 10, 15, 20, 25, 30];
+const roomSizes = computed(() => {
+  const sizes = [5, 10, 15, 20, 25, 30];
   if (userExtra.value > 1) {
-    return slots.concat([45, 60, 75, 90]);
+    return sizes.concat([45, 60, 75, 90]);
   }
-  return slots;
+  return sizes;
 });
 function createRoom() {
   const payload = { ...toCreate.value };
-  let maxUsers = payload.maxUsers.split(" ")[0];
-  payload.maxUsers = Number(maxUsers);
   if (!payload.name) {
     payload.name = "eeeeeee";
   }
@@ -81,7 +79,7 @@ function close() {
     name: "",
     gamemode: 0,
     password: "",
-    maxUsers: "5 slots",
+    maxUsers: 5,
   };
   emit("close");
 }

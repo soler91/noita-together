@@ -625,7 +625,12 @@ const useStore = defineStore("store", () => {
         commit("setLoading", false);
       });
     },
-    createRoom: async (payload) => {
+    createRoom: async (payload: {
+      name: string;
+      gamemode: Gamemode;
+      password: string;
+      maxUsers: number;
+    }) => {
       commit("setLoading", true);
       ipcRenderer.send("CLIENT_MESSAGE", { key: "cRoomCreate", payload });
       ipcRenderer.once("sRoomCreated", (event, data) => {
