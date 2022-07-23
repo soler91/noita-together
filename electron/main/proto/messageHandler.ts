@@ -1,4 +1,5 @@
 import { NT } from "./messages";
+
 /**
  * @throws {Error} if the message is not a valid envelope
  */
