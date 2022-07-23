@@ -22,9 +22,9 @@ export function encode(obj: NT.IEnvelope) {
   }
 }
 
-export function encodeGameMsg(
-  type: NonNullable<NT.GameAction["action"]>,
-  data
+export function encodeGameMsg<T extends NonNullable<NT.GameAction["action"]>>(
+  type: T,
+  data: NT.IGameAction[T]
 ) {
   const payload = {
     gameAction: {
@@ -34,9 +34,9 @@ export function encodeGameMsg(
   return encode(payload);
 }
 
-export function encodeLobbyMsg(
-  type: NonNullable<NT.LobbyAction["action"]>,
-  data
+export function encodeLobbyMsg<T extends NonNullable<NT.LobbyAction["action"]>>(
+  type: T,
+  data: NT.ILobbyAction[T]
 ) {
   const payload = {
     lobbyAction: {
