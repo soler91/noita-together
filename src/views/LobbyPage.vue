@@ -144,7 +144,7 @@ function gamemodeName(id: Gamemode) {
   return GamemodeNames[id];
 }
 function createRoom(payload) {
-  store.dispatch("createRoom", payload);
+  store.actions.createRoom(payload);
 }
 function refreshRooms() {
   refreshing.value = true;

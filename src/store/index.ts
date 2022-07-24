@@ -101,7 +101,6 @@ const ipcPlugin = (ipcx) => {
     });
 
     ipcx.on("sRoomFlagsUpdated", (event, data) => {
-      console.log(data);
       // TODO: Replace this temporary fix with a proper one
       const mode = store.state.room.gamemode;
       const fDefaults = store.defaultFlags[mode];
@@ -512,6 +511,7 @@ const useStore = defineStore("store", () => {
     },
     setRoom: (payload) => {
       state.room = payload;
+      commit("setDefaultFlags", payload.gamemode);
       for (const user of state.room.users) {
         user.color = randomColor();
       }
