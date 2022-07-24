@@ -76,6 +76,7 @@ import vRoomPassword from "../components/vRoomPassword.vue";
 import { ref, computed, onMounted, watch, nextTick } from "vue";
 import { useRouter } from "vue-router";
 import useStore, { Gamemode, GamemodeNames } from "../store";
+import NT from "../messages";
 const store = useStore();
 const router = useRouter();
 const showPasswordModal = ref(false);
@@ -143,7 +144,7 @@ function joinRoom(id: string, password) {
 function gamemodeName(id: Gamemode) {
   return GamemodeNames[id];
 }
-function createRoom(payload) {
+function createRoom(payload: NT.IClientRoomCreate) {
   store.actions.createRoom(payload);
 }
 function refreshRooms() {

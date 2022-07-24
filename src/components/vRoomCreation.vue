@@ -5,8 +5,8 @@
     </template>
     <template v-slot:body>
       <select class="slot-selector" v-model="toCreate.gamemode">
-        <option>Co-op</option>
-        <option>Nemesis PROTOTYPE</option>
+        <option :value="Gamemodes.Coop">Co-op</option>
+        <option :value="Gamemodes.Nemesis">Nemesis PROTOTYPE</option>
       </select>
       <select class="slot-selector" v-model="toCreate.maxUsers">
         <option v-for="slot in roomSizes" :key="slot" :value="slot">
@@ -36,18 +36,19 @@ import vModal from "../components/vModal.vue";
 import vButton from "../components/vButton.vue";
 import vInput from "../components/vInput.vue";
 import { ref, computed } from "vue";
-import useStore from "../store";
+import useStore, { Gamemodes } from "../store";
+import NT from "../messages";
 const store = useStore();
 
 const emit = defineEmits<{
-  (e: "createRoom", value: any): void;
+  (e: "createRoom", value: NT.IClientRoomCreate): void;
   (e: "close"): void;
 }>();
 
 const canCreate = ref(true);
 const toCreate = ref({
   name: "",
-  gamemode: "Co-op",
+  gamemode: Gamemodes.Coop,
   password: "",
   maxUsers: 5,
 });
@@ -64,13 +65,7 @@ const roomSizes = computed(() => {
 function createRoom() {
   const payload = { ...toCreate.value };
   if (!payload.name) {
-    payload.name = "eeeeeee";
-  }
-  if (payload.gamemode == "Co-op") {
-    payload.gamemode = 0;
-  }
-  if (payload.gamemode == "Nemesis PROTOTYPE") {
-    payload.gamemode = 2;
+    payload.name = "missing room name";
   }
   emit("createRoom", payload);
 }

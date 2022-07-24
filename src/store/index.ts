@@ -644,7 +644,8 @@ const useStore = defineStore("store", () => {
       });
     },
     createRoom: async (payload: NT.IClientRoomCreate) => {
-      commit("setLoading", true);
+      state.loading = true;
+      // TODO: Make this a proper promise which can resolve and reject
       ipc.callMain("clientMessage")({ key: "cRoomCreate", payload });
 
       ipcRenderer.once("sRoomCreated", (event, data) => {
@@ -661,7 +662,8 @@ const useStore = defineStore("store", () => {
           body: data.reason,
           canClose: true,
         });
-        commit("setLoading", false);
+        state.loading = false;
+
         return false;
       });
     },
@@ -684,7 +686,7 @@ const useStore = defineStore("store", () => {
       });
     },
     leaveRoom: async () => {
-      commit("setLoading", true);
+      state.loading = true;
       const key = getters.isHost.value ? "cRoomDelete" : "cLeaveRoom";
       const payload = {
         id: getters.roomId.value,
@@ -696,20 +698,22 @@ const useStore = defineStore("store", () => {
       ipcRenderer.once(evt, (event, data) => {
         if (evt == "sUserLeftRoom") {
           if (data.userId == getters.userId.value) {
-            commit("setLoading", false);
+            state.loading = false;
             return true;
           }
         } else {
-          commit("setLoading", false);
+          state.loading = false;
           return true;
         }
       });
     },
     kickUser: async (payload: NT.IClientKickUser) => {
+      state.loading = true;
       commit("setLoading", true);
+      // TODO: Make this a proper promise
       ipc.callMain("clientMessage")({ key: "cKickUser", payload });
       ipcRenderer.on("sUserKicked", () => {
-        commit("setLoading", false);
+        state.loading = false;
         return true;
       });
     },

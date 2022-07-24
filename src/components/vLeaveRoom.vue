@@ -34,7 +34,7 @@ const isHost = computed(() => {
 });
 
 function leaveRoom() {
-  store.dispatch("leaveRoom", undefined);
+  store.actions.leaveRoom();
 }
 function close() {
   emit("close");

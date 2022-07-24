@@ -144,7 +144,9 @@ watch(chat, (chat) => {
   });
 });
 function lockRoom() {
-  store.dispatch("updateRoom", { locked: !room.value.locked });
+  store.actions.updateRoom({
+    locked: !room.value.locked,
+  });
 }
 function sendChat(e: KeyboardEvent) {
   if (e.key != "Enter" || !chatMsg.value.trim()) {
@@ -175,11 +177,15 @@ function openLeaveRoom() {
 function closeLeaveModal() {
   showLeaveModal.value = false;
 }
-function kick(userId: number) {
-  store.dispatch("kickUser", { userId });
+function kick(userId: string) {
+  store.actions.kickUser({
+    userId,
+  });
 }
-function ban(userId: number) {
-  store.dispatch("banUser", { userId });
+function ban(userId: string) {
+  store.actions.banUser({
+    userId,
+  });
 }
 function startRun(forced: boolean) {
   store.dispatch("startRun", { forced });
