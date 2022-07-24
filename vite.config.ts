@@ -27,7 +27,9 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
               "process.env.VITE_APP_HOSTNAME": JSON.stringify(
                 env.VITE_APP_HOSTNAME
               ),
-              "process.env.VITE_APP_WS_PORT": JSON.stringify(env.VITE_APP_PORT),
+              "process.env.VITE_APP_WS_PORT": JSON.stringify(
+                env.VITE_APP_WS_PORT
+              ),
             },
           },
         },
