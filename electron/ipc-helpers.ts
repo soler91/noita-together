@@ -1,7 +1,8 @@
 import type { BrowserWindow } from "electron";
+import type { MainProcessIpc, RendererProcessIpc } from "electron-better-ipc";
 
 // We have functions with at most one argument
-type IpcTypeSchema = { [key: string]: (...args: [any]) => any };
+type IpcTypeSchema = { [key: string]: (...args: [any]) => Promise<any> };
 
 /**
  * MIT License
@@ -35,16 +36,15 @@ export interface SafeMainProcessIpc<
 
 	const browserWindow = BrowserWindow.getFocusedWindow();
 
-	const emoji = await ipc.callRenderer(browserWindow!, 'get-emoji', 'unicorn');
+	const emoji = await ipc.callRenderer(browserWindow!)('get-emoji', 'unicorn');
 	console.log(emoji);
 	//=> '🦄'
 	```
 	*/
-  callRenderer<Channel extends keyof RendererType>(
+  callRenderer<Channel extends keyof RendererType & string>(
     browserWindow: BrowserWindow,
-    channel: Channel,
-    ...data: Parameters<RendererType[Channel]>
-  ): Promise<ReturnType<RendererType[Channel]>>;
+    channel: Channel
+  ): RendererType[Channel];
 
   /**
 	Send a message to the focused window, as determined by `electron.BrowserWindow.getFocusedWindow`.
@@ -64,10 +64,9 @@ export interface SafeMainProcessIpc<
 	//=> '🦄'
 	```
 	*/
-  callFocusedRenderer<Channel extends keyof RendererType>(
-    channel: Channel,
-    ...data: Parameters<RendererType[Channel]>
-  ): Promise<ReturnType<RendererType[Channel]>>;
+  callFocusedRenderer<Channel extends keyof RendererType & string>(
+    channel: Channel
+  ): RendererType[Channel];
 
   /**
 	This method listens for a message from `ipcRenderer.callMain` defined in a renderer process and replies back.
@@ -86,7 +85,7 @@ export interface SafeMainProcessIpc<
 	});
 	```
 	*/
-  answerRenderer<Channel extends keyof MainType>(
+  answerRenderer<Channel extends keyof MainType & string>(
     channel: Channel,
     callback: (
       data: Parameters<MainType[Channel]>[0],
@@ -114,7 +113,7 @@ export interface SafeMainProcessIpc<
 	});
 	```
 	*/
-  answerRenderer<Channel extends keyof MainType>(
+  answerRenderer<Channel extends keyof MainType & string>(
     browserWindow: BrowserWindow,
     channel: Channel,
     callback: (
@@ -131,10 +130,9 @@ export interface SafeMainProcessIpc<
 	@param channel - The channel to send the message on.
 	@param data - The data to send to the receiver.
 	*/
-  sendToRenderers<Channel extends keyof RendererType>(
-    channel: Channel,
-    data?: Parameters<RendererType[Channel]>[0]
-  ): void;
+  sendToRenderers<Channel extends keyof RendererType & string>(
+    channel: Channel
+  ): RendererType[Channel];
 }
 
 export interface SafeRendererProcessIpc<
@@ -159,10 +157,9 @@ export interface SafeRendererProcessIpc<
 	//=> '🦄'
 	```
 	*/
-  callMain<Channel extends keyof MainType>(
-    channel: Channel,
-    ...data: Parameters<MainType[Channel]>
-  ): Promise<ReturnType<MainType[Channel]>>;
+  callMain<Channel extends keyof MainType & string>(
+    channel: Channel
+  ): MainType[Channel];
 
   /**
 	This method listens for a message from `ipcMain.callRenderer` defined in the main process and replies back.
@@ -181,7 +178,7 @@ export interface SafeRendererProcessIpc<
 	});
 	```
 	*/
-  answerMain<Channel extends keyof RendererType>(
+  answerMain<Channel extends keyof RendererType & string>(
     channel: Channel,
     callback: (
       data: Parameters<RendererType[Channel]>[0]
@@ -189,4 +186,49 @@ export interface SafeRendererProcessIpc<
       | ReturnType<RendererType[Channel]>
       | PromiseLike<ReturnType<RendererType[Channel]>>
   ): () => void;
+}
+
+export function makeSafeMain<
+  MainType extends IpcTypeSchema,
+  RendererType extends IpcTypeSchema
+>(ipcMain: MainProcessIpc): SafeMainProcessIpc<MainType, RendererType> {
+  return {
+    callRenderer: (browserWindow, channel) => {
+      return ((data: any) =>
+        ipcMain.callRenderer(browserWindow, channel, data)) as any;
+    },
+    callFocusedRenderer: (channel) => {
+      return ((data: any) => ipcMain.callFocusedRenderer(channel, data)) as any;
+    },
+    answerRenderer: (
+      browserWindowOrChannel: any,
+      channelOrCallback: any,
+      callbackOrUndefined?: any
+    ) => {
+      return ipcMain.answerRenderer(
+        browserWindowOrChannel,
+        channelOrCallback,
+        callbackOrUndefined
+      );
+    },
+    sendToRenderers: (channel) => {
+      return ((data: any) => ipcMain.sendToRenderers(channel, data)) as any;
+    },
+  };
+}
+
+export function makeSafeRenderer<
+  MainType extends IpcTypeSchema,
+  RendererType extends IpcTypeSchema
+>(
+  ipcRenderer: RendererProcessIpc
+): SafeRendererProcessIpc<MainType, RendererType> {
+  return {
+    callMain: (channel) => {
+      return ((data: any) => ipcRenderer.callMain(channel, data)) as any;
+    },
+    answerMain: (channel, callback) => {
+      return ipcRenderer.answerMain(channel, callback);
+    },
+  };
 }

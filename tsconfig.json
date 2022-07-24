@@ -2,19 +2,20 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
-    "moduleResolution": "node",
-    "importHelpers": true,
+    "moduleResolution": "Node",
+    "useDefineForClassFields": true,
     "jsx": "preserve",
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "sourceMap": true,
-    "baseUrl": "./",
     "strict": true,
     "paths": {},
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
-    "types": ["vite/client"]
+    "lib": ["ESNext", "DOM"]
   },
+  /* Project references are more broken than I'd like
   "references": [{ "path": "./tsconfig.node.json" }],
-  "include": ["src/**/*"]
+  */
+  "include": ["src/**/*", "src/**/*.vue", "electron/**/*"]
 }

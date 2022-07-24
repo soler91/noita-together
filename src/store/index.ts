@@ -1,6 +1,8 @@
+import { ipc } from "../ipc-renderer";
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { ipcRenderer } from "electron";
 import { reactive, computed, ref, readonly } from "vue";
+import type NT from "../messages";
 
 const colors = [
   "#698935",
@@ -29,7 +31,7 @@ export const GamemodeNames = {
 
 export type Gamemode = typeof Gamemodes[keyof typeof Gamemodes];
 
-export type GameFlag =
+export type GameFlagDefault =
   | {
       id: string;
       name: string;
@@ -45,18 +47,30 @@ export type GameFlag =
       value: number;
     };
 
+export type GameFlag =
+  | {
+      id: string;
+      type: "boolean";
+      value: boolean;
+    }
+  | {
+      id: string;
+      type: "number";
+      value: number;
+    };
+
 // callbacks for when IPC does stuff
-const ipcPlugin = (ipc) => {
+const ipcPlugin = (ipcx) => {
   return (store) => {
-    ipc.on("CONNECTED", (event, data) => {
+    ipcx.on("CONNECTED", (event, data) => {
       store.commit("setUser", data);
     });
 
-    ipc.on("USER_EXTRA", (event, data) => {
+    ipcx.on("USER_EXTRA", (event, data) => {
       store.commit("setUserExtra", data);
     });
 
-    ipc.on("SAVED_USER", (event, data) => {
+    ipcx.on("SAVED_USER", (event, data) => {
       store.commit("setSavedUserName", data);
     });
     /*
@@ -66,7 +80,7 @@ const ipcPlugin = (ipc) => {
         })
         */
 
-    ipc.on("UPDATE_DOWNLOADED", () => {
+    ipcx.on("UPDATE_DOWNLOADED", () => {
       store.dispatch("errDialog", {
         title: "Update available",
         body: "App finished downloading an update and will apply the next time you launch.",
@@ -74,7 +88,7 @@ const ipcPlugin = (ipc) => {
       });
     });
 
-    ipc.on("CONNECTION_LOST", () => {
+    ipcx.on("CONNECTION_LOST", () => {
       store.dispatch("errDialog", {
         title: "Disconnected from server",
         body: "",
@@ -82,23 +96,23 @@ const ipcPlugin = (ipc) => {
       });
     });
 
-    ipc.on("sRoomUpdated", (event, data) => {
+    ipcx.on("sRoomUpdated", (event, data) => {
       store.commit("roomUpdated", data);
     });
 
-    ipc.on("sRoomFlagsUpdated", (event, data) => {
+    ipcx.on("sRoomFlagsUpdated", (event, data) => {
       store.commit("roomFlagsUpdated", data);
     });
 
-    ipc.on("sRoomDeleted", (event, data) => {
+    ipcx.on("sRoomDeleted", (event, data) => {
       store.commit("resetRoom", data);
     });
 
-    ipc.on("sUserJoinedRoom", (event, data) => {
+    ipcx.on("sUserJoinedRoom", (event, data) => {
       store.commit("userJoinedRoom", data);
     });
 
-    ipc.on("sUserLeftRoom", (event, data) => {
+    ipcx.on("sUserLeftRoom", (event, data) => {
       //store.commit("chatMsg", `[System] ${store.state.rooms.users[data.userId]} has left the room.`)
       if (data.userId == store.state.user.id) {
         store.commit("resetRoom");
@@ -107,7 +121,7 @@ const ipcPlugin = (ipc) => {
       }
     });
 
-    ipc.on("sUserKicked", (event, data) => {
+    ipcx.on("sUserKicked", (event, data) => {
       //store.commit("chatMsg", `[System] ${store.state.rooms.users[data.userId]} has been kicked.`)
       if (data.userId == store.state.user.id) {
         store.commit("resetRoom");
@@ -116,7 +130,7 @@ const ipcPlugin = (ipc) => {
       }
     });
 
-    ipc.on("sUserBanned", (event, data) => {
+    ipcx.on("sUserBanned", (event, data) => {
       //store.commit("chatMsg", `[System] ${store.state.rooms.users[data.userId]} has been banned.`)
       if (data.userId == store.state.user.id) {
         store.commit("resetRoom");
@@ -125,24 +139,24 @@ const ipcPlugin = (ipc) => {
       }
     });
 
-    ipc.on("sUserReadyState", (event, data) => {
+    ipcx.on("sUserReadyState", (event, data) => {
       //console.log({ gotready: data })
       store.commit("userReadyState", data);
     });
 
-    ipc.on("sRoomAddToList", (event, data) => {
+    ipcx.on("sRoomAddToList", (event, data) => {
       store.commit("addRoom", data.room);
     });
 
-    ipc.on("sRoomDeleted", (event, data) => {
+    ipcx.on("sRoomDeleted", (event, data) => {
       store.commit("deleteRoom", data.id);
     });
 
-    ipc.on("sRoomList", (event, data) => {
+    ipcx.on("sRoomList", (event, data) => {
       store.commit("setRooms", data.rooms);
     });
 
-    ipc.on("sChat", (event, data) => {
+    ipcx.on("sChat", (event, data) => {
       store.commit("pushChat", data);
     });
 
@@ -155,7 +169,7 @@ const ipcPlugin = (ipc) => {
 };
 
 const useStore = defineStore("store", () => {
-  const defaultFlags = readonly<{ [key in Gamemode]: GameFlag[] }>({
+  const defaultFlags = readonly<{ [key in Gamemode]: GameFlagDefault[] }>({
     [Gamemodes.Coop]: [
       {
         id: "sync_perks",
@@ -346,6 +360,8 @@ const useStore = defineStore("store", () => {
     ],
   });
 
+  const roomFlags = ref<GameFlag[]>([]);
+
   const state = reactive({
     user: {
       name: "",
@@ -375,7 +391,6 @@ const useStore = defineStore("store", () => {
                 }*/
       ],
     },
-    roomFlags: [],
     roomChat: [],
     loading: false,
     joining: false,
@@ -422,22 +437,11 @@ const useStore = defineStore("store", () => {
     roomHasPassword: computed(() => {
       return state.room.protected;
     }),
-    flags: computed(() => {
-      const mode = state.room.gamemode;
-      const fDefaults = defaultFlags[mode];
-      return fDefaults
-        .map((flag) => {
-          const found = state.roomFlags.find((f) => f.id == flag.id);
-          if (!found && flag.type == "boolean") {
-            return { ...flag, value: false };
-          } else if (found) {
-            return found;
-          } else {
-            return undefined;
-          }
-        })
-        .filter((v) => typeof v !== "undefined");
-    }),
+    flags: computed(() =>
+      roomFlags.value.map((f) => {
+        return { ...f };
+      })
+    ),
   };
 
   const mutations = {
@@ -491,30 +495,18 @@ const useStore = defineStore("store", () => {
       let room = Object.assign(state.room);
       state.room = Object.assign(room, payload);
     },
-    roomFlagsUpdated: (payload) => {
-      const mode = state.room.gamemode;
-      const fDefaults = defaultFlags[mode];
-      if (!fDefaults) {
-        return;
-      }
-      state.roomFlags = payload.flags
-        .map((val) => {
-          const flag = { ...fDefaults.find((f) => f.id == val.flag) };
-          if (!flag) {
-            return;
-          } else {
-            if (typeof val.value == "number") {
-              flag.value = val.value;
-            }
-            if (flag.type == "boolean") {
-              flag.value = true;
-            }
-            return flag;
-          }
-        })
-        .filter((v) => typeof v !== "undefined");
+    roomFlagsUpdated: (payload: GameFlag[]) => {
+      payload.forEach((updateFlag) => {
+        const found = roomFlags.value.find((f) => f.id === updateFlag.id);
+        if (found) {
+          found.value = updateFlag.value;
+        } else {
+          console.warn("Unknown flag: " + updateFlag.id);
+          roomFlags.value.push(updateFlag);
+        }
+      });
     },
-    resetRoom: (state) => {
+    resetRoom: () => {
       state.room = {
         id: "",
         name: "",
@@ -524,7 +516,7 @@ const useStore = defineStore("store", () => {
         users: [],
         locked: false,
       };
-      state.roomFlags = [];
+      roomFlags.value = [];
       state.roomChat = [];
     },
     userJoinedRoom: (payload) => {
@@ -581,9 +573,9 @@ const useStore = defineStore("store", () => {
         state.roomChat.shift();
       }
     },
-    setDefaultFlags: (mode) => {
-      if (mode == 0 || mode == 2) {
-        state.roomFlags = defaultFlags[mode].map((flag) => {
+    setDefaultFlags: (mode: Gamemode) => {
+      if (mode === 0 || mode === 2) {
+        roomFlags.value = defaultFlags[mode].map((flag) => {
           return { ...flag };
         });
       }
@@ -607,9 +599,10 @@ const useStore = defineStore("store", () => {
       commit("setErrDialog", payload);
       commit("showErrDialog", true);
     },
-    joinRoom: (payload) => {
+    joinRoom: (payload: NT.IClientJoinRoom) => {
       commit("setLoading", true);
-      ipcRenderer.send("CLIENT_MESSAGE", { key: "cJoinRoom", payload });
+
+      ipc.callMain("clientMessage")({ key: "cJoinRoom", payload });
 
       ipcRenderer.once("sJoinRoomSuccess", (event, data) => {
         commit("setRoom", data);
@@ -625,14 +618,10 @@ const useStore = defineStore("store", () => {
         commit("setLoading", false);
       });
     },
-    createRoom: async (payload: {
-      name: string;
-      gamemode: Gamemode;
-      password: string;
-      maxUsers: number;
-    }) => {
+    createRoom: async (payload: NT.IClientRoomCreate) => {
       commit("setLoading", true);
-      ipcRenderer.send("CLIENT_MESSAGE", { key: "cRoomCreate", payload });
+      ipc.callMain("clientMessage")({ key: "cRoomCreate", payload });
+
       ipcRenderer.once("sRoomCreated", (event, data) => {
         commit("setDefaultFlags", data.gamemode);
         commit("setRoom", data);
@@ -651,9 +640,9 @@ const useStore = defineStore("store", () => {
         return false;
       });
     },
-    updateRoom: async (payload) => {
+    updateRoom: async (payload: NT.IClientRoomUpdate) => {
       commit("setLoading", true);
-      ipcRenderer.send("CLIENT_MESSAGE", { key: "cRoomUpdate", payload });
+      ipc.callMain("clientMessage")({ key: "cRoomUpdate", payload });
       ipcRenderer.once("sRoomUpdated", () => {
         commit("setLoading", false);
         return true;
@@ -676,7 +665,8 @@ const useStore = defineStore("store", () => {
         id: getters.roomId.value,
         userId: getters.userId.value,
       };
-      ipcRenderer.send("CLIENT_MESSAGE", { key, payload });
+      ipc.callMain("clientMessage")({ key, payload });
+
       const evt = getters.isHost.value ? "sRoomDeleted" : "sUserLeftRoom";
       ipcRenderer.once(evt, (event, data) => {
         if (evt == "sUserLeftRoom") {
@@ -690,24 +680,24 @@ const useStore = defineStore("store", () => {
         }
       });
     },
-    kickUser: async (payload) => {
+    kickUser: async (payload: NT.IClientKickUser) => {
       commit("setLoading", true);
-      ipcRenderer.send("CLIENT_MESSAGE", { key: "cKickUser", payload });
+      ipc.callMain("clientMessage")({ key: "cKickUser", payload });
       ipcRenderer.on("sUserKicked", () => {
         commit("setLoading", false);
         return true;
       });
     },
-    banUser: async (payload) => {
+    banUser: async (payload: NT.IClientBanUser) => {
       commit("setLoading", true);
-      ipcRenderer.send("CLIENT_MESSAGE", { key: "cBanUser", payload });
+      ipc.callMain("clientMessage")({ key: "cBanUser", payload });
       ipcRenderer.on("sUserBanned", () => {
         commit("setLoading", false);
         return true;
       });
     },
-    requestRooms: async (payload) => {
-      ipcRenderer.send("CLIENT_MESSAGE", {
+    requestRooms: async (payload: number) => {
+      ipc.callMain("clientMessage")({
         key: "cRequestRoomList",
         payload: { page: payload && payload > 0 ? payload : 0 },
       });
@@ -725,28 +715,26 @@ const useStore = defineStore("store", () => {
       });
     },
     sendFlags: () => {
-      const flags = getters.flags.value
-        .map((val) => {
-          let flag = { flag: val.id };
-          if (typeof val.value == "number") {
-            flag.uIntVal = val.value;
-          } //temp fix
-          if (val.type == "boolean" && !val.value) {
-            flag = undefined;
+      const flags =
+        getters.flags.value.flatMap<NT.ClientRoomFlagsUpdate.IGameFlag>(
+          (val) => {
+            if (typeof val.value == "number") {
+              return [{ flag: val.id, uIntVal: val.value }];
+            } //temp fix
+            if (val.type == "boolean" && !val.value) {
+              return [];
+            }
+            return [{ flag: val.id }];
           }
-          return flag;
-        })
-        .filter((v) => typeof v !== "undefined");
-      ipcRenderer.send("CLIENT_MESSAGE", {
+        );
+
+      ipc.callMain("clientMessage")({
         key: "cRoomFlagsUpdate",
         payload: { flags },
       });
     },
-    startRun: (payload) => {
-      ipcRenderer.send("CLIENT_MESSAGE", {
-        key: "cStartRun",
-        payload,
-      });
+    startRun: (payload: NT.IClientStartRun) => {
+      ipc.callMain("clientMessage")({ key: "cStartRun", payload });
     },
   };
 
@@ -768,6 +756,8 @@ const useStore = defineStore("store", () => {
   });
 
   return {
+    defaultFlags,
+    roomFlags,
     state,
     getters,
     mutations,

@@ -96,7 +96,7 @@ import vLeaveRoom from "../components/vLeaveRoom.vue";
 import vUserTooltip from "../components/vUserTooltip.vue";
 import { ref, computed, onMounted, watch, nextTick } from "vue";
 import { useRouter } from "vue-router";
-import useStore from "../store";
+import useStore, { type GameFlag } from "../store";
 const router = useRouter();
 const store = useStore();
 
@@ -119,9 +119,6 @@ onMounted(() => {
 
 const room = computed(() => {
   return store.state.room;
-});
-const flags = computed(() => {
-  return store.state.roomFlags;
 });
 const chat = computed(() => {
   return store.state.roomChat;
@@ -161,7 +158,7 @@ function sendChat(e: KeyboardEvent) {
   lastMsg.value = Date.now();
   chatMsg.value = "";
 }
-function sendFlags(payload) {
+function sendFlags(payload: GameFlag[]) {
   store.commit("roomFlagsUpdated", payload);
   store.dispatch("sendFlags", undefined);
   closeRoomFlags();

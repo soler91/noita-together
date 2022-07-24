@@ -36,7 +36,7 @@ export const NT = $root.NT = (() => {
             if (!writer)
                 writer = $Writer.create();
             if (message.gameAction != null && Object.hasOwnProperty.call(message, "gameAction"))
-                $root.NT.GameAction.encode(message.gameAction, writer.uint32(10).fork()).ldelim();
+                $root.NT.GameAction.encode(message.gameAction, writer.uint32(2).fork()).ldelim();
             if (message.lobbyAction != null && Object.hasOwnProperty.call(message, "lobbyAction"))
                 $root.NT.LobbyAction.encode(message.lobbyAction, writer.uint32(402).fork()).ldelim();
             return writer;
@@ -49,7 +49,7 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.gameAction = $root.NT.GameAction.decode(reader, reader.uint32());
                         break;
                     }
@@ -204,87 +204,87 @@ export const NT = $root.NT = (() => {
             if (!writer)
                 writer = $Writer.create();
             if (message.cPlayerMove != null && Object.hasOwnProperty.call(message, "cPlayerMove"))
-                $root.NT.ClientPlayerMove.encode(message.cPlayerMove, writer.uint32(10).fork()).ldelim();
+                $root.NT.ClientPlayerMove.encode(message.cPlayerMove, writer.uint32(2).fork()).ldelim();
             if (message.sPlayerMove != null && Object.hasOwnProperty.call(message, "sPlayerMove"))
-                $root.NT.ServerPlayerMove.encode(message.sPlayerMove, writer.uint32(18).fork()).ldelim();
+                $root.NT.ServerPlayerMove.encode(message.sPlayerMove, writer.uint32(10).fork()).ldelim();
             if (message.cPlayerUpdate != null && Object.hasOwnProperty.call(message, "cPlayerUpdate"))
-                $root.NT.ClientPlayerUpdate.encode(message.cPlayerUpdate, writer.uint32(26).fork()).ldelim();
+                $root.NT.ClientPlayerUpdate.encode(message.cPlayerUpdate, writer.uint32(18).fork()).ldelim();
             if (message.sPlayerUpdate != null && Object.hasOwnProperty.call(message, "sPlayerUpdate"))
-                $root.NT.ServerPlayerUpdate.encode(message.sPlayerUpdate, writer.uint32(34).fork()).ldelim();
+                $root.NT.ServerPlayerUpdate.encode(message.sPlayerUpdate, writer.uint32(26).fork()).ldelim();
             if (message.cPlayerUpdateInventory != null && Object.hasOwnProperty.call(message, "cPlayerUpdateInventory"))
-                $root.NT.ClientPlayerUpdateInventory.encode(message.cPlayerUpdateInventory, writer.uint32(42).fork()).ldelim();
+                $root.NT.ClientPlayerUpdateInventory.encode(message.cPlayerUpdateInventory, writer.uint32(34).fork()).ldelim();
             if (message.sPlayerUpdateInventory != null && Object.hasOwnProperty.call(message, "sPlayerUpdateInventory"))
-                $root.NT.ServerPlayerUpdateInventory.encode(message.sPlayerUpdateInventory, writer.uint32(50).fork()).ldelim();
+                $root.NT.ServerPlayerUpdateInventory.encode(message.sPlayerUpdateInventory, writer.uint32(42).fork()).ldelim();
             if (message.cHostItemBank != null && Object.hasOwnProperty.call(message, "cHostItemBank"))
-                $root.NT.ClientHostItemBank.encode(message.cHostItemBank, writer.uint32(58).fork()).ldelim();
+                $root.NT.ClientHostItemBank.encode(message.cHostItemBank, writer.uint32(50).fork()).ldelim();
             if (message.sHostItemBank != null && Object.hasOwnProperty.call(message, "sHostItemBank"))
-                $root.NT.ServerHostItemBank.encode(message.sHostItemBank, writer.uint32(66).fork()).ldelim();
+                $root.NT.ServerHostItemBank.encode(message.sHostItemBank, writer.uint32(58).fork()).ldelim();
             if (message.cHostUserTake != null && Object.hasOwnProperty.call(message, "cHostUserTake"))
-                $root.NT.ClientHostUserTake.encode(message.cHostUserTake, writer.uint32(74).fork()).ldelim();
+                $root.NT.ClientHostUserTake.encode(message.cHostUserTake, writer.uint32(66).fork()).ldelim();
             if (message.sHostUserTake != null && Object.hasOwnProperty.call(message, "sHostUserTake"))
-                $root.NT.ServerHostUserTake.encode(message.sHostUserTake, writer.uint32(82).fork()).ldelim();
+                $root.NT.ServerHostUserTake.encode(message.sHostUserTake, writer.uint32(74).fork()).ldelim();
             if (message.cHostUserTakeGold != null && Object.hasOwnProperty.call(message, "cHostUserTakeGold"))
-                $root.NT.ClientHostUserTakeGold.encode(message.cHostUserTakeGold, writer.uint32(90).fork()).ldelim();
+                $root.NT.ClientHostUserTakeGold.encode(message.cHostUserTakeGold, writer.uint32(82).fork()).ldelim();
             if (message.sHostUserTakeGold != null && Object.hasOwnProperty.call(message, "sHostUserTakeGold"))
-                $root.NT.ServerHostUserTakeGold.encode(message.sHostUserTakeGold, writer.uint32(98).fork()).ldelim();
+                $root.NT.ServerHostUserTakeGold.encode(message.sHostUserTakeGold, writer.uint32(90).fork()).ldelim();
             if (message.cPlayerAddGold != null && Object.hasOwnProperty.call(message, "cPlayerAddGold"))
-                $root.NT.ClientPlayerAddGold.encode(message.cPlayerAddGold, writer.uint32(106).fork()).ldelim();
+                $root.NT.ClientPlayerAddGold.encode(message.cPlayerAddGold, writer.uint32(98).fork()).ldelim();
             if (message.sPlayerAddGold != null && Object.hasOwnProperty.call(message, "sPlayerAddGold"))
-                $root.NT.ServerPlayerAddGold.encode(message.sPlayerAddGold, writer.uint32(114).fork()).ldelim();
+                $root.NT.ServerPlayerAddGold.encode(message.sPlayerAddGold, writer.uint32(106).fork()).ldelim();
             if (message.cPlayerTakeGold != null && Object.hasOwnProperty.call(message, "cPlayerTakeGold"))
-                $root.NT.ClientPlayerTakeGold.encode(message.cPlayerTakeGold, writer.uint32(122).fork()).ldelim();
+                $root.NT.ClientPlayerTakeGold.encode(message.cPlayerTakeGold, writer.uint32(114).fork()).ldelim();
             if (message.sPlayerTakeGold != null && Object.hasOwnProperty.call(message, "sPlayerTakeGold"))
-                $root.NT.ServerPlayerTakeGold.encode(message.sPlayerTakeGold, writer.uint32(130).fork()).ldelim();
+                $root.NT.ServerPlayerTakeGold.encode(message.sPlayerTakeGold, writer.uint32(122).fork()).ldelim();
             if (message.cPlayerAddItem != null && Object.hasOwnProperty.call(message, "cPlayerAddItem"))
-                $root.NT.ClientPlayerAddItem.encode(message.cPlayerAddItem, writer.uint32(138).fork()).ldelim();
+                $root.NT.ClientPlayerAddItem.encode(message.cPlayerAddItem, writer.uint32(130).fork()).ldelim();
             if (message.sPlayerAddItem != null && Object.hasOwnProperty.call(message, "sPlayerAddItem"))
-                $root.NT.ServerPlayerAddItem.encode(message.sPlayerAddItem, writer.uint32(146).fork()).ldelim();
+                $root.NT.ServerPlayerAddItem.encode(message.sPlayerAddItem, writer.uint32(138).fork()).ldelim();
             if (message.cPlayerTakeItem != null && Object.hasOwnProperty.call(message, "cPlayerTakeItem"))
-                $root.NT.ClientPlayerTakeItem.encode(message.cPlayerTakeItem, writer.uint32(154).fork()).ldelim();
+                $root.NT.ClientPlayerTakeItem.encode(message.cPlayerTakeItem, writer.uint32(146).fork()).ldelim();
             if (message.sPlayerTakeItem != null && Object.hasOwnProperty.call(message, "sPlayerTakeItem"))
-                $root.NT.ServerPlayerTakeItem.encode(message.sPlayerTakeItem, writer.uint32(162).fork()).ldelim();
+                $root.NT.ServerPlayerTakeItem.encode(message.sPlayerTakeItem, writer.uint32(154).fork()).ldelim();
             if (message.cPlayerPickup != null && Object.hasOwnProperty.call(message, "cPlayerPickup"))
-                $root.NT.ClientPlayerPickup.encode(message.cPlayerPickup, writer.uint32(170).fork()).ldelim();
+                $root.NT.ClientPlayerPickup.encode(message.cPlayerPickup, writer.uint32(162).fork()).ldelim();
             if (message.sPlayerPickup != null && Object.hasOwnProperty.call(message, "sPlayerPickup"))
-                $root.NT.ServerPlayerPickup.encode(message.sPlayerPickup, writer.uint32(178).fork()).ldelim();
+                $root.NT.ServerPlayerPickup.encode(message.sPlayerPickup, writer.uint32(170).fork()).ldelim();
             if (message.cNemesisAbility != null && Object.hasOwnProperty.call(message, "cNemesisAbility"))
-                $root.NT.ClientNemesisAbility.encode(message.cNemesisAbility, writer.uint32(186).fork()).ldelim();
+                $root.NT.ClientNemesisAbility.encode(message.cNemesisAbility, writer.uint32(178).fork()).ldelim();
             if (message.sNemesisAbility != null && Object.hasOwnProperty.call(message, "sNemesisAbility"))
-                $root.NT.ServerNemesisAbility.encode(message.sNemesisAbility, writer.uint32(194).fork()).ldelim();
+                $root.NT.ServerNemesisAbility.encode(message.sNemesisAbility, writer.uint32(186).fork()).ldelim();
             if (message.cNemesisPickupItem != null && Object.hasOwnProperty.call(message, "cNemesisPickupItem"))
-                $root.NT.ClientNemesisPickupItem.encode(message.cNemesisPickupItem, writer.uint32(202).fork()).ldelim();
+                $root.NT.ClientNemesisPickupItem.encode(message.cNemesisPickupItem, writer.uint32(194).fork()).ldelim();
             if (message.sNemesisPickupItem != null && Object.hasOwnProperty.call(message, "sNemesisPickupItem"))
-                $root.NT.ServerNemesisPickupItem.encode(message.sNemesisPickupItem, writer.uint32(210).fork()).ldelim();
+                $root.NT.ServerNemesisPickupItem.encode(message.sNemesisPickupItem, writer.uint32(202).fork()).ldelim();
             if (message.cChat != null && Object.hasOwnProperty.call(message, "cChat"))
-                $root.NT.ClientChat.encode(message.cChat, writer.uint32(218).fork()).ldelim();
+                $root.NT.ClientChat.encode(message.cChat, writer.uint32(210).fork()).ldelim();
             if (message.sChat != null && Object.hasOwnProperty.call(message, "sChat"))
-                $root.NT.ServerChat.encode(message.sChat, writer.uint32(226).fork()).ldelim();
+                $root.NT.ServerChat.encode(message.sChat, writer.uint32(218).fork()).ldelim();
             if (message.cPlayerDeath != null && Object.hasOwnProperty.call(message, "cPlayerDeath"))
-                $root.NT.ClientPlayerDeath.encode(message.cPlayerDeath, writer.uint32(234).fork()).ldelim();
+                $root.NT.ClientPlayerDeath.encode(message.cPlayerDeath, writer.uint32(226).fork()).ldelim();
             if (message.sPlayerDeath != null && Object.hasOwnProperty.call(message, "sPlayerDeath"))
-                $root.NT.ServerPlayerDeath.encode(message.sPlayerDeath, writer.uint32(242).fork()).ldelim();
+                $root.NT.ServerPlayerDeath.encode(message.sPlayerDeath, writer.uint32(234).fork()).ldelim();
             if (message.cPlayerNewGamePlus != null && Object.hasOwnProperty.call(message, "cPlayerNewGamePlus"))
-                $root.NT.ClientPlayerNewGamePlus.encode(message.cPlayerNewGamePlus, writer.uint32(250).fork()).ldelim();
+                $root.NT.ClientPlayerNewGamePlus.encode(message.cPlayerNewGamePlus, writer.uint32(242).fork()).ldelim();
             if (message.sPlayerNewGamePlus != null && Object.hasOwnProperty.call(message, "sPlayerNewGamePlus"))
-                $root.NT.ServerPlayerNewGamePlus.encode(message.sPlayerNewGamePlus, writer.uint32(258).fork()).ldelim();
+                $root.NT.ServerPlayerNewGamePlus.encode(message.sPlayerNewGamePlus, writer.uint32(250).fork()).ldelim();
             if (message.cPlayerSecretHourglass != null && Object.hasOwnProperty.call(message, "cPlayerSecretHourglass"))
-                $root.NT.ClientPlayerSecretHourglass.encode(message.cPlayerSecretHourglass, writer.uint32(266).fork()).ldelim();
+                $root.NT.ClientPlayerSecretHourglass.encode(message.cPlayerSecretHourglass, writer.uint32(258).fork()).ldelim();
             if (message.SPlayerSecretHourglass != null && Object.hasOwnProperty.call(message, "SPlayerSecretHourglass"))
-                $root.NT.ServerPlayerSecretHourglass.encode(message.SPlayerSecretHourglass, writer.uint32(274).fork()).ldelim();
+                $root.NT.ServerPlayerSecretHourglass.encode(message.SPlayerSecretHourglass, writer.uint32(266).fork()).ldelim();
             if (message.cCustomModEvent != null && Object.hasOwnProperty.call(message, "cCustomModEvent"))
-                $root.NT.ClientCustomModEvent.encode(message.cCustomModEvent, writer.uint32(282).fork()).ldelim();
+                $root.NT.ClientCustomModEvent.encode(message.cCustomModEvent, writer.uint32(274).fork()).ldelim();
             if (message.sCustomModEvent != null && Object.hasOwnProperty.call(message, "sCustomModEvent"))
-                $root.NT.ServerCustomModEvent.encode(message.sCustomModEvent, writer.uint32(290).fork()).ldelim();
+                $root.NT.ServerCustomModEvent.encode(message.sCustomModEvent, writer.uint32(282).fork()).ldelim();
             if (message.cRespawnPenalty != null && Object.hasOwnProperty.call(message, "cRespawnPenalty"))
-                $root.NT.ClientRespawnPenalty.encode(message.cRespawnPenalty, writer.uint32(298).fork()).ldelim();
+                $root.NT.ClientRespawnPenalty.encode(message.cRespawnPenalty, writer.uint32(290).fork()).ldelim();
             if (message.sRespawnPenalty != null && Object.hasOwnProperty.call(message, "sRespawnPenalty"))
-                $root.NT.ServerRespawnPenalty.encode(message.sRespawnPenalty, writer.uint32(306).fork()).ldelim();
+                $root.NT.ServerRespawnPenalty.encode(message.sRespawnPenalty, writer.uint32(298).fork()).ldelim();
             if (message.cAngerySteve != null && Object.hasOwnProperty.call(message, "cAngerySteve"))
-                $root.NT.ClientAngerySteve.encode(message.cAngerySteve, writer.uint32(314).fork()).ldelim();
+                $root.NT.ClientAngerySteve.encode(message.cAngerySteve, writer.uint32(306).fork()).ldelim();
             if (message.sAngerySteve != null && Object.hasOwnProperty.call(message, "sAngerySteve"))
-                $root.NT.ServerAngerySteve.encode(message.sAngerySteve, writer.uint32(322).fork()).ldelim();
+                $root.NT.ServerAngerySteve.encode(message.sAngerySteve, writer.uint32(314).fork()).ldelim();
             if (message.sPlayerPos != null && Object.hasOwnProperty.call(message, "sPlayerPos"))
-                $root.NT.ServerPlayerPos.encode(message.sPlayerPos, writer.uint32(330).fork()).ldelim();
+                $root.NT.ServerPlayerPos.encode(message.sPlayerPos, writer.uint32(322).fork()).ldelim();
             return writer;
         };
 
@@ -295,167 +295,167 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.cPlayerMove = $root.NT.ClientPlayerMove.decode(reader, reader.uint32());
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.sPlayerMove = $root.NT.ServerPlayerMove.decode(reader, reader.uint32());
                         break;
                     }
-                case 3: {
+                case 2: {
                         message.cPlayerUpdate = $root.NT.ClientPlayerUpdate.decode(reader, reader.uint32());
                         break;
                     }
-                case 4: {
+                case 3: {
                         message.sPlayerUpdate = $root.NT.ServerPlayerUpdate.decode(reader, reader.uint32());
                         break;
                     }
-                case 5: {
+                case 4: {
                         message.cPlayerUpdateInventory = $root.NT.ClientPlayerUpdateInventory.decode(reader, reader.uint32());
                         break;
                     }
-                case 6: {
+                case 5: {
                         message.sPlayerUpdateInventory = $root.NT.ServerPlayerUpdateInventory.decode(reader, reader.uint32());
                         break;
                     }
-                case 7: {
+                case 6: {
                         message.cHostItemBank = $root.NT.ClientHostItemBank.decode(reader, reader.uint32());
                         break;
                     }
-                case 8: {
+                case 7: {
                         message.sHostItemBank = $root.NT.ServerHostItemBank.decode(reader, reader.uint32());
                         break;
                     }
-                case 9: {
+                case 8: {
                         message.cHostUserTake = $root.NT.ClientHostUserTake.decode(reader, reader.uint32());
                         break;
                     }
-                case 10: {
+                case 9: {
                         message.sHostUserTake = $root.NT.ServerHostUserTake.decode(reader, reader.uint32());
                         break;
                     }
-                case 11: {
+                case 10: {
                         message.cHostUserTakeGold = $root.NT.ClientHostUserTakeGold.decode(reader, reader.uint32());
                         break;
                     }
-                case 12: {
+                case 11: {
                         message.sHostUserTakeGold = $root.NT.ServerHostUserTakeGold.decode(reader, reader.uint32());
                         break;
                     }
-                case 13: {
+                case 12: {
                         message.cPlayerAddGold = $root.NT.ClientPlayerAddGold.decode(reader, reader.uint32());
                         break;
                     }
-                case 14: {
+                case 13: {
                         message.sPlayerAddGold = $root.NT.ServerPlayerAddGold.decode(reader, reader.uint32());
                         break;
                     }
-                case 15: {
+                case 14: {
                         message.cPlayerTakeGold = $root.NT.ClientPlayerTakeGold.decode(reader, reader.uint32());
                         break;
                     }
-                case 16: {
+                case 15: {
                         message.sPlayerTakeGold = $root.NT.ServerPlayerTakeGold.decode(reader, reader.uint32());
                         break;
                     }
-                case 17: {
+                case 16: {
                         message.cPlayerAddItem = $root.NT.ClientPlayerAddItem.decode(reader, reader.uint32());
                         break;
                     }
-                case 18: {
+                case 17: {
                         message.sPlayerAddItem = $root.NT.ServerPlayerAddItem.decode(reader, reader.uint32());
                         break;
                     }
-                case 19: {
+                case 18: {
                         message.cPlayerTakeItem = $root.NT.ClientPlayerTakeItem.decode(reader, reader.uint32());
                         break;
                     }
-                case 20: {
+                case 19: {
                         message.sPlayerTakeItem = $root.NT.ServerPlayerTakeItem.decode(reader, reader.uint32());
                         break;
                     }
-                case 21: {
+                case 20: {
                         message.cPlayerPickup = $root.NT.ClientPlayerPickup.decode(reader, reader.uint32());
                         break;
                     }
-                case 22: {
+                case 21: {
                         message.sPlayerPickup = $root.NT.ServerPlayerPickup.decode(reader, reader.uint32());
                         break;
                     }
-                case 23: {
+                case 22: {
                         message.cNemesisAbility = $root.NT.ClientNemesisAbility.decode(reader, reader.uint32());
                         break;
                     }
-                case 24: {
+                case 23: {
                         message.sNemesisAbility = $root.NT.ServerNemesisAbility.decode(reader, reader.uint32());
                         break;
                     }
-                case 25: {
+                case 24: {
                         message.cNemesisPickupItem = $root.NT.ClientNemesisPickupItem.decode(reader, reader.uint32());
                         break;
                     }
-                case 26: {
+                case 25: {
                         message.sNemesisPickupItem = $root.NT.ServerNemesisPickupItem.decode(reader, reader.uint32());
                         break;
                     }
-                case 27: {
+                case 26: {
                         message.cChat = $root.NT.ClientChat.decode(reader, reader.uint32());
                         break;
                     }
-                case 28: {
+                case 27: {
                         message.sChat = $root.NT.ServerChat.decode(reader, reader.uint32());
                         break;
                     }
-                case 29: {
+                case 28: {
                         message.cPlayerDeath = $root.NT.ClientPlayerDeath.decode(reader, reader.uint32());
                         break;
                     }
-                case 30: {
+                case 29: {
                         message.sPlayerDeath = $root.NT.ServerPlayerDeath.decode(reader, reader.uint32());
                         break;
                     }
-                case 31: {
+                case 30: {
                         message.cPlayerNewGamePlus = $root.NT.ClientPlayerNewGamePlus.decode(reader, reader.uint32());
                         break;
                     }
-                case 32: {
+                case 31: {
                         message.sPlayerNewGamePlus = $root.NT.ServerPlayerNewGamePlus.decode(reader, reader.uint32());
                         break;
                     }
-                case 33: {
+                case 32: {
                         message.cPlayerSecretHourglass = $root.NT.ClientPlayerSecretHourglass.decode(reader, reader.uint32());
                         break;
                     }
-                case 34: {
+                case 33: {
                         message.SPlayerSecretHourglass = $root.NT.ServerPlayerSecretHourglass.decode(reader, reader.uint32());
                         break;
                     }
-                case 35: {
+                case 34: {
                         message.cCustomModEvent = $root.NT.ClientCustomModEvent.decode(reader, reader.uint32());
                         break;
                     }
-                case 36: {
+                case 35: {
                         message.sCustomModEvent = $root.NT.ServerCustomModEvent.decode(reader, reader.uint32());
                         break;
                     }
-                case 37: {
+                case 36: {
                         message.cRespawnPenalty = $root.NT.ClientRespawnPenalty.decode(reader, reader.uint32());
                         break;
                     }
-                case 38: {
+                case 37: {
                         message.sRespawnPenalty = $root.NT.ServerRespawnPenalty.decode(reader, reader.uint32());
                         break;
                     }
-                case 39: {
+                case 38: {
                         message.cAngerySteve = $root.NT.ClientAngerySteve.decode(reader, reader.uint32());
                         break;
                     }
-                case 40: {
+                case 39: {
                         message.sAngerySteve = $root.NT.ServerAngerySteve.decode(reader, reader.uint32());
                         break;
                     }
-                case 41: {
+                case 40: {
                         message.sPlayerPos = $root.NT.ServerPlayerPos.decode(reader, reader.uint32());
                         break;
                     }
@@ -1580,12 +1580,9 @@ export const NT = $root.NT = (() => {
         ServerPlayerPos.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(10).string(message.userId);
-            if (message.x != null && Object.hasOwnProperty.call(message, "x"))
-                writer.uint32(21).float(message.x);
-            if (message.y != null && Object.hasOwnProperty.call(message, "y"))
-                writer.uint32(29).float(message.y);
+            writer.uint32(2).string(message.userId);
+            writer.uint32(13).float(message.x);
+            writer.uint32(21).float(message.y);
             return writer;
         };
 
@@ -1596,15 +1593,15 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.userId = reader.string();
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.x = reader.float();
                         break;
                     }
-                case 3: {
+                case 2: {
                         message.y = reader.float();
                         break;
                     }
@@ -1613,21 +1610,24 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("userId"))
+                throw $util.ProtocolError("missing required 'userId'", { instance: message });
+            if (!message.hasOwnProperty("x"))
+                throw $util.ProtocolError("missing required 'x'", { instance: message });
+            if (!message.hasOwnProperty("y"))
+                throw $util.ProtocolError("missing required 'y'", { instance: message });
             return message;
         };
 
         ServerPlayerPos.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.userId != null && message.hasOwnProperty("userId"))
-                if (!$util.isString(message.userId))
-                    return "userId: string expected";
-            if (message.x != null && message.hasOwnProperty("x"))
-                if (typeof message.x !== "number")
-                    return "x: number expected";
-            if (message.y != null && message.hasOwnProperty("y"))
-                if (typeof message.y !== "number")
-                    return "y: number expected";
+            if (!$util.isString(message.userId))
+                return "userId: string expected";
+            if (typeof message.x !== "number")
+                return "x: number expected";
+            if (typeof message.y !== "number")
+                return "y: number expected";
             return null;
         };
 
@@ -1802,11 +1802,10 @@ export const NT = $root.NT = (() => {
         ServerPlayerMove.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(10).string(message.userId);
+            writer.uint32(2).string(message.userId);
             if (message.frames != null && message.frames.length)
                 for (let i = 0; i < message.frames.length; ++i)
-                    $root.NT.PlayerFrame.encode(message.frames[i], writer.uint32(18).fork()).ldelim();
+                    $root.NT.PlayerFrame.encode(message.frames[i], writer.uint32(10).fork()).ldelim();
             return writer;
         };
 
@@ -1817,11 +1816,11 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.userId = reader.string();
                         break;
                     }
-                case 2: {
+                case 1: {
                         if (!(message.frames && message.frames.length))
                             message.frames = [];
                         message.frames.push($root.NT.PlayerFrame.decode(reader, reader.uint32()));
@@ -1832,15 +1831,16 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("userId"))
+                throw $util.ProtocolError("missing required 'userId'", { instance: message });
             return message;
         };
 
         ServerPlayerMove.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.userId != null && message.hasOwnProperty("userId"))
-                if (!$util.isString(message.userId))
-                    return "userId: string expected";
+            if (!$util.isString(message.userId))
+                return "userId: string expected";
             if (message.frames != null && message.hasOwnProperty("frames")) {
                 if (!Array.isArray(message.frames))
                     return "frames: array expected";
@@ -2116,16 +2116,15 @@ export const NT = $root.NT = (() => {
         ServerPlayerUpdate.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(10).string(message.userId);
+            writer.uint32(2).string(message.userId);
             if (message.curHp != null && Object.hasOwnProperty.call(message, "curHp"))
-                writer.uint32(21).float(message.curHp);
+                writer.uint32(13).float(message.curHp);
             if (message.maxHp != null && Object.hasOwnProperty.call(message, "maxHp"))
-                writer.uint32(29).float(message.maxHp);
+                writer.uint32(21).float(message.maxHp);
             if (message.location != null && Object.hasOwnProperty.call(message, "location"))
-                writer.uint32(34).string(message.location);
+                writer.uint32(26).string(message.location);
             if (message.sampo != null && Object.hasOwnProperty.call(message, "sampo"))
-                writer.uint32(40).bool(message.sampo);
+                writer.uint32(32).bool(message.sampo);
             return writer;
         };
 
@@ -2136,23 +2135,23 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.userId = reader.string();
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.curHp = reader.float();
                         break;
                     }
-                case 3: {
+                case 2: {
                         message.maxHp = reader.float();
                         break;
                     }
-                case 4: {
+                case 3: {
                         message.location = reader.string();
                         break;
                     }
-                case 5: {
+                case 4: {
                         message.sampo = reader.bool();
                         break;
                     }
@@ -2161,6 +2160,8 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("userId"))
+                throw $util.ProtocolError("missing required 'userId'", { instance: message });
             return message;
         };
 
@@ -2168,9 +2169,8 @@ export const NT = $root.NT = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             let properties = {};
-            if (message.userId != null && message.hasOwnProperty("userId"))
-                if (!$util.isString(message.userId))
-                    return "userId: string expected";
+            if (!$util.isString(message.userId))
+                return "userId: string expected";
             if (message.curHp != null && message.hasOwnProperty("curHp")) {
                 properties._curHp = 1;
                 if (typeof message.curHp !== "number")
@@ -2281,13 +2281,13 @@ export const NT = $root.NT = (() => {
                 writer = $Writer.create();
             if (message.wands != null && message.wands.length)
                 for (let i = 0; i < message.wands.length; ++i)
-                    $root.NT.ClientPlayerUpdateInventory.InventoryWand.encode(message.wands[i], writer.uint32(10).fork()).ldelim();
+                    $root.NT.ClientPlayerUpdateInventory.InventoryWand.encode(message.wands[i], writer.uint32(2).fork()).ldelim();
             if (message.items != null && message.items.length)
                 for (let i = 0; i < message.items.length; ++i)
-                    $root.NT.ClientPlayerUpdateInventory.InventoryItem.encode(message.items[i], writer.uint32(18).fork()).ldelim();
+                    $root.NT.ClientPlayerUpdateInventory.InventoryItem.encode(message.items[i], writer.uint32(10).fork()).ldelim();
             if (message.spells != null && message.spells.length)
                 for (let i = 0; i < message.spells.length; ++i)
-                    $root.NT.ClientPlayerUpdateInventory.InventorySpell.encode(message.spells[i], writer.uint32(26).fork()).ldelim();
+                    $root.NT.ClientPlayerUpdateInventory.InventorySpell.encode(message.spells[i], writer.uint32(18).fork()).ldelim();
             return writer;
         };
 
@@ -2298,19 +2298,19 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         if (!(message.wands && message.wands.length))
                             message.wands = [];
                         message.wands.push($root.NT.ClientPlayerUpdateInventory.InventoryWand.decode(reader, reader.uint32()));
                         break;
                     }
-                case 2: {
+                case 1: {
                         if (!(message.items && message.items.length))
                             message.items = [];
                         message.items.push($root.NT.ClientPlayerUpdateInventory.InventoryItem.decode(reader, reader.uint32()));
                         break;
                     }
-                case 3: {
+                case 2: {
                         if (!(message.spells && message.spells.length))
                             message.spells = [];
                         message.spells.push($root.NT.ClientPlayerUpdateInventory.InventorySpell.decode(reader, reader.uint32()));
@@ -2451,10 +2451,8 @@ export const NT = $root.NT = (() => {
             InventoryWand.encode = function encode(message, writer) {
                 if (!writer)
                     writer = $Writer.create();
-                if (message.index != null && Object.hasOwnProperty.call(message, "index"))
-                    writer.uint32(8).uint32(message.index);
-                if (message.wand != null && Object.hasOwnProperty.call(message, "wand"))
-                    $root.NT.Wand.encode(message.wand, writer.uint32(18).fork()).ldelim();
+                writer.uint32(0).uint32(message.index);
+                $root.NT.Wand.encode(message.wand, writer.uint32(10).fork()).ldelim();
                 return writer;
             };
 
@@ -2465,11 +2463,11 @@ export const NT = $root.NT = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                    case 0: {
                             message.index = reader.uint32();
                             break;
                         }
-                    case 2: {
+                    case 1: {
                             message.wand = $root.NT.Wand.decode(reader, reader.uint32());
                             break;
                         }
@@ -2478,16 +2476,19 @@ export const NT = $root.NT = (() => {
                         break;
                     }
                 }
+                if (!message.hasOwnProperty("index"))
+                    throw $util.ProtocolError("missing required 'index'", { instance: message });
+                if (!message.hasOwnProperty("wand"))
+                    throw $util.ProtocolError("missing required 'wand'", { instance: message });
                 return message;
             };
 
             InventoryWand.verify = function verify(message) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
-                if (message.index != null && message.hasOwnProperty("index"))
-                    if (!$util.isInteger(message.index))
-                        return "index: integer expected";
-                if (message.wand != null && message.hasOwnProperty("wand")) {
+                if (!$util.isInteger(message.index))
+                    return "index: integer expected";
+                {
                     let error = $root.NT.Wand.verify(message.wand);
                     if (error)
                         return "wand." + error;
@@ -2557,10 +2558,8 @@ export const NT = $root.NT = (() => {
             InventoryItem.encode = function encode(message, writer) {
                 if (!writer)
                     writer = $Writer.create();
-                if (message.index != null && Object.hasOwnProperty.call(message, "index"))
-                    writer.uint32(24).uint32(message.index);
-                if (message.item != null && Object.hasOwnProperty.call(message, "item"))
-                    $root.NT.Item.encode(message.item, writer.uint32(34).fork()).ldelim();
+                writer.uint32(0).uint32(message.index);
+                $root.NT.Item.encode(message.item, writer.uint32(10).fork()).ldelim();
                 return writer;
             };
 
@@ -2571,11 +2570,11 @@ export const NT = $root.NT = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 3: {
+                    case 0: {
                             message.index = reader.uint32();
                             break;
                         }
-                    case 4: {
+                    case 1: {
                             message.item = $root.NT.Item.decode(reader, reader.uint32());
                             break;
                         }
@@ -2584,16 +2583,19 @@ export const NT = $root.NT = (() => {
                         break;
                     }
                 }
+                if (!message.hasOwnProperty("index"))
+                    throw $util.ProtocolError("missing required 'index'", { instance: message });
+                if (!message.hasOwnProperty("item"))
+                    throw $util.ProtocolError("missing required 'item'", { instance: message });
                 return message;
             };
 
             InventoryItem.verify = function verify(message) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
-                if (message.index != null && message.hasOwnProperty("index"))
-                    if (!$util.isInteger(message.index))
-                        return "index: integer expected";
-                if (message.item != null && message.hasOwnProperty("item")) {
+                if (!$util.isInteger(message.index))
+                    return "index: integer expected";
+                {
                     let error = $root.NT.Item.verify(message.item);
                     if (error)
                         return "item." + error;
@@ -2663,10 +2665,8 @@ export const NT = $root.NT = (() => {
             InventorySpell.encode = function encode(message, writer) {
                 if (!writer)
                     writer = $Writer.create();
-                if (message.index != null && Object.hasOwnProperty.call(message, "index"))
-                    writer.uint32(8).uint32(message.index);
-                if (message.spell != null && Object.hasOwnProperty.call(message, "spell"))
-                    $root.NT.Spell.encode(message.spell, writer.uint32(18).fork()).ldelim();
+                writer.uint32(0).uint32(message.index);
+                $root.NT.Spell.encode(message.spell, writer.uint32(10).fork()).ldelim();
                 return writer;
             };
 
@@ -2677,11 +2677,11 @@ export const NT = $root.NT = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                    case 0: {
                             message.index = reader.uint32();
                             break;
                         }
-                    case 2: {
+                    case 1: {
                             message.spell = $root.NT.Spell.decode(reader, reader.uint32());
                             break;
                         }
@@ -2690,16 +2690,19 @@ export const NT = $root.NT = (() => {
                         break;
                     }
                 }
+                if (!message.hasOwnProperty("index"))
+                    throw $util.ProtocolError("missing required 'index'", { instance: message });
+                if (!message.hasOwnProperty("spell"))
+                    throw $util.ProtocolError("missing required 'spell'", { instance: message });
                 return message;
             };
 
             InventorySpell.verify = function verify(message) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
-                if (message.index != null && message.hasOwnProperty("index"))
-                    if (!$util.isInteger(message.index))
-                        return "index: integer expected";
-                if (message.spell != null && message.hasOwnProperty("spell")) {
+                if (!$util.isInteger(message.index))
+                    return "index: integer expected";
+                {
                     let error = $root.NT.Spell.verify(message.spell);
                     if (error)
                         return "spell." + error;
@@ -2777,17 +2780,16 @@ export const NT = $root.NT = (() => {
         ServerPlayerUpdateInventory.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(10).string(message.userId);
+            writer.uint32(2).string(message.userId);
             if (message.wands != null && message.wands.length)
                 for (let i = 0; i < message.wands.length; ++i)
-                    $root.NT.ServerPlayerUpdateInventory.InventoryWand.encode(message.wands[i], writer.uint32(18).fork()).ldelim();
+                    $root.NT.ServerPlayerUpdateInventory.InventoryWand.encode(message.wands[i], writer.uint32(10).fork()).ldelim();
             if (message.items != null && message.items.length)
                 for (let i = 0; i < message.items.length; ++i)
-                    $root.NT.ServerPlayerUpdateInventory.InventoryItem.encode(message.items[i], writer.uint32(26).fork()).ldelim();
+                    $root.NT.ServerPlayerUpdateInventory.InventoryItem.encode(message.items[i], writer.uint32(18).fork()).ldelim();
             if (message.spells != null && message.spells.length)
                 for (let i = 0; i < message.spells.length; ++i)
-                    $root.NT.ServerPlayerUpdateInventory.InventorySpell.encode(message.spells[i], writer.uint32(34).fork()).ldelim();
+                    $root.NT.ServerPlayerUpdateInventory.InventorySpell.encode(message.spells[i], writer.uint32(26).fork()).ldelim();
             return writer;
         };
 
@@ -2798,23 +2800,23 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.userId = reader.string();
                         break;
                     }
-                case 2: {
+                case 1: {
                         if (!(message.wands && message.wands.length))
                             message.wands = [];
                         message.wands.push($root.NT.ServerPlayerUpdateInventory.InventoryWand.decode(reader, reader.uint32()));
                         break;
                     }
-                case 3: {
+                case 2: {
                         if (!(message.items && message.items.length))
                             message.items = [];
                         message.items.push($root.NT.ServerPlayerUpdateInventory.InventoryItem.decode(reader, reader.uint32()));
                         break;
                     }
-                case 4: {
+                case 3: {
                         if (!(message.spells && message.spells.length))
                             message.spells = [];
                         message.spells.push($root.NT.ServerPlayerUpdateInventory.InventorySpell.decode(reader, reader.uint32()));
@@ -2825,15 +2827,16 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("userId"))
+                throw $util.ProtocolError("missing required 'userId'", { instance: message });
             return message;
         };
 
         ServerPlayerUpdateInventory.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.userId != null && message.hasOwnProperty("userId"))
-                if (!$util.isString(message.userId))
-                    return "userId: string expected";
+            if (!$util.isString(message.userId))
+                return "userId: string expected";
             if (message.wands != null && message.hasOwnProperty("wands")) {
                 if (!Array.isArray(message.wands))
                     return "wands: array expected";
@@ -2964,10 +2967,8 @@ export const NT = $root.NT = (() => {
             InventoryWand.encode = function encode(message, writer) {
                 if (!writer)
                     writer = $Writer.create();
-                if (message.index != null && Object.hasOwnProperty.call(message, "index"))
-                    writer.uint32(8).uint32(message.index);
-                if (message.wand != null && Object.hasOwnProperty.call(message, "wand"))
-                    $root.NT.Wand.encode(message.wand, writer.uint32(18).fork()).ldelim();
+                writer.uint32(0).uint32(message.index);
+                $root.NT.Wand.encode(message.wand, writer.uint32(10).fork()).ldelim();
                 return writer;
             };
 
@@ -2978,11 +2979,11 @@ export const NT = $root.NT = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                    case 0: {
                             message.index = reader.uint32();
                             break;
                         }
-                    case 2: {
+                    case 1: {
                             message.wand = $root.NT.Wand.decode(reader, reader.uint32());
                             break;
                         }
@@ -2991,16 +2992,19 @@ export const NT = $root.NT = (() => {
                         break;
                     }
                 }
+                if (!message.hasOwnProperty("index"))
+                    throw $util.ProtocolError("missing required 'index'", { instance: message });
+                if (!message.hasOwnProperty("wand"))
+                    throw $util.ProtocolError("missing required 'wand'", { instance: message });
                 return message;
             };
 
             InventoryWand.verify = function verify(message) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
-                if (message.index != null && message.hasOwnProperty("index"))
-                    if (!$util.isInteger(message.index))
-                        return "index: integer expected";
-                if (message.wand != null && message.hasOwnProperty("wand")) {
+                if (!$util.isInteger(message.index))
+                    return "index: integer expected";
+                {
                     let error = $root.NT.Wand.verify(message.wand);
                     if (error)
                         return "wand." + error;
@@ -3070,10 +3074,8 @@ export const NT = $root.NT = (() => {
             InventoryItem.encode = function encode(message, writer) {
                 if (!writer)
                     writer = $Writer.create();
-                if (message.index != null && Object.hasOwnProperty.call(message, "index"))
-                    writer.uint32(8).uint32(message.index);
-                if (message.item != null && Object.hasOwnProperty.call(message, "item"))
-                    $root.NT.Item.encode(message.item, writer.uint32(18).fork()).ldelim();
+                writer.uint32(0).uint32(message.index);
+                $root.NT.Item.encode(message.item, writer.uint32(10).fork()).ldelim();
                 return writer;
             };
 
@@ -3084,11 +3086,11 @@ export const NT = $root.NT = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                    case 0: {
                             message.index = reader.uint32();
                             break;
                         }
-                    case 2: {
+                    case 1: {
                             message.item = $root.NT.Item.decode(reader, reader.uint32());
                             break;
                         }
@@ -3097,16 +3099,19 @@ export const NT = $root.NT = (() => {
                         break;
                     }
                 }
+                if (!message.hasOwnProperty("index"))
+                    throw $util.ProtocolError("missing required 'index'", { instance: message });
+                if (!message.hasOwnProperty("item"))
+                    throw $util.ProtocolError("missing required 'item'", { instance: message });
                 return message;
             };
 
             InventoryItem.verify = function verify(message) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
-                if (message.index != null && message.hasOwnProperty("index"))
-                    if (!$util.isInteger(message.index))
-                        return "index: integer expected";
-                if (message.item != null && message.hasOwnProperty("item")) {
+                if (!$util.isInteger(message.index))
+                    return "index: integer expected";
+                {
                     let error = $root.NT.Item.verify(message.item);
                     if (error)
                         return "item." + error;
@@ -3176,10 +3181,8 @@ export const NT = $root.NT = (() => {
             InventorySpell.encode = function encode(message, writer) {
                 if (!writer)
                     writer = $Writer.create();
-                if (message.index != null && Object.hasOwnProperty.call(message, "index"))
-                    writer.uint32(8).uint32(message.index);
-                if (message.spell != null && Object.hasOwnProperty.call(message, "spell"))
-                    $root.NT.Spell.encode(message.spell, writer.uint32(18).fork()).ldelim();
+                writer.uint32(0).uint32(message.index);
+                $root.NT.Spell.encode(message.spell, writer.uint32(10).fork()).ldelim();
                 return writer;
             };
 
@@ -3190,11 +3193,11 @@ export const NT = $root.NT = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                    case 0: {
                             message.index = reader.uint32();
                             break;
                         }
-                    case 2: {
+                    case 1: {
                             message.spell = $root.NT.Spell.decode(reader, reader.uint32());
                             break;
                         }
@@ -3203,16 +3206,19 @@ export const NT = $root.NT = (() => {
                         break;
                     }
                 }
+                if (!message.hasOwnProperty("index"))
+                    throw $util.ProtocolError("missing required 'index'", { instance: message });
+                if (!message.hasOwnProperty("spell"))
+                    throw $util.ProtocolError("missing required 'spell'", { instance: message });
                 return message;
             };
 
             InventorySpell.verify = function verify(message) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
-                if (message.index != null && message.hasOwnProperty("index"))
-                    if (!$util.isInteger(message.index))
-                        return "index: integer expected";
-                if (message.spell != null && message.hasOwnProperty("spell")) {
+                if (!$util.isInteger(message.index))
+                    return "index: integer expected";
+                {
                     let error = $root.NT.Spell.verify(message.spell);
                     if (error)
                         return "spell." + error;
@@ -3748,12 +3754,9 @@ export const NT = $root.NT = (() => {
         ClientHostUserTake.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(10).string(message.userId);
-            if (message.id != null && Object.hasOwnProperty.call(message, "id"))
-                writer.uint32(18).string(message.id);
-            if (message.success != null && Object.hasOwnProperty.call(message, "success"))
-                writer.uint32(24).bool(message.success);
+            writer.uint32(2).string(message.userId);
+            writer.uint32(10).string(message.id);
+            writer.uint32(16).bool(message.success);
             return writer;
         };
 
@@ -3764,15 +3767,15 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.userId = reader.string();
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.id = reader.string();
                         break;
                     }
-                case 3: {
+                case 2: {
                         message.success = reader.bool();
                         break;
                     }
@@ -3781,21 +3784,24 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("userId"))
+                throw $util.ProtocolError("missing required 'userId'", { instance: message });
+            if (!message.hasOwnProperty("id"))
+                throw $util.ProtocolError("missing required 'id'", { instance: message });
+            if (!message.hasOwnProperty("success"))
+                throw $util.ProtocolError("missing required 'success'", { instance: message });
             return message;
         };
 
         ClientHostUserTake.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.userId != null && message.hasOwnProperty("userId"))
-                if (!$util.isString(message.userId))
-                    return "userId: string expected";
-            if (message.id != null && message.hasOwnProperty("id"))
-                if (!$util.isString(message.id))
-                    return "id: string expected";
-            if (message.success != null && message.hasOwnProperty("success"))
-                if (typeof message.success !== "boolean")
-                    return "success: boolean expected";
+            if (!$util.isString(message.userId))
+                return "userId: string expected";
+            if (!$util.isString(message.id))
+                return "id: string expected";
+            if (typeof message.success !== "boolean")
+                return "success: boolean expected";
             return null;
         };
 
@@ -3864,12 +3870,9 @@ export const NT = $root.NT = (() => {
         ServerHostUserTake.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(10).string(message.userId);
-            if (message.id != null && Object.hasOwnProperty.call(message, "id"))
-                writer.uint32(18).string(message.id);
-            if (message.success != null && Object.hasOwnProperty.call(message, "success"))
-                writer.uint32(24).bool(message.success);
+            writer.uint32(2).string(message.userId);
+            writer.uint32(10).string(message.id);
+            writer.uint32(16).bool(message.success);
             return writer;
         };
 
@@ -3880,15 +3883,15 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.userId = reader.string();
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.id = reader.string();
                         break;
                     }
-                case 3: {
+                case 2: {
                         message.success = reader.bool();
                         break;
                     }
@@ -3897,21 +3900,24 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("userId"))
+                throw $util.ProtocolError("missing required 'userId'", { instance: message });
+            if (!message.hasOwnProperty("id"))
+                throw $util.ProtocolError("missing required 'id'", { instance: message });
+            if (!message.hasOwnProperty("success"))
+                throw $util.ProtocolError("missing required 'success'", { instance: message });
             return message;
         };
 
         ServerHostUserTake.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.userId != null && message.hasOwnProperty("userId"))
-                if (!$util.isString(message.userId))
-                    return "userId: string expected";
-            if (message.id != null && message.hasOwnProperty("id"))
-                if (!$util.isString(message.id))
-                    return "id: string expected";
-            if (message.success != null && message.hasOwnProperty("success"))
-                if (typeof message.success !== "boolean")
-                    return "success: boolean expected";
+            if (!$util.isString(message.userId))
+                return "userId: string expected";
+            if (!$util.isString(message.id))
+                return "id: string expected";
+            if (typeof message.success !== "boolean")
+                return "success: boolean expected";
             return null;
         };
 
@@ -3980,12 +3986,9 @@ export const NT = $root.NT = (() => {
         ClientHostUserTakeGold.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(10).string(message.userId);
-            if (message.amount != null && Object.hasOwnProperty.call(message, "amount"))
-                writer.uint32(16).uint32(message.amount);
-            if (message.success != null && Object.hasOwnProperty.call(message, "success"))
-                writer.uint32(24).bool(message.success);
+            writer.uint32(2).string(message.userId);
+            writer.uint32(8).uint32(message.amount);
+            writer.uint32(16).bool(message.success);
             return writer;
         };
 
@@ -3996,15 +3999,15 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.userId = reader.string();
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.amount = reader.uint32();
                         break;
                     }
-                case 3: {
+                case 2: {
                         message.success = reader.bool();
                         break;
                     }
@@ -4013,21 +4016,24 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("userId"))
+                throw $util.ProtocolError("missing required 'userId'", { instance: message });
+            if (!message.hasOwnProperty("amount"))
+                throw $util.ProtocolError("missing required 'amount'", { instance: message });
+            if (!message.hasOwnProperty("success"))
+                throw $util.ProtocolError("missing required 'success'", { instance: message });
             return message;
         };
 
         ClientHostUserTakeGold.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.userId != null && message.hasOwnProperty("userId"))
-                if (!$util.isString(message.userId))
-                    return "userId: string expected";
-            if (message.amount != null && message.hasOwnProperty("amount"))
-                if (!$util.isInteger(message.amount))
-                    return "amount: integer expected";
-            if (message.success != null && message.hasOwnProperty("success"))
-                if (typeof message.success !== "boolean")
-                    return "success: boolean expected";
+            if (!$util.isString(message.userId))
+                return "userId: string expected";
+            if (!$util.isInteger(message.amount))
+                return "amount: integer expected";
+            if (typeof message.success !== "boolean")
+                return "success: boolean expected";
             return null;
         };
 
@@ -4096,12 +4102,9 @@ export const NT = $root.NT = (() => {
         ServerHostUserTakeGold.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(10).string(message.userId);
-            if (message.amount != null && Object.hasOwnProperty.call(message, "amount"))
-                writer.uint32(16).uint32(message.amount);
-            if (message.success != null && Object.hasOwnProperty.call(message, "success"))
-                writer.uint32(24).bool(message.success);
+            writer.uint32(2).string(message.userId);
+            writer.uint32(8).uint32(message.amount);
+            writer.uint32(16).bool(message.success);
             return writer;
         };
 
@@ -4112,15 +4115,15 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.userId = reader.string();
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.amount = reader.uint32();
                         break;
                     }
-                case 3: {
+                case 2: {
                         message.success = reader.bool();
                         break;
                     }
@@ -4129,21 +4132,24 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("userId"))
+                throw $util.ProtocolError("missing required 'userId'", { instance: message });
+            if (!message.hasOwnProperty("amount"))
+                throw $util.ProtocolError("missing required 'amount'", { instance: message });
+            if (!message.hasOwnProperty("success"))
+                throw $util.ProtocolError("missing required 'success'", { instance: message });
             return message;
         };
 
         ServerHostUserTakeGold.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.userId != null && message.hasOwnProperty("userId"))
-                if (!$util.isString(message.userId))
-                    return "userId: string expected";
-            if (message.amount != null && message.hasOwnProperty("amount"))
-                if (!$util.isInteger(message.amount))
-                    return "amount: integer expected";
-            if (message.success != null && message.hasOwnProperty("success"))
-                if (typeof message.success !== "boolean")
-                    return "success: boolean expected";
+            if (!$util.isString(message.userId))
+                return "userId: string expected";
+            if (!$util.isInteger(message.amount))
+                return "amount: integer expected";
+            if (typeof message.success !== "boolean")
+                return "success: boolean expected";
             return null;
         };
 
@@ -4210,8 +4216,7 @@ export const NT = $root.NT = (() => {
         ClientPlayerAddGold.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.amount != null && Object.hasOwnProperty.call(message, "amount"))
-                writer.uint32(8).uint32(message.amount);
+            writer.uint32(0).uint32(message.amount);
             return writer;
         };
 
@@ -4222,7 +4227,7 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.amount = reader.uint32();
                         break;
                     }
@@ -4231,15 +4236,16 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("amount"))
+                throw $util.ProtocolError("missing required 'amount'", { instance: message });
             return message;
         };
 
         ClientPlayerAddGold.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.amount != null && message.hasOwnProperty("amount"))
-                if (!$util.isInteger(message.amount))
-                    return "amount: integer expected";
+            if (!$util.isInteger(message.amount))
+                return "amount: integer expected";
             return null;
         };
 
@@ -4296,10 +4302,8 @@ export const NT = $root.NT = (() => {
         ServerPlayerAddGold.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(10).string(message.userId);
-            if (message.amount != null && Object.hasOwnProperty.call(message, "amount"))
-                writer.uint32(16).uint32(message.amount);
+            writer.uint32(2).string(message.userId);
+            writer.uint32(8).uint32(message.amount);
             return writer;
         };
 
@@ -4310,11 +4314,11 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.userId = reader.string();
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.amount = reader.uint32();
                         break;
                     }
@@ -4323,18 +4327,20 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("userId"))
+                throw $util.ProtocolError("missing required 'userId'", { instance: message });
+            if (!message.hasOwnProperty("amount"))
+                throw $util.ProtocolError("missing required 'amount'", { instance: message });
             return message;
         };
 
         ServerPlayerAddGold.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.userId != null && message.hasOwnProperty("userId"))
-                if (!$util.isString(message.userId))
-                    return "userId: string expected";
-            if (message.amount != null && message.hasOwnProperty("amount"))
-                if (!$util.isInteger(message.amount))
-                    return "amount: integer expected";
+            if (!$util.isString(message.userId))
+                return "userId: string expected";
+            if (!$util.isInteger(message.amount))
+                return "amount: integer expected";
             return null;
         };
 
@@ -4396,8 +4402,7 @@ export const NT = $root.NT = (() => {
         ClientPlayerTakeGold.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.amount != null && Object.hasOwnProperty.call(message, "amount"))
-                writer.uint32(8).uint32(message.amount);
+            writer.uint32(0).uint32(message.amount);
             return writer;
         };
 
@@ -4408,7 +4413,7 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.amount = reader.uint32();
                         break;
                     }
@@ -4417,15 +4422,16 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("amount"))
+                throw $util.ProtocolError("missing required 'amount'", { instance: message });
             return message;
         };
 
         ClientPlayerTakeGold.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.amount != null && message.hasOwnProperty("amount"))
-                if (!$util.isInteger(message.amount))
-                    return "amount: integer expected";
+            if (!$util.isInteger(message.amount))
+                return "amount: integer expected";
             return null;
         };
 
@@ -4482,10 +4488,8 @@ export const NT = $root.NT = (() => {
         ServerPlayerTakeGold.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(10).string(message.userId);
-            if (message.amount != null && Object.hasOwnProperty.call(message, "amount"))
-                writer.uint32(16).uint32(message.amount);
+            writer.uint32(2).string(message.userId);
+            writer.uint32(8).uint32(message.amount);
             return writer;
         };
 
@@ -4496,11 +4500,11 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.userId = reader.string();
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.amount = reader.uint32();
                         break;
                     }
@@ -4509,18 +4513,20 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("userId"))
+                throw $util.ProtocolError("missing required 'userId'", { instance: message });
+            if (!message.hasOwnProperty("amount"))
+                throw $util.ProtocolError("missing required 'amount'", { instance: message });
             return message;
         };
 
         ServerPlayerTakeGold.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.userId != null && message.hasOwnProperty("userId"))
-                if (!$util.isString(message.userId))
-                    return "userId: string expected";
-            if (message.amount != null && message.hasOwnProperty("amount"))
-                if (!$util.isInteger(message.amount))
-                    return "amount: integer expected";
+            if (!$util.isString(message.userId))
+                return "userId: string expected";
+            if (!$util.isInteger(message.amount))
+                return "amount: integer expected";
             return null;
         };
 
@@ -4593,13 +4599,13 @@ export const NT = $root.NT = (() => {
             if (!writer)
                 writer = $Writer.create();
             if (message.spells != null && Object.hasOwnProperty.call(message, "spells"))
-                $root.NT.ClientPlayerAddItem.Spells.encode(message.spells, writer.uint32(10).fork()).ldelim();
+                $root.NT.ClientPlayerAddItem.Spells.encode(message.spells, writer.uint32(2).fork()).ldelim();
             if (message.wands != null && Object.hasOwnProperty.call(message, "wands"))
-                $root.NT.ClientPlayerAddItem.Wands.encode(message.wands, writer.uint32(18).fork()).ldelim();
+                $root.NT.ClientPlayerAddItem.Wands.encode(message.wands, writer.uint32(10).fork()).ldelim();
             if (message.flasks != null && Object.hasOwnProperty.call(message, "flasks"))
-                $root.NT.ClientPlayerAddItem.Items.encode(message.flasks, writer.uint32(26).fork()).ldelim();
+                $root.NT.ClientPlayerAddItem.Items.encode(message.flasks, writer.uint32(18).fork()).ldelim();
             if (message.objects != null && Object.hasOwnProperty.call(message, "objects"))
-                $root.NT.ClientPlayerAddItem.Entities.encode(message.objects, writer.uint32(34).fork()).ldelim();
+                $root.NT.ClientPlayerAddItem.Entities.encode(message.objects, writer.uint32(26).fork()).ldelim();
             return writer;
         };
 
@@ -4610,19 +4616,19 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.spells = $root.NT.ClientPlayerAddItem.Spells.decode(reader, reader.uint32());
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.wands = $root.NT.ClientPlayerAddItem.Wands.decode(reader, reader.uint32());
                         break;
                     }
-                case 3: {
+                case 2: {
                         message.flasks = $root.NT.ClientPlayerAddItem.Items.decode(reader, reader.uint32());
                         break;
                     }
-                case 4: {
+                case 3: {
                         message.objects = $root.NT.ClientPlayerAddItem.Entities.decode(reader, reader.uint32());
                         break;
                     }
@@ -4765,7 +4771,7 @@ export const NT = $root.NT = (() => {
                     writer = $Writer.create();
                 if (message.list != null && message.list.length)
                     for (let i = 0; i < message.list.length; ++i)
-                        $root.NT.Spell.encode(message.list[i], writer.uint32(10).fork()).ldelim();
+                        $root.NT.Spell.encode(message.list[i], writer.uint32(2).fork()).ldelim();
                 return writer;
             };
 
@@ -4776,7 +4782,7 @@ export const NT = $root.NT = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                    case 0: {
                             if (!(message.list && message.list.length))
                                 message.list = [];
                             message.list.push($root.NT.Spell.decode(reader, reader.uint32()));
@@ -4871,7 +4877,7 @@ export const NT = $root.NT = (() => {
                     writer = $Writer.create();
                 if (message.list != null && message.list.length)
                     for (let i = 0; i < message.list.length; ++i)
-                        $root.NT.Wand.encode(message.list[i], writer.uint32(10).fork()).ldelim();
+                        $root.NT.Wand.encode(message.list[i], writer.uint32(2).fork()).ldelim();
                 return writer;
             };
 
@@ -4882,7 +4888,7 @@ export const NT = $root.NT = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                    case 0: {
                             if (!(message.list && message.list.length))
                                 message.list = [];
                             message.list.push($root.NT.Wand.decode(reader, reader.uint32()));
@@ -4977,7 +4983,7 @@ export const NT = $root.NT = (() => {
                     writer = $Writer.create();
                 if (message.list != null && message.list.length)
                     for (let i = 0; i < message.list.length; ++i)
-                        $root.NT.Item.encode(message.list[i], writer.uint32(10).fork()).ldelim();
+                        $root.NT.Item.encode(message.list[i], writer.uint32(2).fork()).ldelim();
                 return writer;
             };
 
@@ -4988,7 +4994,7 @@ export const NT = $root.NT = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                    case 0: {
                             if (!(message.list && message.list.length))
                                 message.list = [];
                             message.list.push($root.NT.Item.decode(reader, reader.uint32()));
@@ -5083,7 +5089,7 @@ export const NT = $root.NT = (() => {
                     writer = $Writer.create();
                 if (message.list != null && message.list.length)
                     for (let i = 0; i < message.list.length; ++i)
-                        $root.NT.EntityItem.encode(message.list[i], writer.uint32(10).fork()).ldelim();
+                        $root.NT.EntityItem.encode(message.list[i], writer.uint32(2).fork()).ldelim();
                 return writer;
             };
 
@@ -5094,7 +5100,7 @@ export const NT = $root.NT = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                    case 0: {
                             if (!(message.list && message.list.length))
                                 message.list = [];
                             message.list.push($root.NT.EntityItem.decode(reader, reader.uint32()));
@@ -5200,16 +5206,15 @@ export const NT = $root.NT = (() => {
         ServerPlayerAddItem.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(10).string(message.userId);
+            writer.uint32(2).string(message.userId);
             if (message.spells != null && Object.hasOwnProperty.call(message, "spells"))
-                $root.NT.ServerPlayerAddItem.Spells.encode(message.spells, writer.uint32(18).fork()).ldelim();
+                $root.NT.ServerPlayerAddItem.Spells.encode(message.spells, writer.uint32(10).fork()).ldelim();
             if (message.wands != null && Object.hasOwnProperty.call(message, "wands"))
-                $root.NT.ServerPlayerAddItem.Wands.encode(message.wands, writer.uint32(26).fork()).ldelim();
+                $root.NT.ServerPlayerAddItem.Wands.encode(message.wands, writer.uint32(18).fork()).ldelim();
             if (message.flasks != null && Object.hasOwnProperty.call(message, "flasks"))
-                $root.NT.ServerPlayerAddItem.Items.encode(message.flasks, writer.uint32(34).fork()).ldelim();
+                $root.NT.ServerPlayerAddItem.Items.encode(message.flasks, writer.uint32(26).fork()).ldelim();
             if (message.objects != null && Object.hasOwnProperty.call(message, "objects"))
-                $root.NT.ServerPlayerAddItem.Entities.encode(message.objects, writer.uint32(42).fork()).ldelim();
+                $root.NT.ServerPlayerAddItem.Entities.encode(message.objects, writer.uint32(34).fork()).ldelim();
             return writer;
         };
 
@@ -5220,23 +5225,23 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.userId = reader.string();
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.spells = $root.NT.ServerPlayerAddItem.Spells.decode(reader, reader.uint32());
                         break;
                     }
-                case 3: {
+                case 2: {
                         message.wands = $root.NT.ServerPlayerAddItem.Wands.decode(reader, reader.uint32());
                         break;
                     }
-                case 4: {
+                case 3: {
                         message.flasks = $root.NT.ServerPlayerAddItem.Items.decode(reader, reader.uint32());
                         break;
                     }
-                case 5: {
+                case 4: {
                         message.objects = $root.NT.ServerPlayerAddItem.Entities.decode(reader, reader.uint32());
                         break;
                     }
@@ -5245,6 +5250,8 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("userId"))
+                throw $util.ProtocolError("missing required 'userId'", { instance: message });
             return message;
         };
 
@@ -5252,9 +5259,8 @@ export const NT = $root.NT = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             let properties = {};
-            if (message.userId != null && message.hasOwnProperty("userId"))
-                if (!$util.isString(message.userId))
-                    return "userId: string expected";
+            if (!$util.isString(message.userId))
+                return "userId: string expected";
             if (message.spells != null && message.hasOwnProperty("spells")) {
                 properties.item = 1;
                 {
@@ -5388,7 +5394,7 @@ export const NT = $root.NT = (() => {
                     writer = $Writer.create();
                 if (message.list != null && message.list.length)
                     for (let i = 0; i < message.list.length; ++i)
-                        $root.NT.Spell.encode(message.list[i], writer.uint32(10).fork()).ldelim();
+                        $root.NT.Spell.encode(message.list[i], writer.uint32(2).fork()).ldelim();
                 return writer;
             };
 
@@ -5399,7 +5405,7 @@ export const NT = $root.NT = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                    case 0: {
                             if (!(message.list && message.list.length))
                                 message.list = [];
                             message.list.push($root.NT.Spell.decode(reader, reader.uint32()));
@@ -5494,7 +5500,7 @@ export const NT = $root.NT = (() => {
                     writer = $Writer.create();
                 if (message.list != null && message.list.length)
                     for (let i = 0; i < message.list.length; ++i)
-                        $root.NT.Wand.encode(message.list[i], writer.uint32(18).fork()).ldelim();
+                        $root.NT.Wand.encode(message.list[i], writer.uint32(2).fork()).ldelim();
                 return writer;
             };
 
@@ -5505,7 +5511,7 @@ export const NT = $root.NT = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 2: {
+                    case 0: {
                             if (!(message.list && message.list.length))
                                 message.list = [];
                             message.list.push($root.NT.Wand.decode(reader, reader.uint32()));
@@ -5600,7 +5606,7 @@ export const NT = $root.NT = (() => {
                     writer = $Writer.create();
                 if (message.list != null && message.list.length)
                     for (let i = 0; i < message.list.length; ++i)
-                        $root.NT.Item.encode(message.list[i], writer.uint32(26).fork()).ldelim();
+                        $root.NT.Item.encode(message.list[i], writer.uint32(2).fork()).ldelim();
                 return writer;
             };
 
@@ -5611,7 +5617,7 @@ export const NT = $root.NT = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 3: {
+                    case 0: {
                             if (!(message.list && message.list.length))
                                 message.list = [];
                             message.list.push($root.NT.Item.decode(reader, reader.uint32()));
@@ -5706,7 +5712,7 @@ export const NT = $root.NT = (() => {
                     writer = $Writer.create();
                 if (message.list != null && message.list.length)
                     for (let i = 0; i < message.list.length; ++i)
-                        $root.NT.EntityItem.encode(message.list[i], writer.uint32(34).fork()).ldelim();
+                        $root.NT.EntityItem.encode(message.list[i], writer.uint32(2).fork()).ldelim();
                 return writer;
             };
 
@@ -5717,7 +5723,7 @@ export const NT = $root.NT = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 4: {
+                    case 0: {
                             if (!(message.list && message.list.length))
                                 message.list = [];
                             message.list.push($root.NT.EntityItem.decode(reader, reader.uint32()));
@@ -5812,8 +5818,7 @@ export const NT = $root.NT = (() => {
         ClientPlayerTakeItem.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.id != null && Object.hasOwnProperty.call(message, "id"))
-                writer.uint32(10).string(message.id);
+            writer.uint32(2).string(message.id);
             return writer;
         };
 
@@ -5824,7 +5829,7 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.id = reader.string();
                         break;
                     }
@@ -5833,15 +5838,16 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("id"))
+                throw $util.ProtocolError("missing required 'id'", { instance: message });
             return message;
         };
 
         ClientPlayerTakeItem.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.id != null && message.hasOwnProperty("id"))
-                if (!$util.isString(message.id))
-                    return "id: string expected";
+            if (!$util.isString(message.id))
+                return "id: string expected";
             return null;
         };
 
@@ -5898,10 +5904,8 @@ export const NT = $root.NT = (() => {
         ServerPlayerTakeItem.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(10).string(message.userId);
-            if (message.id != null && Object.hasOwnProperty.call(message, "id"))
-                writer.uint32(18).string(message.id);
+            writer.uint32(2).string(message.userId);
+            writer.uint32(10).string(message.id);
             return writer;
         };
 
@@ -5912,11 +5916,11 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.userId = reader.string();
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.id = reader.string();
                         break;
                     }
@@ -5925,18 +5929,20 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("userId"))
+                throw $util.ProtocolError("missing required 'userId'", { instance: message });
+            if (!message.hasOwnProperty("id"))
+                throw $util.ProtocolError("missing required 'id'", { instance: message });
             return message;
         };
 
         ServerPlayerTakeItem.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.userId != null && message.hasOwnProperty("userId"))
-                if (!$util.isString(message.userId))
-                    return "userId: string expected";
-            if (message.id != null && message.hasOwnProperty("id"))
-                if (!$util.isString(message.id))
-                    return "id: string expected";
+            if (!$util.isString(message.userId))
+                return "userId: string expected";
+            if (!$util.isString(message.id))
+                return "id: string expected";
             return null;
         };
 
@@ -5998,8 +6004,7 @@ export const NT = $root.NT = (() => {
         ClientChat.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.message != null && Object.hasOwnProperty.call(message, "message"))
-                writer.uint32(10).string(message.message);
+            writer.uint32(2).string(message.message);
             return writer;
         };
 
@@ -6010,7 +6015,7 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.message = reader.string();
                         break;
                     }
@@ -6019,15 +6024,16 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("message"))
+                throw $util.ProtocolError("missing required 'message'", { instance: message });
             return message;
         };
 
         ClientChat.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.message != null && message.hasOwnProperty("message"))
-                if (!$util.isString(message.message))
-                    return "message: string expected";
+            if (!$util.isString(message.message))
+                return "message: string expected";
             return null;
         };
 
@@ -6086,14 +6092,10 @@ export const NT = $root.NT = (() => {
         ServerChat.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.id != null && Object.hasOwnProperty.call(message, "id"))
-                writer.uint32(10).string(message.id);
-            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(18).string(message.userId);
-            if (message.name != null && Object.hasOwnProperty.call(message, "name"))
-                writer.uint32(26).string(message.name);
-            if (message.message != null && Object.hasOwnProperty.call(message, "message"))
-                writer.uint32(34).string(message.message);
+            writer.uint32(2).string(message.id);
+            writer.uint32(10).string(message.userId);
+            writer.uint32(18).string(message.name);
+            writer.uint32(26).string(message.message);
             return writer;
         };
 
@@ -6104,19 +6106,19 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.id = reader.string();
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.userId = reader.string();
                         break;
                     }
-                case 3: {
+                case 2: {
                         message.name = reader.string();
                         break;
                     }
-                case 4: {
+                case 3: {
                         message.message = reader.string();
                         break;
                     }
@@ -6125,24 +6127,28 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("id"))
+                throw $util.ProtocolError("missing required 'id'", { instance: message });
+            if (!message.hasOwnProperty("userId"))
+                throw $util.ProtocolError("missing required 'userId'", { instance: message });
+            if (!message.hasOwnProperty("name"))
+                throw $util.ProtocolError("missing required 'name'", { instance: message });
+            if (!message.hasOwnProperty("message"))
+                throw $util.ProtocolError("missing required 'message'", { instance: message });
             return message;
         };
 
         ServerChat.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.id != null && message.hasOwnProperty("id"))
-                if (!$util.isString(message.id))
-                    return "id: string expected";
-            if (message.userId != null && message.hasOwnProperty("userId"))
-                if (!$util.isString(message.userId))
-                    return "userId: string expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.message != null && message.hasOwnProperty("message"))
-                if (!$util.isString(message.message))
-                    return "message: string expected";
+            if (!$util.isString(message.id))
+                return "id: string expected";
+            if (!$util.isString(message.userId))
+                return "userId: string expected";
+            if (!$util.isString(message.name))
+                return "name: string expected";
+            if (!$util.isString(message.message))
+                return "message: string expected";
             return null;
         };
 
@@ -6223,9 +6229,9 @@ export const NT = $root.NT = (() => {
             if (!writer)
                 writer = $Writer.create();
             if (message.heart != null && Object.hasOwnProperty.call(message, "heart"))
-                $root.NT.ClientPlayerPickup.HeartPickup.encode(message.heart, writer.uint32(10).fork()).ldelim();
+                $root.NT.ClientPlayerPickup.HeartPickup.encode(message.heart, writer.uint32(2).fork()).ldelim();
             if (message.orb != null && Object.hasOwnProperty.call(message, "orb"))
-                $root.NT.ClientPlayerPickup.OrbPickup.encode(message.orb, writer.uint32(18).fork()).ldelim();
+                $root.NT.ClientPlayerPickup.OrbPickup.encode(message.orb, writer.uint32(10).fork()).ldelim();
             return writer;
         };
 
@@ -6236,11 +6242,11 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.heart = $root.NT.ClientPlayerPickup.HeartPickup.decode(reader, reader.uint32());
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.orb = $root.NT.ClientPlayerPickup.OrbPickup.decode(reader, reader.uint32());
                         break;
                     }
@@ -6340,8 +6346,7 @@ export const NT = $root.NT = (() => {
             HeartPickup.encode = function encode(message, writer) {
                 if (!writer)
                     writer = $Writer.create();
-                if (message.hpPerk != null && Object.hasOwnProperty.call(message, "hpPerk"))
-                    writer.uint32(8).bool(message.hpPerk);
+                writer.uint32(0).bool(message.hpPerk);
                 return writer;
             };
 
@@ -6352,7 +6357,7 @@ export const NT = $root.NT = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                    case 0: {
                             message.hpPerk = reader.bool();
                             break;
                         }
@@ -6361,15 +6366,16 @@ export const NT = $root.NT = (() => {
                         break;
                     }
                 }
+                if (!message.hasOwnProperty("hpPerk"))
+                    throw $util.ProtocolError("missing required 'hpPerk'", { instance: message });
                 return message;
             };
 
             HeartPickup.verify = function verify(message) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
-                if (message.hpPerk != null && message.hasOwnProperty("hpPerk"))
-                    if (typeof message.hpPerk !== "boolean")
-                        return "hpPerk: boolean expected";
+                if (typeof message.hpPerk !== "boolean")
+                    return "hpPerk: boolean expected";
                 return null;
             };
 
@@ -6425,8 +6431,7 @@ export const NT = $root.NT = (() => {
             OrbPickup.encode = function encode(message, writer) {
                 if (!writer)
                     writer = $Writer.create();
-                if (message.id != null && Object.hasOwnProperty.call(message, "id"))
-                    writer.uint32(8).uint32(message.id);
+                writer.uint32(0).uint32(message.id);
                 return writer;
             };
 
@@ -6437,7 +6442,7 @@ export const NT = $root.NT = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                    case 0: {
                             message.id = reader.uint32();
                             break;
                         }
@@ -6446,15 +6451,16 @@ export const NT = $root.NT = (() => {
                         break;
                     }
                 }
+                if (!message.hasOwnProperty("id"))
+                    throw $util.ProtocolError("missing required 'id'", { instance: message });
                 return message;
             };
 
             OrbPickup.verify = function verify(message) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
-                if (message.id != null && message.hasOwnProperty("id"))
-                    if (!$util.isInteger(message.id))
-                        return "id: integer expected";
+                if (!$util.isInteger(message.id))
+                    return "id: integer expected";
                 return null;
             };
 
@@ -6523,11 +6529,11 @@ export const NT = $root.NT = (() => {
             if (!writer)
                 writer = $Writer.create();
             if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(10).string(message.userId);
+                writer.uint32(2).string(message.userId);
             if (message.heart != null && Object.hasOwnProperty.call(message, "heart"))
-                $root.NT.ServerPlayerPickup.HeartPickup.encode(message.heart, writer.uint32(18).fork()).ldelim();
+                $root.NT.ServerPlayerPickup.HeartPickup.encode(message.heart, writer.uint32(10).fork()).ldelim();
             if (message.orb != null && Object.hasOwnProperty.call(message, "orb"))
-                $root.NT.ServerPlayerPickup.OrbPickup.encode(message.orb, writer.uint32(26).fork()).ldelim();
+                $root.NT.ServerPlayerPickup.OrbPickup.encode(message.orb, writer.uint32(18).fork()).ldelim();
             return writer;
         };
 
@@ -6538,15 +6544,15 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.userId = reader.string();
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.heart = $root.NT.ServerPlayerPickup.HeartPickup.decode(reader, reader.uint32());
                         break;
                     }
-                case 3: {
+                case 2: {
                         message.orb = $root.NT.ServerPlayerPickup.OrbPickup.decode(reader, reader.uint32());
                         break;
                     }
@@ -6655,8 +6661,7 @@ export const NT = $root.NT = (() => {
             HeartPickup.encode = function encode(message, writer) {
                 if (!writer)
                     writer = $Writer.create();
-                if (message.hpPerk != null && Object.hasOwnProperty.call(message, "hpPerk"))
-                    writer.uint32(8).bool(message.hpPerk);
+                writer.uint32(0).bool(message.hpPerk);
                 return writer;
             };
 
@@ -6667,7 +6672,7 @@ export const NT = $root.NT = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                    case 0: {
                             message.hpPerk = reader.bool();
                             break;
                         }
@@ -6676,15 +6681,16 @@ export const NT = $root.NT = (() => {
                         break;
                     }
                 }
+                if (!message.hasOwnProperty("hpPerk"))
+                    throw $util.ProtocolError("missing required 'hpPerk'", { instance: message });
                 return message;
             };
 
             HeartPickup.verify = function verify(message) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
-                if (message.hpPerk != null && message.hasOwnProperty("hpPerk"))
-                    if (typeof message.hpPerk !== "boolean")
-                        return "hpPerk: boolean expected";
+                if (typeof message.hpPerk !== "boolean")
+                    return "hpPerk: boolean expected";
                 return null;
             };
 
@@ -6740,8 +6746,7 @@ export const NT = $root.NT = (() => {
             OrbPickup.encode = function encode(message, writer) {
                 if (!writer)
                     writer = $Writer.create();
-                if (message.id != null && Object.hasOwnProperty.call(message, "id"))
-                    writer.uint32(8).uint32(message.id);
+                writer.uint32(0).uint32(message.id);
                 return writer;
             };
 
@@ -6752,7 +6757,7 @@ export const NT = $root.NT = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                    case 0: {
                             message.id = reader.uint32();
                             break;
                         }
@@ -6761,15 +6766,16 @@ export const NT = $root.NT = (() => {
                         break;
                     }
                 }
+                if (!message.hasOwnProperty("id"))
+                    throw $util.ProtocolError("missing required 'id'", { instance: message });
                 return message;
             };
 
             OrbPickup.verify = function verify(message) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
-                if (message.id != null && message.hasOwnProperty("id"))
-                    if (!$util.isInteger(message.id))
-                        return "id: integer expected";
+                if (!$util.isInteger(message.id))
+                    return "id: integer expected";
                 return null;
             };
 
@@ -6828,8 +6834,7 @@ export const NT = $root.NT = (() => {
         ClientNemesisPickupItem.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.gameId != null && Object.hasOwnProperty.call(message, "gameId"))
-                writer.uint32(10).string(message.gameId);
+            writer.uint32(2).string(message.gameId);
             return writer;
         };
 
@@ -6840,7 +6845,7 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.gameId = reader.string();
                         break;
                     }
@@ -6849,15 +6854,16 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("gameId"))
+                throw $util.ProtocolError("missing required 'gameId'", { instance: message });
             return message;
         };
 
         ClientNemesisPickupItem.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.gameId != null && message.hasOwnProperty("gameId"))
-                if (!$util.isString(message.gameId))
-                    return "gameId: string expected";
+            if (!$util.isString(message.gameId))
+                return "gameId: string expected";
             return null;
         };
 
@@ -6914,10 +6920,8 @@ export const NT = $root.NT = (() => {
         ServerNemesisPickupItem.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(10).string(message.userId);
-            if (message.gameId != null && Object.hasOwnProperty.call(message, "gameId"))
-                writer.uint32(18).string(message.gameId);
+            writer.uint32(2).string(message.userId);
+            writer.uint32(10).string(message.gameId);
             return writer;
         };
 
@@ -6928,11 +6932,11 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.userId = reader.string();
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.gameId = reader.string();
                         break;
                     }
@@ -6941,18 +6945,20 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("userId"))
+                throw $util.ProtocolError("missing required 'userId'", { instance: message });
+            if (!message.hasOwnProperty("gameId"))
+                throw $util.ProtocolError("missing required 'gameId'", { instance: message });
             return message;
         };
 
         ServerNemesisPickupItem.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.userId != null && message.hasOwnProperty("userId"))
-                if (!$util.isString(message.userId))
-                    return "userId: string expected";
-            if (message.gameId != null && message.hasOwnProperty("gameId"))
-                if (!$util.isString(message.gameId))
-                    return "gameId: string expected";
+            if (!$util.isString(message.userId))
+                return "userId: string expected";
+            if (!$util.isString(message.gameId))
+                return "gameId: string expected";
             return null;
         };
 
@@ -7014,8 +7020,7 @@ export const NT = $root.NT = (() => {
         ClientNemesisAbility.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.gameId != null && Object.hasOwnProperty.call(message, "gameId"))
-                writer.uint32(10).string(message.gameId);
+            writer.uint32(2).string(message.gameId);
             return writer;
         };
 
@@ -7026,7 +7031,7 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.gameId = reader.string();
                         break;
                     }
@@ -7035,15 +7040,16 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("gameId"))
+                throw $util.ProtocolError("missing required 'gameId'", { instance: message });
             return message;
         };
 
         ClientNemesisAbility.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.gameId != null && message.hasOwnProperty("gameId"))
-                if (!$util.isString(message.gameId))
-                    return "gameId: string expected";
+            if (!$util.isString(message.gameId))
+                return "gameId: string expected";
             return null;
         };
 
@@ -7100,10 +7106,8 @@ export const NT = $root.NT = (() => {
         ServerNemesisAbility.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(10).string(message.userId);
-            if (message.gameId != null && Object.hasOwnProperty.call(message, "gameId"))
-                writer.uint32(18).string(message.gameId);
+            writer.uint32(2).string(message.userId);
+            writer.uint32(10).string(message.gameId);
             return writer;
         };
 
@@ -7114,11 +7118,11 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.userId = reader.string();
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.gameId = reader.string();
                         break;
                     }
@@ -7127,18 +7131,20 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("userId"))
+                throw $util.ProtocolError("missing required 'userId'", { instance: message });
+            if (!message.hasOwnProperty("gameId"))
+                throw $util.ProtocolError("missing required 'gameId'", { instance: message });
             return message;
         };
 
         ServerNemesisAbility.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.userId != null && message.hasOwnProperty("userId"))
-                if (!$util.isString(message.userId))
-                    return "userId: string expected";
-            if (message.gameId != null && message.hasOwnProperty("gameId"))
-                if (!$util.isString(message.gameId))
-                    return "gameId: string expected";
+            if (!$util.isString(message.userId))
+                return "userId: string expected";
+            if (!$util.isString(message.gameId))
+                return "gameId: string expected";
             return null;
         };
 
@@ -7208,10 +7214,9 @@ export const NT = $root.NT = (() => {
         ClientPlayerDeath.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.isWin != null && Object.hasOwnProperty.call(message, "isWin"))
-                writer.uint32(8).bool(message.isWin);
+            writer.uint32(0).bool(message.isWin);
             if (message.gameTime != null && Object.hasOwnProperty.call(message, "gameTime"))
-                writer.uint32(16).uint32(message.gameTime);
+                writer.uint32(8).uint32(message.gameTime);
             return writer;
         };
 
@@ -7222,11 +7227,11 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.isWin = reader.bool();
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.gameTime = reader.uint32();
                         break;
                     }
@@ -7235,6 +7240,8 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("isWin"))
+                throw $util.ProtocolError("missing required 'isWin'", { instance: message });
             return message;
         };
 
@@ -7242,9 +7249,8 @@ export const NT = $root.NT = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             let properties = {};
-            if (message.isWin != null && message.hasOwnProperty("isWin"))
-                if (typeof message.isWin !== "boolean")
-                    return "isWin: boolean expected";
+            if (typeof message.isWin !== "boolean")
+                return "isWin: boolean expected";
             if (message.gameTime != null && message.hasOwnProperty("gameTime")) {
                 properties._gameTime = 1;
                 if (!$util.isInteger(message.gameTime))
@@ -7321,12 +7327,10 @@ export const NT = $root.NT = (() => {
         ServerPlayerDeath.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(10).string(message.userId);
-            if (message.isWin != null && Object.hasOwnProperty.call(message, "isWin"))
-                writer.uint32(16).bool(message.isWin);
+            writer.uint32(2).string(message.userId);
+            writer.uint32(8).bool(message.isWin);
             if (message.gameTime != null && Object.hasOwnProperty.call(message, "gameTime"))
-                writer.uint32(24).uint32(message.gameTime);
+                writer.uint32(16).uint32(message.gameTime);
             return writer;
         };
 
@@ -7337,15 +7341,15 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.userId = reader.string();
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.isWin = reader.bool();
                         break;
                     }
-                case 3: {
+                case 2: {
                         message.gameTime = reader.uint32();
                         break;
                     }
@@ -7354,6 +7358,10 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("userId"))
+                throw $util.ProtocolError("missing required 'userId'", { instance: message });
+            if (!message.hasOwnProperty("isWin"))
+                throw $util.ProtocolError("missing required 'isWin'", { instance: message });
             return message;
         };
 
@@ -7361,12 +7369,10 @@ export const NT = $root.NT = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             let properties = {};
-            if (message.userId != null && message.hasOwnProperty("userId"))
-                if (!$util.isString(message.userId))
-                    return "userId: string expected";
-            if (message.isWin != null && message.hasOwnProperty("isWin"))
-                if (typeof message.isWin !== "boolean")
-                    return "isWin: boolean expected";
+            if (!$util.isString(message.userId))
+                return "userId: string expected";
+            if (typeof message.isWin !== "boolean")
+                return "isWin: boolean expected";
             if (message.gameTime != null && message.hasOwnProperty("gameTime")) {
                 properties._gameTime = 1;
                 if (!$util.isInteger(message.gameTime))
@@ -7440,8 +7446,7 @@ export const NT = $root.NT = (() => {
         ClientPlayerNewGamePlus.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.amount != null && Object.hasOwnProperty.call(message, "amount"))
-                writer.uint32(8).uint32(message.amount);
+            writer.uint32(0).uint32(message.amount);
             return writer;
         };
 
@@ -7452,7 +7457,7 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.amount = reader.uint32();
                         break;
                     }
@@ -7461,15 +7466,16 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("amount"))
+                throw $util.ProtocolError("missing required 'amount'", { instance: message });
             return message;
         };
 
         ClientPlayerNewGamePlus.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.amount != null && message.hasOwnProperty("amount"))
-                if (!$util.isInteger(message.amount))
-                    return "amount: integer expected";
+            if (!$util.isInteger(message.amount))
+                return "amount: integer expected";
             return null;
         };
 
@@ -7527,9 +7533,8 @@ export const NT = $root.NT = (() => {
             if (!writer)
                 writer = $Writer.create();
             if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(10).string(message.userId);
-            if (message.amount != null && Object.hasOwnProperty.call(message, "amount"))
-                writer.uint32(16).uint32(message.amount);
+                writer.uint32(2).string(message.userId);
+            writer.uint32(8).uint32(message.amount);
             return writer;
         };
 
@@ -7540,11 +7545,11 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.userId = reader.string();
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.amount = reader.uint32();
                         break;
                     }
@@ -7553,6 +7558,8 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("amount"))
+                throw $util.ProtocolError("missing required 'amount'", { instance: message });
             return message;
         };
 
@@ -7562,9 +7569,8 @@ export const NT = $root.NT = (() => {
             if (message.userId != null && message.hasOwnProperty("userId"))
                 if (!$util.isString(message.userId))
                     return "userId: string expected";
-            if (message.amount != null && message.hasOwnProperty("amount"))
-                if (!$util.isInteger(message.amount))
-                    return "amount: integer expected";
+            if (!$util.isInteger(message.amount))
+                return "amount: integer expected";
             return null;
         };
 
@@ -7626,8 +7632,7 @@ export const NT = $root.NT = (() => {
         ClientPlayerSecretHourglass.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.material != null && Object.hasOwnProperty.call(message, "material"))
-                writer.uint32(10).string(message.material);
+            writer.uint32(10).string(message.material);
             return writer;
         };
 
@@ -7647,15 +7652,16 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("material"))
+                throw $util.ProtocolError("missing required 'material'", { instance: message });
             return message;
         };
 
         ClientPlayerSecretHourglass.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.material != null && message.hasOwnProperty("material"))
-                if (!$util.isString(message.material))
-                    return "material: string expected";
+            if (!$util.isString(message.material))
+                return "material: string expected";
             return null;
         };
 
@@ -7712,10 +7718,8 @@ export const NT = $root.NT = (() => {
         ServerPlayerSecretHourglass.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(10).string(message.userId);
-            if (message.material != null && Object.hasOwnProperty.call(message, "material"))
-                writer.uint32(18).string(message.material);
+            writer.uint32(2).string(message.userId);
+            writer.uint32(10).string(message.material);
             return writer;
         };
 
@@ -7726,11 +7730,11 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.userId = reader.string();
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.material = reader.string();
                         break;
                     }
@@ -7739,18 +7743,20 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("userId"))
+                throw $util.ProtocolError("missing required 'userId'", { instance: message });
+            if (!message.hasOwnProperty("material"))
+                throw $util.ProtocolError("missing required 'material'", { instance: message });
             return message;
         };
 
         ServerPlayerSecretHourglass.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.userId != null && message.hasOwnProperty("userId"))
-                if (!$util.isString(message.userId))
-                    return "userId: string expected";
-            if (message.material != null && message.hasOwnProperty("material"))
-                if (!$util.isString(message.material))
-                    return "material: string expected";
+            if (!$util.isString(message.userId))
+                return "userId: string expected";
+            if (!$util.isString(message.material))
+                return "material: string expected";
             return null;
         };
 
@@ -7812,8 +7818,7 @@ export const NT = $root.NT = (() => {
         ClientCustomModEvent.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.payload != null && Object.hasOwnProperty.call(message, "payload"))
-                writer.uint32(10).string(message.payload);
+            writer.uint32(2).string(message.payload);
             return writer;
         };
 
@@ -7824,7 +7829,7 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.payload = reader.string();
                         break;
                     }
@@ -7833,15 +7838,16 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("payload"))
+                throw $util.ProtocolError("missing required 'payload'", { instance: message });
             return message;
         };
 
         ClientCustomModEvent.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.payload != null && message.hasOwnProperty("payload"))
-                if (!$util.isString(message.payload))
-                    return "payload: string expected";
+            if (!$util.isString(message.payload))
+                return "payload: string expected";
             return null;
         };
 
@@ -7898,10 +7904,8 @@ export const NT = $root.NT = (() => {
         ServerCustomModEvent.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(10).string(message.userId);
-            if (message.payload != null && Object.hasOwnProperty.call(message, "payload"))
-                writer.uint32(18).string(message.payload);
+            writer.uint32(2).string(message.userId);
+            writer.uint32(10).string(message.payload);
             return writer;
         };
 
@@ -7912,11 +7916,11 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.userId = reader.string();
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.payload = reader.string();
                         break;
                     }
@@ -7925,18 +7929,20 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("userId"))
+                throw $util.ProtocolError("missing required 'userId'", { instance: message });
+            if (!message.hasOwnProperty("payload"))
+                throw $util.ProtocolError("missing required 'payload'", { instance: message });
             return message;
         };
 
         ServerCustomModEvent.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.userId != null && message.hasOwnProperty("userId"))
-                if (!$util.isString(message.userId))
-                    return "userId: string expected";
-            if (message.payload != null && message.hasOwnProperty("payload"))
-                if (!$util.isString(message.payload))
-                    return "payload: string expected";
+            if (!$util.isString(message.userId))
+                return "userId: string expected";
+            if (!$util.isString(message.payload))
+                return "payload: string expected";
             return null;
         };
 
@@ -7998,8 +8004,7 @@ export const NT = $root.NT = (() => {
         ClientRespawnPenalty.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.deaths != null && Object.hasOwnProperty.call(message, "deaths"))
-                writer.uint32(8).uint32(message.deaths);
+            writer.uint32(0).uint32(message.deaths);
             return writer;
         };
 
@@ -8010,7 +8015,7 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.deaths = reader.uint32();
                         break;
                     }
@@ -8019,15 +8024,16 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("deaths"))
+                throw $util.ProtocolError("missing required 'deaths'", { instance: message });
             return message;
         };
 
         ClientRespawnPenalty.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.deaths != null && message.hasOwnProperty("deaths"))
-                if (!$util.isInteger(message.deaths))
-                    return "deaths: integer expected";
+            if (!$util.isInteger(message.deaths))
+                return "deaths: integer expected";
             return null;
         };
 
@@ -8084,10 +8090,8 @@ export const NT = $root.NT = (() => {
         ServerRespawnPenalty.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(10).string(message.userId);
-            if (message.deaths != null && Object.hasOwnProperty.call(message, "deaths"))
-                writer.uint32(16).uint32(message.deaths);
+            writer.uint32(2).string(message.userId);
+            writer.uint32(8).uint32(message.deaths);
             return writer;
         };
 
@@ -8098,11 +8102,11 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.userId = reader.string();
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.deaths = reader.uint32();
                         break;
                     }
@@ -8111,18 +8115,20 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("userId"))
+                throw $util.ProtocolError("missing required 'userId'", { instance: message });
+            if (!message.hasOwnProperty("deaths"))
+                throw $util.ProtocolError("missing required 'deaths'", { instance: message });
             return message;
         };
 
         ServerRespawnPenalty.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.userId != null && message.hasOwnProperty("userId"))
-                if (!$util.isString(message.userId))
-                    return "userId: string expected";
-            if (message.deaths != null && message.hasOwnProperty("deaths"))
-                if (!$util.isInteger(message.deaths))
-                    return "deaths: integer expected";
+            if (!$util.isString(message.userId))
+                return "userId: string expected";
+            if (!$util.isInteger(message.deaths))
+                return "deaths: integer expected";
             return null;
         };
 
@@ -8184,8 +8190,7 @@ export const NT = $root.NT = (() => {
         ClientAngerySteve.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.idk != null && Object.hasOwnProperty.call(message, "idk"))
-                writer.uint32(8).bool(message.idk);
+            writer.uint32(0).bool(message.idk);
             return writer;
         };
 
@@ -8196,7 +8201,7 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.idk = reader.bool();
                         break;
                     }
@@ -8205,15 +8210,16 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("idk"))
+                throw $util.ProtocolError("missing required 'idk'", { instance: message });
             return message;
         };
 
         ClientAngerySteve.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.idk != null && message.hasOwnProperty("idk"))
-                if (typeof message.idk !== "boolean")
-                    return "idk: boolean expected";
+            if (typeof message.idk !== "boolean")
+                return "idk: boolean expected";
             return null;
         };
 
@@ -8269,8 +8275,7 @@ export const NT = $root.NT = (() => {
         ServerAngerySteve.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(10).string(message.userId);
+            writer.uint32(2).string(message.userId);
             return writer;
         };
 
@@ -8281,7 +8286,7 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.userId = reader.string();
                         break;
                     }
@@ -8290,15 +8295,16 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("userId"))
+                throw $util.ProtocolError("missing required 'userId'", { instance: message });
             return message;
         };
 
         ServerAngerySteve.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.userId != null && message.hasOwnProperty("userId"))
-                if (!$util.isString(message.userId))
-                    return "userId: string expected";
+            if (!$util.isString(message.userId))
+                return "userId: string expected";
             return null;
         };
 
@@ -8373,20 +8379,19 @@ export const NT = $root.NT = (() => {
         Wand.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.id != null && Object.hasOwnProperty.call(message, "id"))
-                writer.uint32(10).string(message.id);
+            writer.uint32(2).string(message.id);
             if (message.stats != null && Object.hasOwnProperty.call(message, "stats"))
-                $root.NT.Wand.WandStats.encode(message.stats, writer.uint32(18).fork()).ldelim();
+                $root.NT.Wand.WandStats.encode(message.stats, writer.uint32(10).fork()).ldelim();
             if (message.alwaysCast != null && message.alwaysCast.length)
                 for (let i = 0; i < message.alwaysCast.length; ++i)
-                    $root.NT.Spell.encode(message.alwaysCast[i], writer.uint32(26).fork()).ldelim();
+                    $root.NT.Spell.encode(message.alwaysCast[i], writer.uint32(18).fork()).ldelim();
             if (message.deck != null && message.deck.length)
                 for (let i = 0; i < message.deck.length; ++i)
-                    $root.NT.Spell.encode(message.deck[i], writer.uint32(34).fork()).ldelim();
+                    $root.NT.Spell.encode(message.deck[i], writer.uint32(26).fork()).ldelim();
             if (message.sentBy != null && Object.hasOwnProperty.call(message, "sentBy"))
-                writer.uint32(42).string(message.sentBy);
+                writer.uint32(34).string(message.sentBy);
             if (message.contributedBy != null && Object.hasOwnProperty.call(message, "contributedBy"))
-                writer.uint32(50).string(message.contributedBy);
+                writer.uint32(42).string(message.contributedBy);
             return writer;
         };
 
@@ -8397,31 +8402,31 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.id = reader.string();
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.stats = $root.NT.Wand.WandStats.decode(reader, reader.uint32());
                         break;
                     }
-                case 3: {
+                case 2: {
                         if (!(message.alwaysCast && message.alwaysCast.length))
                             message.alwaysCast = [];
                         message.alwaysCast.push($root.NT.Spell.decode(reader, reader.uint32()));
                         break;
                     }
-                case 4: {
+                case 3: {
                         if (!(message.deck && message.deck.length))
                             message.deck = [];
                         message.deck.push($root.NT.Spell.decode(reader, reader.uint32()));
                         break;
                     }
-                case 5: {
+                case 4: {
                         message.sentBy = reader.string();
                         break;
                     }
-                case 6: {
+                case 5: {
                         message.contributedBy = reader.string();
                         break;
                     }
@@ -8430,6 +8435,8 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("id"))
+                throw $util.ProtocolError("missing required 'id'", { instance: message });
             return message;
         };
 
@@ -8437,9 +8444,8 @@ export const NT = $root.NT = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             let properties = {};
-            if (message.id != null && message.hasOwnProperty("id"))
-                if (!$util.isString(message.id))
-                    return "id: string expected";
+            if (!$util.isString(message.id))
+                return "id: string expected";
             if (message.stats != null && message.hasOwnProperty("stats")) {
                 let error = $root.NT.Wand.WandStats.verify(message.stats);
                 if (error)
@@ -8597,38 +8603,22 @@ export const NT = $root.NT = (() => {
             WandStats.encode = function encode(message, writer) {
                 if (!writer)
                     writer = $Writer.create();
-                if (message.sprite != null && Object.hasOwnProperty.call(message, "sprite"))
-                    writer.uint32(10).string(message.sprite);
-                if (message.named != null && Object.hasOwnProperty.call(message, "named"))
-                    writer.uint32(16).bool(message.named);
-                if (message.uiName != null && Object.hasOwnProperty.call(message, "uiName"))
-                    writer.uint32(26).string(message.uiName);
-                if (message.manaMax != null && Object.hasOwnProperty.call(message, "manaMax"))
-                    writer.uint32(37).float(message.manaMax);
-                if (message.manaChargeSpeed != null && Object.hasOwnProperty.call(message, "manaChargeSpeed"))
-                    writer.uint32(45).float(message.manaChargeSpeed);
-                if (message.reloadTime != null && Object.hasOwnProperty.call(message, "reloadTime"))
-                    writer.uint32(48).int32(message.reloadTime);
-                if (message.actionsPerRound != null && Object.hasOwnProperty.call(message, "actionsPerRound"))
-                    writer.uint32(56).uint32(message.actionsPerRound);
-                if (message.deckCapacity != null && Object.hasOwnProperty.call(message, "deckCapacity"))
-                    writer.uint32(64).uint32(message.deckCapacity);
-                if (message.shuffleDeckWhenEmpty != null && Object.hasOwnProperty.call(message, "shuffleDeckWhenEmpty"))
-                    writer.uint32(72).bool(message.shuffleDeckWhenEmpty);
-                if (message.spreadDegrees != null && Object.hasOwnProperty.call(message, "spreadDegrees"))
-                    writer.uint32(85).float(message.spreadDegrees);
-                if (message.speedMultiplier != null && Object.hasOwnProperty.call(message, "speedMultiplier"))
-                    writer.uint32(93).float(message.speedMultiplier);
-                if (message.fireRateWait != null && Object.hasOwnProperty.call(message, "fireRateWait"))
-                    writer.uint32(96).int32(message.fireRateWait);
-                if (message.tipX != null && Object.hasOwnProperty.call(message, "tipX"))
-                    writer.uint32(109).float(message.tipX);
-                if (message.tipY != null && Object.hasOwnProperty.call(message, "tipY"))
-                    writer.uint32(117).float(message.tipY);
-                if (message.gripX != null && Object.hasOwnProperty.call(message, "gripX"))
-                    writer.uint32(125).float(message.gripX);
-                if (message.gripY != null && Object.hasOwnProperty.call(message, "gripY"))
-                    writer.uint32(133).float(message.gripY);
+                writer.uint32(2).string(message.sprite);
+                writer.uint32(8).bool(message.named);
+                writer.uint32(18).string(message.uiName);
+                writer.uint32(29).float(message.manaMax);
+                writer.uint32(37).float(message.manaChargeSpeed);
+                writer.uint32(40).int32(message.reloadTime);
+                writer.uint32(48).uint32(message.actionsPerRound);
+                writer.uint32(56).uint32(message.deckCapacity);
+                writer.uint32(64).bool(message.shuffleDeckWhenEmpty);
+                writer.uint32(77).float(message.spreadDegrees);
+                writer.uint32(85).float(message.speedMultiplier);
+                writer.uint32(88).int32(message.fireRateWait);
+                writer.uint32(101).float(message.tipX);
+                writer.uint32(109).float(message.tipY);
+                writer.uint32(117).float(message.gripX);
+                writer.uint32(125).float(message.gripY);
                 return writer;
             };
 
@@ -8639,67 +8629,67 @@ export const NT = $root.NT = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                    case 0: {
                             message.sprite = reader.string();
                             break;
                         }
-                    case 2: {
+                    case 1: {
                             message.named = reader.bool();
                             break;
                         }
-                    case 3: {
+                    case 2: {
                             message.uiName = reader.string();
                             break;
                         }
-                    case 4: {
+                    case 3: {
                             message.manaMax = reader.float();
                             break;
                         }
-                    case 5: {
+                    case 4: {
                             message.manaChargeSpeed = reader.float();
                             break;
                         }
-                    case 6: {
+                    case 5: {
                             message.reloadTime = reader.int32();
                             break;
                         }
-                    case 7: {
+                    case 6: {
                             message.actionsPerRound = reader.uint32();
                             break;
                         }
-                    case 8: {
+                    case 7: {
                             message.deckCapacity = reader.uint32();
                             break;
                         }
-                    case 9: {
+                    case 8: {
                             message.shuffleDeckWhenEmpty = reader.bool();
                             break;
                         }
-                    case 10: {
+                    case 9: {
                             message.spreadDegrees = reader.float();
                             break;
                         }
-                    case 11: {
+                    case 10: {
                             message.speedMultiplier = reader.float();
                             break;
                         }
-                    case 12: {
+                    case 11: {
                             message.fireRateWait = reader.int32();
                             break;
                         }
-                    case 13: {
+                    case 12: {
                             message.tipX = reader.float();
                             break;
                         }
-                    case 14: {
+                    case 13: {
                             message.tipY = reader.float();
                             break;
                         }
-                    case 15: {
+                    case 14: {
                             message.gripX = reader.float();
                             break;
                         }
-                    case 16: {
+                    case 15: {
                             message.gripY = reader.float();
                             break;
                         }
@@ -8708,60 +8698,76 @@ export const NT = $root.NT = (() => {
                         break;
                     }
                 }
+                if (!message.hasOwnProperty("sprite"))
+                    throw $util.ProtocolError("missing required 'sprite'", { instance: message });
+                if (!message.hasOwnProperty("named"))
+                    throw $util.ProtocolError("missing required 'named'", { instance: message });
+                if (!message.hasOwnProperty("uiName"))
+                    throw $util.ProtocolError("missing required 'uiName'", { instance: message });
+                if (!message.hasOwnProperty("manaMax"))
+                    throw $util.ProtocolError("missing required 'manaMax'", { instance: message });
+                if (!message.hasOwnProperty("manaChargeSpeed"))
+                    throw $util.ProtocolError("missing required 'manaChargeSpeed'", { instance: message });
+                if (!message.hasOwnProperty("reloadTime"))
+                    throw $util.ProtocolError("missing required 'reloadTime'", { instance: message });
+                if (!message.hasOwnProperty("actionsPerRound"))
+                    throw $util.ProtocolError("missing required 'actionsPerRound'", { instance: message });
+                if (!message.hasOwnProperty("deckCapacity"))
+                    throw $util.ProtocolError("missing required 'deckCapacity'", { instance: message });
+                if (!message.hasOwnProperty("shuffleDeckWhenEmpty"))
+                    throw $util.ProtocolError("missing required 'shuffleDeckWhenEmpty'", { instance: message });
+                if (!message.hasOwnProperty("spreadDegrees"))
+                    throw $util.ProtocolError("missing required 'spreadDegrees'", { instance: message });
+                if (!message.hasOwnProperty("speedMultiplier"))
+                    throw $util.ProtocolError("missing required 'speedMultiplier'", { instance: message });
+                if (!message.hasOwnProperty("fireRateWait"))
+                    throw $util.ProtocolError("missing required 'fireRateWait'", { instance: message });
+                if (!message.hasOwnProperty("tipX"))
+                    throw $util.ProtocolError("missing required 'tipX'", { instance: message });
+                if (!message.hasOwnProperty("tipY"))
+                    throw $util.ProtocolError("missing required 'tipY'", { instance: message });
+                if (!message.hasOwnProperty("gripX"))
+                    throw $util.ProtocolError("missing required 'gripX'", { instance: message });
+                if (!message.hasOwnProperty("gripY"))
+                    throw $util.ProtocolError("missing required 'gripY'", { instance: message });
                 return message;
             };
 
             WandStats.verify = function verify(message) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
-                if (message.sprite != null && message.hasOwnProperty("sprite"))
-                    if (!$util.isString(message.sprite))
-                        return "sprite: string expected";
-                if (message.named != null && message.hasOwnProperty("named"))
-                    if (typeof message.named !== "boolean")
-                        return "named: boolean expected";
-                if (message.uiName != null && message.hasOwnProperty("uiName"))
-                    if (!$util.isString(message.uiName))
-                        return "uiName: string expected";
-                if (message.manaMax != null && message.hasOwnProperty("manaMax"))
-                    if (typeof message.manaMax !== "number")
-                        return "manaMax: number expected";
-                if (message.manaChargeSpeed != null && message.hasOwnProperty("manaChargeSpeed"))
-                    if (typeof message.manaChargeSpeed !== "number")
-                        return "manaChargeSpeed: number expected";
-                if (message.reloadTime != null && message.hasOwnProperty("reloadTime"))
-                    if (!$util.isInteger(message.reloadTime))
-                        return "reloadTime: integer expected";
-                if (message.actionsPerRound != null && message.hasOwnProperty("actionsPerRound"))
-                    if (!$util.isInteger(message.actionsPerRound))
-                        return "actionsPerRound: integer expected";
-                if (message.deckCapacity != null && message.hasOwnProperty("deckCapacity"))
-                    if (!$util.isInteger(message.deckCapacity))
-                        return "deckCapacity: integer expected";
-                if (message.shuffleDeckWhenEmpty != null && message.hasOwnProperty("shuffleDeckWhenEmpty"))
-                    if (typeof message.shuffleDeckWhenEmpty !== "boolean")
-                        return "shuffleDeckWhenEmpty: boolean expected";
-                if (message.spreadDegrees != null && message.hasOwnProperty("spreadDegrees"))
-                    if (typeof message.spreadDegrees !== "number")
-                        return "spreadDegrees: number expected";
-                if (message.speedMultiplier != null && message.hasOwnProperty("speedMultiplier"))
-                    if (typeof message.speedMultiplier !== "number")
-                        return "speedMultiplier: number expected";
-                if (message.fireRateWait != null && message.hasOwnProperty("fireRateWait"))
-                    if (!$util.isInteger(message.fireRateWait))
-                        return "fireRateWait: integer expected";
-                if (message.tipX != null && message.hasOwnProperty("tipX"))
-                    if (typeof message.tipX !== "number")
-                        return "tipX: number expected";
-                if (message.tipY != null && message.hasOwnProperty("tipY"))
-                    if (typeof message.tipY !== "number")
-                        return "tipY: number expected";
-                if (message.gripX != null && message.hasOwnProperty("gripX"))
-                    if (typeof message.gripX !== "number")
-                        return "gripX: number expected";
-                if (message.gripY != null && message.hasOwnProperty("gripY"))
-                    if (typeof message.gripY !== "number")
-                        return "gripY: number expected";
+                if (!$util.isString(message.sprite))
+                    return "sprite: string expected";
+                if (typeof message.named !== "boolean")
+                    return "named: boolean expected";
+                if (!$util.isString(message.uiName))
+                    return "uiName: string expected";
+                if (typeof message.manaMax !== "number")
+                    return "manaMax: number expected";
+                if (typeof message.manaChargeSpeed !== "number")
+                    return "manaChargeSpeed: number expected";
+                if (!$util.isInteger(message.reloadTime))
+                    return "reloadTime: integer expected";
+                if (!$util.isInteger(message.actionsPerRound))
+                    return "actionsPerRound: integer expected";
+                if (!$util.isInteger(message.deckCapacity))
+                    return "deckCapacity: integer expected";
+                if (typeof message.shuffleDeckWhenEmpty !== "boolean")
+                    return "shuffleDeckWhenEmpty: boolean expected";
+                if (typeof message.spreadDegrees !== "number")
+                    return "spreadDegrees: number expected";
+                if (typeof message.speedMultiplier !== "number")
+                    return "speedMultiplier: number expected";
+                if (!$util.isInteger(message.fireRateWait))
+                    return "fireRateWait: integer expected";
+                if (typeof message.tipX !== "number")
+                    return "tipX: number expected";
+                if (typeof message.tipY !== "number")
+                    return "tipY: number expected";
+                if (typeof message.gripX !== "number")
+                    return "gripX: number expected";
+                if (typeof message.gripY !== "number")
+                    return "gripY: number expected";
                 return null;
             };
 
@@ -8912,16 +8918,13 @@ export const NT = $root.NT = (() => {
         Spell.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.id != null && Object.hasOwnProperty.call(message, "id"))
-                writer.uint32(10).string(message.id);
-            if (message.gameId != null && Object.hasOwnProperty.call(message, "gameId"))
-                writer.uint32(18).string(message.gameId);
+            writer.uint32(2).string(message.id);
+            writer.uint32(10).string(message.gameId);
             if (message.sentBy != null && Object.hasOwnProperty.call(message, "sentBy"))
-                writer.uint32(26).string(message.sentBy);
+                writer.uint32(18).string(message.sentBy);
             if (message.contributedBy != null && Object.hasOwnProperty.call(message, "contributedBy"))
-                writer.uint32(34).string(message.contributedBy);
-            if (message.usesRemaining != null && Object.hasOwnProperty.call(message, "usesRemaining"))
-                writer.uint32(40).int32(message.usesRemaining);
+                writer.uint32(26).string(message.contributedBy);
+            writer.uint32(32).int32(message.usesRemaining);
             return writer;
         };
 
@@ -8932,23 +8935,23 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.id = reader.string();
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.gameId = reader.string();
                         break;
                     }
-                case 3: {
+                case 2: {
                         message.sentBy = reader.string();
                         break;
                     }
-                case 4: {
+                case 3: {
                         message.contributedBy = reader.string();
                         break;
                     }
-                case 5: {
+                case 4: {
                         message.usesRemaining = reader.int32();
                         break;
                     }
@@ -8957,6 +8960,12 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("id"))
+                throw $util.ProtocolError("missing required 'id'", { instance: message });
+            if (!message.hasOwnProperty("gameId"))
+                throw $util.ProtocolError("missing required 'gameId'", { instance: message });
+            if (!message.hasOwnProperty("usesRemaining"))
+                throw $util.ProtocolError("missing required 'usesRemaining'", { instance: message });
             return message;
         };
 
@@ -8964,12 +8973,10 @@ export const NT = $root.NT = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             let properties = {};
-            if (message.id != null && message.hasOwnProperty("id"))
-                if (!$util.isString(message.id))
-                    return "id: string expected";
-            if (message.gameId != null && message.hasOwnProperty("gameId"))
-                if (!$util.isString(message.gameId))
-                    return "gameId: string expected";
+            if (!$util.isString(message.id))
+                return "id: string expected";
+            if (!$util.isString(message.gameId))
+                return "gameId: string expected";
             if (message.sentBy != null && message.hasOwnProperty("sentBy")) {
                 properties._sentBy = 1;
                 if (!$util.isString(message.sentBy))
@@ -8980,9 +8987,8 @@ export const NT = $root.NT = (() => {
                 if (!$util.isString(message.contributedBy))
                     return "contributedBy: string expected";
             }
-            if (message.usesRemaining != null && message.hasOwnProperty("usesRemaining"))
-                if (!$util.isInteger(message.usesRemaining))
-                    return "usesRemaining: integer expected";
+            if (!$util.isInteger(message.usesRemaining))
+                return "usesRemaining: integer expected";
             return null;
         };
 
@@ -9081,19 +9087,16 @@ export const NT = $root.NT = (() => {
         Item.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.id != null && Object.hasOwnProperty.call(message, "id"))
-                writer.uint32(10).string(message.id);
-            if (message.color != null && Object.hasOwnProperty.call(message, "color"))
-                $root.NT.Item.Color.encode(message.color, writer.uint32(18).fork()).ldelim();
+            writer.uint32(2).string(message.id);
+            $root.NT.Item.Color.encode(message.color, writer.uint32(10).fork()).ldelim();
             if (message.content != null && message.content.length)
                 for (let i = 0; i < message.content.length; ++i)
-                    $root.NT.Item.Material.encode(message.content[i], writer.uint32(26).fork()).ldelim();
+                    $root.NT.Item.Material.encode(message.content[i], writer.uint32(18).fork()).ldelim();
             if (message.sentBy != null && Object.hasOwnProperty.call(message, "sentBy"))
-                writer.uint32(34).string(message.sentBy);
+                writer.uint32(26).string(message.sentBy);
             if (message.contributedBy != null && Object.hasOwnProperty.call(message, "contributedBy"))
-                writer.uint32(42).string(message.contributedBy);
-            if (message.isChest != null && Object.hasOwnProperty.call(message, "isChest"))
-                writer.uint32(48).bool(message.isChest);
+                writer.uint32(34).string(message.contributedBy);
+            writer.uint32(40).bool(message.isChest);
             return writer;
         };
 
@@ -9104,29 +9107,29 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.id = reader.string();
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.color = $root.NT.Item.Color.decode(reader, reader.uint32());
                         break;
                     }
-                case 3: {
+                case 2: {
                         if (!(message.content && message.content.length))
                             message.content = [];
                         message.content.push($root.NT.Item.Material.decode(reader, reader.uint32()));
                         break;
                     }
-                case 4: {
+                case 3: {
                         message.sentBy = reader.string();
                         break;
                     }
-                case 5: {
+                case 4: {
                         message.contributedBy = reader.string();
                         break;
                     }
-                case 6: {
+                case 5: {
                         message.isChest = reader.bool();
                         break;
                     }
@@ -9135,6 +9138,12 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("id"))
+                throw $util.ProtocolError("missing required 'id'", { instance: message });
+            if (!message.hasOwnProperty("color"))
+                throw $util.ProtocolError("missing required 'color'", { instance: message });
+            if (!message.hasOwnProperty("isChest"))
+                throw $util.ProtocolError("missing required 'isChest'", { instance: message });
             return message;
         };
 
@@ -9142,10 +9151,9 @@ export const NT = $root.NT = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             let properties = {};
-            if (message.id != null && message.hasOwnProperty("id"))
-                if (!$util.isString(message.id))
-                    return "id: string expected";
-            if (message.color != null && message.hasOwnProperty("color")) {
+            if (!$util.isString(message.id))
+                return "id: string expected";
+            {
                 let error = $root.NT.Item.Color.verify(message.color);
                 if (error)
                     return "color." + error;
@@ -9169,9 +9177,8 @@ export const NT = $root.NT = (() => {
                 if (!$util.isString(message.contributedBy))
                     return "contributedBy: string expected";
             }
-            if (message.isChest != null && message.hasOwnProperty("isChest"))
-                if (typeof message.isChest !== "boolean")
-                    return "isChest: boolean expected";
+            if (typeof message.isChest !== "boolean")
+                return "isChest: boolean expected";
             return null;
         };
 
@@ -9271,12 +9278,9 @@ export const NT = $root.NT = (() => {
             Color.encode = function encode(message, writer) {
                 if (!writer)
                     writer = $Writer.create();
-                if (message.r != null && Object.hasOwnProperty.call(message, "r"))
-                    writer.uint32(13).float(message.r);
-                if (message.g != null && Object.hasOwnProperty.call(message, "g"))
-                    writer.uint32(21).float(message.g);
-                if (message.b != null && Object.hasOwnProperty.call(message, "b"))
-                    writer.uint32(29).float(message.b);
+                writer.uint32(5).float(message.r);
+                writer.uint32(13).float(message.g);
+                writer.uint32(21).float(message.b);
                 return writer;
             };
 
@@ -9287,15 +9291,15 @@ export const NT = $root.NT = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                    case 0: {
                             message.r = reader.float();
                             break;
                         }
-                    case 2: {
+                    case 1: {
                             message.g = reader.float();
                             break;
                         }
-                    case 3: {
+                    case 2: {
                             message.b = reader.float();
                             break;
                         }
@@ -9304,21 +9308,24 @@ export const NT = $root.NT = (() => {
                         break;
                     }
                 }
+                if (!message.hasOwnProperty("r"))
+                    throw $util.ProtocolError("missing required 'r'", { instance: message });
+                if (!message.hasOwnProperty("g"))
+                    throw $util.ProtocolError("missing required 'g'", { instance: message });
+                if (!message.hasOwnProperty("b"))
+                    throw $util.ProtocolError("missing required 'b'", { instance: message });
                 return message;
             };
 
             Color.verify = function verify(message) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
-                if (message.r != null && message.hasOwnProperty("r"))
-                    if (typeof message.r !== "number")
-                        return "r: number expected";
-                if (message.g != null && message.hasOwnProperty("g"))
-                    if (typeof message.g !== "number")
-                        return "g: number expected";
-                if (message.b != null && message.hasOwnProperty("b"))
-                    if (typeof message.b !== "number")
-                        return "b: number expected";
+                if (typeof message.r !== "number")
+                    return "r: number expected";
+                if (typeof message.g !== "number")
+                    return "g: number expected";
+                if (typeof message.b !== "number")
+                    return "b: number expected";
                 return null;
             };
 
@@ -9386,10 +9393,8 @@ export const NT = $root.NT = (() => {
             Material.encode = function encode(message, writer) {
                 if (!writer)
                     writer = $Writer.create();
-                if (message.id != null && Object.hasOwnProperty.call(message, "id"))
-                    writer.uint32(8).uint32(message.id);
-                if (message.amount != null && Object.hasOwnProperty.call(message, "amount"))
-                    writer.uint32(16).uint32(message.amount);
+                writer.uint32(0).uint32(message.id);
+                writer.uint32(8).uint32(message.amount);
                 return writer;
             };
 
@@ -9400,11 +9405,11 @@ export const NT = $root.NT = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                    case 0: {
                             message.id = reader.uint32();
                             break;
                         }
-                    case 2: {
+                    case 1: {
                             message.amount = reader.uint32();
                             break;
                         }
@@ -9413,18 +9418,20 @@ export const NT = $root.NT = (() => {
                         break;
                     }
                 }
+                if (!message.hasOwnProperty("id"))
+                    throw $util.ProtocolError("missing required 'id'", { instance: message });
+                if (!message.hasOwnProperty("amount"))
+                    throw $util.ProtocolError("missing required 'amount'", { instance: message });
                 return message;
             };
 
             Material.verify = function verify(message) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
-                if (message.id != null && message.hasOwnProperty("id"))
-                    if (!$util.isInteger(message.id))
-                        return "id: integer expected";
-                if (message.amount != null && message.hasOwnProperty("amount"))
-                    if (!$util.isInteger(message.amount))
-                        return "amount: integer expected";
+                if (!$util.isInteger(message.id))
+                    return "id: integer expected";
+                if (!$util.isInteger(message.amount))
+                    return "amount: integer expected";
                 return null;
             };
 
@@ -9499,14 +9506,11 @@ export const NT = $root.NT = (() => {
         EntityItem.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.id != null && Object.hasOwnProperty.call(message, "id"))
-                writer.uint32(10).string(message.id);
-            if (message.path != null && Object.hasOwnProperty.call(message, "path"))
-                writer.uint32(18).string(message.path);
-            if (message.sprite != null && Object.hasOwnProperty.call(message, "sprite"))
-                writer.uint32(26).string(message.sprite);
+            writer.uint32(2).string(message.id);
+            writer.uint32(10).string(message.path);
+            writer.uint32(18).string(message.sprite);
             if (message.sentBy != null && Object.hasOwnProperty.call(message, "sentBy"))
-                writer.uint32(34).string(message.sentBy);
+                writer.uint32(26).string(message.sentBy);
             return writer;
         };
 
@@ -9517,19 +9521,19 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.id = reader.string();
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.path = reader.string();
                         break;
                     }
-                case 3: {
+                case 2: {
                         message.sprite = reader.string();
                         break;
                     }
-                case 4: {
+                case 3: {
                         message.sentBy = reader.string();
                         break;
                     }
@@ -9538,6 +9542,12 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("id"))
+                throw $util.ProtocolError("missing required 'id'", { instance: message });
+            if (!message.hasOwnProperty("path"))
+                throw $util.ProtocolError("missing required 'path'", { instance: message });
+            if (!message.hasOwnProperty("sprite"))
+                throw $util.ProtocolError("missing required 'sprite'", { instance: message });
             return message;
         };
 
@@ -9545,15 +9555,12 @@ export const NT = $root.NT = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             let properties = {};
-            if (message.id != null && message.hasOwnProperty("id"))
-                if (!$util.isString(message.id))
-                    return "id: string expected";
-            if (message.path != null && message.hasOwnProperty("path"))
-                if (!$util.isString(message.path))
-                    return "path: string expected";
-            if (message.sprite != null && message.hasOwnProperty("sprite"))
-                if (!$util.isString(message.sprite))
-                    return "sprite: string expected";
+            if (!$util.isString(message.id))
+                return "id: string expected";
+            if (!$util.isString(message.path))
+                return "path: string expected";
+            if (!$util.isString(message.sprite))
+                return "sprite: string expected";
             if (message.sentBy != null && message.hasOwnProperty("sentBy")) {
                 properties._sentBy = 1;
                 if (!$util.isString(message.sentBy))
@@ -9669,65 +9676,65 @@ export const NT = $root.NT = (() => {
             if (!writer)
                 writer = $Writer.create();
             if (message.cRoomCreate != null && Object.hasOwnProperty.call(message, "cRoomCreate"))
-                $root.NT.ClientRoomCreate.encode(message.cRoomCreate, writer.uint32(10).fork()).ldelim();
+                $root.NT.ClientRoomCreate.encode(message.cRoomCreate, writer.uint32(2).fork()).ldelim();
             if (message.sRoomCreated != null && Object.hasOwnProperty.call(message, "sRoomCreated"))
-                $root.NT.ServerRoomCreated.encode(message.sRoomCreated, writer.uint32(18).fork()).ldelim();
+                $root.NT.ServerRoomCreated.encode(message.sRoomCreated, writer.uint32(10).fork()).ldelim();
             if (message.sRoomCreateFailed != null && Object.hasOwnProperty.call(message, "sRoomCreateFailed"))
-                $root.NT.ServerRoomCreateFailed.encode(message.sRoomCreateFailed, writer.uint32(26).fork()).ldelim();
+                $root.NT.ServerRoomCreateFailed.encode(message.sRoomCreateFailed, writer.uint32(18).fork()).ldelim();
             if (message.cRoomUpdate != null && Object.hasOwnProperty.call(message, "cRoomUpdate"))
-                $root.NT.ClientRoomUpdate.encode(message.cRoomUpdate, writer.uint32(34).fork()).ldelim();
+                $root.NT.ClientRoomUpdate.encode(message.cRoomUpdate, writer.uint32(26).fork()).ldelim();
             if (message.sRoomUpdated != null && Object.hasOwnProperty.call(message, "sRoomUpdated"))
-                $root.NT.ServerRoomUpdated.encode(message.sRoomUpdated, writer.uint32(42).fork()).ldelim();
+                $root.NT.ServerRoomUpdated.encode(message.sRoomUpdated, writer.uint32(34).fork()).ldelim();
             if (message.sRoomUpdateFailed != null && Object.hasOwnProperty.call(message, "sRoomUpdateFailed"))
-                $root.NT.ServerRoomUpdateFailed.encode(message.sRoomUpdateFailed, writer.uint32(50).fork()).ldelim();
+                $root.NT.ServerRoomUpdateFailed.encode(message.sRoomUpdateFailed, writer.uint32(42).fork()).ldelim();
             if (message.cRoomFlagsUpdate != null && Object.hasOwnProperty.call(message, "cRoomFlagsUpdate"))
-                $root.NT.ClientRoomFlagsUpdate.encode(message.cRoomFlagsUpdate, writer.uint32(58).fork()).ldelim();
+                $root.NT.ClientRoomFlagsUpdate.encode(message.cRoomFlagsUpdate, writer.uint32(50).fork()).ldelim();
             if (message.sRoomFlagsUpdated != null && Object.hasOwnProperty.call(message, "sRoomFlagsUpdated"))
-                $root.NT.ServerRoomFlagsUpdated.encode(message.sRoomFlagsUpdated, writer.uint32(66).fork()).ldelim();
+                $root.NT.ServerRoomFlagsUpdated.encode(message.sRoomFlagsUpdated, writer.uint32(58).fork()).ldelim();
             if (message.sRoomFlagsUpdateFailed != null && Object.hasOwnProperty.call(message, "sRoomFlagsUpdateFailed"))
-                $root.NT.ServerRoomFlagsUpdateFailed.encode(message.sRoomFlagsUpdateFailed, writer.uint32(74).fork()).ldelim();
+                $root.NT.ServerRoomFlagsUpdateFailed.encode(message.sRoomFlagsUpdateFailed, writer.uint32(66).fork()).ldelim();
             if (message.cRoomDelete != null && Object.hasOwnProperty.call(message, "cRoomDelete"))
-                $root.NT.ClientRoomDelete.encode(message.cRoomDelete, writer.uint32(82).fork()).ldelim();
+                $root.NT.ClientRoomDelete.encode(message.cRoomDelete, writer.uint32(74).fork()).ldelim();
             if (message.sRoomDeleted != null && Object.hasOwnProperty.call(message, "sRoomDeleted"))
-                $root.NT.ServerRoomDeleted.encode(message.sRoomDeleted, writer.uint32(90).fork()).ldelim();
+                $root.NT.ServerRoomDeleted.encode(message.sRoomDeleted, writer.uint32(82).fork()).ldelim();
             if (message.cJoinRoom != null && Object.hasOwnProperty.call(message, "cJoinRoom"))
-                $root.NT.ClientJoinRoom.encode(message.cJoinRoom, writer.uint32(98).fork()).ldelim();
+                $root.NT.ClientJoinRoom.encode(message.cJoinRoom, writer.uint32(90).fork()).ldelim();
             if (message.sJoinRoomSuccess != null && Object.hasOwnProperty.call(message, "sJoinRoomSuccess"))
-                $root.NT.ServerJoinRoomSuccess.encode(message.sJoinRoomSuccess, writer.uint32(106).fork()).ldelim();
+                $root.NT.ServerJoinRoomSuccess.encode(message.sJoinRoomSuccess, writer.uint32(98).fork()).ldelim();
             if (message.sJoinRoomFailed != null && Object.hasOwnProperty.call(message, "sJoinRoomFailed"))
-                $root.NT.ServerJoinRoomFailed.encode(message.sJoinRoomFailed, writer.uint32(114).fork()).ldelim();
+                $root.NT.ServerJoinRoomFailed.encode(message.sJoinRoomFailed, writer.uint32(106).fork()).ldelim();
             if (message.sUserJoinedRoom != null && Object.hasOwnProperty.call(message, "sUserJoinedRoom"))
-                $root.NT.ServerUserJoinedRoom.encode(message.sUserJoinedRoom, writer.uint32(122).fork()).ldelim();
+                $root.NT.ServerUserJoinedRoom.encode(message.sUserJoinedRoom, writer.uint32(114).fork()).ldelim();
             if (message.cLeaveRoom != null && Object.hasOwnProperty.call(message, "cLeaveRoom"))
-                $root.NT.ClientLeaveRoom.encode(message.cLeaveRoom, writer.uint32(130).fork()).ldelim();
+                $root.NT.ClientLeaveRoom.encode(message.cLeaveRoom, writer.uint32(122).fork()).ldelim();
             if (message.sUserLeftRoom != null && Object.hasOwnProperty.call(message, "sUserLeftRoom"))
-                $root.NT.ServerUserLeftRoom.encode(message.sUserLeftRoom, writer.uint32(138).fork()).ldelim();
+                $root.NT.ServerUserLeftRoom.encode(message.sUserLeftRoom, writer.uint32(130).fork()).ldelim();
             if (message.cKickUser != null && Object.hasOwnProperty.call(message, "cKickUser"))
-                $root.NT.ClientKickUser.encode(message.cKickUser, writer.uint32(146).fork()).ldelim();
+                $root.NT.ClientKickUser.encode(message.cKickUser, writer.uint32(138).fork()).ldelim();
             if (message.sUserKicked != null && Object.hasOwnProperty.call(message, "sUserKicked"))
-                $root.NT.ServerUserKicked.encode(message.sUserKicked, writer.uint32(154).fork()).ldelim();
+                $root.NT.ServerUserKicked.encode(message.sUserKicked, writer.uint32(146).fork()).ldelim();
             if (message.cBanUser != null && Object.hasOwnProperty.call(message, "cBanUser"))
-                $root.NT.ClientBanUser.encode(message.cBanUser, writer.uint32(162).fork()).ldelim();
+                $root.NT.ClientBanUser.encode(message.cBanUser, writer.uint32(154).fork()).ldelim();
             if (message.sUserBanned != null && Object.hasOwnProperty.call(message, "sUserBanned"))
-                $root.NT.ServerUserBanned.encode(message.sUserBanned, writer.uint32(170).fork()).ldelim();
+                $root.NT.ServerUserBanned.encode(message.sUserBanned, writer.uint32(162).fork()).ldelim();
             if (message.cReadyState != null && Object.hasOwnProperty.call(message, "cReadyState"))
-                $root.NT.ClientReadyState.encode(message.cReadyState, writer.uint32(178).fork()).ldelim();
+                $root.NT.ClientReadyState.encode(message.cReadyState, writer.uint32(170).fork()).ldelim();
             if (message.sUserReadyState != null && Object.hasOwnProperty.call(message, "sUserReadyState"))
-                $root.NT.ServerUserReadyState.encode(message.sUserReadyState, writer.uint32(186).fork()).ldelim();
+                $root.NT.ServerUserReadyState.encode(message.sUserReadyState, writer.uint32(178).fork()).ldelim();
             if (message.cStartRun != null && Object.hasOwnProperty.call(message, "cStartRun"))
-                $root.NT.ClientStartRun.encode(message.cStartRun, writer.uint32(194).fork()).ldelim();
+                $root.NT.ClientStartRun.encode(message.cStartRun, writer.uint32(186).fork()).ldelim();
             if (message.sHostStart != null && Object.hasOwnProperty.call(message, "sHostStart"))
-                $root.NT.ServerHostStart.encode(message.sHostStart, writer.uint32(202).fork()).ldelim();
+                $root.NT.ServerHostStart.encode(message.sHostStart, writer.uint32(194).fork()).ldelim();
             if (message.cRequestRoomList != null && Object.hasOwnProperty.call(message, "cRequestRoomList"))
-                $root.NT.ClientRequestRoomList.encode(message.cRequestRoomList, writer.uint32(218).fork()).ldelim();
+                $root.NT.ClientRequestRoomList.encode(message.cRequestRoomList, writer.uint32(210).fork()).ldelim();
             if (message.sRoomList != null && Object.hasOwnProperty.call(message, "sRoomList"))
-                $root.NT.ServerRoomList.encode(message.sRoomList, writer.uint32(226).fork()).ldelim();
+                $root.NT.ServerRoomList.encode(message.sRoomList, writer.uint32(218).fork()).ldelim();
             if (message.sDisconnected != null && Object.hasOwnProperty.call(message, "sDisconnected"))
-                $root.NT.ServerDisconnected.encode(message.sDisconnected, writer.uint32(250).fork()).ldelim();
+                $root.NT.ServerDisconnected.encode(message.sDisconnected, writer.uint32(242).fork()).ldelim();
             if (message.sRoomAddToList != null && Object.hasOwnProperty.call(message, "sRoomAddToList"))
-                $root.NT.ServerRoomAddToList.encode(message.sRoomAddToList, writer.uint32(258).fork()).ldelim();
+                $root.NT.ServerRoomAddToList.encode(message.sRoomAddToList, writer.uint32(250).fork()).ldelim();
             if (message.cRunOver != null && Object.hasOwnProperty.call(message, "cRunOver"))
-                $root.NT.ClientRunOver.encode(message.cRunOver, writer.uint32(266).fork()).ldelim();
+                $root.NT.ClientRunOver.encode(message.cRunOver, writer.uint32(258).fork()).ldelim();
             return writer;
         };
 
@@ -9738,123 +9745,123 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.cRoomCreate = $root.NT.ClientRoomCreate.decode(reader, reader.uint32());
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.sRoomCreated = $root.NT.ServerRoomCreated.decode(reader, reader.uint32());
                         break;
                     }
-                case 3: {
+                case 2: {
                         message.sRoomCreateFailed = $root.NT.ServerRoomCreateFailed.decode(reader, reader.uint32());
                         break;
                     }
-                case 4: {
+                case 3: {
                         message.cRoomUpdate = $root.NT.ClientRoomUpdate.decode(reader, reader.uint32());
                         break;
                     }
-                case 5: {
+                case 4: {
                         message.sRoomUpdated = $root.NT.ServerRoomUpdated.decode(reader, reader.uint32());
                         break;
                     }
-                case 6: {
+                case 5: {
                         message.sRoomUpdateFailed = $root.NT.ServerRoomUpdateFailed.decode(reader, reader.uint32());
                         break;
                     }
-                case 7: {
+                case 6: {
                         message.cRoomFlagsUpdate = $root.NT.ClientRoomFlagsUpdate.decode(reader, reader.uint32());
                         break;
                     }
-                case 8: {
+                case 7: {
                         message.sRoomFlagsUpdated = $root.NT.ServerRoomFlagsUpdated.decode(reader, reader.uint32());
                         break;
                     }
-                case 9: {
+                case 8: {
                         message.sRoomFlagsUpdateFailed = $root.NT.ServerRoomFlagsUpdateFailed.decode(reader, reader.uint32());
                         break;
                     }
-                case 10: {
+                case 9: {
                         message.cRoomDelete = $root.NT.ClientRoomDelete.decode(reader, reader.uint32());
                         break;
                     }
-                case 11: {
+                case 10: {
                         message.sRoomDeleted = $root.NT.ServerRoomDeleted.decode(reader, reader.uint32());
                         break;
                     }
-                case 12: {
+                case 11: {
                         message.cJoinRoom = $root.NT.ClientJoinRoom.decode(reader, reader.uint32());
                         break;
                     }
-                case 13: {
+                case 12: {
                         message.sJoinRoomSuccess = $root.NT.ServerJoinRoomSuccess.decode(reader, reader.uint32());
                         break;
                     }
-                case 14: {
+                case 13: {
                         message.sJoinRoomFailed = $root.NT.ServerJoinRoomFailed.decode(reader, reader.uint32());
                         break;
                     }
-                case 15: {
+                case 14: {
                         message.sUserJoinedRoom = $root.NT.ServerUserJoinedRoom.decode(reader, reader.uint32());
                         break;
                     }
-                case 16: {
+                case 15: {
                         message.cLeaveRoom = $root.NT.ClientLeaveRoom.decode(reader, reader.uint32());
                         break;
                     }
-                case 17: {
+                case 16: {
                         message.sUserLeftRoom = $root.NT.ServerUserLeftRoom.decode(reader, reader.uint32());
                         break;
                     }
-                case 18: {
+                case 17: {
                         message.cKickUser = $root.NT.ClientKickUser.decode(reader, reader.uint32());
                         break;
                     }
-                case 19: {
+                case 18: {
                         message.sUserKicked = $root.NT.ServerUserKicked.decode(reader, reader.uint32());
                         break;
                     }
-                case 20: {
+                case 19: {
                         message.cBanUser = $root.NT.ClientBanUser.decode(reader, reader.uint32());
                         break;
                     }
-                case 21: {
+                case 20: {
                         message.sUserBanned = $root.NT.ServerUserBanned.decode(reader, reader.uint32());
                         break;
                     }
-                case 22: {
+                case 21: {
                         message.cReadyState = $root.NT.ClientReadyState.decode(reader, reader.uint32());
                         break;
                     }
-                case 23: {
+                case 22: {
                         message.sUserReadyState = $root.NT.ServerUserReadyState.decode(reader, reader.uint32());
                         break;
                     }
-                case 24: {
+                case 23: {
                         message.cStartRun = $root.NT.ClientStartRun.decode(reader, reader.uint32());
                         break;
                     }
-                case 25: {
+                case 24: {
                         message.sHostStart = $root.NT.ServerHostStart.decode(reader, reader.uint32());
                         break;
                     }
-                case 27: {
+                case 26: {
                         message.cRequestRoomList = $root.NT.ClientRequestRoomList.decode(reader, reader.uint32());
                         break;
                     }
-                case 28: {
+                case 27: {
                         message.sRoomList = $root.NT.ServerRoomList.decode(reader, reader.uint32());
                         break;
                     }
-                case 31: {
+                case 30: {
                         message.sDisconnected = $root.NT.ServerDisconnected.decode(reader, reader.uint32());
                         break;
                     }
-                case 32: {
+                case 31: {
                         message.sRoomAddToList = $root.NT.ServerRoomAddToList.decode(reader, reader.uint32());
                         break;
                     }
-                case 33: {
+                case 32: {
                         message.cRunOver = $root.NT.ClientRunOver.decode(reader, reader.uint32());
                         break;
                     }
@@ -10614,7 +10621,7 @@ export const NT = $root.NT = (() => {
             if (!writer)
                 writer = $Writer.create();
             if (message.reason != null && Object.hasOwnProperty.call(message, "reason"))
-                writer.uint32(10).string(message.reason);
+                writer.uint32(2).string(message.reason);
             return writer;
         };
 
@@ -10625,7 +10632,7 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.reason = reader.string();
                         break;
                     }
@@ -10698,8 +10705,7 @@ export const NT = $root.NT = (() => {
         ClientRoomDelete.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.id != null && Object.hasOwnProperty.call(message, "id"))
-                writer.uint32(10).string(message.id);
+            writer.uint32(2).string(message.id);
             return writer;
         };
 
@@ -10710,7 +10716,7 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.id = reader.string();
                         break;
                     }
@@ -10719,15 +10725,16 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("id"))
+                throw $util.ProtocolError("missing required 'id'", { instance: message });
             return message;
         };
 
         ClientRoomDelete.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.id != null && message.hasOwnProperty("id"))
-                if (!$util.isString(message.id))
-                    return "id: string expected";
+            if (!$util.isString(message.id))
+                return "id: string expected";
             return null;
         };
 
@@ -10783,8 +10790,7 @@ export const NT = $root.NT = (() => {
         ServerRoomDeleted.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.id != null && Object.hasOwnProperty.call(message, "id"))
-                writer.uint32(10).string(message.id);
+            writer.uint32(2).string(message.id);
             return writer;
         };
 
@@ -10795,7 +10801,7 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.id = reader.string();
                         break;
                     }
@@ -10804,15 +10810,16 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("id"))
+                throw $util.ProtocolError("missing required 'id'", { instance: message });
             return message;
         };
 
         ServerRoomDeleted.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.id != null && message.hasOwnProperty("id"))
-                if (!$util.isString(message.id))
-                    return "id: string expected";
+            if (!$util.isString(message.id))
+                return "id: string expected";
             return null;
         };
 
@@ -10878,14 +10885,11 @@ export const NT = $root.NT = (() => {
         ClientRoomCreate.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.name != null && Object.hasOwnProperty.call(message, "name"))
-                writer.uint32(10).string(message.name);
-            if (message.gamemode != null && Object.hasOwnProperty.call(message, "gamemode"))
-                writer.uint32(16).uint32(message.gamemode);
-            if (message.maxUsers != null && Object.hasOwnProperty.call(message, "maxUsers"))
-                writer.uint32(24).uint32(message.maxUsers);
+            writer.uint32(2).string(message.name);
+            writer.uint32(8).uint32(message.gamemode);
+            writer.uint32(16).uint32(message.maxUsers);
             if (message.password != null && Object.hasOwnProperty.call(message, "password"))
-                writer.uint32(34).string(message.password);
+                writer.uint32(26).string(message.password);
             return writer;
         };
 
@@ -10896,19 +10900,19 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.name = reader.string();
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.gamemode = reader.uint32();
                         break;
                     }
-                case 3: {
+                case 2: {
                         message.maxUsers = reader.uint32();
                         break;
                     }
-                case 4: {
+                case 3: {
                         message.password = reader.string();
                         break;
                     }
@@ -10917,6 +10921,12 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("name"))
+                throw $util.ProtocolError("missing required 'name'", { instance: message });
+            if (!message.hasOwnProperty("gamemode"))
+                throw $util.ProtocolError("missing required 'gamemode'", { instance: message });
+            if (!message.hasOwnProperty("maxUsers"))
+                throw $util.ProtocolError("missing required 'maxUsers'", { instance: message });
             return message;
         };
 
@@ -10924,15 +10934,12 @@ export const NT = $root.NT = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             let properties = {};
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.gamemode != null && message.hasOwnProperty("gamemode"))
-                if (!$util.isInteger(message.gamemode))
-                    return "gamemode: integer expected";
-            if (message.maxUsers != null && message.hasOwnProperty("maxUsers"))
-                if (!$util.isInteger(message.maxUsers))
-                    return "maxUsers: integer expected";
+            if (!$util.isString(message.name))
+                return "name: string expected";
+            if (!$util.isInteger(message.gamemode))
+                return "gamemode: integer expected";
+            if (!$util.isInteger(message.maxUsers))
+                return "maxUsers: integer expected";
             if (message.password != null && message.hasOwnProperty("password")) {
                 properties._password = 1;
                 if (!$util.isString(message.password))
@@ -11025,21 +11032,16 @@ export const NT = $root.NT = (() => {
         ServerRoomCreated.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.id != null && Object.hasOwnProperty.call(message, "id"))
-                writer.uint32(10).string(message.id);
-            if (message.name != null && Object.hasOwnProperty.call(message, "name"))
-                writer.uint32(18).string(message.name);
-            if (message.gamemode != null && Object.hasOwnProperty.call(message, "gamemode"))
-                writer.uint32(24).uint32(message.gamemode);
-            if (message.maxUsers != null && Object.hasOwnProperty.call(message, "maxUsers"))
-                writer.uint32(32).uint32(message.maxUsers);
+            writer.uint32(2).string(message.id);
+            writer.uint32(10).string(message.name);
+            writer.uint32(16).uint32(message.gamemode);
+            writer.uint32(24).uint32(message.maxUsers);
             if (message.password != null && Object.hasOwnProperty.call(message, "password"))
-                writer.uint32(42).string(message.password);
-            if (message.locked != null && Object.hasOwnProperty.call(message, "locked"))
-                writer.uint32(48).bool(message.locked);
+                writer.uint32(34).string(message.password);
+            writer.uint32(40).bool(message.locked);
             if (message.users != null && message.users.length)
                 for (let i = 0; i < message.users.length; ++i)
-                    $root.NT.ServerRoomCreated.User.encode(message.users[i], writer.uint32(58).fork()).ldelim();
+                    $root.NT.ServerRoomCreated.User.encode(message.users[i], writer.uint32(50).fork()).ldelim();
             return writer;
         };
 
@@ -11050,31 +11052,31 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.id = reader.string();
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.name = reader.string();
                         break;
                     }
-                case 3: {
+                case 2: {
                         message.gamemode = reader.uint32();
                         break;
                     }
-                case 4: {
+                case 3: {
                         message.maxUsers = reader.uint32();
                         break;
                     }
-                case 5: {
+                case 4: {
                         message.password = reader.string();
                         break;
                     }
-                case 6: {
+                case 5: {
                         message.locked = reader.bool();
                         break;
                     }
-                case 7: {
+                case 6: {
                         if (!(message.users && message.users.length))
                             message.users = [];
                         message.users.push($root.NT.ServerRoomCreated.User.decode(reader, reader.uint32()));
@@ -11085,6 +11087,16 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("id"))
+                throw $util.ProtocolError("missing required 'id'", { instance: message });
+            if (!message.hasOwnProperty("name"))
+                throw $util.ProtocolError("missing required 'name'", { instance: message });
+            if (!message.hasOwnProperty("gamemode"))
+                throw $util.ProtocolError("missing required 'gamemode'", { instance: message });
+            if (!message.hasOwnProperty("maxUsers"))
+                throw $util.ProtocolError("missing required 'maxUsers'", { instance: message });
+            if (!message.hasOwnProperty("locked"))
+                throw $util.ProtocolError("missing required 'locked'", { instance: message });
             return message;
         };
 
@@ -11092,26 +11104,21 @@ export const NT = $root.NT = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             let properties = {};
-            if (message.id != null && message.hasOwnProperty("id"))
-                if (!$util.isString(message.id))
-                    return "id: string expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.gamemode != null && message.hasOwnProperty("gamemode"))
-                if (!$util.isInteger(message.gamemode))
-                    return "gamemode: integer expected";
-            if (message.maxUsers != null && message.hasOwnProperty("maxUsers"))
-                if (!$util.isInteger(message.maxUsers))
-                    return "maxUsers: integer expected";
+            if (!$util.isString(message.id))
+                return "id: string expected";
+            if (!$util.isString(message.name))
+                return "name: string expected";
+            if (!$util.isInteger(message.gamemode))
+                return "gamemode: integer expected";
+            if (!$util.isInteger(message.maxUsers))
+                return "maxUsers: integer expected";
             if (message.password != null && message.hasOwnProperty("password")) {
                 properties._password = 1;
                 if (!$util.isString(message.password))
                     return "password: string expected";
             }
-            if (message.locked != null && message.hasOwnProperty("locked"))
-                if (typeof message.locked !== "boolean")
-                    return "locked: boolean expected";
+            if (typeof message.locked !== "boolean")
+                return "locked: boolean expected";
             if (message.users != null && message.hasOwnProperty("users")) {
                 if (!Array.isArray(message.users))
                     return "users: array expected";
@@ -11221,14 +11228,10 @@ export const NT = $root.NT = (() => {
             User.encode = function encode(message, writer) {
                 if (!writer)
                     writer = $Writer.create();
-                if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                    writer.uint32(10).string(message.userId);
-                if (message.name != null && Object.hasOwnProperty.call(message, "name"))
-                    writer.uint32(18).string(message.name);
-                if (message.ready != null && Object.hasOwnProperty.call(message, "ready"))
-                    writer.uint32(24).bool(message.ready);
-                if (message.owner != null && Object.hasOwnProperty.call(message, "owner"))
-                    writer.uint32(32).bool(message.owner);
+                writer.uint32(2).string(message.userId);
+                writer.uint32(10).string(message.name);
+                writer.uint32(16).bool(message.ready);
+                writer.uint32(24).bool(message.owner);
                 return writer;
             };
 
@@ -11239,19 +11242,19 @@ export const NT = $root.NT = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                    case 0: {
                             message.userId = reader.string();
                             break;
                         }
-                    case 2: {
+                    case 1: {
                             message.name = reader.string();
                             break;
                         }
-                    case 3: {
+                    case 2: {
                             message.ready = reader.bool();
                             break;
                         }
-                    case 4: {
+                    case 3: {
                             message.owner = reader.bool();
                             break;
                         }
@@ -11260,24 +11263,28 @@ export const NT = $root.NT = (() => {
                         break;
                     }
                 }
+                if (!message.hasOwnProperty("userId"))
+                    throw $util.ProtocolError("missing required 'userId'", { instance: message });
+                if (!message.hasOwnProperty("name"))
+                    throw $util.ProtocolError("missing required 'name'", { instance: message });
+                if (!message.hasOwnProperty("ready"))
+                    throw $util.ProtocolError("missing required 'ready'", { instance: message });
+                if (!message.hasOwnProperty("owner"))
+                    throw $util.ProtocolError("missing required 'owner'", { instance: message });
                 return message;
             };
 
             User.verify = function verify(message) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
-                if (message.userId != null && message.hasOwnProperty("userId"))
-                    if (!$util.isString(message.userId))
-                        return "userId: string expected";
-                if (message.name != null && message.hasOwnProperty("name"))
-                    if (!$util.isString(message.name))
-                        return "name: string expected";
-                if (message.ready != null && message.hasOwnProperty("ready"))
-                    if (typeof message.ready !== "boolean")
-                        return "ready: boolean expected";
-                if (message.owner != null && message.hasOwnProperty("owner"))
-                    if (typeof message.owner !== "boolean")
-                        return "owner: boolean expected";
+                if (!$util.isString(message.userId))
+                    return "userId: string expected";
+                if (!$util.isString(message.name))
+                    return "name: string expected";
+                if (typeof message.ready !== "boolean")
+                    return "ready: boolean expected";
+                if (typeof message.owner !== "boolean")
+                    return "owner: boolean expected";
                 return null;
             };
 
@@ -11353,7 +11360,7 @@ export const NT = $root.NT = (() => {
             if (!writer)
                 writer = $Writer.create();
             if (message.reason != null && Object.hasOwnProperty.call(message, "reason"))
-                writer.uint32(10).string(message.reason);
+                writer.uint32(2).string(message.reason);
             return writer;
         };
 
@@ -11364,7 +11371,7 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.reason = reader.string();
                         break;
                     }
@@ -11822,7 +11829,7 @@ export const NT = $root.NT = (() => {
             if (!writer)
                 writer = $Writer.create();
             if (message.reason != null && Object.hasOwnProperty.call(message, "reason"))
-                writer.uint32(10).string(message.reason);
+                writer.uint32(2).string(message.reason);
             return writer;
         };
 
@@ -11833,7 +11840,7 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.reason = reader.string();
                         break;
                     }
@@ -11909,7 +11916,7 @@ export const NT = $root.NT = (() => {
                 writer = $Writer.create();
             if (message.flags != null && message.flags.length)
                 for (let i = 0; i < message.flags.length; ++i)
-                    $root.NT.ClientRoomFlagsUpdate.GameFlag.encode(message.flags[i], writer.uint32(10).fork()).ldelim();
+                    $root.NT.ClientRoomFlagsUpdate.GameFlag.encode(message.flags[i], writer.uint32(2).fork()).ldelim();
             return writer;
         };
 
@@ -11920,7 +11927,7 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         if (!(message.flags && message.flags.length))
                             message.flags = [];
                         message.flags.push($root.NT.ClientRoomFlagsUpdate.GameFlag.decode(reader, reader.uint32()));
@@ -12041,18 +12048,17 @@ export const NT = $root.NT = (() => {
             GameFlag.encode = function encode(message, writer) {
                 if (!writer)
                     writer = $Writer.create();
-                if (message.flag != null && Object.hasOwnProperty.call(message, "flag"))
-                    writer.uint32(10).string(message.flag);
+                writer.uint32(2).string(message.flag);
                 if (message.intVal != null && Object.hasOwnProperty.call(message, "intVal"))
-                    writer.uint32(16).int32(message.intVal);
+                    writer.uint32(8).int32(message.intVal);
                 if (message.strVal != null && Object.hasOwnProperty.call(message, "strVal"))
-                    writer.uint32(26).string(message.strVal);
+                    writer.uint32(18).string(message.strVal);
                 if (message.floatVal != null && Object.hasOwnProperty.call(message, "floatVal"))
-                    writer.uint32(37).float(message.floatVal);
+                    writer.uint32(29).float(message.floatVal);
                 if (message.boolVal != null && Object.hasOwnProperty.call(message, "boolVal"))
-                    writer.uint32(40).bool(message.boolVal);
+                    writer.uint32(32).bool(message.boolVal);
                 if (message.uIntVal != null && Object.hasOwnProperty.call(message, "uIntVal"))
-                    writer.uint32(48).uint32(message.uIntVal);
+                    writer.uint32(40).uint32(message.uIntVal);
                 return writer;
             };
 
@@ -12063,27 +12069,27 @@ export const NT = $root.NT = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                    case 0: {
                             message.flag = reader.string();
                             break;
                         }
-                    case 2: {
+                    case 1: {
                             message.intVal = reader.int32();
                             break;
                         }
-                    case 3: {
+                    case 2: {
                             message.strVal = reader.string();
                             break;
                         }
-                    case 4: {
+                    case 3: {
                             message.floatVal = reader.float();
                             break;
                         }
-                    case 5: {
+                    case 4: {
                             message.boolVal = reader.bool();
                             break;
                         }
-                    case 6: {
+                    case 5: {
                             message.uIntVal = reader.uint32();
                             break;
                         }
@@ -12092,6 +12098,8 @@ export const NT = $root.NT = (() => {
                         break;
                     }
                 }
+                if (!message.hasOwnProperty("flag"))
+                    throw $util.ProtocolError("missing required 'flag'", { instance: message });
                 return message;
             };
 
@@ -12099,9 +12107,8 @@ export const NT = $root.NT = (() => {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
                 let properties = {};
-                if (message.flag != null && message.hasOwnProperty("flag"))
-                    if (!$util.isString(message.flag))
-                        return "flag: string expected";
+                if (!$util.isString(message.flag))
+                    return "flag: string expected";
                 if (message.intVal != null && message.hasOwnProperty("intVal")) {
                     properties._intVal = 1;
                     if (!$util.isInteger(message.intVal))
@@ -12223,7 +12230,7 @@ export const NT = $root.NT = (() => {
                 writer = $Writer.create();
             if (message.flags != null && message.flags.length)
                 for (let i = 0; i < message.flags.length; ++i)
-                    $root.NT.ServerRoomFlagsUpdated.GameFlag.encode(message.flags[i], writer.uint32(10).fork()).ldelim();
+                    $root.NT.ServerRoomFlagsUpdated.GameFlag.encode(message.flags[i], writer.uint32(2).fork()).ldelim();
             return writer;
         };
 
@@ -12234,7 +12241,7 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         if (!(message.flags && message.flags.length))
                             message.flags = [];
                         message.flags.push($root.NT.ServerRoomFlagsUpdated.GameFlag.decode(reader, reader.uint32()));
@@ -12355,18 +12362,17 @@ export const NT = $root.NT = (() => {
             GameFlag.encode = function encode(message, writer) {
                 if (!writer)
                     writer = $Writer.create();
-                if (message.flag != null && Object.hasOwnProperty.call(message, "flag"))
-                    writer.uint32(10).string(message.flag);
+                writer.uint32(2).string(message.flag);
                 if (message.intVal != null && Object.hasOwnProperty.call(message, "intVal"))
-                    writer.uint32(16).int32(message.intVal);
+                    writer.uint32(8).int32(message.intVal);
                 if (message.strVal != null && Object.hasOwnProperty.call(message, "strVal"))
-                    writer.uint32(26).string(message.strVal);
+                    writer.uint32(18).string(message.strVal);
                 if (message.floatVal != null && Object.hasOwnProperty.call(message, "floatVal"))
-                    writer.uint32(37).float(message.floatVal);
+                    writer.uint32(29).float(message.floatVal);
                 if (message.boolVal != null && Object.hasOwnProperty.call(message, "boolVal"))
-                    writer.uint32(40).bool(message.boolVal);
+                    writer.uint32(32).bool(message.boolVal);
                 if (message.uIntVal != null && Object.hasOwnProperty.call(message, "uIntVal"))
-                    writer.uint32(48).uint32(message.uIntVal);
+                    writer.uint32(40).uint32(message.uIntVal);
                 return writer;
             };
 
@@ -12377,27 +12383,27 @@ export const NT = $root.NT = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                    case 0: {
                             message.flag = reader.string();
                             break;
                         }
-                    case 2: {
+                    case 1: {
                             message.intVal = reader.int32();
                             break;
                         }
-                    case 3: {
+                    case 2: {
                             message.strVal = reader.string();
                             break;
                         }
-                    case 4: {
+                    case 3: {
                             message.floatVal = reader.float();
                             break;
                         }
-                    case 5: {
+                    case 4: {
                             message.boolVal = reader.bool();
                             break;
                         }
-                    case 6: {
+                    case 5: {
                             message.uIntVal = reader.uint32();
                             break;
                         }
@@ -12406,6 +12412,8 @@ export const NT = $root.NT = (() => {
                         break;
                     }
                 }
+                if (!message.hasOwnProperty("flag"))
+                    throw $util.ProtocolError("missing required 'flag'", { instance: message });
                 return message;
             };
 
@@ -12413,9 +12421,8 @@ export const NT = $root.NT = (() => {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
                 let properties = {};
-                if (message.flag != null && message.hasOwnProperty("flag"))
-                    if (!$util.isString(message.flag))
-                        return "flag: string expected";
+                if (!$util.isString(message.flag))
+                    return "flag: string expected";
                 if (message.intVal != null && message.hasOwnProperty("intVal")) {
                     properties._intVal = 1;
                     if (!$util.isInteger(message.intVal))
@@ -12535,7 +12542,7 @@ export const NT = $root.NT = (() => {
             if (!writer)
                 writer = $Writer.create();
             if (message.reason != null && Object.hasOwnProperty.call(message, "reason"))
-                writer.uint32(10).string(message.reason);
+                writer.uint32(2).string(message.reason);
             return writer;
         };
 
@@ -12546,7 +12553,7 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.reason = reader.string();
                         break;
                     }
@@ -12627,10 +12634,9 @@ export const NT = $root.NT = (() => {
         ClientJoinRoom.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.id != null && Object.hasOwnProperty.call(message, "id"))
-                writer.uint32(10).string(message.id);
+            writer.uint32(2).string(message.id);
             if (message.password != null && Object.hasOwnProperty.call(message, "password"))
-                writer.uint32(18).string(message.password);
+                writer.uint32(10).string(message.password);
             return writer;
         };
 
@@ -12641,11 +12647,11 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.id = reader.string();
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.password = reader.string();
                         break;
                     }
@@ -12654,6 +12660,8 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("id"))
+                throw $util.ProtocolError("missing required 'id'", { instance: message });
             return message;
         };
 
@@ -12661,9 +12669,8 @@ export const NT = $root.NT = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             let properties = {};
-            if (message.id != null && message.hasOwnProperty("id"))
-                if (!$util.isString(message.id))
-                    return "id: string expected";
+            if (!$util.isString(message.id))
+                return "id: string expected";
             if (message.password != null && message.hasOwnProperty("password")) {
                 properties._password = 1;
                 if (!$util.isString(message.password))
@@ -12745,21 +12752,16 @@ export const NT = $root.NT = (() => {
         ServerJoinRoomSuccess.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.id != null && Object.hasOwnProperty.call(message, "id"))
-                writer.uint32(10).string(message.id);
-            if (message.name != null && Object.hasOwnProperty.call(message, "name"))
-                writer.uint32(18).string(message.name);
-            if (message.gamemode != null && Object.hasOwnProperty.call(message, "gamemode"))
-                writer.uint32(24).uint32(message.gamemode);
-            if (message.maxUsers != null && Object.hasOwnProperty.call(message, "maxUsers"))
-                writer.uint32(32).uint32(message.maxUsers);
+            writer.uint32(2).string(message.id);
+            writer.uint32(10).string(message.name);
+            writer.uint32(16).uint32(message.gamemode);
+            writer.uint32(24).uint32(message.maxUsers);
             if (message.password != null && Object.hasOwnProperty.call(message, "password"))
-                writer.uint32(42).string(message.password);
-            if (message.locked != null && Object.hasOwnProperty.call(message, "locked"))
-                writer.uint32(48).bool(message.locked);
+                writer.uint32(34).string(message.password);
+            writer.uint32(40).bool(message.locked);
             if (message.users != null && message.users.length)
                 for (let i = 0; i < message.users.length; ++i)
-                    $root.NT.ServerJoinRoomSuccess.User.encode(message.users[i], writer.uint32(58).fork()).ldelim();
+                    $root.NT.ServerJoinRoomSuccess.User.encode(message.users[i], writer.uint32(50).fork()).ldelim();
             return writer;
         };
 
@@ -12770,31 +12772,31 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.id = reader.string();
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.name = reader.string();
                         break;
                     }
-                case 3: {
+                case 2: {
                         message.gamemode = reader.uint32();
                         break;
                     }
-                case 4: {
+                case 3: {
                         message.maxUsers = reader.uint32();
                         break;
                     }
-                case 5: {
+                case 4: {
                         message.password = reader.string();
                         break;
                     }
-                case 6: {
+                case 5: {
                         message.locked = reader.bool();
                         break;
                     }
-                case 7: {
+                case 6: {
                         if (!(message.users && message.users.length))
                             message.users = [];
                         message.users.push($root.NT.ServerJoinRoomSuccess.User.decode(reader, reader.uint32()));
@@ -12805,6 +12807,16 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("id"))
+                throw $util.ProtocolError("missing required 'id'", { instance: message });
+            if (!message.hasOwnProperty("name"))
+                throw $util.ProtocolError("missing required 'name'", { instance: message });
+            if (!message.hasOwnProperty("gamemode"))
+                throw $util.ProtocolError("missing required 'gamemode'", { instance: message });
+            if (!message.hasOwnProperty("maxUsers"))
+                throw $util.ProtocolError("missing required 'maxUsers'", { instance: message });
+            if (!message.hasOwnProperty("locked"))
+                throw $util.ProtocolError("missing required 'locked'", { instance: message });
             return message;
         };
 
@@ -12812,26 +12824,21 @@ export const NT = $root.NT = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             let properties = {};
-            if (message.id != null && message.hasOwnProperty("id"))
-                if (!$util.isString(message.id))
-                    return "id: string expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.gamemode != null && message.hasOwnProperty("gamemode"))
-                if (!$util.isInteger(message.gamemode))
-                    return "gamemode: integer expected";
-            if (message.maxUsers != null && message.hasOwnProperty("maxUsers"))
-                if (!$util.isInteger(message.maxUsers))
-                    return "maxUsers: integer expected";
+            if (!$util.isString(message.id))
+                return "id: string expected";
+            if (!$util.isString(message.name))
+                return "name: string expected";
+            if (!$util.isInteger(message.gamemode))
+                return "gamemode: integer expected";
+            if (!$util.isInteger(message.maxUsers))
+                return "maxUsers: integer expected";
             if (message.password != null && message.hasOwnProperty("password")) {
                 properties._password = 1;
                 if (!$util.isString(message.password))
                     return "password: string expected";
             }
-            if (message.locked != null && message.hasOwnProperty("locked"))
-                if (typeof message.locked !== "boolean")
-                    return "locked: boolean expected";
+            if (typeof message.locked !== "boolean")
+                return "locked: boolean expected";
             if (message.users != null && message.hasOwnProperty("users")) {
                 if (!Array.isArray(message.users))
                     return "users: array expected";
@@ -12941,14 +12948,10 @@ export const NT = $root.NT = (() => {
             User.encode = function encode(message, writer) {
                 if (!writer)
                     writer = $Writer.create();
-                if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                    writer.uint32(10).string(message.userId);
-                if (message.name != null && Object.hasOwnProperty.call(message, "name"))
-                    writer.uint32(18).string(message.name);
-                if (message.ready != null && Object.hasOwnProperty.call(message, "ready"))
-                    writer.uint32(24).bool(message.ready);
-                if (message.owner != null && Object.hasOwnProperty.call(message, "owner"))
-                    writer.uint32(32).bool(message.owner);
+                writer.uint32(2).string(message.userId);
+                writer.uint32(10).string(message.name);
+                writer.uint32(16).bool(message.ready);
+                writer.uint32(24).bool(message.owner);
                 return writer;
             };
 
@@ -12959,19 +12962,19 @@ export const NT = $root.NT = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                    case 0: {
                             message.userId = reader.string();
                             break;
                         }
-                    case 2: {
+                    case 1: {
                             message.name = reader.string();
                             break;
                         }
-                    case 3: {
+                    case 2: {
                             message.ready = reader.bool();
                             break;
                         }
-                    case 4: {
+                    case 3: {
                             message.owner = reader.bool();
                             break;
                         }
@@ -12980,24 +12983,28 @@ export const NT = $root.NT = (() => {
                         break;
                     }
                 }
+                if (!message.hasOwnProperty("userId"))
+                    throw $util.ProtocolError("missing required 'userId'", { instance: message });
+                if (!message.hasOwnProperty("name"))
+                    throw $util.ProtocolError("missing required 'name'", { instance: message });
+                if (!message.hasOwnProperty("ready"))
+                    throw $util.ProtocolError("missing required 'ready'", { instance: message });
+                if (!message.hasOwnProperty("owner"))
+                    throw $util.ProtocolError("missing required 'owner'", { instance: message });
                 return message;
             };
 
             User.verify = function verify(message) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
-                if (message.userId != null && message.hasOwnProperty("userId"))
-                    if (!$util.isString(message.userId))
-                        return "userId: string expected";
-                if (message.name != null && message.hasOwnProperty("name"))
-                    if (!$util.isString(message.name))
-                        return "name: string expected";
-                if (message.ready != null && message.hasOwnProperty("ready"))
-                    if (typeof message.ready !== "boolean")
-                        return "ready: boolean expected";
-                if (message.owner != null && message.hasOwnProperty("owner"))
-                    if (typeof message.owner !== "boolean")
-                        return "owner: boolean expected";
+                if (!$util.isString(message.userId))
+                    return "userId: string expected";
+                if (!$util.isString(message.name))
+                    return "name: string expected";
+                if (typeof message.ready !== "boolean")
+                    return "ready: boolean expected";
+                if (typeof message.owner !== "boolean")
+                    return "owner: boolean expected";
                 return null;
             };
 
@@ -13073,7 +13080,7 @@ export const NT = $root.NT = (() => {
             if (!writer)
                 writer = $Writer.create();
             if (message.reason != null && Object.hasOwnProperty.call(message, "reason"))
-                writer.uint32(10).string(message.reason);
+                writer.uint32(2).string(message.reason);
             return writer;
         };
 
@@ -13084,7 +13091,7 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.reason = reader.string();
                         break;
                     }
@@ -13158,10 +13165,8 @@ export const NT = $root.NT = (() => {
         ServerUserJoinedRoom.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(10).string(message.userId);
-            if (message.name != null && Object.hasOwnProperty.call(message, "name"))
-                writer.uint32(18).string(message.name);
+            writer.uint32(10).string(message.userId);
+            writer.uint32(18).string(message.name);
             return writer;
         };
 
@@ -13185,18 +13190,20 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("userId"))
+                throw $util.ProtocolError("missing required 'userId'", { instance: message });
+            if (!message.hasOwnProperty("name"))
+                throw $util.ProtocolError("missing required 'name'", { instance: message });
             return message;
         };
 
         ServerUserJoinedRoom.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.userId != null && message.hasOwnProperty("userId"))
-                if (!$util.isString(message.userId))
-                    return "userId: string expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
+            if (!$util.isString(message.userId))
+                return "userId: string expected";
+            if (!$util.isString(message.name))
+                return "name: string expected";
             return null;
         };
 
@@ -13258,8 +13265,7 @@ export const NT = $root.NT = (() => {
         ClientLeaveRoom.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(10).string(message.userId);
+            writer.uint32(10).string(message.userId);
             return writer;
         };
 
@@ -13279,15 +13285,16 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("userId"))
+                throw $util.ProtocolError("missing required 'userId'", { instance: message });
             return message;
         };
 
         ClientLeaveRoom.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.userId != null && message.hasOwnProperty("userId"))
-                if (!$util.isString(message.userId))
-                    return "userId: string expected";
+            if (!$util.isString(message.userId))
+                return "userId: string expected";
             return null;
         };
 
@@ -13343,8 +13350,7 @@ export const NT = $root.NT = (() => {
         ServerUserLeftRoom.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(10).string(message.userId);
+            writer.uint32(10).string(message.userId);
             return writer;
         };
 
@@ -13364,15 +13370,16 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("userId"))
+                throw $util.ProtocolError("missing required 'userId'", { instance: message });
             return message;
         };
 
         ServerUserLeftRoom.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.userId != null && message.hasOwnProperty("userId"))
-                if (!$util.isString(message.userId))
-                    return "userId: string expected";
+            if (!$util.isString(message.userId))
+                return "userId: string expected";
             return null;
         };
 
@@ -13428,8 +13435,7 @@ export const NT = $root.NT = (() => {
         ClientKickUser.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(10).string(message.userId);
+            writer.uint32(10).string(message.userId);
             return writer;
         };
 
@@ -13449,15 +13455,16 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("userId"))
+                throw $util.ProtocolError("missing required 'userId'", { instance: message });
             return message;
         };
 
         ClientKickUser.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.userId != null && message.hasOwnProperty("userId"))
-                if (!$util.isString(message.userId))
-                    return "userId: string expected";
+            if (!$util.isString(message.userId))
+                return "userId: string expected";
             return null;
         };
 
@@ -13513,8 +13520,7 @@ export const NT = $root.NT = (() => {
         ServerUserKicked.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(10).string(message.userId);
+            writer.uint32(10).string(message.userId);
             return writer;
         };
 
@@ -13534,15 +13540,16 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("userId"))
+                throw $util.ProtocolError("missing required 'userId'", { instance: message });
             return message;
         };
 
         ServerUserKicked.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.userId != null && message.hasOwnProperty("userId"))
-                if (!$util.isString(message.userId))
-                    return "userId: string expected";
+            if (!$util.isString(message.userId))
+                return "userId: string expected";
             return null;
         };
 
@@ -13598,8 +13605,7 @@ export const NT = $root.NT = (() => {
         ClientBanUser.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(10).string(message.userId);
+            writer.uint32(10).string(message.userId);
             return writer;
         };
 
@@ -13619,15 +13625,16 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("userId"))
+                throw $util.ProtocolError("missing required 'userId'", { instance: message });
             return message;
         };
 
         ClientBanUser.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.userId != null && message.hasOwnProperty("userId"))
-                if (!$util.isString(message.userId))
-                    return "userId: string expected";
+            if (!$util.isString(message.userId))
+                return "userId: string expected";
             return null;
         };
 
@@ -13683,8 +13690,7 @@ export const NT = $root.NT = (() => {
         ServerUserBanned.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(10).string(message.userId);
+            writer.uint32(10).string(message.userId);
             return writer;
         };
 
@@ -13704,15 +13710,16 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("userId"))
+                throw $util.ProtocolError("missing required 'userId'", { instance: message });
             return message;
         };
 
         ServerUserBanned.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.userId != null && message.hasOwnProperty("userId"))
-                if (!$util.isString(message.userId))
-                    return "userId: string expected";
+            if (!$util.isString(message.userId))
+                return "userId: string expected";
             return null;
         };
 
@@ -13790,17 +13797,16 @@ export const NT = $root.NT = (() => {
         ClientReadyState.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.ready != null && Object.hasOwnProperty.call(message, "ready"))
-                writer.uint32(8).bool(message.ready);
+            writer.uint32(0).bool(message.ready);
             if (message.seed != null && Object.hasOwnProperty.call(message, "seed"))
-                writer.uint32(18).string(message.seed);
+                writer.uint32(10).string(message.seed);
             if (message.mods != null && message.mods.length)
                 for (let i = 0; i < message.mods.length; ++i)
-                    writer.uint32(26).string(message.mods[i]);
+                    writer.uint32(18).string(message.mods[i]);
             if (message.version != null && Object.hasOwnProperty.call(message, "version"))
-                writer.uint32(34).string(message.version);
+                writer.uint32(26).string(message.version);
             if (message.beta != null && Object.hasOwnProperty.call(message, "beta"))
-                writer.uint32(40).bool(message.beta);
+                writer.uint32(32).bool(message.beta);
             return writer;
         };
 
@@ -13811,25 +13817,25 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.ready = reader.bool();
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.seed = reader.string();
                         break;
                     }
-                case 3: {
+                case 2: {
                         if (!(message.mods && message.mods.length))
                             message.mods = [];
                         message.mods.push(reader.string());
                         break;
                     }
-                case 4: {
+                case 3: {
                         message.version = reader.string();
                         break;
                     }
-                case 5: {
+                case 4: {
                         message.beta = reader.bool();
                         break;
                     }
@@ -13838,6 +13844,8 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("ready"))
+                throw $util.ProtocolError("missing required 'ready'", { instance: message });
             return message;
         };
 
@@ -13845,9 +13853,8 @@ export const NT = $root.NT = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             let properties = {};
-            if (message.ready != null && message.hasOwnProperty("ready"))
-                if (typeof message.ready !== "boolean")
-                    return "ready: boolean expected";
+            if (typeof message.ready !== "boolean")
+                return "ready: boolean expected";
             if (message.seed != null && message.hasOwnProperty("seed")) {
                 properties._seed = 1;
                 if (!$util.isString(message.seed))
@@ -13983,19 +13990,17 @@ export const NT = $root.NT = (() => {
         ServerUserReadyState.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.userId != null && Object.hasOwnProperty.call(message, "userId"))
-                writer.uint32(10).string(message.userId);
-            if (message.ready != null && Object.hasOwnProperty.call(message, "ready"))
-                writer.uint32(16).bool(message.ready);
+            writer.uint32(2).string(message.userId);
+            writer.uint32(8).bool(message.ready);
             if (message.seed != null && Object.hasOwnProperty.call(message, "seed"))
-                writer.uint32(26).string(message.seed);
+                writer.uint32(18).string(message.seed);
             if (message.mods != null && message.mods.length)
                 for (let i = 0; i < message.mods.length; ++i)
-                    writer.uint32(34).string(message.mods[i]);
+                    writer.uint32(26).string(message.mods[i]);
             if (message.version != null && Object.hasOwnProperty.call(message, "version"))
-                writer.uint32(42).string(message.version);
+                writer.uint32(34).string(message.version);
             if (message.beta != null && Object.hasOwnProperty.call(message, "beta"))
-                writer.uint32(48).bool(message.beta);
+                writer.uint32(40).bool(message.beta);
             return writer;
         };
 
@@ -14006,29 +14011,29 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.userId = reader.string();
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.ready = reader.bool();
                         break;
                     }
-                case 3: {
+                case 2: {
                         message.seed = reader.string();
                         break;
                     }
-                case 4: {
+                case 3: {
                         if (!(message.mods && message.mods.length))
                             message.mods = [];
                         message.mods.push(reader.string());
                         break;
                     }
-                case 5: {
+                case 4: {
                         message.version = reader.string();
                         break;
                     }
-                case 6: {
+                case 5: {
                         message.beta = reader.bool();
                         break;
                     }
@@ -14037,6 +14042,10 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("userId"))
+                throw $util.ProtocolError("missing required 'userId'", { instance: message });
+            if (!message.hasOwnProperty("ready"))
+                throw $util.ProtocolError("missing required 'ready'", { instance: message });
             return message;
         };
 
@@ -14044,12 +14053,10 @@ export const NT = $root.NT = (() => {
             if (typeof message !== "object" || message === null)
                 return "object expected";
             let properties = {};
-            if (message.userId != null && message.hasOwnProperty("userId"))
-                if (!$util.isString(message.userId))
-                    return "userId: string expected";
-            if (message.ready != null && message.hasOwnProperty("ready"))
-                if (typeof message.ready !== "boolean")
-                    return "ready: boolean expected";
+            if (!$util.isString(message.userId))
+                return "userId: string expected";
+            if (typeof message.ready !== "boolean")
+                return "ready: boolean expected";
             if (message.seed != null && message.hasOwnProperty("seed")) {
                 properties._seed = 1;
                 if (!$util.isString(message.seed))
@@ -14168,8 +14175,7 @@ export const NT = $root.NT = (() => {
         ClientStartRun.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.forced != null && Object.hasOwnProperty.call(message, "forced"))
-                writer.uint32(8).bool(message.forced);
+            writer.uint32(0).bool(message.forced);
             return writer;
         };
 
@@ -14180,7 +14186,7 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.forced = reader.bool();
                         break;
                     }
@@ -14189,15 +14195,16 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("forced"))
+                throw $util.ProtocolError("missing required 'forced'", { instance: message });
             return message;
         };
 
         ClientStartRun.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.forced != null && message.hasOwnProperty("forced"))
-                if (typeof message.forced !== "boolean")
-                    return "forced: boolean expected";
+            if (typeof message.forced !== "boolean")
+                return "forced: boolean expected";
             return null;
         };
 
@@ -14253,8 +14260,7 @@ export const NT = $root.NT = (() => {
         ServerHostStart.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.forced != null && Object.hasOwnProperty.call(message, "forced"))
-                writer.uint32(8).bool(message.forced);
+            writer.uint32(0).bool(message.forced);
             return writer;
         };
 
@@ -14265,7 +14271,7 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.forced = reader.bool();
                         break;
                     }
@@ -14274,15 +14280,16 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("forced"))
+                throw $util.ProtocolError("missing required 'forced'", { instance: message });
             return message;
         };
 
         ServerHostStart.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.forced != null && message.hasOwnProperty("forced"))
-                if (typeof message.forced !== "boolean")
-                    return "forced: boolean expected";
+            if (typeof message.forced !== "boolean")
+                return "forced: boolean expected";
             return null;
         };
 
@@ -14338,8 +14345,7 @@ export const NT = $root.NT = (() => {
         ClientRequestRoomList.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.page != null && Object.hasOwnProperty.call(message, "page"))
-                writer.uint32(8).uint32(message.page);
+            writer.uint32(0).uint32(message.page);
             return writer;
         };
 
@@ -14350,7 +14356,7 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.page = reader.uint32();
                         break;
                     }
@@ -14359,15 +14365,16 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("page"))
+                throw $util.ProtocolError("missing required 'page'", { instance: message });
             return message;
         };
 
         ClientRequestRoomList.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.page != null && message.hasOwnProperty("page"))
-                if (!$util.isInteger(message.page))
-                    return "page: integer expected";
+            if (!$util.isInteger(message.page))
+                return "page: integer expected";
             return null;
         };
 
@@ -14434,9 +14441,9 @@ export const NT = $root.NT = (() => {
                 writer = $Writer.create();
             if (message.rooms != null && message.rooms.length)
                 for (let i = 0; i < message.rooms.length; ++i)
-                    $root.NT.ServerRoomList.Room.encode(message.rooms[i], writer.uint32(10).fork()).ldelim();
+                    $root.NT.ServerRoomList.Room.encode(message.rooms[i], writer.uint32(2).fork()).ldelim();
             if (message.pages != null && Object.hasOwnProperty.call(message, "pages"))
-                writer.uint32(16).uint32(message.pages);
+                writer.uint32(8).uint32(message.pages);
             return writer;
         };
 
@@ -14447,13 +14454,13 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         if (!(message.rooms && message.rooms.length))
                             message.rooms = [];
                         message.rooms.push($root.NT.ServerRoomList.Room.decode(reader, reader.uint32()));
                         break;
                     }
-                case 2: {
+                case 1: {
                         message.pages = reader.uint32();
                         break;
                     }
@@ -14560,22 +14567,14 @@ export const NT = $root.NT = (() => {
             Room.encode = function encode(message, writer) {
                 if (!writer)
                     writer = $Writer.create();
-                if (message.id != null && Object.hasOwnProperty.call(message, "id"))
-                    writer.uint32(10).string(message.id);
-                if (message.name != null && Object.hasOwnProperty.call(message, "name"))
-                    writer.uint32(18).string(message.name);
-                if (message.gamemode != null && Object.hasOwnProperty.call(message, "gamemode"))
-                    writer.uint32(24).uint32(message.gamemode);
-                if (message.curUsers != null && Object.hasOwnProperty.call(message, "curUsers"))
-                    writer.uint32(32).uint32(message.curUsers);
-                if (message.maxUsers != null && Object.hasOwnProperty.call(message, "maxUsers"))
-                    writer.uint32(40).uint32(message.maxUsers);
-                if (message["protected"] != null && Object.hasOwnProperty.call(message, "protected"))
-                    writer.uint32(48).bool(message["protected"]);
-                if (message.owner != null && Object.hasOwnProperty.call(message, "owner"))
-                    writer.uint32(58).string(message.owner);
-                if (message.locked != null && Object.hasOwnProperty.call(message, "locked"))
-                    writer.uint32(64).bool(message.locked);
+                writer.uint32(2).string(message.id);
+                writer.uint32(10).string(message.name);
+                writer.uint32(16).uint32(message.gamemode);
+                writer.uint32(24).uint32(message.curUsers);
+                writer.uint32(32).uint32(message.maxUsers);
+                writer.uint32(40).bool(message["protected"]);
+                writer.uint32(50).string(message.owner);
+                writer.uint32(56).bool(message.locked);
                 return writer;
             };
 
@@ -14586,35 +14585,35 @@ export const NT = $root.NT = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                    case 0: {
                             message.id = reader.string();
                             break;
                         }
-                    case 2: {
+                    case 1: {
                             message.name = reader.string();
                             break;
                         }
-                    case 3: {
+                    case 2: {
                             message.gamemode = reader.uint32();
                             break;
                         }
-                    case 4: {
+                    case 3: {
                             message.curUsers = reader.uint32();
                             break;
                         }
-                    case 5: {
+                    case 4: {
                             message.maxUsers = reader.uint32();
                             break;
                         }
-                    case 6: {
+                    case 5: {
                             message["protected"] = reader.bool();
                             break;
                         }
-                    case 7: {
+                    case 6: {
                             message.owner = reader.string();
                             break;
                         }
-                    case 8: {
+                    case 7: {
                             message.locked = reader.bool();
                             break;
                         }
@@ -14623,36 +14622,44 @@ export const NT = $root.NT = (() => {
                         break;
                     }
                 }
+                if (!message.hasOwnProperty("id"))
+                    throw $util.ProtocolError("missing required 'id'", { instance: message });
+                if (!message.hasOwnProperty("name"))
+                    throw $util.ProtocolError("missing required 'name'", { instance: message });
+                if (!message.hasOwnProperty("gamemode"))
+                    throw $util.ProtocolError("missing required 'gamemode'", { instance: message });
+                if (!message.hasOwnProperty("curUsers"))
+                    throw $util.ProtocolError("missing required 'curUsers'", { instance: message });
+                if (!message.hasOwnProperty("maxUsers"))
+                    throw $util.ProtocolError("missing required 'maxUsers'", { instance: message });
+                if (!message.hasOwnProperty("protected"))
+                    throw $util.ProtocolError("missing required 'protected'", { instance: message });
+                if (!message.hasOwnProperty("owner"))
+                    throw $util.ProtocolError("missing required 'owner'", { instance: message });
+                if (!message.hasOwnProperty("locked"))
+                    throw $util.ProtocolError("missing required 'locked'", { instance: message });
                 return message;
             };
 
             Room.verify = function verify(message) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
-                if (message.id != null && message.hasOwnProperty("id"))
-                    if (!$util.isString(message.id))
-                        return "id: string expected";
-                if (message.name != null && message.hasOwnProperty("name"))
-                    if (!$util.isString(message.name))
-                        return "name: string expected";
-                if (message.gamemode != null && message.hasOwnProperty("gamemode"))
-                    if (!$util.isInteger(message.gamemode))
-                        return "gamemode: integer expected";
-                if (message.curUsers != null && message.hasOwnProperty("curUsers"))
-                    if (!$util.isInteger(message.curUsers))
-                        return "curUsers: integer expected";
-                if (message.maxUsers != null && message.hasOwnProperty("maxUsers"))
-                    if (!$util.isInteger(message.maxUsers))
-                        return "maxUsers: integer expected";
-                if (message["protected"] != null && message.hasOwnProperty("protected"))
-                    if (typeof message["protected"] !== "boolean")
-                        return "protected: boolean expected";
-                if (message.owner != null && message.hasOwnProperty("owner"))
-                    if (!$util.isString(message.owner))
-                        return "owner: string expected";
-                if (message.locked != null && message.hasOwnProperty("locked"))
-                    if (typeof message.locked !== "boolean")
-                        return "locked: boolean expected";
+                if (!$util.isString(message.id))
+                    return "id: string expected";
+                if (!$util.isString(message.name))
+                    return "name: string expected";
+                if (!$util.isInteger(message.gamemode))
+                    return "gamemode: integer expected";
+                if (!$util.isInteger(message.curUsers))
+                    return "curUsers: integer expected";
+                if (!$util.isInteger(message.maxUsers))
+                    return "maxUsers: integer expected";
+                if (typeof message["protected"] !== "boolean")
+                    return "protected: boolean expected";
+                if (!$util.isString(message.owner))
+                    return "owner: string expected";
+                if (typeof message.locked !== "boolean")
+                    return "locked: boolean expected";
                 return null;
             };
 
@@ -14747,8 +14754,7 @@ export const NT = $root.NT = (() => {
         ServerRoomAddToList.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.room != null && Object.hasOwnProperty.call(message, "room"))
-                $root.NT.ServerRoomAddToList.Room.encode(message.room, writer.uint32(10).fork()).ldelim();
+            $root.NT.ServerRoomAddToList.Room.encode(message.room, writer.uint32(2).fork()).ldelim();
             return writer;
         };
 
@@ -14759,7 +14765,7 @@ export const NT = $root.NT = (() => {
             while (reader.pos < end) {
                 let tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
+                case 0: {
                         message.room = $root.NT.ServerRoomAddToList.Room.decode(reader, reader.uint32());
                         break;
                     }
@@ -14768,13 +14774,15 @@ export const NT = $root.NT = (() => {
                     break;
                 }
             }
+            if (!message.hasOwnProperty("room"))
+                throw $util.ProtocolError("missing required 'room'", { instance: message });
             return message;
         };
 
         ServerRoomAddToList.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.room != null && message.hasOwnProperty("room")) {
+            {
                 let error = $root.NT.ServerRoomAddToList.Room.verify(message.room);
                 if (error)
                     return "room." + error;
@@ -14841,22 +14849,14 @@ export const NT = $root.NT = (() => {
             Room.encode = function encode(message, writer) {
                 if (!writer)
                     writer = $Writer.create();
-                if (message.id != null && Object.hasOwnProperty.call(message, "id"))
-                    writer.uint32(10).string(message.id);
-                if (message.name != null && Object.hasOwnProperty.call(message, "name"))
-                    writer.uint32(18).string(message.name);
-                if (message.gamemode != null && Object.hasOwnProperty.call(message, "gamemode"))
-                    writer.uint32(24).uint32(message.gamemode);
-                if (message.curUsers != null && Object.hasOwnProperty.call(message, "curUsers"))
-                    writer.uint32(32).uint32(message.curUsers);
-                if (message.maxUsers != null && Object.hasOwnProperty.call(message, "maxUsers"))
-                    writer.uint32(40).uint32(message.maxUsers);
-                if (message["protected"] != null && Object.hasOwnProperty.call(message, "protected"))
-                    writer.uint32(48).bool(message["protected"]);
-                if (message.owner != null && Object.hasOwnProperty.call(message, "owner"))
-                    writer.uint32(58).string(message.owner);
-                if (message.locked != null && Object.hasOwnProperty.call(message, "locked"))
-                    writer.uint32(64).bool(message.locked);
+                writer.uint32(2).string(message.id);
+                writer.uint32(10).string(message.name);
+                writer.uint32(16).uint32(message.gamemode);
+                writer.uint32(24).uint32(message.curUsers);
+                writer.uint32(32).uint32(message.maxUsers);
+                writer.uint32(40).bool(message["protected"]);
+                writer.uint32(50).string(message.owner);
+                writer.uint32(56).bool(message.locked);
                 return writer;
             };
 
@@ -14867,35 +14867,35 @@ export const NT = $root.NT = (() => {
                 while (reader.pos < end) {
                     let tag = reader.uint32();
                     switch (tag >>> 3) {
-                    case 1: {
+                    case 0: {
                             message.id = reader.string();
                             break;
                         }
-                    case 2: {
+                    case 1: {
                             message.name = reader.string();
                             break;
                         }
-                    case 3: {
+                    case 2: {
                             message.gamemode = reader.uint32();
                             break;
                         }
-                    case 4: {
+                    case 3: {
                             message.curUsers = reader.uint32();
                             break;
                         }
-                    case 5: {
+                    case 4: {
                             message.maxUsers = reader.uint32();
                             break;
                         }
-                    case 6: {
+                    case 5: {
                             message["protected"] = reader.bool();
                             break;
                         }
-                    case 7: {
+                    case 6: {
                             message.owner = reader.string();
                             break;
                         }
-                    case 8: {
+                    case 7: {
                             message.locked = reader.bool();
                             break;
                         }
@@ -14904,36 +14904,44 @@ export const NT = $root.NT = (() => {
                         break;
                     }
                 }
+                if (!message.hasOwnProperty("id"))
+                    throw $util.ProtocolError("missing required 'id'", { instance: message });
+                if (!message.hasOwnProperty("name"))
+                    throw $util.ProtocolError("missing required 'name'", { instance: message });
+                if (!message.hasOwnProperty("gamemode"))
+                    throw $util.ProtocolError("missing required 'gamemode'", { instance: message });
+                if (!message.hasOwnProperty("curUsers"))
+                    throw $util.ProtocolError("missing required 'curUsers'", { instance: message });
+                if (!message.hasOwnProperty("maxUsers"))
+                    throw $util.ProtocolError("missing required 'maxUsers'", { instance: message });
+                if (!message.hasOwnProperty("protected"))
+                    throw $util.ProtocolError("missing required 'protected'", { instance: message });
+                if (!message.hasOwnProperty("owner"))
+                    throw $util.ProtocolError("missing required 'owner'", { instance: message });
+                if (!message.hasOwnProperty("locked"))
+                    throw $util.ProtocolError("missing required 'locked'", { instance: message });
                 return message;
             };
 
             Room.verify = function verify(message) {
                 if (typeof message !== "object" || message === null)
                     return "object expected";
-                if (message.id != null && message.hasOwnProperty("id"))
-                    if (!$util.isString(message.id))
-                        return "id: string expected";
-                if (message.name != null && message.hasOwnProperty("name"))
-                    if (!$util.isString(message.name))
-                        return "name: string expected";
-                if (message.gamemode != null && message.hasOwnProperty("gamemode"))
-                    if (!$util.isInteger(message.gamemode))
-                        return "gamemode: integer expected";
-                if (message.curUsers != null && message.hasOwnProperty("curUsers"))
-                    if (!$util.isInteger(message.curUsers))
-                        return "curUsers: integer expected";
-                if (message.maxUsers != null && message.hasOwnProperty("maxUsers"))
-                    if (!$util.isInteger(message.maxUsers))
-                        return "maxUsers: integer expected";
-                if (message["protected"] != null && message.hasOwnProperty("protected"))
-                    if (typeof message["protected"] !== "boolean")
-                        return "protected: boolean expected";
-                if (message.owner != null && message.hasOwnProperty("owner"))
-                    if (!$util.isString(message.owner))
-                        return "owner: string expected";
-                if (message.locked != null && message.hasOwnProperty("locked"))
-                    if (typeof message.locked !== "boolean")
-                        return "locked: boolean expected";
+                if (!$util.isString(message.id))
+                    return "id: string expected";
+                if (!$util.isString(message.name))
+                    return "name: string expected";
+                if (!$util.isInteger(message.gamemode))
+                    return "gamemode: integer expected";
+                if (!$util.isInteger(message.curUsers))
+                    return "curUsers: integer expected";
+                if (!$util.isInteger(message.maxUsers))
+                    return "maxUsers: integer expected";
+                if (typeof message["protected"] !== "boolean")
+                    return "protected: boolean expected";
+                if (!$util.isString(message.owner))
+                    return "owner: string expected";
+                if (typeof message.locked !== "boolean")
+                    return "locked: boolean expected";
                 return null;
             };
 

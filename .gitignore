@@ -3,6 +3,7 @@
 /dist
 
 /vite-plugin-electron.log
+/electron/main/proto/messages.js
 
 # local env files
 .env.local

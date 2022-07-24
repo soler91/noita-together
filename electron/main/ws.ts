@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import { ipcMain } from "electron";
+import { ipc } from "./ipc-main";
 import ws from "ws";
 import messageHandler from "./proto/messageHandler";
 import { appEvent } from "./appEvent";
@@ -119,7 +120,7 @@ export default (data) => {
     }
   });
 
-  ipcMain.on("CLIENT_MESSAGE", (e, data) => {
+  ipc.answerRenderer("clientMessage", async (data) => {
     const msg = messageHandler.encodeLobbyMsg(data.key, data.payload);
     sendMsg(msg);
   });

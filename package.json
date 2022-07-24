@@ -7,7 +7,7 @@
   "main": "dist/electron/main/index.js",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit -p tsconfig.node.json --composite false && vue-tsc --noEmit && vite build && electron-builder --config .electron-builder.config.js",
+    "build": "vue-tsc --noEmit -p tsconfig.node.json --composite false && vue-tsc --noEmit --composite false && vite build && electron-builder --config .electron-builder.config.js",
     "build-force": "vite build && electron-builder --config .electron-builder.config.js",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --ignore-path .gitignore",
     "type-gen": "pbjs -t static-module --wrap es6 --no-comments --no-delimited --out electron/main/proto/messages.js public/messages.proto && pbjs -t static-module --no-delimited public/messages.proto | pbts -o electron/main/proto/messages.d.ts -"

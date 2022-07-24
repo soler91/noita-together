@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { appEvent } from "./appEvent";
 import { ipcMain } from "electron";
 import { EventEmitter } from "events";
+import type { NT } from "./proto/messages";
 
 // TODO: Check out https://github.com/stephenh/ts-proto
 // Or check out https://github.com/timostamm/protobuf-ts
@@ -38,7 +39,7 @@ class NoitaGame extends EventEmitter {
   rejectConnections = true;
   user = { userId: 0, name: "", host: false };
   spellList = [];
-  gameFlags = [];
+  gameFlags: NT.ClientRoomFlagsUpdate.IGameFlag[] = [];
   players = {};
   bank = {
     wands: [],

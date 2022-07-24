@@ -11,8 +11,12 @@
             <i class="far fa-question-circle"></i>
           </Popper>
         </h2>
-        <select class="slot-selector" :disabled="!isHost" v-model="deathFlag">
-          <option v-for="option in payload.death" :key="option.id">
+        <select class="slot-selector" :disabled="!isHost" v-model="deathFlagId">
+          <option
+            v-for="option in payload.death"
+            :key="option.id"
+            :value="option.id"
+          >
             {{ option.name }}
           </option>
         </select>
@@ -43,6 +47,7 @@
           </Popper>
         </h2>
         <div class="world-seed">
+          {{ payload?.world }}
           <vInput v-model="payload.world.sync_world_seed.value"></vInput>
           <vButton @click="randomizeSeed">Random</vButton>
         </div>
@@ -64,77 +69,63 @@ import vButton from "../components/vButton.vue";
 import Popper from "vue3-popper";
 import vInput from "../components/vInput.vue";
 import { ref, computed } from "vue";
-import useStore from "../store";
+import useStore, { type GameFlag } from "../store";
 const store = useStore();
 
 const emit = defineEmits<{
-  (e: "applyFlags", value: any): void;
+  (e: "applyFlags", value: GameFlag[]): void;
   (e: "close"): void;
 }>();
 
-const payload = ref(null);
-const deathFlag = ref("");
+const flagValues = ref(new Map<string, GameFlag>());
+
+const deathFlagId = ref("");
 
 const isHost = computed(() => {
   return store.getters.isHost;
 });
-const storeFlags = computed(() => {
-  return store.getters.flags;
-});
-const flags = computed(() => {
-  const flags = storeFlags.value;
+
+const defaultFlags = computed(() => store.defaultFlags);
+
+const payload = ref(getFlags());
+
+function getFlags() {
+  const flags = store.roomFlags;
   const game = {};
   const world = {};
   const death = {};
   for (const flag of flags) {
     if (flag.id.startsWith("death_penalty")) {
-      death[flag.id] = flag;
+      death[flag.id] = { ...flag };
     } else if (flag.id == "sync_world_seed") {
-      world[flag.id] = flag;
+      world[flag.id] = { ...flag };
     } else {
-      game[flag.id] = flag;
+      game[flag.id] = { ...flag };
     }
   }
   return { game, death, world };
-});
+}
 const deathTooltip = computed(() => {
-  const deathFlags = flags.value.death;
-  const flag = deathFlag.value;
-  let tooltip = "";
-  for (const key in deathFlags) {
-    if (deathFlags[key].name == flag) {
-      tooltip = deathFlags[key].tooltip;
-      break;
-    }
-  }
-  return tooltip;
+  const deathFlags = payload.value.death;
+  return deathFlags[deathFlagId.value]?.tooltip ?? "";
 });
 
-payload.value = flags.value;
-console.log({ f: storeFlags.value });
-deathFlag.value = storeFlags.value.find(
+deathFlagId.value = store.roomFlags.find(
   (v) => v.id.startsWith("death_penalty") && v.value
-).name;
+).id;
 
-//the whole flags things is a massive mess gotta rethink when braincells grow back
 function applyFlags() {
-  const allFlags = flags.value;
-  const payload = [];
-  //console.log({a: flags.death})
-  for (const flag in allFlags.death) {
-    if (allFlags.death[flag].name == deathFlag.value) {
-      allFlags.death[flag].value = true;
-      payload.push({ flag: allFlags.death[flag].id });
-    } else {
-      allFlags.death[flag].value = false;
-    }
-  }
-  for (const flag in allFlags.game) {
+  const allFlags = payload.value;
+  const flagsPayload = [];
+
+  flagsPayload.push({ flag: deathFlagId.value });
+
+  for (const flagId in allFlags.game) {
     if (
-      typeof allFlags.game[flag].value == "boolean" &&
-      allFlags.game[flag].value
+      allFlags.game[flagId].type == "boolean" &&
+      allFlags.game[flagId].value
     ) {
-      payload.push({ flag: allFlags.game[flag].id });
+      flagsPayload.push({ flag: allFlags.game[flagId].id });
     }
   }
   for (const flag in allFlags.world) {
@@ -142,13 +133,13 @@ function applyFlags() {
     if (isNaN(val)) {
       val = 0;
     }
-    payload.push({
+    flagsPayload.push({
       flag: allFlags.world[flag].id,
       value: Math.min(val, 4294967295),
     });
   }
   //console.log({ flags: payload })
-  emit("applyFlags", { flags: payload });
+  emit("applyFlags", { flags: flagsPayload });
 }
 
 function randomizeSeed() {

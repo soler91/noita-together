@@ -125,14 +125,14 @@ function closePasswordModal() {
   showPasswordModal.value = false;
 }
 
-function joinRoom(id, password) {
+function joinRoom(id: string, password) {
   if (typeof password == "boolean" && password) {
     clickedRoom.value = id;
     openPasswordModal();
     return;
   }
   try {
-    store.dispatch("joinRoom", {
+    store.actions.joinRoom({
       id,
       password: password ? password : undefined,
     });

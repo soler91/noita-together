@@ -62,14 +62,13 @@ const mode = computed(() => {
   return store.getters.roomGamemode;
 });
 const seed = computed(() => {
-  const flags = store.getters.flags;
-  let seed = 0;
+  const flags = store.roomFlags;
   for (const flag of flags) {
-    if (flag.id == "sync_world_seed") {
-      seed = flag.value;
+    if (flag.id === "sync_world_seed" && flag.type === "number") {
+      return flag.value;
     }
   }
-  return seed;
+  return 0;
 });
 const host = computed(() => {
   const users = store.state.room.users;
