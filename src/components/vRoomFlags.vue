@@ -146,6 +146,14 @@ const deathFlagId = ref(
 );
 
 function applyFlags() {
+  deathFlagCategory.value.forEach((flagId) => {
+    flagValues.value.set(flagId, {
+      id: flagId,
+      type: "boolean",
+      value: flagId === deathFlagId.value,
+    });
+  });
+
   emit("applyFlags", [...flagValues.value.values()]);
 }
 
