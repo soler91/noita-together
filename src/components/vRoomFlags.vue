@@ -7,30 +7,46 @@
       <div class="flags-body">
         <h2>
           Death Penalty
-          <Popper :content="deathTooltip" :hover="true" :interactive="true">
+          <Popper
+            :content="defaultModeFlags.get(deathFlagId)?.tooltip"
+            :hover="true"
+            :interactive="true"
+          >
             <i class="far fa-question-circle"></i>
           </Popper>
         </h2>
         <select class="slot-selector" :disabled="!isHost" v-model="deathFlagId">
           <option
-            v-for="option in payload.death"
-            :key="option.id"
-            :value="option.id"
+            v-for="flagId in deathFlagCategory"
+            :key="flagId"
+            :value="flagId"
           >
-            {{ option.name }}
+            {{ defaultModeFlags.get(flagId)?.name ?? "Unknown" }}
           </option>
         </select>
 
         <h2>Run Options</h2>
         <div class="switches">
           <vSwitch
-            v-for="entry in payload.game"
-            :key="entry.id"
-            v-model="payload.game[entry.id].value"
+            v-for="flagId in gameFlagCategory"
+            :key="flagId"
+            :modelValue="!!flagValues.get(flagId)?.value"
+            @update:modelValue="
+              (value) =>
+                flagValues.set(flagId, {
+                  id: flagId,
+                  type: 'boolean',
+                  value: value,
+                })
+            "
             :disabled="!isHost"
           >
-            <span>{{ entry.name }}</span>
-            <Popper :content="entry.tooltip" :hover="true" :interactive="true">
+            <span>{{ defaultModeFlags.get(flagId)?.name ?? flagId }}</span>
+            <Popper
+              :content="defaultModeFlags.get(flagId)?.tooltip"
+              :hover="true"
+              :interactive="true"
+            >
               <i class="far fa-question-circle"></i>
             </Popper>
           </vSwitch>
@@ -39,7 +55,7 @@
         <h2>
           World seed
           <Popper
-            :content="payload.world.sync_world_seed.tooltip"
+            :content="defaultModeFlags.get(seedFlagId)?.tooltip"
             :hover="true"
             :interactive="true"
           >
@@ -47,8 +63,18 @@
           </Popper>
         </h2>
         <div class="world-seed">
-          {{ payload?.world }}
-          <vInput v-model="payload.world.sync_world_seed.value"></vInput>
+          <vInput
+            type="number"
+            :modelValue="(flagValues.get(seedFlagId)?.value as number ?? 0)"
+            @update:modelValue="
+              (value) =>
+                flagValues.set(seedFlagId, {
+                  id: seedFlagId,
+                  type: 'number',
+                  value: +value,
+                })
+            "
+          ></vInput>
           <vButton @click="randomizeSeed">Random</vButton>
         </div>
       </div>
@@ -69,7 +95,7 @@ import vButton from "../components/vButton.vue";
 import Popper from "vue3-popper";
 import vInput from "../components/vInput.vue";
 import { ref, computed } from "vue";
-import useStore, { type GameFlag } from "../store";
+import useStore, { Gamemode, type GameFlag } from "../store";
 const store = useStore();
 
 const emit = defineEmits<{
@@ -77,75 +103,61 @@ const emit = defineEmits<{
   (e: "close"): void;
 }>();
 
-const flagValues = ref(new Map<string, GameFlag>());
-
-const deathFlagId = ref("");
+const flagValues = ref(
+  new Map<string, GameFlag>(
+    store.roomFlags.map((flag) => [flag.id, { ...flag }])
+  )
+);
 
 const isHost = computed(() => {
   return store.getters.isHost;
 });
 
-const defaultFlags = computed(() => store.defaultFlags);
+const defaultModeFlags = computed(
+  () =>
+    new Map(
+      store.defaultFlags[store.state.room.gamemode as Gamemode].map((flag) => [
+        flag.id,
+        flag,
+      ])
+    )
+);
 
-const payload = ref(getFlags());
+const seedFlagId = computed(() => "sync_world_seed");
+const deathFlagCategory = computed(() =>
+  store.roomFlags
+    .filter((flag) => flag.id.startsWith("death_penalty"))
+    .map((flag) => flag.id)
+);
+const gameFlagCategory = computed(() =>
+  store.roomFlags
+    .filter(
+      (flag) =>
+        flag.id !== seedFlagId.value &&
+        !deathFlagCategory.value.includes(flag.id)
+    )
+    .map((flag) => flag.id)
+);
 
-function getFlags() {
-  const flags = store.roomFlags;
-  const game = {};
-  const world = {};
-  const death = {};
-  for (const flag of flags) {
-    if (flag.id.startsWith("death_penalty")) {
-      death[flag.id] = { ...flag };
-    } else if (flag.id == "sync_world_seed") {
-      world[flag.id] = { ...flag };
-    } else {
-      game[flag.id] = { ...flag };
-    }
-  }
-  return { game, death, world };
-}
-const deathTooltip = computed(() => {
-  const deathFlags = payload.value.death;
-  return deathFlags[deathFlagId.value]?.tooltip ?? "";
-});
-
-deathFlagId.value = store.roomFlags.find(
-  (v) => v.id.startsWith("death_penalty") && v.value
-).id;
+const deathFlagId = ref(
+  store.roomFlags.find(
+    (flag) => deathFlagCategory.value.includes(flag.id) && flag.value
+  )?.id ?? ""
+);
 
 function applyFlags() {
-  const allFlags = payload.value;
-  const flagsPayload = [];
-
-  flagsPayload.push({ flag: deathFlagId.value });
-
-  for (const flagId in allFlags.game) {
-    if (
-      allFlags.game[flagId].type == "boolean" &&
-      allFlags.game[flagId].value
-    ) {
-      flagsPayload.push({ flag: allFlags.game[flagId].id });
-    }
-  }
-  for (const flag in allFlags.world) {
-    let val = Number(allFlags.world[flag].value);
-    if (isNaN(val)) {
-      val = 0;
-    }
-    flagsPayload.push({
-      flag: allFlags.world[flag].id,
-      value: Math.min(val, 4294967295),
-    });
-  }
-  //console.log({ flags: payload })
-  emit("applyFlags", { flags: flagsPayload });
+  emit("applyFlags", [...flagValues.value.values()]);
 }
 
 function randomizeSeed() {
   const seed = Math.floor(Math.random() * 4294967295) + 1;
-  payload.value.world.sync_world_seed.value = seed;
+  flagValues.value.set(seedFlagId.value, {
+    id: seedFlagId.value,
+    type: "number",
+    value: seed,
+  });
 }
+
 function close() {
   emit("close");
 }

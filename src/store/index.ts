@@ -101,7 +101,32 @@ const ipcPlugin = (ipcx) => {
     });
 
     ipcx.on("sRoomFlagsUpdated", (event, data) => {
-      store.commit("roomFlagsUpdated", data);
+      console.log(data);
+      // TODO: Replace this temporary fix with a proper one
+      const mode = store.state.room.gamemode;
+      const fDefaults = store.defaultFlags[mode];
+      if (!fDefaults) {
+        return;
+      }
+      const updatedFlags = data.flags.flatMap((val) => {
+        const defaultFlag = fDefaults.find((f) => f.id == val.flag);
+        if (!defaultFlag) {
+          return [];
+        }
+        const flag: GameFlag = {
+          id: val.flag,
+          type: defaultFlag.type,
+          value: defaultFlag.value,
+        };
+        if ("uIntVal" in val) {
+          flag.value = val.uIntVal;
+        }
+        if (flag.type == "boolean") {
+          flag.value = true;
+        }
+        return [flag];
+      });
+      store.commit("roomFlagsUpdated", updatedFlags);
     });
 
     ipcx.on("sRoomDeleted", (event, data) => {
@@ -719,6 +744,7 @@ const useStore = defineStore("store", () => {
         getters.flags.value.flatMap<NT.ClientRoomFlagsUpdate.IGameFlag>(
           (val) => {
             if (typeof val.value == "number") {
+              // TODO: Improve this to support more types
               return [{ flag: val.id, uIntVal: val.value }];
             } //temp fix
             if (val.type == "boolean" && !val.value) {
@@ -747,6 +773,7 @@ const useStore = defineStore("store", () => {
   }
 
   ipcPlugin(ipcRenderer)({
+    defaultFlags,
     state,
     getters,
     mutations,
