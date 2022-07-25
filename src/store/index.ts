@@ -652,7 +652,7 @@ const useStore = defineStore("store", () => {
         commit("setDefaultFlags", data.gamemode);
         commit("setRoom", data);
         commit("setLoading", false);
-        dispatch("sendFlags");
+        actions.sendFlags();
         return true;
       });
 
@@ -728,7 +728,7 @@ const useStore = defineStore("store", () => {
     requestRooms: async (payload: number) => {
       ipc.callMain("clientMessage")({
         key: "cRequestRoomList",
-        payload: { page: payload && payload > 0 ? payload : 0 },
+        payload: { page: payload > 0 ? payload : 0 },
       });
     },
     sendChat: (payload) => {

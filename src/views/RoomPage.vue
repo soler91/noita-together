@@ -162,7 +162,7 @@ function sendChat(e: KeyboardEvent) {
 }
 function sendFlags(payload: GameFlag[]) {
   store.commit("roomFlagsUpdated", payload);
-  store.dispatch("sendFlags", undefined);
+  store.actions.sendFlags();
   closeRoomFlags();
 }
 function openRoomFlags() {
@@ -188,7 +188,9 @@ function ban(userId: string) {
   });
 }
 function startRun(forced: boolean) {
-  store.dispatch("startRun", { forced });
+  store.actions.startRun({
+    forced,
+  });
 }
 </script>
 

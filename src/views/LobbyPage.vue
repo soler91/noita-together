@@ -94,7 +94,7 @@ try {
       }
     }
   );
-  store.dispatch("requestRooms", undefined);
+  store.actions.requestRooms(0);
 } catch (error) {
   console.log(error);
 }
@@ -158,7 +158,7 @@ function refreshRooms() {
       }
     );
 
-    store.dispatch("requestRooms", undefined);
+    store.actions.requestRooms(0);
   } catch (error) {
     console.log(error);
   }
