@@ -1,9 +1,9 @@
-import { defineConfig, loadEnv } from "vite";
+import { rmSync } from "fs";
+import { join } from "path";
+import { defineConfig, loadEnv, Plugin, UserConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import electron from "vite-plugin-electron";
 import pkg from "./package.json";
-import { rmSync } from "fs";
-import { join } from "path";
 
 rmSync("dist", { recursive: true, force: true }); // v14.14.0
 
@@ -19,7 +19,7 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
       electron({
         main: {
           entry: "electron/main/index.ts",
-          vite: {
+          vite: withDebug({
             build: {
               outDir: "dist/electron/main",
             },
@@ -31,7 +31,7 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
                 env.VITE_APP_WS_PORT
               ),
             },
-          },
+          }),
         },
         preload: {
           input: {
@@ -56,3 +56,21 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
     },
   };
 });
+
+function withDebug(config: UserConfig): UserConfig {
+  if (process.env.VSCODE_DEBUG) {
+    if (!config.build) config.build = {};
+    config.build.sourcemap = true;
+    config.plugins = (config.plugins || []).concat({
+      name: "electron-vite-debug",
+      configResolved(config) {
+        const index = config.plugins.findIndex(
+          (p) => p.name === "electron-main-watcher"
+        );
+        // At present, Vite can only modify plugins in configResolved hook.
+        (config.plugins as Plugin[]).splice(index, 1);
+      },
+    });
+  }
+  return config;
+}
