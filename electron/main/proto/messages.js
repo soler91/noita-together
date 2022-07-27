@@ -180,7 +180,7 @@ export const NT = $root.NT = (() => {
         GameAction.prototype.cPlayerNewGamePlus = null;
         GameAction.prototype.sPlayerNewGamePlus = null;
         GameAction.prototype.cPlayerSecretHourglass = null;
-        GameAction.prototype.SPlayerSecretHourglass = null;
+        GameAction.prototype.sPlayerSecretHourglass = null;
         GameAction.prototype.cCustomModEvent = null;
         GameAction.prototype.sCustomModEvent = null;
         GameAction.prototype.cRespawnPenalty = null;
@@ -192,7 +192,7 @@ export const NT = $root.NT = (() => {
         let $oneOfFields;
 
         Object.defineProperty(GameAction.prototype, "action", {
-            get: $util.oneOfGetter($oneOfFields = ["cPlayerMove", "sPlayerMove", "cPlayerUpdate", "sPlayerUpdate", "cPlayerUpdateInventory", "sPlayerUpdateInventory", "cHostItemBank", "sHostItemBank", "cHostUserTake", "sHostUserTake", "cHostUserTakeGold", "sHostUserTakeGold", "cPlayerAddGold", "sPlayerAddGold", "cPlayerTakeGold", "sPlayerTakeGold", "cPlayerAddItem", "sPlayerAddItem", "cPlayerTakeItem", "sPlayerTakeItem", "cPlayerPickup", "sPlayerPickup", "cNemesisAbility", "sNemesisAbility", "cNemesisPickupItem", "sNemesisPickupItem", "cChat", "sChat", "cPlayerDeath", "sPlayerDeath", "cPlayerNewGamePlus", "sPlayerNewGamePlus", "cPlayerSecretHourglass", "SPlayerSecretHourglass", "cCustomModEvent", "sCustomModEvent", "cRespawnPenalty", "sRespawnPenalty", "cAngerySteve", "sAngerySteve", "sPlayerPos"]),
+            get: $util.oneOfGetter($oneOfFields = ["cPlayerMove", "sPlayerMove", "cPlayerUpdate", "sPlayerUpdate", "cPlayerUpdateInventory", "sPlayerUpdateInventory", "cHostItemBank", "sHostItemBank", "cHostUserTake", "sHostUserTake", "cHostUserTakeGold", "sHostUserTakeGold", "cPlayerAddGold", "sPlayerAddGold", "cPlayerTakeGold", "sPlayerTakeGold", "cPlayerAddItem", "sPlayerAddItem", "cPlayerTakeItem", "sPlayerTakeItem", "cPlayerPickup", "sPlayerPickup", "cNemesisAbility", "sNemesisAbility", "cNemesisPickupItem", "sNemesisPickupItem", "cChat", "sChat", "cPlayerDeath", "sPlayerDeath", "cPlayerNewGamePlus", "sPlayerNewGamePlus", "cPlayerSecretHourglass", "sPlayerSecretHourglass", "cCustomModEvent", "sCustomModEvent", "cRespawnPenalty", "sRespawnPenalty", "cAngerySteve", "sAngerySteve", "sPlayerPos"]),
             set: $util.oneOfSetter($oneOfFields)
         });
 
@@ -269,8 +269,8 @@ export const NT = $root.NT = (() => {
                 $root.NT.ServerPlayerNewGamePlus.encode(message.sPlayerNewGamePlus, writer.uint32(250).fork()).ldelim();
             if (message.cPlayerSecretHourglass != null && Object.hasOwnProperty.call(message, "cPlayerSecretHourglass"))
                 $root.NT.ClientPlayerSecretHourglass.encode(message.cPlayerSecretHourglass, writer.uint32(258).fork()).ldelim();
-            if (message.SPlayerSecretHourglass != null && Object.hasOwnProperty.call(message, "SPlayerSecretHourglass"))
-                $root.NT.ServerPlayerSecretHourglass.encode(message.SPlayerSecretHourglass, writer.uint32(266).fork()).ldelim();
+            if (message.sPlayerSecretHourglass != null && Object.hasOwnProperty.call(message, "sPlayerSecretHourglass"))
+                $root.NT.ServerPlayerSecretHourglass.encode(message.sPlayerSecretHourglass, writer.uint32(266).fork()).ldelim();
             if (message.cCustomModEvent != null && Object.hasOwnProperty.call(message, "cCustomModEvent"))
                 $root.NT.ClientCustomModEvent.encode(message.cCustomModEvent, writer.uint32(274).fork()).ldelim();
             if (message.sCustomModEvent != null && Object.hasOwnProperty.call(message, "sCustomModEvent"))
@@ -428,7 +428,7 @@ export const NT = $root.NT = (() => {
                         break;
                     }
                 case 33: {
-                        message.SPlayerSecretHourglass = $root.NT.ServerPlayerSecretHourglass.decode(reader, reader.uint32());
+                        message.sPlayerSecretHourglass = $root.NT.ServerPlayerSecretHourglass.decode(reader, reader.uint32());
                         break;
                     }
                 case 34: {
@@ -799,14 +799,14 @@ export const NT = $root.NT = (() => {
                         return "cPlayerSecretHourglass." + error;
                 }
             }
-            if (message.SPlayerSecretHourglass != null && message.hasOwnProperty("SPlayerSecretHourglass")) {
+            if (message.sPlayerSecretHourglass != null && message.hasOwnProperty("sPlayerSecretHourglass")) {
                 if (properties.action === 1)
                     return "action: multiple values";
                 properties.action = 1;
                 {
-                    let error = $root.NT.ServerPlayerSecretHourglass.verify(message.SPlayerSecretHourglass);
+                    let error = $root.NT.ServerPlayerSecretHourglass.verify(message.sPlayerSecretHourglass);
                     if (error)
-                        return "SPlayerSecretHourglass." + error;
+                        return "sPlayerSecretHourglass." + error;
                 }
             }
             if (message.cCustomModEvent != null && message.hasOwnProperty("cCustomModEvent")) {
@@ -1051,10 +1051,10 @@ export const NT = $root.NT = (() => {
                     throw TypeError(".NT.GameAction.cPlayerSecretHourglass: object expected");
                 message.cPlayerSecretHourglass = $root.NT.ClientPlayerSecretHourglass.fromObject(object.cPlayerSecretHourglass);
             }
-            if (object.SPlayerSecretHourglass != null) {
-                if (typeof object.SPlayerSecretHourglass !== "object")
-                    throw TypeError(".NT.GameAction.SPlayerSecretHourglass: object expected");
-                message.SPlayerSecretHourglass = $root.NT.ServerPlayerSecretHourglass.fromObject(object.SPlayerSecretHourglass);
+            if (object.sPlayerSecretHourglass != null) {
+                if (typeof object.sPlayerSecretHourglass !== "object")
+                    throw TypeError(".NT.GameAction.sPlayerSecretHourglass: object expected");
+                message.sPlayerSecretHourglass = $root.NT.ServerPlayerSecretHourglass.fromObject(object.sPlayerSecretHourglass);
             }
             if (object.cCustomModEvent != null) {
                 if (typeof object.cCustomModEvent !== "object")
@@ -1263,10 +1263,10 @@ export const NT = $root.NT = (() => {
                 if (options.oneofs)
                     object.action = "cPlayerSecretHourglass";
             }
-            if (message.SPlayerSecretHourglass != null && message.hasOwnProperty("SPlayerSecretHourglass")) {
-                object.SPlayerSecretHourglass = $root.NT.ServerPlayerSecretHourglass.toObject(message.SPlayerSecretHourglass, options);
+            if (message.sPlayerSecretHourglass != null && message.hasOwnProperty("sPlayerSecretHourglass")) {
+                object.sPlayerSecretHourglass = $root.NT.ServerPlayerSecretHourglass.toObject(message.sPlayerSecretHourglass, options);
                 if (options.oneofs)
-                    object.action = "SPlayerSecretHourglass";
+                    object.action = "sPlayerSecretHourglass";
             }
             if (message.cCustomModEvent != null && message.hasOwnProperty("cCustomModEvent")) {
                 object.cCustomModEvent = $root.NT.ClientCustomModEvent.toObject(message.cCustomModEvent, options);

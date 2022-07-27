@@ -17,6 +17,17 @@ function sysMsg(message: string) {
   });
 }
 
+function protoKeyValue<T extends object>(obj: T): UnionizeOneOf<Required<T>> {
+  // One hell of a hack to figure out which "oneof" is set
+  const key = Object.keys(obj).shift() as keyof T;
+  return { key, value: obj[key] } as any;
+}
+
+// From https://effectivetypescript.com/2020/05/12/unionize-objectify/
+type UnionizeOneOf<T extends object> = {
+  [k in keyof T]: { key: k; value: NonNullable<T[k]> };
+}[keyof T];
+
 function lerp(a: number, b: number, weight: number) {
   return a * weight + b * (1 - weight);
 }
@@ -37,7 +48,7 @@ class NoitaGame extends EventEmitter {
   #queueDelay = 5000;
 
   rejectConnections = true;
-  user = { userId: 0, name: "", host: false };
+  user = { userId: "", name: "", host: false };
   spellList = [];
   gameFlags: NT.ClientRoomFlagsUpdate.IGameFlag[] = [];
   players = {};
@@ -246,7 +257,7 @@ class NoitaGame extends EventEmitter {
     }
   }
 
-  reset() {
+  async reset() {
     this.setHost(false);
     this.rejectConnections = true;
     this.spellList = [];
@@ -261,262 +272,274 @@ class NoitaGame extends EventEmitter {
     };
   }
 
-  sPlayerMove(payload) {
-    try {
+  handleGameAction(gameAction: NT.IGameAction) {
+    const { key, value } = protoKeyValue(gameAction);
+
+    // TODO: This doesn't seem very nice
+    if (key === "sChat") {
+      appEvent("sChat", value);
+      this.sendEvt("Chat", value);
+    } else if (key === "sPlayerMove") {
+      const payload = value;
+      try {
+        if (payload.userId == this.user.userId || !this.client) {
+          return;
+        }
+        const frames = [];
+        for (const [index, current] of payload.frames.entries()) {
+          frames.push(current);
+          const next = payload.frames[index + 1];
+          if (typeof next !== "undefined") {
+            const med = {
+              x: lerp(current.x, next.x, 0.869),
+              y: lerp(current.y, next.y, 0.869),
+              armR: rotLerp(current.armR, next.armR, 0.869),
+              armScaleY: current.armScaleY,
+              scaleX: next.scaleX,
+              anim: next.anim,
+              held: next.held,
+            };
+            frames.push(med);
+          }
+        }
+        const jank = frames
+          .map((current) => {
+            return `${current.armR},${current.armScaleY},${current.x},${current.y},${current.scaleX},${current.anim},${current.held},`;
+          })
+          .join(",");
+        this.sendEvt("PlayerMove", { userId: payload.userId, frames, jank });
+      } catch (error) {
+        console.log(error);
+      }
+    } else if (key === "sPlayerPos") {
+      const payload = value;
       if (payload.userId == this.user.userId || !this.client) {
         return;
       }
-      const frames = [];
-      for (const [index, current] of payload.frames.entries()) {
-        frames.push(current);
-        const next = payload.frames[index + 1];
-        if (typeof next !== "undefined") {
-          const med = {
-            x: lerp(current.x, next.x, 0.869),
-            y: lerp(current.y, next.y, 0.869),
-            armR: rotLerp(current.armR, next.armR, 0.869),
-            armScaleY: current.armScaleY,
-            scaleX: next.scaleX,
-            anim: next.anim,
-            held: next.held,
-          };
-          frames.push(med);
-        }
-      }
-      const jank = frames
-        .map((current) => {
-          return `${current.armR},${current.armScaleY},${current.x},${current.y},${current.scaleX},${current.anim},${current.held},`;
-        })
-        .join(",");
-      this.sendEvt("PlayerMove", { userId: payload.userId, frames, jank });
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  sPlayerPos(payload) {
-    if (payload.userId == this.user.userId || !this.client) {
-      return;
-    }
-    this.sendEvt("PlayerPos", payload);
-  }
-  sPlayerUpdate(payload) {
-    if (payload.userId == this.user.userId) {
-      return;
-    }
-    this.sendEvt("PlayerUpdate", payload);
-  }
-  sPlayerUpdateInventory(payload) {
-    if (payload.userId == this.user.userId) {
-      return;
-    }
-    this.sendEvt("PlayerUpdateInventory", payload);
-  }
-  sHostItemBank(payload) {
-    this.bank = {
-      wands: payload.wands,
-      spells: payload.spells,
-      flasks: payload.items,
-      objects: payload.objects,
-      gold: payload.gold,
-    };
-    this.bankToGame();
-  }
-  sHostUserTake(payload) {
-    if (!payload.success) {
+      this.sendEvt("PlayerPos", payload);
+    } else if (key === "sPlayerUpdate") {
+      const payload = value;
       if (payload.userId == this.user.userId) {
-        this.sendEvt("UserTakeFailed", payload);
+        return;
       }
-      return;
-    }
-    for (const key in this.bank) {
-      if (key == "gold") {
-        continue;
+      this.sendEvt("PlayerUpdate", payload);
+    } else if (key === "sPlayerUpdateInventory") {
+      const payload = value;
+      if (payload.userId == this.user.userId) {
+        return;
       }
-      for (const [index, item] of this.bank[key].entries()) {
-        if (item.id == payload.id) {
-          this.bank[key].splice(index, 1);
-          this.sendEvt("UserTakeSuccess", {
-            me: payload.userId == this.user.userId,
-            ...payload,
-          });
+      this.sendEvt("PlayerUpdateInventory", payload);
+    } else if (key === "sHostItemBank") {
+      const payload = value;
+      this.bank = {
+        wands: payload.wands,
+        spells: payload.spells,
+        flasks: payload.items,
+        objects: payload.objects,
+        gold: payload.gold,
+      };
+      this.bankToGame();
+    } else if (key === "sHostUserTake") {
+      const payload = value;
+      if (!payload.success) {
+        if (payload.userId == this.user.userId) {
+          this.sendEvt("UserTakeFailed", payload);
+        }
+        return;
+      }
+      for (const key in this.bank) {
+        if (key == "gold") {
+          continue;
+        }
+        for (const [index, item] of this.bank[key].entries()) {
+          if (item.id == payload.id) {
+            this.bank[key].splice(index, 1);
+            this.sendEvt("UserTakeSuccess", {
+              me: payload.userId == this.user.userId,
+              ...payload,
+            });
+          }
         }
       }
-    }
-  }
-  sPlayerAddItem(payload) {
-    const data = {
-      flasks: payload.flasks,
-      spells: payload.spells,
-      wands: payload.wands,
-      objects: payload.objects,
-    };
-    const items = [];
+    } else if (key === "sPlayerAddItem") {
+      const payload = value;
+      const data = {
+        flasks: payload.flasks,
+        spells: payload.spells,
+        wands: payload.wands,
+        objects: payload.objects,
+      };
+      const items = [];
 
-    for (const key in data) {
-      if (!data[key]) {
-        continue;
+      for (const key in data) {
+        if (!data[key]) {
+          continue;
+        }
+        for (const item of data[key].list) {
+          this.bank[key].push(item);
+          items.push(item);
+        }
       }
-      for (const item of data[key].list) {
-        this.bank[key].push(item);
-        items.push(item);
-      }
-    }
 
-    this.sendEvt("UserAddItems", { userId: payload.userId, items }); //filter later?
-  }
-  sPlayerAddGold(payload) {
-    this.bank.gold += payload.amount;
-    this.sendEvt("UserAddGold", payload);
-  }
-  sPlayerTakeGold(payload) {
-    if (!this.isHost) {
-      return;
-    }
-    if (this.bank.gold >= payload.amount) {
-      this.emit("HostTakeGold", {
+      this.sendEvt("UserAddItems", { userId: payload.userId, items }); //filter later?
+    } else if (key === "sPlayerAddGold") {
+      const payload = value;
+      this.bank.gold += payload.amount;
+      this.sendEvt("UserAddGold", payload);
+    } else if (key === "sPlayerTakeGold") {
+      const payload = value;
+      if (!this.isHost) {
+        return;
+      }
+      if (this.bank.gold >= payload.amount) {
+        this.emit("HostTakeGold", {
+          userId: payload.userId,
+          amount: payload.amount,
+          success: true,
+        });
+      } else {
+        this.emit("HostTakeGold", {
+          userId: payload.userId,
+          amount: payload.amount,
+          success: false,
+        });
+      }
+    } else if (key === "sHostUserTakeGold") {
+      const payload = value;
+      if (payload.success) {
+        this.bank.gold -= payload.amount;
+        this.sendEvt("UserTakeGoldSuccess", {
+          me: payload.userId == this.user.userId,
+          ...payload,
+        });
+      } else if (payload.userId == this.user.userId) {
+        this.sendEvt("UserTakeGoldFailed", {
+          me: payload.userId == this.user.userId,
+          ...payload,
+        });
+      }
+    } else if (key === "sPlayerTakeItem") {
+      const payload = value;
+      if (!this.isHost) {
+        return;
+      }
+      for (const key in this.bank) {
+        if (key == "gold") {
+          continue;
+        }
+        for (const item of this.bank[key]) {
+          if (item.id == payload.id) {
+            this.emit("HostTake", {
+              userId: payload.userId,
+              id: payload.id,
+              success: true,
+            });
+            return;
+          }
+        }
+      }
+      this.emit("HostTake", {
         userId: payload.userId,
-        amount: payload.amount,
-        success: true,
-      });
-    } else {
-      this.emit("HostTakeGold", {
-        userId: payload.userId,
-        amount: payload.amount,
+        id: payload.id,
         success: false,
       });
-    }
-  }
-  sHostUserTakeGold(payload) {
-    if (payload.success) {
-      this.bank.gold -= payload.amount;
-      this.sendEvt("UserTakeGoldSuccess", {
-        me: payload.userId == this.user.userId,
-        ...payload,
-      });
-    } else if (payload.userId == this.user.userId) {
-      this.sendEvt("UserTakeGoldFailed", {
-        me: payload.userId == this.user.userId,
-        ...payload,
-      });
-    }
-  }
-  sPlayerTakeItem(payload) {
-    if (!this.isHost) {
-      return;
-    }
-    for (const key in this.bank) {
-      if (key == "gold") {
-        continue;
+    } else if (key === "sPlayerPickup") {
+      const payload = value;
+      const player =
+        payload.userId == this.user.userId
+          ? this.user
+          : this.players[payload.userId];
+      if (player) {
+        sysMsg(
+          `${player.name} picked up a ${payload.heart ? "heart" : "orb"}.`
+        );
       }
-      for (const item of this.bank[key]) {
-        if (item.id == payload.id) {
-          this.emit("HostTake", {
-            userId: payload.userId,
-            id: payload.id,
-            success: true,
-          });
-          return;
+      if (payload.userId == this.user.userId) {
+        return;
+      }
+      this.sendEvt("PlayerPickup", payload);
+    } else if (key === "sPlayerDeath") {
+      const payload = value;
+      const player =
+        payload.userId == this.user.userId
+          ? this.user
+          : this.players[payload.userId];
+      if (player) {
+        sysMsg(`${player.name} has ${payload.isWin ? "won" : "died"}.`);
+        if (
+          this.isHost &&
+          this.onDeathKick &&
+          !payload.isWin &&
+          this.user.userId != payload.userId
+        ) {
+          this.emit("death_kick", payload.userId);
         }
       }
-    }
-    this.emit("HostTake", {
-      userId: payload.userId,
-      id: payload.id,
-      success: false,
-    });
-  }
-  sPlayerPickup(payload) {
-    const player =
-      payload.userId == this.user.userId
-        ? this.user
-        : this.players[payload.userId];
-    if (player) {
-      sysMsg(`${player.name} picked up a ${payload.heart ? "heart" : "orb"}.`);
-    }
-    if (payload.userId == this.user.userId) {
-      return;
-    }
-    this.sendEvt("PlayerPickup", payload);
-  }
-  sPlayerDeath(payload) {
-    const player =
-      payload.userId == this.user.userId
-        ? this.user
-        : this.players[payload.userId];
-    if (player) {
-      sysMsg(`${player.name} has ${payload.isWin ? "won" : "died"}.`);
-      if (
-        this.isHost &&
-        this.onDeathKick &&
-        !payload.isWin &&
-        this.user.userId != payload.userId
-      ) {
-        this.emit("death_kick", payload.userId);
+      if (payload.userId == this.user.userId) {
+        return;
       }
+      this.sendEvt("PlayerDeath", payload);
+    } else if (key === "sPlayerSecretHourglass") {
+      const payload = value;
+      if (payload.userId == this.user.userId) {
+        return;
+      }
+      this.sendEvt("SecretHourglass", payload);
+    } else if (key === "sCustomModEvent") {
+      const payload = value;
+      if (payload.userId == this.user.userId) {
+        return;
+      }
+      try {
+        this.sendEvt("CustomModEvent", {
+          userId: payload.userId,
+          ...JSON.parse(payload.payload),
+        });
+      } catch (error) {}
+    } else if (key === "sRespawnPenalty") {
+      const payload = value;
+      const player =
+        payload.userId == this.user.userId
+          ? this.user
+          : this.players[payload.userId];
+      if (player) {
+        sysMsg(`${player.name} had to respawn against his will.`);
+        if (
+          this.isHost &&
+          this.onDeathKick &&
+          this.user.userId != payload.userId
+        ) {
+          this.emit("death_kick", payload.userId);
+        }
+      }
+      if (payload.userId == this.user.userId) {
+        return;
+      }
+      this.sendEvt("RespawnPenalty", payload);
+    } else if (key === "sAngerySteve") {
+      const payload = value;
+      const player =
+        payload.userId == this.user.userId
+          ? this.user
+          : this.players[payload.userId];
+      if (player) {
+        sysMsg(`${player.name} has angered the gods.`);
+      }
+      if (payload.userId == this.user.userId) {
+        return;
+      }
+      this.sendEvt("AngerySteve", payload);
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const ignoreKey = key;
     }
-    if (payload.userId == this.user.userId) {
-      return;
-    }
-    this.sendEvt("PlayerDeath", payload);
   }
+
   //sPlayerNewGamePlus (payload) => {},
-  sPlayerSecretHourglass(payload) {
-    if (payload.userId == this.user.userId) {
-      return;
-    }
-    this.sendEvt("SecretHourglass", payload);
-  }
-  sCustomModEvent(payload) {
-    if (payload.userId == this.user.userId) {
-      return;
-    }
-    try {
-      this.sendEvt("CustomModEvent", {
-        userId: payload.userId,
-        ...JSON.parse(payload.payload),
-      });
-    } catch (error) {}
-  }
-  sRespawnPenalty(payload) {
-    const player =
-      payload.userId == this.user.userId
-        ? this.user
-        : this.players[payload.userId];
-    if (player) {
-      sysMsg(`${player.name} had to respawn against his will.`);
-      if (
-        this.isHost &&
-        this.onDeathKick &&
-        this.user.userId != payload.userId
-      ) {
-        this.emit("death_kick", payload.userId);
-      }
-    }
-    if (payload.userId == this.user.userId) {
-      return;
-    }
-    this.sendEvt("RespawnPenalty", payload);
-  }
-  sAngerySteve(payload) {
-    const player =
-      payload.userId == this.user.userId
-        ? this.user
-        : this.players[payload.userId];
-    if (player) {
-      sysMsg(`${player.name} has angered the gods.`);
-    }
-    if (payload.userId == this.user.userId) {
-      return;
-    }
-    this.sendEvt("AngerySteve", payload);
-  }
   /*
     sNemesisPickupItem (payload) => {},
     sNemesisAbility (payload) => {},
     */
-  sChat(payload) {
-    this.sendEvt("Chat", payload);
-  }
 }
 
 export default new NoitaGame();

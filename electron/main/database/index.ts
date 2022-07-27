@@ -14,6 +14,8 @@ export interface StorageItemTable {
 
 export interface GameSaveTable {
   id: string;
+  name: string;
+  gold: number;
 }
 
 export interface BankItemTable {
@@ -70,6 +72,6 @@ export function getDb() {
   }
   return dbPromise;
 }
-// TODO: Put game path in storage
+
 // TODO: Put world seed, all flags, onDeathKick and gold amount into games storage
 // TODO: Put bank items into storage and reference the game and store their type (wand, spell, ...)

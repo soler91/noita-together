@@ -193,8 +193,8 @@ export namespace NT {
         /** GameAction cPlayerSecretHourglass */
         cPlayerSecretHourglass?: (NT.IClientPlayerSecretHourglass|null);
 
-        /** GameAction SPlayerSecretHourglass */
-        SPlayerSecretHourglass?: (NT.IServerPlayerSecretHourglass|null);
+        /** GameAction sPlayerSecretHourglass */
+        sPlayerSecretHourglass?: (NT.IServerPlayerSecretHourglass|null);
 
         /** GameAction cCustomModEvent */
         cCustomModEvent?: (NT.IClientCustomModEvent|null);
@@ -326,8 +326,8 @@ export namespace NT {
         /** GameAction cPlayerSecretHourglass. */
         public cPlayerSecretHourglass?: (NT.IClientPlayerSecretHourglass|null);
 
-        /** GameAction SPlayerSecretHourglass. */
-        public SPlayerSecretHourglass?: (NT.IServerPlayerSecretHourglass|null);
+        /** GameAction sPlayerSecretHourglass. */
+        public sPlayerSecretHourglass?: (NT.IServerPlayerSecretHourglass|null);
 
         /** GameAction cCustomModEvent. */
         public cCustomModEvent?: (NT.IClientCustomModEvent|null);
@@ -351,7 +351,7 @@ export namespace NT {
         public sPlayerPos?: (NT.IServerPlayerPos|null);
 
         /** GameAction action. */
-        public action?: ("cPlayerMove"|"sPlayerMove"|"cPlayerUpdate"|"sPlayerUpdate"|"cPlayerUpdateInventory"|"sPlayerUpdateInventory"|"cHostItemBank"|"sHostItemBank"|"cHostUserTake"|"sHostUserTake"|"cHostUserTakeGold"|"sHostUserTakeGold"|"cPlayerAddGold"|"sPlayerAddGold"|"cPlayerTakeGold"|"sPlayerTakeGold"|"cPlayerAddItem"|"sPlayerAddItem"|"cPlayerTakeItem"|"sPlayerTakeItem"|"cPlayerPickup"|"sPlayerPickup"|"cNemesisAbility"|"sNemesisAbility"|"cNemesisPickupItem"|"sNemesisPickupItem"|"cChat"|"sChat"|"cPlayerDeath"|"sPlayerDeath"|"cPlayerNewGamePlus"|"sPlayerNewGamePlus"|"cPlayerSecretHourglass"|"SPlayerSecretHourglass"|"cCustomModEvent"|"sCustomModEvent"|"cRespawnPenalty"|"sRespawnPenalty"|"cAngerySteve"|"sAngerySteve"|"sPlayerPos");
+        public action?: ("cPlayerMove"|"sPlayerMove"|"cPlayerUpdate"|"sPlayerUpdate"|"cPlayerUpdateInventory"|"sPlayerUpdateInventory"|"cHostItemBank"|"sHostItemBank"|"cHostUserTake"|"sHostUserTake"|"cHostUserTakeGold"|"sHostUserTakeGold"|"cPlayerAddGold"|"sPlayerAddGold"|"cPlayerTakeGold"|"sPlayerTakeGold"|"cPlayerAddItem"|"sPlayerAddItem"|"cPlayerTakeItem"|"sPlayerTakeItem"|"cPlayerPickup"|"sPlayerPickup"|"cNemesisAbility"|"sNemesisAbility"|"cNemesisPickupItem"|"sNemesisPickupItem"|"cChat"|"sChat"|"cPlayerDeath"|"sPlayerDeath"|"cPlayerNewGamePlus"|"sPlayerNewGamePlus"|"cPlayerSecretHourglass"|"sPlayerSecretHourglass"|"cCustomModEvent"|"sCustomModEvent"|"cRespawnPenalty"|"sRespawnPenalty"|"cAngerySteve"|"sAngerySteve"|"sPlayerPos");
 
         /**
          * Creates a new GameAction instance using the specified properties.

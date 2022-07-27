@@ -59,7 +59,7 @@ message GameAction {
         ServerPlayerNewGamePlus s_player_new_game_plus = 31;
 
         ClientPlayerSecretHourglass c_player_secret_hourglass = 32;
-        ServerPlayerSecretHourglass S_player_secret_hourglass = 33;
+        ServerPlayerSecretHourglass s_player_secret_hourglass = 33;
     
         ClientCustomModEvent c_custom_mod_event = 34;
         ServerCustomModEvent s_custom_mod_event = 35;

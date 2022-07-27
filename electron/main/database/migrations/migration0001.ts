@@ -10,6 +10,8 @@ export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
     .createTable("game_save")
     .addColumn("id", "text", (col) => col.primaryKey())
+    .addColumn("name", "text", (col) => col.notNull())
+    .addColumn("gold", "integer", (col) => col.notNull())
     .execute();
 
   await db.schema
