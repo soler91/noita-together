@@ -1,5 +1,7 @@
 import { appEvent } from "./appEvent";
 import Updater from "./updater";
+import { getDb } from "./database";
+import { spawn } from "child_process";
 //let branch = "mod" //'master';
 let updatelog = true;
 let noselfupdate = false;
@@ -77,7 +79,60 @@ function updaterSetup(branch, gamePath) {
   return updater;
 }
 
-export const updateMod = async (gamePath) => {
+async function findGameFolder(): Promise<string> {
+  try {
+    const db = await getDb();
+    const gamePathEntry = await db
+      .selectFrom("storage_item")
+      .selectAll()
+      .where("storage_item.key", "=", "gamePath")
+      .executeTakeFirst();
+    if (gamePathEntry) {
+      return gamePathEntry.value;
+    }
+  } catch (e) {
+    console.error(e);
+  }
+
+  return await new Promise((res, reject) => {
+    const gamePaths: string[] = [];
+    const child = spawn("powershell.exe", [
+      `
+            (Get-Item "HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Steam App 881100").GetValue("InstallLocation")
+            (Get-Item "HKLM:\\SOFTWARE\\WOW6432Node\\GOG.com\\Games\\1310457090").GetValue("path")
+            `,
+    ]);
+    child.stdout.on("data", function (data) {
+      gamePaths.push(data.toString());
+    });
+    child.stdin.end();
+    child.on("error", () => {
+      // do nothing on error and let it default to blank on close
+    });
+    child.on("close", async () => {
+      try {
+        let gamePath = gamePaths.shift() || "";
+        if (gamePath) {
+          gamePath = gamePath.replace("\r\n", "");
+        }
+        const db = await getDb();
+        await db
+          .replaceInto("storage_item")
+          .values({
+            key: "gamePath",
+            value: gamePath,
+          })
+          .executeTakeFirst();
+        res(gamePath);
+      } catch (e) {
+        reject(e);
+      }
+    });
+  });
+}
+
+export const updateMod = async () => {
+  const gamePath = await findGameFolder();
   // i wan die
   let error = false;
   let coopReady = false;

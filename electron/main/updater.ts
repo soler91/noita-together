@@ -4,60 +4,7 @@ import crypto from "crypto";
 import fs from "fs";
 import path from "path";
 import { EventEmitter } from "events";
-import { spawn } from "child_process";
-import { dbPromise } from "./database";
 
-async function findGameFolder() {
-  try {
-    const db = await dbPromise;
-    const gamePathEntry = await db
-      .selectFrom("storage_item")
-      .selectAll()
-      .where("storage_item.key", "=", "gamePath")
-      .executeTakeFirst();
-    if (gamePathEntry) {
-      return gamePathEntry.value;
-    }
-  } catch (e) {
-    console.error(e);
-  }
-
-  return await new Promise((res, reject) => {
-    const gamePaths: string[] = [];
-    const child = spawn("powershell.exe", [
-      `
-            (Get-Item "HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Steam App 881100").GetValue("InstallLocation")
-            (Get-Item "HKLM:\\SOFTWARE\\WOW6432Node\\GOG.com\\Games\\1310457090").GetValue("path")
-            `,
-    ]);
-    child.stdout.on("data", function (data) {
-      gamePaths.push(data.toString());
-    });
-    child.stdin.end();
-    child.on("error", () => {
-      // do nothing on error and let it default to blank on close
-    });
-    child.on("close", async () => {
-      try {
-        let gamePath = gamePaths.shift() || "";
-        if (gamePath) {
-          gamePath = gamePath.replace("\r\n", "");
-        }
-        const db = await dbPromise;
-        await db
-          .replaceInto("storage_item")
-          .values({
-            key: "gamePath",
-            value: gamePath,
-          })
-          .executeTakeFirst();
-        res(gamePath);
-      } catch (e) {
-        reject(e);
-      }
-    });
-  });
-}
 // Constants
 const AutoUpdateServers = [
   "https://raw.githubusercontent.com/soler91/noita-together/",
@@ -81,12 +28,13 @@ function hash(data) {
 }
 
 class Updater extends EventEmitter {
-  constructor(branch = "mod", gamePath) {
+  gamePath: string;
+  constructor(branch = "mod", gamePath: string) {
     super();
     this.setMaxListeners(0);
 
     this.branch = branch;
-    this.gamePath = gamePath || "";
+    this.gamePath = gamePath;
   }
 
   buildPath(relpath) {
@@ -165,10 +113,7 @@ class Updater extends EventEmitter {
 
   async resolveGamePath() {
     if (!this.gamePath) {
-      const gamePath = await findGameFolder();
-      if (gamePath) {
-        this.gamePath = gamePath;
-      }
+      return false;
     }
 
     if (fs.existsSync(path.join(this.gamePath, "/noita.exe"))) {
@@ -176,6 +121,7 @@ class Updater extends EventEmitter {
       if (this.branch == "nemesis") {
         folder = "noita-nemesis";
       }
+      // TODO: WTF is up with this code?
       this.gamePath = path.join(this.gamePath, "/mods/" + folder + "/");
       return true;
     } else {

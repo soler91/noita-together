@@ -8,7 +8,7 @@ import wsClient from "./ws";
 import keytar from "keytar"; // TODO: This could be replaced with Electron's safeStorage https://freek.dev/2103-replacing-keytar-with-electrons-safestorage-in-ray
 import got from "got";
 import http from "http";
-import { dbPromise } from "./database";
+import { getDb } from "./database";
 import { ipc } from "./ipc-main";
 
 let rememberUser = false;
@@ -113,24 +113,25 @@ async function createWindow() {
   });
 }
 
-ipcMain.on("update_mod", async (event, gamePath) => {
+ipc.answerRenderer("setGamePath", async (path) => {
+  const db = await getDb();
+  await db
+    .replaceInto("storage_item")
+    .values({
+      key: "gamePath",
+      value: path,
+    })
+    .executeTakeFirst();
+});
+
+ipcMain.on("update_mod", (event) => {
   keytar.findCredentials("Noita Together").then((credentials) => {
     if (credentials.length > 0) {
       const username = credentials[0].account;
       appEvent("SAVED_USER", username);
     }
   });
-  if (gamePath) {
-    const db = await dbPromise;
-    await db
-      .replaceInto("storage_item")
-      .values({
-        key: "gamePath",
-        value: gamePath,
-      })
-      .executeTakeFirst();
-  }
-  updateMod(gamePath);
+  updateMod();
 });
 
 ipcMain.on("remember_user", (event, val) => {
@@ -216,27 +217,23 @@ if (import.meta.env.PROD) {
     .catch((e) => console.error("Failed check updates:", e));
 }
 
+let asyncCleanupPromise: Promise<void> | null = null;
+
 app.on("window-all-closed", () => {
   win = null;
-  if (process.platform !== "darwin") {
-    app.quit();
-  }
-});
 
-let asyncCleanupDone = false;
-app.on("before-quit", async (e) => {
-  if (!asyncCleanupDone) {
-    e.preventDefault();
-    try {
-      await Promise.race([
-        dbPromise.then((db) => db.destroy()),
-        new Promise((res) => setTimeout(() => res("timeout"), 1000)),
-      ]);
-    } finally {
-      asyncCleanupDone = true;
+  if (asyncCleanupPromise === null) {
+    asyncCleanupPromise = Promise.race([
+      getDb().then((db) => db.destroy()),
+      new Promise<void>((res) => setTimeout(() => res(), 1000)),
+    ]).finally(() => {
       app.quit();
-    }
+    });
   }
+
+  /*if (process.platform !== "darwin") {
+    app.quit();
+  }*/
 });
 
 app.on("activate", showOrCreateWindow);

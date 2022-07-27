@@ -8,8 +8,9 @@ export type MainIpc = {
     key: T;
     payload: NT.ILobbyAction[T];
   }): Promise<void>;
-  noPayload(a: number): Promise<void>;
-  simplePlayload(cat: number): Promise<string>;
+  setGamePath(path: string): Promise<void>;
+
+  // TODO: Delete those dummy methods
   complexRet(b: number): Promise<{
     foo: string;
     bar: {
@@ -24,6 +25,7 @@ export type MainIpc = {
  * Technically we could have multiple render processes, but we don't.
  */
 export type RendererIpc = {
+  // TODO: Delete those dummy methods
   "complex-payload"(a: string): Promise<{
     foo: string;
     bar: {

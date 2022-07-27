@@ -12,6 +12,7 @@
 
 <script setup lang="ts">
 import { ipcRenderer } from "electron";
+import { ipc } from "../ipc-renderer";
 import vButton from "../components/vButton.vue";
 import vGamePath from "../components/vGamePath.vue";
 import { ref, onMounted } from "vue";
@@ -42,9 +43,10 @@ onMounted(() => {
 function continueLogin() {
   router.replace({ path: "/login" });
 }
-function setPathAndUpdate(path: string) {
+async function setPathAndUpdate(path: string) {
   showPathModal.value = false;
-  ipcRenderer.send("update_mod", path);
+  await ipc.callMain("setGamePath")(path);
+  ipcRenderer.send("update_mod");
 }
 </script>
 
