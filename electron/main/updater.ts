@@ -5,17 +5,25 @@ import fs from "fs";
 import path from "path";
 import { EventEmitter } from "events";
 import { spawn } from "child_process";
-import { app } from "electron";
+import { dbPromise } from "./database";
 
-function findGameFolder() {
-  return new Promise((res) => {
-    forcedirSync(app.getPath("userData"));
-    const userDataPath = path.join(app.getPath("userData"), "/gamePath.json");
-    if (fs.existsSync(userDataPath)) {
-      const gamePath = JSON.parse(fs.readFileSync(userDataPath, "utf-8"));
-      res(gamePath);
+async function findGameFolder() {
+  try {
+    const db = await dbPromise;
+    const gamePathEntry = await db
+      .selectFrom("storage_item")
+      .selectAll()
+      .where("storage_item.key", "=", "gamePath")
+      .executeTakeFirst();
+    if (gamePathEntry) {
+      return gamePathEntry.value;
     }
-    const gamePaths = [];
+  } catch (e) {
+    console.error(e);
+  }
+
+  return await new Promise((res, reject) => {
+    const gamePaths: string[] = [];
     const child = spawn("powershell.exe", [
       `
             (Get-Item "HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Steam App 881100").GetValue("InstallLocation")
@@ -26,14 +34,27 @@ function findGameFolder() {
       gamePaths.push(data.toString());
     });
     child.stdin.end();
-    child.on("error", () => {}); // do nothing on error and let it default to blank on close
-    child.on("close", () => {
-      let gamePath = gamePaths.shift() || "";
-      if (gamePath) {
-        gamePath = gamePath.replace("\r\n", "");
+    child.on("error", () => {
+      // do nothing on error and let it default to blank on close
+    });
+    child.on("close", async () => {
+      try {
+        let gamePath = gamePaths.shift() || "";
+        if (gamePath) {
+          gamePath = gamePath.replace("\r\n", "");
+        }
+        const db = await dbPromise;
+        await db
+          .replaceInto("storage_item")
+          .values({
+            key: "gamePath",
+            value: gamePath,
+          })
+          .executeTakeFirst();
+        res(gamePath);
+      } catch (e) {
+        reject(e);
       }
-      fs.writeFileSync(userDataPath, JSON.stringify(gamePath));
-      res(gamePath);
     });
   });
 }
@@ -42,7 +63,6 @@ const AutoUpdateServers = [
   "https://raw.githubusercontent.com/soler91/noita-together/",
 ];
 
-// Implementation
 function forcedirSync(dir) {
   try {
     fs.mkdirSync(dir, { recursive: true });

@@ -1,19 +1,19 @@
 import { distFolder, publicFolder } from "./root-path";
 import { app, BrowserWindow, shell, ipcMain, dialog } from "electron";
 import { join } from "path";
-import fs from "fs";
 import { autoUpdater } from "electron-updater";
 import { updateMod } from "./update";
 import { appEvent } from "./appEvent";
 import wsClient from "./ws";
-import keytar from "keytar";
+import keytar from "keytar"; // TODO: This could be replaced with Electron's safeStorage https://freek.dev/2103-replacing-keytar-with-electrons-safestorage-in-ray
 import got from "got";
 import http from "http";
+import { dbPromise } from "./database";
 import { ipc } from "./ipc-main";
 
 let rememberUser = false;
 
-if (!process.env.VITE_APP_HOSTNAME) {
+if (!process.env.VITE_APP_HOSTNAME || !process.env.VITE_APP_WS_PORT) {
   console.error(
     "Please set the VITE_APP_HOSTNAME and the VITE_APP_WS_PORT environment variables"
   );
@@ -95,13 +95,17 @@ async function createWindow() {
   });
 
   if (import.meta.env.PROD) {
-    win.loadFile(join(distFolder, "index.html"));
     win.webContents.openDevTools();
+  } else {
+    win.webContents.openDevTools();
+  }
+
+  if (import.meta.env.PROD) {
+    win.loadFile(join(distFolder, "index.html"));
   } else {
     win.loadURL(
       `http://${process.env.VITE_DEV_SERVER_HOST}:${process.env.VITE_DEV_SERVER_PORT}`
     );
-    win.webContents.openDevTools();
   }
 
   win.webContents.on("did-finish-load", () => {
@@ -109,7 +113,7 @@ async function createWindow() {
   });
 }
 
-ipcMain.on("update_mod", (event, gamePath) => {
+ipcMain.on("update_mod", async (event, gamePath) => {
   keytar.findCredentials("Noita Together").then((credentials) => {
     if (credentials.length > 0) {
       const username = credentials[0].account;
@@ -117,8 +121,14 @@ ipcMain.on("update_mod", (event, gamePath) => {
     }
   });
   if (gamePath) {
-    const userDataPath = join(app.getPath("userData"), "/gamePath.json");
-    fs.writeFileSync(userDataPath, JSON.stringify(gamePath));
+    const db = await dbPromise;
+    await db
+      .replaceInto("storage_item")
+      .values({
+        key: "gamePath",
+        value: gamePath,
+      })
+      .executeTakeFirst();
   }
   updateMod(gamePath);
 });
@@ -210,6 +220,22 @@ app.on("window-all-closed", () => {
   win = null;
   if (process.platform !== "darwin") {
     app.quit();
+  }
+});
+
+let asyncCleanupDone = false;
+app.on("before-quit", async (e) => {
+  if (!asyncCleanupDone) {
+    e.preventDefault();
+    try {
+      await Promise.race([
+        dbPromise.then((db) => db.destroy()),
+        new Promise((res) => setTimeout(() => res("timeout"), 1000)),
+      ]);
+    } finally {
+      asyncCleanupDone = true;
+      app.quit();
+    }
   }
 });
 
