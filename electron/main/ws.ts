@@ -91,15 +91,7 @@ export default (data) => {
       let payload;
       let key;
       if (gameAction) {
-        // One hell of a hack to figure out which game action is set
-        key = Object.keys(gameAction).shift();
-        payload = gameAction[key];
-        if (key == "sChat") {
-          appEvent(key, payload);
-        }
-        if (typeof noita[key] == "function") {
-          noita[key](payload);
-        }
+        noita.handleGameAction(gameAction);
       } else if (lobbyAction) {
         key = Object.keys(lobbyAction).shift();
         payload = lobbyAction[key];
