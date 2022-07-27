@@ -5,6 +5,7 @@ import ws from "ws";
 import messageHandler from "./proto/messageHandler";
 import { appEvent } from "./appEvent";
 import noita from "./noita";
+import { NT } from "./proto/messages";
 const host = `ws://${process.env["VITE_APP_HOSTNAME"]}${
   process.env["VITE_APP_WS_PORT"] ? ":" + process.env["VITE_APP_WS_PORT"] : ""
 }/`;
@@ -14,7 +15,11 @@ export default (data) => {
   noita.setUser({ userId: user.userId, name: user.name, host: false });
   let isHost = false;
   let client: ws | null = new ws(`${host}${data.token}`);
-  const lobby = {
+  const lobby: {
+    [key in keyof NT.ILobbyAction]: (
+      payload: NT.ILobbyAction[key]
+    ) => void | Promise<void>;
+  } = {
     sHostStart: (payload) => {
       if (isHost) {
         const msg = messageHandler.encodeGameMsg("cHostItemBank", {
@@ -28,23 +33,23 @@ export default (data) => {
       }
       noita.sendEvt("StartRun");
     },
-    sUserBanned: (payload) => {
+    sUserBanned: async (payload) => {
       if (payload.userId == user.userId) {
-        noita.reset();
+        await noita.reset();
       } else {
         noita.removePlayer(payload);
       }
     },
-    sUserKicked: (payload) => {
+    sUserKicked: async (payload) => {
       if (payload.userId == user.userId) {
-        noita.reset();
+        await noita.reset();
       } else {
         noita.removePlayer(payload);
       }
     },
-    sUserLeftRoom: (payload) => {
+    sUserLeftRoom: async (payload) => {
       if (payload.userId == user.userId) {
-        noita.reset();
+        await noita.reset();
       } else {
         noita.removePlayer(payload);
       }
@@ -69,8 +74,8 @@ export default (data) => {
       noita.setHost(true);
       isHost = true;
     },
-    sRoomDeleted: (payload) => {
-      noita.reset();
+    sRoomDeleted: async (payload) => {
+      await noita.reset();
     },
   };
 
