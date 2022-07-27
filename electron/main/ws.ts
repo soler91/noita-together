@@ -22,12 +22,13 @@ export default (data) => {
   } = {
     sHostStart: (payload) => {
       if (isHost) {
+        const bank = noita.getBank();
         const msg = messageHandler.encodeGameMsg("cHostItemBank", {
-          wands: noita.bank.wands,
-          spells: noita.bank.spells,
-          items: noita.bank.flasks,
-          objects: noita.bank.objects,
-          gold: noita.bank.gold,
+          wands: bank.wands,
+          spells: bank.spells,
+          items: bank.flasks,
+          objects: bank.objects,
+          gold: bank.gold,
         });
         sendMsg(msg);
       }

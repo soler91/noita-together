@@ -53,10 +53,10 @@ class NoitaGame extends EventEmitter {
   gameFlags: NT.ClientRoomFlagsUpdate.IGameFlag[] = [];
   players = {};
   bank = {
-    wands: [],
-    spells: [],
-    flasks: [],
-    objects: [],
+    wands: [] as NT.IWand[],
+    spells: [] as NT.ISpell[],
+    flasks: [] as NT.IItem[],
+    objects: [] as NT.IEntityItem[],
     gold: 0,
   };
   onDeathKick = false;
@@ -132,11 +132,11 @@ class NoitaGame extends EventEmitter {
       },
       sHostItemBank: async (payload) => {
         this.bank = {
-          wands: payload.wands,
-          spells: payload.spells,
-          flasks: payload.items,
-          objects: payload.objects,
-          gold: payload.gold,
+          wands: payload.wands ?? [],
+          spells: payload.spells ?? [],
+          flasks: payload.items ?? [],
+          objects: payload.objects ?? [],
+          gold: payload.gold ?? 0,
         };
         this.bankToGame();
       },
@@ -331,6 +331,12 @@ class NoitaGame extends EventEmitter {
         this.sendEvt("AngerySteve", payload);
       },
     };
+
+    //sPlayerNewGamePlus (payload) => {},
+    /*
+    sNemesisPickupItem (payload) => {},
+    sNemesisAbility (payload) => {},
+    */
   }
 
   isConnectionLocalhost(addr: string | undefined) {
@@ -342,6 +348,9 @@ class NoitaGame extends EventEmitter {
     );
   }
 
+  /**
+   * Sets up the connection between this client and the locally running Noita game.
+   */
   gameListen() {
     if (!this.server) {
       this.server = new WebSocketServer({ port: this.port });
@@ -448,12 +457,18 @@ class NoitaGame extends EventEmitter {
     this.user.host = val;
   }
 
+  /**
+   * Sends a message to the locally running Noita game.
+   */
   sendEvt(key: string, payload: any = {}) {
     const data = JSON.stringify({ event: key, payload });
-    this.toGame(data);
+    this.#toGame(data);
   }
 
-  toGame(data: string) {
+  /**
+   * Sends a message to the locally running Noita game.
+   */
+  #toGame(data: string) {
     if (!this.client) {
       //console.log("[Game] Pushed code to queue.")
       this.#queue.push(data);
@@ -465,7 +480,7 @@ class NoitaGame extends EventEmitter {
       setTimeout(() => {
         const dataInQueue = this.#queue.shift();
         if (dataInQueue) {
-          this.toGame(dataInQueue);
+          this.#toGame(dataInQueue);
         }
       }, this.#queueDelay);
     }
@@ -535,16 +550,20 @@ class NoitaGame extends EventEmitter {
     };
   }
 
+  getBank() {
+    return {
+      wands: this.bank.wands,
+      spells: this.bank.spells,
+      flasks: this.bank.flasks,
+      objects: this.bank.objects,
+      gold: this.bank.gold,
+    };
+  }
+
   handleGameAction(gameAction: NT.IGameAction) {
     const { key, value } = protoKeyValue(gameAction);
     return this.#gameActionHandler[key]?.(value as any);
   }
-
-  //sPlayerNewGamePlus (payload) => {},
-  /*
-    sNemesisPickupItem (payload) => {},
-    sNemesisAbility (payload) => {},
-    */
 }
 
 export default new NoitaGame();

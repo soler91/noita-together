@@ -10,6 +10,9 @@ message Envelope {
 
 message GameAction {
     oneof action {
+        // The c prefix stands for "client", which refers to this application
+        // The s prefix stands for "server", which refers to the online Noita game server
+
         ClientPlayerMove c_player_move = 1;
         ServerPlayerMove s_player_move = 2;
 
