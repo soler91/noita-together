@@ -4,12 +4,13 @@ import { app } from "electron";
 import { migrateToLatest, VersionedDatabase } from "./migrations";
 // Depending on NT isn't ideal in terms of migrating, but it'll do for now
 import { NT } from "../proto/messages";
+import { ExtendedJSONFile } from "./extended-json";
 
 // TODO: Maybe use https://github.com/mtth/avsc for the schema stuff to have a really neat database that can't get messed up as easily
 // ^ Bonus points for supporting maps and stuff
 
 const filePath = join(app.getPath("userData"), "/nt-db.json");
-const adapter = new JSONFile<NoitaDatabase>(filePath);
+const adapter = new ExtendedJSONFile<NoitaDatabase>(filePath);
 
 type Database = Low<NoitaDatabase> & { data: NoitaDatabase };
 

@@ -5,8 +5,8 @@ import { ipcMain } from "electron";
 import { EventEmitter } from "events";
 import type { NT } from "./proto/messages";
 
-// TODO: Check out https://github.com/stephenh/ts-proto
-// Or check out https://github.com/timostamm/protobuf-ts
+// TODO: Check out  https://github.com/timostamm/protobuf-ts
+// Or check out https://github.com/stephenh/ts-proto plus https://github.com/timostamm/protobuf-ts/tree/master/packages/protoc
 
 function sysMsg(message: string) {
   appEvent("sChat", {
