@@ -17,5 +17,5 @@
   /* Project references are more broken than I'd like
   "references": [{ "path": "./tsconfig.node.json" }],
   */
-  "include": ["src/**/*", "src/**/*.vue", "electron/**/*"]
+  "include": ["src/**/*", "src/**/*.vue", "electron/**/*", "shared/**/*"]
 }

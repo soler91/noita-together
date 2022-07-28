@@ -1,4 +1,4 @@
-import { makeSafeRenderer } from "../electron/ipc-helpers";
+import { makeSafeRenderer } from "../shared/ipc-helpers";
 import type { MainIpc, RendererIpc } from "../electron/ipc";
 import { ipcRenderer } from "electron-better-ipc";
 

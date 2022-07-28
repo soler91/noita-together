@@ -10,5 +10,5 @@
     "skipLibCheck": true,
     "types": ["vite/client"]
   },
-  "include": ["vite.config.ts", "package.json", "electron/**/*"]
+  "include": ["vite.config.ts", "package.json", "electron/**/*", "shared/**/*"]
 }

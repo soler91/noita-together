@@ -1,13 +1,12 @@
-import { Low, JSONFile } from "lowdb";
+import { Low } from "lowdb";
 import { join } from "path";
 import { app } from "electron";
 import { migrateToLatest, VersionedDatabase } from "./migrations";
 // Depending on NT isn't ideal in terms of migrating, but it'll do for now
-import { NT } from "../proto/messages";
+import type { NT } from "../proto/messages";
 import { ExtendedJSONFile } from "./extended-json";
 
 // TODO: Maybe use https://github.com/mtth/avsc for the schema stuff to have a really neat database that can't get messed up as easily
-// ^ Bonus points for supporting maps and stuff
 
 const filePath = join(app.getPath("userData"), "/nt-db.json");
 const adapter = new ExtendedJSONFile<NoitaDatabase>(filePath);
@@ -40,6 +39,7 @@ export interface Game {
   readonly id: string;
   name: string;
   readonly bank: BankItem[];
+  readonly flags: RoomFlag[];
   gold: number;
   seed: number;
   readonly gamemode: Gamemode;
@@ -65,6 +65,18 @@ export type BankItem =
       readonly id: string;
       readonly type: "item";
       readonly value: NT.IEntityItem;
+    };
+
+export type RoomFlag =
+  | {
+      id: string;
+      type: "boolean";
+      value: boolean;
+    }
+  | {
+      id: string;
+      type: "number";
+      value: number;
     };
 
 export interface NoitaDatabase extends VersionedDatabase<any> {
