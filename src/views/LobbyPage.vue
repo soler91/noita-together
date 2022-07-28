@@ -76,7 +76,7 @@ import vRoomCreation from "../components/vRoomCreation.vue";
 import vRoomPassword from "../components/vRoomPassword.vue";
 import { ref, computed, onMounted, watch, nextTick } from "vue";
 import { useRouter } from "vue-router";
-import useStore, { Gamemode, GamemodeNames } from "../store";
+import useStore from "../store";
 import NT from "../messages";
 const store = useStore();
 const router = useRouter();
@@ -142,8 +142,10 @@ function joinRoom(id: string, password) {
     console.log(error);
   }
 }
-function gamemodeName(id: Gamemode) {
-  return GamemodeNames[id];
+function gamemodeName(id) {
+  if (id == 0) return "Co-op";
+  if (id == 1) return "Race";
+  if (id == 2) return "Nemesis";
 }
 function createRoom(payload: NT.IClientRoomCreate) {
   store.actions.createRoom(payload);

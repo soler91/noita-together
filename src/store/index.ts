@@ -3,6 +3,7 @@ import { defineStore, acceptHMRUpdate } from "pinia";
 import { ipcRenderer } from "electron";
 import { reactive, computed, ref, readonly } from "vue";
 import type NT from "../messages";
+import type { Gamemode } from "../../electron/main/database";
 
 const colors = [
   "#698935",
@@ -17,20 +18,19 @@ const randomColor = () => {
   return colors[Math.floor(Math.random() * colors.length)];
 };
 
-export const Gamemodes = {
-  Coop: 0,
-  Race: 1,
-  Nemesis: 2,
-} as const;
+export const GamemodeToId: { [key in Gamemode]: number } = {
+  coop: 0,
+  race: 1,
+  nemesis: 2,
+};
 
-export const GamemodeNames = {
-  [Gamemodes.Coop]: "Co-op",
-  [Gamemodes.Race]: "Race",
-  [Gamemodes.Nemesis]: "Nemesis",
-} as const;
+export const GamemodeFromId: { [key in number]: Gamemode } = {
+  0: "coop",
+  1: "race",
+  2: "nemesis",
+};
 
-export type Gamemode = typeof Gamemodes[keyof typeof Gamemodes];
-
+// TODO: Remove those types
 export type GameFlagDefault =
   | {
       id: string;
@@ -104,7 +104,7 @@ const ipcPlugin = (ipcx) => {
 
     ipcx.on("sRoomFlagsUpdated", (event, data) => {
       // TODO: Replace this temporary fix with a proper one
-      const mode = store.state.room.gamemode;
+      const mode = GamemodeFromId[store.state.room.gamemode];
       const fDefaults = store.defaultFlags[mode];
       if (!fDefaults) {
         return;
@@ -196,7 +196,7 @@ const ipcPlugin = (ipcx) => {
 
 const useStore = defineStore("store", () => {
   const defaultFlags = readonly<{ [key in Gamemode]: GameFlagDefault[] }>({
-    [Gamemodes.Coop]: [
+    coop: [
       {
         id: "sync_perks",
         name: "Share all perks",
@@ -316,8 +316,8 @@ const useStore = defineStore("store", () => {
         value: false,
       },
     ],
-    [Gamemodes.Race]: [],
-    [Gamemodes.Nemesis]: [
+    race: [],
+    nemesis: [
       {
         id: "ban_ambrosia",
         name: "Ban Ambrosia",
@@ -514,7 +514,7 @@ const useStore = defineStore("store", () => {
     },
     setRoom: (payload: Room) => {
       state.room = payload;
-      commit("setDefaultFlags", payload.gamemode);
+      actions.loadDefaultRoomFlags(GamemodeFromId[payload.gamemode]);
       for (const user of state.room.users) {
         user.color = randomColor();
       }
@@ -590,13 +590,6 @@ const useStore = defineStore("store", () => {
         state.roomChat.shift();
       }
     },
-    setDefaultFlags: (mode: Gamemode) => {
-      if (mode === 0 || mode === 2) {
-        roomFlags.value = defaultFlags[mode].map((flag) => {
-          return { ...flag };
-        });
-      }
-    },
   };
 
   const actions = {
@@ -642,7 +635,7 @@ const useStore = defineStore("store", () => {
 
       return new Promise<Room>((resolve, reject) => {
         ipcRenderer.once("sRoomCreated", (event, data) => {
-          commit("setDefaultFlags", data.gamemode);
+          actions.loadDefaultRoomFlags(GamemodeFromId[data.gamemode]);
           commit("setRoom", data);
           commit("setLoading", false);
           actions.sendFlags();
@@ -670,7 +663,8 @@ const useStore = defineStore("store", () => {
       if (!state.room.id) return;
 
       // TODO: Put saved stuff into room
-      actions.updateRoomFlags();
+      const game = await ipc.callMain("getGameSaveFull")(payload.id);
+      actions.updateRoomFlags(game.flags);
     },
     updateRoom: async (payload: NT.IClientRoomUpdate) => {
       commit("setLoading", true);
@@ -689,6 +683,13 @@ const useStore = defineStore("store", () => {
         commit("setLoading", false);
         return false;
       });
+    },
+    loadDefaultRoomFlags: (mode: Gamemode) => {
+      if (mode === "coop" || mode === "nemesis") {
+        roomFlags.value = defaultFlags[mode].map((flag) => {
+          return { ...flag };
+        });
+      }
     },
     updateRoomFlags: (payload: GameFlag[]) => {
       payload.forEach((updateFlag) => {

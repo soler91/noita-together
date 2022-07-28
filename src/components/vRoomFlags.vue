@@ -95,7 +95,7 @@ import vButton from "../components/vButton.vue";
 import Popper from "vue3-popper";
 import vInput from "../components/vInput.vue";
 import { ref, computed } from "vue";
-import useStore, { Gamemode, type GameFlag } from "../store";
+import useStore, { type GameFlag, GamemodeFromId } from "../store";
 const store = useStore();
 
 const emit = defineEmits<{
@@ -116,10 +116,9 @@ const isHost = computed(() => {
 const defaultModeFlags = computed(
   () =>
     new Map(
-      store.defaultFlags[store.state.room.gamemode as Gamemode].map((flag) => [
-        flag.id,
-        flag,
-      ])
+      store.defaultFlags[GamemodeFromId[store.state.room.gamemode]].map(
+        (flag) => [flag.id, flag]
+      )
     )
 );
 

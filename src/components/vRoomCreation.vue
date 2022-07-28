@@ -19,8 +19,8 @@
       </div>
       <div v-else>
         <select class="slot-selector" v-model="toCreate.gamemode">
-          <option :value="Gamemodes.Coop">Co-op</option>
-          <option :value="Gamemodes.Nemesis">Nemesis PROTOTYPE</option>
+          <option :value="'coop'">Co-op</option>
+          <option :value="'nemesis'">Nemesis PROTOTYPE</option>
         </select>
       </div>
       <select class="slot-selector" v-model="toCreate.maxUsers">
@@ -51,9 +51,10 @@ import vModal from "../components/vModal.vue";
 import vButton from "../components/vButton.vue";
 import vInput from "../components/vInput.vue";
 import { ref, computed } from "vue";
-import useStore, { Gamemode, Gamemodes } from "../store";
+import useStore, { GamemodeToId } from "../store";
 import NT from "../messages";
 import { ipc } from "../ipc-renderer";
+import type { Gamemode } from "../../electron/main/database";
 const store = useStore();
 
 const emit = defineEmits<{
@@ -61,7 +62,7 @@ const emit = defineEmits<{
   (
     e: "loadRoom",
     value: {
-      id: number;
+      id: string;
       room: NT.IClientRoomCreate;
     }
   ): void;
@@ -69,8 +70,8 @@ const emit = defineEmits<{
 }>();
 
 const loadSavedRoom = ref(false);
-const savedRoomId = ref<number | null>(null);
-const savedRooms = ref<{ id: number; name: string; gamemode: number }[]>([]);
+const savedRoomId = ref<string | null>(null);
+const savedRooms = ref<{ id: string; name: string; gamemode: Gamemode }[]>([]);
 
 ipc
   .callMain("getGameSaves")()
@@ -81,7 +82,7 @@ ipc
 const canCreate = ref(true);
 const toCreate = ref({
   name: "",
-  gamemode: Gamemodes.Coop as Gamemode,
+  gamemode: "coop" as Gamemode,
   password: "",
   maxUsers: 5,
 });
@@ -101,9 +102,14 @@ function createRoom() {
       return;
     }
 
-    const payload = { ...toCreate.value };
-    payload.gamemode = (savedRooms.value.find((r) => r.id === savedRoomId.value)
-      ?.gamemode ?? Gamemodes.Coop) as Gamemode;
+    const payload = {
+      ...toCreate.value,
+      gamemode:
+        GamemodeToId[
+          savedRooms.value.find((r) => r.id === savedRoomId.value)?.gamemode ??
+            "coop"
+        ],
+    };
 
     if (!payload.name) {
       payload.name = "missing room name";
@@ -113,7 +119,10 @@ function createRoom() {
       room: payload,
     });
   } else {
-    const payload = { ...toCreate.value };
+    const payload = {
+      ...toCreate.value,
+      gamemode: GamemodeToId[toCreate.value.gamemode],
+    };
     if (!payload.name) {
       payload.name = "missing room name";
     }
@@ -123,7 +132,7 @@ function createRoom() {
 function close() {
   toCreate.value = {
     name: "",
-    gamemode: Gamemodes.Coop,
+    gamemode: "coop",
     password: "",
     maxUsers: 5,
   };

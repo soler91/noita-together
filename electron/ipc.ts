@@ -1,4 +1,4 @@
-import type { Gamemode } from "./main/database";
+import type { Game, Gamemode } from "./main/database";
 import type { NT } from "./main/proto/messages";
 
 /**
@@ -18,6 +18,8 @@ export type MainIpc = {
       gamemode: Gamemode;
     }[]
   >;
+
+  getGameSaveFull(roomId: number): Promise<Game>;
 };
 
 /**
