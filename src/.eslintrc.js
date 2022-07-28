@@ -14,4 +14,15 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: "module",
   },
+  rules: {
+    "@typescript-eslint/no-explicit-any": "off",
+    "no-restricted-syntax": [
+      "error",
+      {
+        selector:
+          "ImportDeclaration[importKind!='type'][source.value=/..\\u002Felectron/]",
+        message: "Must use 'import type' when importing from '../electron'.",
+      },
+    ],
+  },
 };
