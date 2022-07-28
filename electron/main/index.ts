@@ -124,6 +124,18 @@ ipc.answerRenderer("setGamePath", async (path) => {
     .executeTakeFirst();
 });
 
+ipc.answerRenderer("getGameSaves", async () => {
+  const db = await getDb();
+  const gameSaves = await db.selectFrom("game_save").selectAll().execute();
+  return gameSaves.map((v) => {
+    return {
+      id: v.id,
+      name: v.name,
+      gamemode: v.gamemode,
+    };
+  });
+});
+
 ipcMain.on("update_mod", (event) => {
   keytar.findCredentials("Noita Together").then((credentials) => {
     if (credentials.length > 0) {

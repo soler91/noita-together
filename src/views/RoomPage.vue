@@ -161,7 +161,7 @@ function sendChat(e: KeyboardEvent) {
   chatMsg.value = "";
 }
 function sendFlags(payload: GameFlag[]) {
-  store.commit("roomFlagsUpdated", payload);
+  store.actions.updateRoomFlags(payload);
   store.actions.sendFlags();
   closeRoomFlags();
 }

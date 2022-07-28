@@ -59,6 +59,8 @@ export type GameFlag =
       value: number;
     };
 
+export type Room = NT.IServerJoinRoomSuccess & NT.IServerRoomCreated;
+
 // callbacks for when IPC does stuff
 const ipcPlugin = (ipcx) => {
   return (store) => {
@@ -125,7 +127,7 @@ const ipcPlugin = (ipcx) => {
         }
         return [flag];
       });
-      store.commit("roomFlagsUpdated", updatedFlags);
+      store.actions.updateRoomFlags(updatedFlags);
     });
 
     ipcx.on("sRoomDeleted", (event, data) => {
@@ -385,6 +387,7 @@ const useStore = defineStore("store", () => {
   });
 
   const roomFlags = ref<GameFlag[]>([]);
+  //const room = ref<Room | null>(null);
 
   const state = reactive({
     user: {
@@ -509,27 +512,16 @@ const useStore = defineStore("store", () => {
     setRooms: (payload) => {
       state.lobbies = payload;
     },
-    setRoom: (payload) => {
+    setRoom: (payload: Room) => {
       state.room = payload;
       commit("setDefaultFlags", payload.gamemode);
       for (const user of state.room.users) {
         user.color = randomColor();
       }
     },
-    roomUpdated: (payload) => {
+    roomUpdated: (payload: Room) => {
       let room = Object.assign(state.room);
       state.room = Object.assign(room, payload);
-    },
-    roomFlagsUpdated: (payload: GameFlag[]) => {
-      payload.forEach((updateFlag) => {
-        const found = roomFlags.value.find((f) => f.id === updateFlag.id);
-        if (found) {
-          found.value = updateFlag.value;
-        } else {
-          console.warn("Unknown flag: " + updateFlag.id);
-          roomFlags.value.push(updateFlag);
-        }
-      });
     },
     resetRoom: () => {
       state.room = {
@@ -643,29 +635,42 @@ const useStore = defineStore("store", () => {
         commit("setLoading", false);
       });
     },
-    createRoom: async (payload: NT.IClientRoomCreate) => {
+    createRoom: (payload: NT.IClientRoomCreate) => {
       state.loading = true;
       // TODO: Make this a proper promise which can resolve and reject
       ipc.callMain("clientMessage")({ key: "cRoomCreate", payload });
 
-      ipcRenderer.once("sRoomCreated", (event, data) => {
-        commit("setDefaultFlags", data.gamemode);
-        commit("setRoom", data);
-        commit("setLoading", false);
-        actions.sendFlags();
-        return true;
-      });
-
-      ipcRenderer.once("sRoomCreateFailed", (event, data) => {
-        dispatch("errDialog", {
-          title: "Failed to create room",
-          body: data.reason,
-          canClose: true,
+      return new Promise<Room>((resolve, reject) => {
+        ipcRenderer.once("sRoomCreated", (event, data) => {
+          commit("setDefaultFlags", data.gamemode);
+          commit("setRoom", data);
+          commit("setLoading", false);
+          actions.sendFlags();
+          resolve(data);
+          return true;
         });
-        state.loading = false;
 
-        return false;
+        ipcRenderer.once("sRoomCreateFailed", (event, data) => {
+          dispatch("errDialog", {
+            title: "Failed to create room",
+            body: data.reason,
+            canClose: true,
+          });
+          state.loading = false;
+          reject(new Error(data.reason));
+          return false;
+        });
       });
+    },
+    loadSavedRoom: async (payload: {
+      id: number;
+      room: NT.IClientRoomCreate;
+    }) => {
+      await actions.createRoom(payload.room);
+      if (!state.room.id) return;
+
+      // TODO: Put saved stuff into room
+      actions.updateRoomFlags();
     },
     updateRoom: async (payload: NT.IClientRoomUpdate) => {
       commit("setLoading", true);
@@ -683,6 +688,17 @@ const useStore = defineStore("store", () => {
         });
         commit("setLoading", false);
         return false;
+      });
+    },
+    updateRoomFlags: (payload: GameFlag[]) => {
+      payload.forEach((updateFlag) => {
+        const found = roomFlags.value.find((f) => f.id === updateFlag.id);
+        if (found) {
+          found.value = updateFlag.value;
+        } else {
+          console.warn("Unknown flag: " + updateFlag.id);
+          roomFlags.value.push(updateFlag);
+        }
       });
     },
     leaveRoom: async () => {

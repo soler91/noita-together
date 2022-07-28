@@ -1,13 +1,28 @@
 <template>
   <vModal>
     <template v-slot:header>
-      <h1>Create Room</h1>
+      <h1 v-if="loadSavedRoom">Load Saved Room</h1>
+      <h1 v-else>Create Room</h1>
     </template>
     <template v-slot:body>
-      <select class="slot-selector" v-model="toCreate.gamemode">
-        <option :value="Gamemodes.Coop">Co-op</option>
-        <option :value="Gamemodes.Nemesis">Nemesis PROTOTYPE</option>
+      <select class="slot-selector" v-model="loadSavedRoom">
+        <option :value="false">New Room</option>
+        <option :value="true">Load Saved</option>
       </select>
+
+      <div v-if="loadSavedRoom">
+        <select class="slot-selector" v-model="savedRoomId">
+          <option v-for="room in savedRooms" :value="room.id" :key="room.id">
+            {{ room.name }}
+          </option>
+        </select>
+      </div>
+      <div v-else>
+        <select class="slot-selector" v-model="toCreate.gamemode">
+          <option :value="Gamemodes.Coop">Co-op</option>
+          <option :value="Gamemodes.Nemesis">Nemesis PROTOTYPE</option>
+        </select>
+      </div>
       <select class="slot-selector" v-model="toCreate.maxUsers">
         <option v-for="slot in roomSizes" :key="slot" :value="slot">
           {{ slot }} slots
@@ -36,19 +51,37 @@ import vModal from "../components/vModal.vue";
 import vButton from "../components/vButton.vue";
 import vInput from "../components/vInput.vue";
 import { ref, computed } from "vue";
-import useStore, { Gamemodes } from "../store";
+import useStore, { Gamemode, Gamemodes } from "../store";
 import NT from "../messages";
+import { ipc } from "../ipc-renderer";
 const store = useStore();
 
 const emit = defineEmits<{
   (e: "createRoom", value: NT.IClientRoomCreate): void;
+  (
+    e: "loadRoom",
+    value: {
+      id: number;
+      room: NT.IClientRoomCreate;
+    }
+  ): void;
   (e: "close"): void;
 }>();
+
+const loadSavedRoom = ref(false);
+const savedRoomId = ref<number | null>(null);
+const savedRooms = ref<{ id: number; name: string; gamemode: number }[]>([]);
+
+ipc
+  .callMain("getGameSaves")()
+  .then((saves) => {
+    savedRooms.value = saves;
+  });
 
 const canCreate = ref(true);
 const toCreate = ref({
   name: "",
-  gamemode: Gamemodes.Coop,
+  gamemode: Gamemodes.Coop as Gamemode,
   password: "",
   maxUsers: 5,
 });
@@ -63,16 +96,34 @@ const roomSizes = computed(() => {
   return sizes;
 });
 function createRoom() {
-  const payload = { ...toCreate.value };
-  if (!payload.name) {
-    payload.name = "missing room name";
+  if (loadSavedRoom.value) {
+    if (savedRoomId.value === null) {
+      return;
+    }
+
+    const payload = { ...toCreate.value };
+    payload.gamemode = (savedRooms.value.find((r) => r.id === savedRoomId.value)
+      ?.gamemode ?? Gamemodes.Coop) as Gamemode;
+
+    if (!payload.name) {
+      payload.name = "missing room name";
+    }
+    emit("loadRoom", {
+      id: savedRoomId.value,
+      room: payload,
+    });
+  } else {
+    const payload = { ...toCreate.value };
+    if (!payload.name) {
+      payload.name = "missing room name";
+    }
+    emit("createRoom", payload);
   }
-  emit("createRoom", payload);
 }
 function close() {
   toCreate.value = {
     name: "",
-    gamemode: 0,
+    gamemode: Gamemodes.Coop,
     password: "",
     maxUsers: 5,
   };

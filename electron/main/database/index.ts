@@ -2,7 +2,7 @@ import { join } from "path";
 import { app } from "electron";
 import * as migration0001 from "./migrations/migration0001";
 import sqlite3 from "sqlite3";
-import { Kysely, Migrator } from "kysely";
+import { Generated, Kysely, Migrator } from "kysely";
 import { SqliteDialect } from "./sqlite/sqlite-dialect";
 
 const filePath = join(app.getPath("userData"), "/nt-db.sqlite");
@@ -13,7 +13,8 @@ export interface StorageItemTable {
 }
 
 export interface GameSaveTable {
-  id: string;
+  id: Generated<number>;
+  gamemode: number;
   name: string;
   gold: number;
 }

@@ -591,6 +591,7 @@ message ClientJoinRoom {
     optional string password = 1;
 }
 
+// TODO: This basically duplicates the ServerRoomCreated message
 message ServerJoinRoomSuccess {
     required string id = 0;
     required string name = 1;

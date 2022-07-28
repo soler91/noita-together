@@ -3,6 +3,7 @@
     <vRoomCreation
       v-if="showRoomCreation"
       @createRoom="createRoom"
+      @loadRoom="(payload) => store.actions.loadSavedRoom(payload)"
       @close="closeCreationModal"
     />
     <vRoomPassword

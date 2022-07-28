@@ -10,14 +10,13 @@ export type MainIpc = {
   }): Promise<void>;
   setGamePath(path: string): Promise<void>;
 
-  // TODO: Delete those dummy methods
-  complexRet(b: number): Promise<{
-    foo: string;
-    bar: {
-      baz: number;
-    };
-  }>;
-  "get-emoji"(name: string): Promise<string>;
+  getGameSaves(): Promise<
+    {
+      id: number;
+      name: string;
+      gamemode: number;
+    }[]
+  >;
 };
 
 /**
