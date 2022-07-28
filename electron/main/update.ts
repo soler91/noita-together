@@ -82,13 +82,9 @@ function updaterSetup(branch, gamePath) {
 async function findGameFolder(): Promise<string> {
   try {
     const db = await getDb();
-    const gamePathEntry = await db
-      .selectFrom("storage_item")
-      .selectAll()
-      .where("storage_item.key", "=", "gamePath")
-      .executeTakeFirst();
-    if (gamePathEntry) {
-      return gamePathEntry.value;
+    const gamePath = db.data.storage.gamePath;
+    if (gamePath) {
+      return gamePath;
     }
   } catch (e) {
     console.error(e);
@@ -116,13 +112,8 @@ async function findGameFolder(): Promise<string> {
           gamePath = gamePath.replace("\r\n", "");
         }
         const db = await getDb();
-        await db
-          .replaceInto("storage_item")
-          .values({
-            key: "gamePath",
-            value: gamePath,
-          })
-          .executeTakeFirst();
+        db.data.storage.gamePath = gamePath;
+        await db.write();
         res(gamePath);
       } catch (e) {
         reject(e);

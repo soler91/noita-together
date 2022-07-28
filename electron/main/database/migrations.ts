@@ -33,8 +33,10 @@ class Migration<ResultDatabase extends VersionedDatabase<number>> {
     return new Migration(this, targetVersion, migrate as any);
   }
 }
-
+// Database format migrations
+// Make sure to *NEVER* change an existing migration that is used in production. Always add new migrations.
 const finalMigration = Migration.BaseMigration.addMigration(1, (db) => {
+  // This migration just exists to show off how migrations work
   return {
     version: 1,
     storage: [] as any[],
@@ -43,7 +45,9 @@ const finalMigration = Migration.BaseMigration.addMigration(1, (db) => {
 }).addMigration(2, (db) => {
   return {
     version: 2,
-    storage: db.storage,
+    storage: {
+      gamePath: "",
+    },
     games: db.games,
   };
 });

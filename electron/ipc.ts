@@ -1,3 +1,4 @@
+import type { Gamemode } from "./main/database";
 import type { NT } from "./main/proto/messages";
 
 /**
@@ -12,9 +13,9 @@ export type MainIpc = {
 
   getGameSaves(): Promise<
     {
-      id: number;
+      id: string;
       name: string;
-      gamemode: number;
+      gamemode: Gamemode;
     }[]
   >;
 };

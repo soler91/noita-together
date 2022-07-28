@@ -1,72 +1,27 @@
+import { Low, JSONFile } from "lowdb";
 import { join } from "path";
 import { app } from "electron";
-import * as migration0001 from "./migrations/migration0001";
-import sqlite3 from "sqlite3";
-import { Generated, Kysely, Migrator } from "kysely";
-import { SqliteDialect } from "./sqlite/sqlite-dialect";
+import { migrateToLatest, VersionedDatabase } from "./migrations";
+// Depending on NT isn't ideal in terms of migrating, but it'll do for now
+import { NT } from "../proto/messages";
 
-const filePath = join(app.getPath("userData"), "/nt-db.sqlite");
+// TODO: Maybe use https://github.com/mtth/avsc for the schema stuff to have a really neat database that can't get messed up as easily
+// ^ Bonus points for supporting maps and stuff
 
-export interface StorageItemTable {
-  key: string;
-  value: string;
+const filePath = join(app.getPath("userData"), "/nt-db.json");
+const adapter = new JSONFile<NoitaDatabase>(filePath);
+
+type Database = Low<NoitaDatabase> & { data: NoitaDatabase };
+
+async function getDatabase(): Promise<Database> {
+  const db = new Low(adapter);
+  await db.read();
+  const data: NoitaDatabase = migrateToLatest(db.data ?? { version: 0 });
+  db.data = data;
+  return db as Database;
 }
 
-export interface GameSaveTable {
-  id: Generated<number>;
-  gamemode: number;
-  name: string;
-  gold: number;
-}
-
-export interface BankItemTable {
-  id: string;
-}
-
-export interface NoitaDatabase {
-  storage_item: StorageItemTable;
-  game_save: GameSaveTable;
-  bank_item: BankItemTable;
-}
-
-async function getDatabase(): Promise<Kysely<NoitaDatabase>> {
-  const sqliteDb = new sqlite3.Database(filePath);
-  sqliteDb.configure("busyTimeout", 1000);
-  const noitaDb = new Kysely<NoitaDatabase>({
-    dialect: new SqliteDialect({
-      database: sqliteDb,
-    }),
-  });
-
-  const migrator = new Migrator({
-    provider: {
-      async getMigrations() {
-        return {
-          migration0001: migration0001,
-        };
-      },
-    },
-    db: noitaDb,
-  });
-
-  const { error, results } = await migrator.migrateToLatest();
-  if (error) {
-    throw error;
-  } else {
-    results?.forEach((it) => {
-      if (it.status === "Success") {
-        console.log(
-          `migration "${it.migrationName}" was executed successfully`
-        );
-      } else if (it.status === "Error") {
-        console.error(`failed to execute migration "${it.migrationName}"`);
-      }
-    });
-    return noitaDb;
-  }
-}
-
-let dbPromise: Promise<Kysely<NoitaDatabase>> | null = null;
+let dbPromise: Promise<Database> | null = null;
 export function getDb() {
   if (dbPromise === null) {
     dbPromise = getDatabase();
@@ -74,5 +29,49 @@ export function getDb() {
   return dbPromise;
 }
 
-// TODO: Put world seed, all flags, onDeathKick and gold amount into games storage
-// TODO: Put bank items into storage and reference the game and store their type (wand, spell, ...)
+export interface Storage {
+  gamePath: string;
+}
+
+export type Gamemode = "coop" | "race" | "nemesis";
+
+export interface Game {
+  readonly id: string;
+  name: string;
+  readonly bank: BankItem[];
+  gold: number;
+  seed: number;
+  readonly gamemode: Gamemode;
+}
+
+export type BankItem =
+  | {
+      readonly id: string;
+      readonly type: "wand";
+      readonly value: NT.IWand;
+    }
+  | {
+      readonly id: string;
+      readonly type: "spell";
+      readonly value: NT.ISpell;
+    }
+  | {
+      readonly id: string;
+      readonly type: "flask";
+      readonly value: NT.IItem;
+    }
+  | {
+      readonly id: string;
+      readonly type: "item";
+      readonly value: NT.IEntityItem;
+    };
+
+export interface NoitaDatabase extends VersionedDatabase<any> {
+  /**
+   * Acts like a local storage
+   */
+  readonly storage: Storage;
+  readonly games: Game[];
+}
+
+// TODO: Put onDeathKick into games storage

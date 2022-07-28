@@ -115,19 +115,13 @@ async function createWindow() {
 
 ipc.answerRenderer("setGamePath", async (path) => {
   const db = await getDb();
-  await db
-    .replaceInto("storage_item")
-    .values({
-      key: "gamePath",
-      value: path,
-    })
-    .executeTakeFirst();
+  db.data.storage.gamePath = path;
+  await db.write();
 });
 
 ipc.answerRenderer("getGameSaves", async () => {
   const db = await getDb();
-  const gameSaves = await db.selectFrom("game_save").selectAll().execute();
-  return gameSaves.map((v) => {
+  return db.data.games.map((v) => {
     return {
       id: v.id,
       name: v.name,
@@ -236,7 +230,7 @@ app.on("window-all-closed", () => {
 
   if (asyncCleanupPromise === null) {
     asyncCleanupPromise = Promise.race([
-      getDb().then((db) => db.destroy()),
+      getDb().then((db) => db.write()),
       new Promise<void>((res) => setTimeout(() => res(), 1000)),
     ]).finally(() => {
       app.quit();
