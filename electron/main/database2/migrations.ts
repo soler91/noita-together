@@ -1,5 +1,5 @@
-interface VersionedDatabase<Version extends number> {
-  version: Version;
+export interface VersionedDatabase<Version extends number> {
+  readonly version: Version;
 }
 
 /**
@@ -22,7 +22,7 @@ class Migration<ResultDatabase extends VersionedDatabase<number>> {
 
   static BaseMigration = new Migration(null, 1, () => {
     return {
-      version: 1,
+      version: 0,
     };
   });
 
@@ -34,20 +34,21 @@ class Migration<ResultDatabase extends VersionedDatabase<number>> {
   }
 }
 
-const finalMigration = Migration.BaseMigration.addMigration(6, (db) => {
+const finalMigration = Migration.BaseMigration.addMigration(1, (db) => {
   return {
-    version: 6,
-    dog: db.version,
-    neko: 32,
+    version: 1,
+    storage: [] as any[],
+    games: [] as any[],
   };
-}).addMigration(11, (db) => {
+}).addMigration(2, (db) => {
   return {
-    version: 11,
-    neko: db.neko,
+    version: 2,
+    storage: db.storage,
+    games: db.games,
   };
 });
 
-function migrateToLatest(db: {
+export function migrateToLatest(db: {
   version: number;
 }): ReturnType<typeof finalMigration["migrate"]> {
   let currentMigration: Migration<any> | null = finalMigration;
