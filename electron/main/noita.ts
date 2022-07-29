@@ -626,7 +626,7 @@ class NoitaGame extends EventEmitter {
         return {
           id: v.id,
           type: type,
-          value: v,
+          value: { ...v },
         } as BankItem;
       });
     }
@@ -635,17 +635,22 @@ class NoitaGame extends EventEmitter {
       protoFlag: NT.ClientRoomFlagsUpdate.IGameFlag
     ): RoomFlag {
       // TODO: This is just a temporary hack
-      if ("uIntVal" in protoFlag) {
+      if (
+        "uIntVal" in protoFlag &&
+        protoFlag.uIntVal !== undefined &&
+        protoFlag.uIntVal !== null
+      ) {
         return {
           id: protoFlag.flag,
           type: "number",
           value: protoFlag.uIntVal as number,
         };
       } else {
+        // The existence of a flag implies that it's set to true
         return {
           id: protoFlag.flag,
           type: "boolean",
-          value: protoFlag.boolVal as boolean,
+          value: true,
         };
       }
     }

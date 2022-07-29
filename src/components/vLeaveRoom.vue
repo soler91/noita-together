@@ -4,9 +4,7 @@
       <h1>Leave Room?</h1>
     </template>
     <template v-slot:body>
-      <p v-if="isHost">
-        The room will be deleted, and the item bank will be lost.
-      </p>
+      <p v-if="isHost">The room will be saved and can be loaded again.</p>
       <p v-else>Are you sure you want to leave the room?</p>
     </template>
     <template v-slot:footer>

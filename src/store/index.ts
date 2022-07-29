@@ -119,7 +119,11 @@ const ipcPlugin = (ipcx) => {
           type: defaultFlag.type,
           value: defaultFlag.value,
         };
-        if ("uIntVal" in val) {
+        if (
+          "uIntVal" in val &&
+          val.uIntVal !== undefined &&
+          val.uIntVal !== null
+        ) {
           flag.value = val.uIntVal;
         }
         if (flag.type == "boolean") {
