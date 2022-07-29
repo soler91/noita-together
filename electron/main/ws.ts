@@ -7,8 +7,8 @@ import { appEvent } from "./appEvent";
 import noita from "./noita";
 import { NT } from "./proto/messages";
 import { getDb } from "./database";
-const host = `ws://${process.env["VITE_APP_HOSTNAME"]}${
-  process.env["VITE_APP_WS_PORT"] ? ":" + process.env["VITE_APP_WS_PORT"] : ""
+const host = `ws://${process.env.VITE_APP_HOSTNAME}${
+  process.env.VITE_APP_WS_PORT ? ":" + process.env.VITE_APP_WS_PORT : ""
 }/`;
 
 export default (data) => {
