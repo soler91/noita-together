@@ -78,6 +78,7 @@ class RunningGame {
   }
 
   get isOnDeathKick() {
+    // Only seems to happen when the user is the host
     return this.flags.some((v) => v.flag == "_ondeath_kick");
   }
 
@@ -100,14 +101,12 @@ class NoitaGame extends EventEmitter {
   spellList = [];
   players = {};
   #game: RunningGame | null = null;
-  gameFlags: NT.ClientRoomFlagsUpdate.IGameFlag[] = [];
   bank = {
     wands: [] as NT.IWand[],
     spells: [] as NT.ISpell[],
     flasks: [] as NT.IItem[],
     objects: [] as NT.IEntityItem[],
   };
-  onDeathKick = false;
 
   #gameActionHandler: {
     [key in keyof NT.IGameAction]: (
@@ -302,7 +301,7 @@ class NoitaGame extends EventEmitter {
         }
         this.sendEvt("PlayerPickup", payload);
       },
-      sPlayerDeath: async (payload) => {
+      sPlayerDeath: async (payload, game) => {
         const player =
           payload.userId == this.user.userId
             ? this.user
@@ -311,7 +310,7 @@ class NoitaGame extends EventEmitter {
           sysMsg(`${player.name} has ${payload.isWin ? "won" : "died"}.`);
           if (
             this.isHost &&
-            this.onDeathKick &&
+            game.isOnDeathKick &&
             !payload.isWin &&
             this.user.userId != payload.userId
           ) {
@@ -340,7 +339,7 @@ class NoitaGame extends EventEmitter {
           });
         } catch (error) {}
       },
-      sRespawnPenalty: async (payload) => {
+      sRespawnPenalty: async (payload, game) => {
         const player =
           payload.userId == this.user.userId
             ? this.user
@@ -349,7 +348,7 @@ class NoitaGame extends EventEmitter {
           sysMsg(`${player.name} had to respawn against his will.`);
           if (
             this.isHost &&
-            this.onDeathKick &&
+            game.isOnDeathKick &&
             this.user.userId != payload.userId
           ) {
             this.emit("death_kick", payload.userId);
@@ -427,7 +426,10 @@ class NoitaGame extends EventEmitter {
     });
     this.on("RequestPlayerList", () => {
       this.sendPlayerList();
-      this.sendEvt("UpdateFlags", this.gameFlags);
+      if (!this.#game) {
+        console.warn("Requested player list without game");
+      }
+      this.sendEvt("UpdateFlags", this.#game?.flags ?? []);
     });
     this.on("PlayerDeath", () => {
       this.bank = {
@@ -532,17 +534,13 @@ class NoitaGame extends EventEmitter {
     this.#game = new RunningGame(gameId);
   }
 
-  updateFlags(data) {
-    const onDeathKick = data.some((entry) => entry.flag == "_ondeath_kick");
-    if (this.isHost) {
-      this.onDeathKick = onDeathKick;
-    }
-
+  updateFlags(data: NT.ServerRoomFlagsUpdated.IGameFlag[]) {
     data.push({ flag: "NT_GAMEMODE_CO_OP" }); //hardcode this for now :) <3
-    this.gameFlags = data;
-
-    // TODO: Save the room flags right here
-    console.log("Updated room flags");
+    if (this.#game) {
+      this.#game.flags = data;
+    } else {
+      console.error("[Game] Update flags without game");
+    }
 
     this.sendEvt("UpdateFlags", data);
   }
@@ -651,7 +649,6 @@ class NoitaGame extends EventEmitter {
     this.setHost(false);
     this.rejectConnections = true;
     this.spellList = [];
-    this.gameFlags = [];
     this.players = {};
     this.bank = {
       wands: [],
