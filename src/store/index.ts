@@ -656,7 +656,7 @@ const useStore = defineStore("store", () => {
       });
     },
     loadSavedRoom: async (payload: {
-      id: number;
+      id: string;
       room: NT.IClientRoomCreate;
     }) => {
       await actions.createRoom(payload.room);
