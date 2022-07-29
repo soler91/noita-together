@@ -106,13 +106,13 @@ class NoitaGame extends EventEmitter {
     spells: [] as NT.ISpell[],
     flasks: [] as NT.IItem[],
     objects: [] as NT.IEntityItem[],
-    gold: 0,
   };
   onDeathKick = false;
 
   #gameActionHandler: {
     [key in keyof NT.IGameAction]: (
-      payload: NonNullable<NT.IGameAction[key]>
+      payload: NonNullable<NT.IGameAction[key]>,
+      game: RunningGame
     ) => void | Promise<void>;
   };
 
@@ -179,14 +179,14 @@ class NoitaGame extends EventEmitter {
         }
         this.sendEvt("PlayerUpdateInventory", payload);
       },
-      sHostItemBank: async (payload) => {
+      sHostItemBank: async (payload, game) => {
         this.bank = {
           wands: payload.wands ?? [],
           spells: payload.spells ?? [],
           flasks: payload.items ?? [],
           objects: payload.objects ?? [],
-          gold: payload.gold ?? 0,
         };
+        game.gold = payload.gold ?? 0;
         this.bankToGame();
       },
       sHostUserTake: async (payload) => {
@@ -197,9 +197,6 @@ class NoitaGame extends EventEmitter {
           return;
         }
         for (const key in this.bank) {
-          if (key == "gold") {
-            continue;
-          }
           for (const [index, item] of this.bank[key].entries()) {
             if (item.id == payload.id) {
               this.bank[key].splice(index, 1);
@@ -232,15 +229,15 @@ class NoitaGame extends EventEmitter {
 
         this.sendEvt("UserAddItems", { userId: payload.userId, items }); //filter later?
       },
-      sPlayerAddGold: async (payload) => {
-        this.bank.gold += payload.amount;
+      sPlayerAddGold: async (payload, game) => {
+        game.gold += payload.amount;
         this.sendEvt("UserAddGold", payload);
       },
-      sPlayerTakeGold: async (payload) => {
+      sPlayerTakeGold: async (payload, game) => {
         if (!this.isHost) {
           return;
         }
-        if (this.bank.gold >= payload.amount) {
+        if (game.gold >= payload.amount) {
           this.emit("HostTakeGold", {
             userId: payload.userId,
             amount: payload.amount,
@@ -254,9 +251,9 @@ class NoitaGame extends EventEmitter {
           });
         }
       },
-      sHostUserTakeGold: async (payload) => {
+      sHostUserTakeGold: async (payload, game) => {
         if (payload.success) {
-          this.bank.gold -= payload.amount;
+          game.gold -= payload.amount;
           this.sendEvt("UserTakeGoldSuccess", {
             me: payload.userId == this.user.userId,
             ...payload,
@@ -273,9 +270,6 @@ class NoitaGame extends EventEmitter {
           return;
         }
         for (const key in this.bank) {
-          if (key == "gold") {
-            continue;
-          }
           for (const item of this.bank[key]) {
             if (item.id == payload.id) {
               this.emit("HostTake", {
@@ -441,7 +435,6 @@ class NoitaGame extends EventEmitter {
         spells: [],
         flasks: [],
         objects: [],
-        gold: 0,
       };
     });
     this.on("RunOver", () => {
@@ -450,7 +443,6 @@ class NoitaGame extends EventEmitter {
         spells: [],
         flasks: [],
         objects: [],
-        gold: 0,
       };
     });
   }
@@ -569,6 +561,7 @@ class NoitaGame extends EventEmitter {
   }
 
   bankToGame() {
+    if (!this.#game) return;
     const bank = [];
     for (const wand of this.bank.wands) {
       bank.push(wand);
@@ -582,7 +575,7 @@ class NoitaGame extends EventEmitter {
     for (const item of this.bank.objects) {
       bank.push(item);
     }
-    this.sendEvt("ItemBank", { items: bank, gold: this.bank.gold });
+    this.sendEvt("ItemBank", { items: bank, gold: this.#game.gold });
   }
 
   setSpellList(data) {}
@@ -665,23 +658,26 @@ class NoitaGame extends EventEmitter {
       spells: [],
       flasks: [],
       objects: [],
-      gold: 0,
     };
   }
 
   getBank() {
+    if (!this.#game) return null;
     return {
       wands: this.bank.wands,
       spells: this.bank.spells,
       flasks: this.bank.flasks,
       objects: this.bank.objects,
-      gold: this.bank.gold,
+      gold: this.#game.gold,
     };
   }
 
   handleGameAction(gameAction: NT.IGameAction) {
     const { key, value } = protoKeyValue(gameAction);
-    return this.#gameActionHandler[key]?.(value as any);
+    if (!this.#game) {
+      console.error("No game existing during handleGameAction, key was ", key);
+    }
+    return this.#gameActionHandler[key]?.(value as any, this.#game);
   }
 }
 
