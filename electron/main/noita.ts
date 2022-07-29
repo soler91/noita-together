@@ -59,6 +59,7 @@ class RunningGame {
   gameId: string;
   name = ""; // TODO: Save the game name
   gamemode: Gamemode = "coop"; // TODO: Save the game gamemode
+  // TODO: consider using a map, since that's supported now
   flags: NT.ClientRoomFlagsUpdate.IGameFlag[] = [];
   bank: {
     wands: NT.IWand[];

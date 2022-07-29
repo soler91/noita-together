@@ -38,6 +38,7 @@ export type Gamemode = "coop" | "race" | "nemesis";
 export interface Game {
   readonly id: string;
   name: string;
+  // TODO: consider using a map, since that's supported now
   readonly bank: BankItem[];
   readonly flags: RoomFlag[];
   gold: number;
