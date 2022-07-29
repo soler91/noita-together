@@ -6,6 +6,7 @@ import messageHandler from "./proto/messageHandler";
 import { appEvent } from "./appEvent";
 import noita from "./noita";
 import { NT } from "./proto/messages";
+import { getDb } from "./database";
 const host = `ws://${process.env["VITE_APP_HOSTNAME"]}${
   process.env["VITE_APP_WS_PORT"] ? ":" + process.env["VITE_APP_WS_PORT"] : ""
 }/`;
@@ -133,6 +134,22 @@ export default (data) => {
     return {
       success: await noita.saveGame(),
     };
+  });
+
+  ipc.answerRenderer("getGameSaveFull", async (data) => {
+    const db = await getDb();
+    return db.data.games.find((v) => v.id === data) ?? null;
+  });
+
+  ipc.answerRenderer("loadSavedGame", async (data) => {
+    const db = await getDb();
+    const savedGame = db.data.games.find((v) => v.id === data) ?? null;
+    if (!savedGame) {
+      return { success: false };
+    }
+
+    const success = noita.loadSavedGame(savedGame);
+    return { success };
   });
 
   ipcMain.on("CLIENT_CHAT", (e, data) => {

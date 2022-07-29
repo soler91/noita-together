@@ -126,6 +126,7 @@ ipc.answerRenderer("getGameSaves", async () => {
       id: v.id,
       name: v.name,
       gamemode: v.gamemode,
+      timestamp: v.timestamp,
     };
   });
 });

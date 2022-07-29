@@ -13,7 +13,10 @@
       <div v-if="loadSavedRoom">
         <select class="slot-selector" v-model="savedRoomId">
           <option v-for="room in savedRooms" :value="room.id" :key="room.id">
-            {{ room.name }}
+            <span v-if="room.name">{{ room.name }}</span>
+            <span v-else>Missing room name</span>
+            -
+            {{ new Date(room.timestamp).toISOString() }}
           </option>
         </select>
       </div>
@@ -71,7 +74,9 @@ const emit = defineEmits<{
 
 const loadSavedRoom = ref(false);
 const savedRoomId = ref<string | null>(null);
-const savedRooms = ref<{ id: string; name: string; gamemode: Gamemode }[]>([]);
+const savedRooms = ref<
+  { id: string; name: string; gamemode: Gamemode; timestamp: number }[]
+>([]);
 
 ipc
   .callMain("getGameSaves")()

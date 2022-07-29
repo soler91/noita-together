@@ -20,10 +20,14 @@ export type MainIpc = {
       id: string;
       name: string;
       gamemode: Gamemode;
+      timestamp: number;
     }[]
   >;
 
-  getGameSaveFull(roomId: number): Promise<Game>;
+  getGameSaveFull(saveId: string): Promise<Game | null>;
+  loadSavedGame(saveId: string): Promise<{
+    success: boolean;
+  }>;
 };
 
 /**

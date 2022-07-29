@@ -41,6 +41,7 @@ export interface Game {
   readonly bank: BankItem[];
   readonly flags: RoomFlag[];
   gold: number;
+  timestamp: number;
   readonly gamemode: Gamemode;
 }
 

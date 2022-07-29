@@ -4,7 +4,7 @@ import { appEvent } from "./appEvent";
 import { ipcMain } from "electron";
 import { EventEmitter } from "events";
 import type { NT } from "./proto/messages";
-import { BankItem, Gamemode, getDb, RoomFlag } from "./database";
+import { BankItem, Game, Gamemode, getDb, RoomFlag } from "./database";
 
 // TODO: Check out  https://github.com/timostamm/protobuf-ts
 // Or check out https://github.com/stephenh/ts-proto plus https://github.com/timostamm/protobuf-ts/tree/master/packages/protoc
@@ -165,12 +165,14 @@ class NoitaGame extends EventEmitter {
         this.sendEvt("PlayerUpdate", payload);
       },
       sPlayerUpdateInventory: async (payload) => {
+        // TODO: ^ Should I also save inventories?
         if (payload.userId == this.user.userId) {
           return;
         }
         this.sendEvt("PlayerUpdateInventory", payload);
       },
       sHostItemBank: async (payload, game) => {
+        console.log("sHostItemBank, setting up the bank");
         game.bank.flasks = payload.items ?? [];
         game.bank.objects = payload.objects ?? [];
         game.bank.spells = payload.spells ?? [];
@@ -529,6 +531,30 @@ class NoitaGame extends EventEmitter {
     this.#game = new RunningGame(gameId);
   }
 
+  loadSavedGame(savedGame: Game) {
+    const game = this.#game;
+    if (!game) return false;
+    game.gold = savedGame.gold;
+    savedGame.bank.forEach((bankItem) => {
+      if (bankItem.type == "flask") {
+        game.bank.flasks.push(bankItem.value);
+      } else if (bankItem.type == "item") {
+        game.bank.objects.push(bankItem.value);
+      } else if (bankItem.type == "spell") {
+        game.bank.spells.push(bankItem.value);
+      } else if (bankItem.type == "wand") {
+        game.bank.wands.push(bankItem.value);
+      } else {
+        console.warn("Unknown bank item type", bankItem);
+      }
+    });
+    game.name = savedGame.name;
+
+    // TODO: Do the flags loading here
+
+    return true;
+  }
+
   updateFlags(data: NT.ServerRoomFlagsUpdated.IGameFlag[]) {
     data.push({ flag: "NT_GAMEMODE_CO_OP" }); //hardcode this for now :) <3
     if (this.#game) {
@@ -587,6 +613,7 @@ class NoitaGame extends EventEmitter {
         protoBankToDb(game.bank.wands, "wand"),
       ].flat(),
       flags: game.flags.map((v) => protoFlagToDb(v)),
+      timestamp: Date.now(),
     });
 
     await db.write();

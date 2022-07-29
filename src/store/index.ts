@@ -662,9 +662,11 @@ const useStore = defineStore("store", () => {
       await actions.createRoom(payload.room);
       if (!state.room.id) return;
 
-      // TODO: Put saved stuff into room
+      // TODO: Probably move that part to the main thread
       const game = await ipc.callMain("getGameSaveFull")(payload.id);
       actions.updateRoomFlags(game.flags);
+      actions.sendFlags();
+      await ipc.callMain("loadSavedGame")(payload.id);
     },
     updateRoom: async (payload: NT.IClientRoomUpdate) => {
       commit("setLoading", true);
