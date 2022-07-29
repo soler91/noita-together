@@ -14,6 +14,11 @@
       </vButton>
       <h1>[{{ users.length }}/{{ room.maxUsers }}]{{ room.name }}</h1>
       <div class="room-edit">
+        <vButton @click="saveGame" :disabled="!isHost">
+          <template v-slot:icon>
+            <i class="fa-solid fa-floppy-disk"></i>
+          </template>
+        </vButton>
         <vButton @click="lockRoom" :disabled="!isHost">
           <template v-slot:icon>
             <i class="fas fa-lock" v-if="room.locked"></i>
@@ -97,6 +102,7 @@ import vUserTooltip from "../components/vUserTooltip.vue";
 import { ref, computed, onMounted, watch, nextTick } from "vue";
 import { useRouter } from "vue-router";
 import useStore, { type GameFlag } from "../store";
+import { ipc } from "../ipc-renderer";
 const router = useRouter();
 const store = useStore();
 
@@ -147,6 +153,14 @@ function lockRoom() {
   store.actions.updateRoom({
     locked: !room.value.locked,
   });
+}
+async function saveGame() {
+  const gameSave = await ipc.callMain("saveGame")();
+  if (gameSave.success) {
+    store.dispatch("sendChat", { message: "Game saved" });
+  } else {
+    store.dispatch("sendChat", { message: "Game save failed" });
+  }
 }
 function sendChat(e: KeyboardEvent) {
   if (e.key != "Enter" || !chatMsg.value.trim()) {

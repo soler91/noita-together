@@ -4,6 +4,7 @@ import { appEvent } from "./appEvent";
 import { ipcMain } from "electron";
 import { EventEmitter } from "events";
 import type { NT } from "./proto/messages";
+import { BankItem, Gamemode, getDb, RoomFlag } from "./database";
 
 // TODO: Check out  https://github.com/timostamm/protobuf-ts
 // Or check out https://github.com/stephenh/ts-proto plus https://github.com/timostamm/protobuf-ts/tree/master/packages/protoc
@@ -38,6 +39,53 @@ function rotLerp(a: number, b: number, weight: number) {
   return b + ((shortest * weight) % pi2);
 }
 
+/**
+ * Utility function to remove certain values from an array
+ */
+function removeFromArray<T>(array: T[], shouldRemove: (element: T) => boolean) {
+  const removed: T[] = [];
+  let i = 0;
+  while (i < array.length) {
+    if (shouldRemove(array[i])) {
+      removed.push(...array.splice(i, 1));
+    } else {
+      i++;
+    }
+  }
+  return removed;
+}
+
+class RunningGame {
+  gameId: string;
+  name = "";
+  gamemode: Gamemode = "coop";
+  flags: NT.ClientRoomFlagsUpdate.IGameFlag[] = [];
+  bank: {
+    wands: NT.IWand[];
+    spells: NT.ISpell[];
+    flasks: NT.IItem[];
+    objects: NT.IEntityItem[];
+  } = {
+    wands: [],
+    spells: [],
+    flasks: [],
+    objects: [],
+  };
+  gold = 0;
+
+  constructor(gameId: string) {
+    this.gameId = gameId;
+  }
+
+  get isOnDeathKick() {
+    return this.flags.some((v) => v.flag == "_ondeath_kick");
+  }
+
+  get worldSeed() {
+    return this.flags.find((v) => v.flag == "sync_world_seed")?.uIntVal ?? 0;
+  }
+}
+
 class NoitaGame extends EventEmitter {
   port = 25569;
   server: WebSocketServer | null = null;
@@ -50,8 +98,9 @@ class NoitaGame extends EventEmitter {
   rejectConnections = true;
   user = { userId: "", name: "", host: false };
   spellList = [];
-  gameFlags: NT.ClientRoomFlagsUpdate.IGameFlag[] = [];
   players = {};
+  #game: RunningGame | null = null;
+  gameFlags: NT.ClientRoomFlagsUpdate.IGameFlag[] = [];
   bank = {
     wands: [] as NT.IWand[],
     spells: [] as NT.ISpell[],
@@ -486,6 +535,11 @@ class NoitaGame extends EventEmitter {
     }
   }
 
+  startGame(gameId: string) {
+    console.log("Started game", gameId);
+    this.#game = new RunningGame(gameId);
+  }
+
   updateFlags(data) {
     const onDeathKick = data.some((entry) => entry.flag == "_ondeath_kick");
     if (this.isHost) {
@@ -494,6 +548,10 @@ class NoitaGame extends EventEmitter {
 
     data.push({ flag: "NT_GAMEMODE_CO_OP" }); //hardcode this for now :) <3
     this.gameFlags = data;
+
+    // TODO: Save the room flags right here
+    console.log("Updated room flags");
+
     this.sendEvt("UpdateFlags", data);
   }
 
@@ -535,7 +593,68 @@ class NoitaGame extends EventEmitter {
     }
   }
 
+  async saveGame() {
+    const game = this.#game;
+    if (!game) return false;
+
+    const db = await getDb();
+    removeFromArray(db.data.games, (v) => v.id === game.gameId);
+    db.data.games.push({
+      id: game.gameId,
+      name: game.name,
+      gold: game.gold,
+      gamemode: game.gamemode,
+      bank: [
+        protoBankToDb(game.bank.flasks, "flask"),
+        protoBankToDb(game.bank.objects, "item"),
+        protoBankToDb(game.bank.spells, "spell"),
+        protoBankToDb(game.bank.wands, "wand"),
+      ].flat(),
+      flags: game.flags.map((v) => protoFlagToDb(v)),
+    });
+
+    await db.write();
+
+    function protoBankToDb(
+      protoBankItems: BankItem["value"][],
+      type: BankItem["type"]
+    ): BankItem[] {
+      return protoBankItems.map((v) => {
+        return {
+          id: v.id,
+          type: type,
+          value: v,
+        } as BankItem;
+      });
+    }
+
+    function protoFlagToDb(
+      protoFlag: NT.ClientRoomFlagsUpdate.IGameFlag
+    ): RoomFlag {
+      // TODO: This is just a temporary hack
+      if ("uIntVal" in protoFlag) {
+        return {
+          id: protoFlag.flag,
+          type: "number",
+          value: protoFlag.uIntVal as number,
+        };
+      } else {
+        return {
+          id: protoFlag.flag,
+          type: "boolean",
+          value: protoFlag.boolVal as boolean,
+        };
+      }
+    }
+
+    return true;
+  }
+
   async reset() {
+    if (this.isHost) {
+      await this.saveGame();
+    }
+    this.#game = null;
     this.setHost(false);
     this.rejectConnections = true;
     this.spellList = [];

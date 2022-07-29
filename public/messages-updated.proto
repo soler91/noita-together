@@ -564,6 +564,7 @@ message ServerRoomUpdateFailed{
 message ClientRoomFlagsUpdate {
     repeated GameFlag flags = 1;
     message GameFlag {
+        // TODO: This seems like a hack, please improve it
         string flag = 1;
         optional int32 int_val = 2;
         optional string str_val = 3;

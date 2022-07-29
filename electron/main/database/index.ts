@@ -41,7 +41,6 @@ export interface Game {
   readonly bank: BankItem[];
   readonly flags: RoomFlag[];
   gold: number;
-  seed: number;
   readonly gamemode: Gamemode;
 }
 
@@ -86,5 +85,3 @@ export interface NoitaDatabase extends VersionedDatabase<any> {
   readonly storage: Storage;
   readonly games: Game[];
 }
-
-// TODO: Put onDeathKick into games storage

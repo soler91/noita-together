@@ -11,6 +11,10 @@ export type MainIpc = {
   }): Promise<void>;
   setGamePath(path: string): Promise<void>;
 
+  saveGame(): Promise<{
+    success: boolean;
+  }>;
+
   getGameSaves(): Promise<
     {
       id: string;

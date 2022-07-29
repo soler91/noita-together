@@ -13,11 +13,11 @@ const host = `ws://${process.env["VITE_APP_HOSTNAME"]}${
 export default (data) => {
   const user = { userId: data.id, name: data.display_name };
   noita.setUser({ userId: user.userId, name: user.name, host: false });
-  let isHost = false;
+  let isHost = false; // TODO: Use noita.isHost() instead
   let client: ws | null = new ws(`${host}${data.token}`);
   const lobby: {
     [key in keyof NT.ILobbyAction]: (
-      payload: NT.ILobbyAction[key]
+      payload: NonNullable<NT.ILobbyAction[key]> // TODO: Change protobuf stuff so that this NonNullable is not necessary
     ) => void | Promise<void>;
   } = {
     sHostStart: (payload) => {
@@ -60,6 +60,7 @@ export default (data) => {
     },
     sJoinRoomSuccess: (payload) => {
       noita.rejectConnections = false;
+      noita.startGame(uuidv4());
       for (const player of payload.users) {
         if (player.userId == user.userId) {
           continue;
@@ -71,7 +72,12 @@ export default (data) => {
       noita.updateFlags(payload.flags);
     },
     sRoomCreated: (payload) => {
+      if (!payload) {
+        console.error("sRoomCreated payload is null");
+        return;
+      }
       noita.rejectConnections = false;
+      noita.startGame(uuidv4());
       noita.setHost(true);
       isHost = true;
     },
@@ -86,7 +92,7 @@ export default (data) => {
 
   client.on("close", () => {
     appEvent("CONNECTION_LOST");
-    client.terminate();
+    client?.terminate();
     client = null;
   });
 
@@ -121,6 +127,12 @@ export default (data) => {
   ipc.answerRenderer("clientMessage", async (data) => {
     const msg = messageHandler.encodeLobbyMsg(data.key, data.payload);
     sendMsg(msg);
+  });
+
+  ipc.answerRenderer("saveGame", async (data) => {
+    return {
+      success: await noita.saveGame(),
+    };
   });
 
   ipcMain.on("CLIENT_CHAT", (e, data) => {
