@@ -1,24 +1,58 @@
-# Contributing
+# Contributing Guide
+
+Welcome, interested person! Contributions are welcome. If you're ever unsure, feel free to open an issue.
+
+Preferably, features are developed in another branch or fork. After the feature is ready, a pull request to the master branch should be opened.
+
+## Prerequisites
+
+- [Node 16 or greater](https://nodejs.org/en/). Don't install Chocolatey.
+- A code editor (see below)
+
+## Setup
+
+1. Fork the repository
+2. Clone your fork
+3. Create a `.env` file and set the required variables
+4. `npm install`
+5. `npm run dev`
+
+## Recommended Tooling
+
+I recommend using [Visual Studio Code](https://code.visualstudio.com/) with
+
+- [Prettier Extension](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) to format your files
+- Settings &rarr; Format On Save &rarr; Enable (`"editor.formatOnSave": true,`)
+  - If you are using autosave: Settings &rarr; Autosave &rarr; On Focus Change (`"files.autoSave": "onFocusChange",`)
+- [Vue Language Features (Volar) Extension](https://marketplace.visualstudio.com/items?itemName=Vue.volar) for Vue.js
+- [TypeScript Vue Plugin (Volar) Extension](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) for Vue.js. Take-over mode is *not* recommended, so just get this plugin.
+- [(optional)Error Lens](https://marketplace.visualstudio.com/items?itemName=usernamehw.errorlens) to see all the errors inline with the code
+- [(optional)TODO Highlight Extension](https://marketplace.visualstudio.com/items?itemName=wayou.vscode-todo-highlight)
+- [(optional)Eslint Extension](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) to automatically show lots of little warnings
 
 
-master branch: Electron app
-mod branch: Noita together mod
+As for settings, I personally am a fan of those "inlay hints".
 
-## Getting started
 
-Clone this repository and do
+## Used Libraries
 
-```sh
-npm install
-```
+The most important ones are
 
-### Developing
+- [Electron](https://www.electronjs.org/) - Build desktop apps with web technologies
+- [Typescript](https://www.typescriptlang.org/) - Typesafe Javascript
+- [Vue 3](https://github.com/vuejs/vue-next/) - Vue 3 with [the composition API](https://vuejs.org/guide/extras/composition-api-faq.html#what-is-composition-api)
 
-```sh
-npm run dev
-```
+We are also using
 
+- [Vite](https://github.com/vuejs/vite) - a speedy Vue.js framework
+- Protobuf
+
+
+For more, check out the `package.json`
+
+## Additional commands
 ### Building
+
 
 ```sh
 npm run build
@@ -42,7 +76,12 @@ npm run lint
 npm run type-gen
 ```
 
+## Code Structure
 
+- master branch: Electron app
+- mod branch: Noita together lua mod
+
+# Stuff from the template
 
 ## Directory
 
