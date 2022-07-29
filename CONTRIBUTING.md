@@ -81,22 +81,17 @@ npm run type-gen
 - master branch: Electron app
 - mod branch: Noita together lua mod
 
+
+### File Structure
+
+- `electron/main` main thread
+- `electron/main/database` deals with saving and loading a room, *make sure to always add migrations when you're changing the format!*
+- `electron/main/proto` deals with the protobuf stuff, you can recreate the messages by running `npm run type-gen`
+- `electron/main/index` entry point of the application
+- `electron/ipc` type definitions for the improved IPC module
+- `src` renderer thread
+
 # Stuff from the template
-
-## Directory
-
-```diff
-+ ├─┬ electron
-+ │ ├─┬ main
-+ │ │ └── index.ts    entry of Electron-main
-+ │ └─┬ preload
-+ │   └── index.ts    entry of Electron-preload
-  ├─┬ src
-  │ └── main.ts       entry of Electron-renderer
-  ├── index.html
-  ├── package.json
-  └── vite.config.ts
-```
 
 ## 🚨 `dependencies` vs `devDependencies`
 
