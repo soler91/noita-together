@@ -668,6 +668,10 @@ const useStore = defineStore("store", () => {
 
       // TODO: Probably move that part to the main thread
       const game = await ipc.callMain("getGameSaveFull")(payload.id);
+      // TODO: Remove this horrible hack, which is needed because the death flag stuff is cursed
+      roomFlags.value = roomFlags.value.filter((flag) => {
+        return !flag.id.startsWith("death_penalty");
+      });
       actions.updateRoomFlags(game.flags);
       actions.sendFlags();
       await ipc.callMain("loadSavedGame")(payload.id);
