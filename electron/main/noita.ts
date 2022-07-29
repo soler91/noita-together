@@ -57,8 +57,8 @@ function removeFromArray<T>(array: T[], shouldRemove: (element: T) => boolean) {
 
 class RunningGame {
   gameId: string;
-  name = "";
-  gamemode: Gamemode = "coop";
+  name = ""; // TODO: Save the game name
+  gamemode: Gamemode = "coop"; // TODO: Save the game gamemode
   flags: NT.ClientRoomFlagsUpdate.IGameFlag[] = [];
   bank: {
     wands: NT.IWand[];
@@ -98,16 +98,8 @@ class NoitaGame extends EventEmitter {
 
   rejectConnections = true;
   user = { userId: "", name: "", host: false };
-  spellList = [];
   players = {};
   #game: RunningGame | null = null;
-  bank = {
-    wands: [] as NT.IWand[],
-    spells: [] as NT.ISpell[],
-    flasks: [] as NT.IItem[],
-    objects: [] as NT.IEntityItem[],
-  };
-
   #gameActionHandler: {
     [key in keyof NT.IGameAction]: (
       payload: NonNullable<NT.IGameAction[key]>,
@@ -179,54 +171,49 @@ class NoitaGame extends EventEmitter {
         this.sendEvt("PlayerUpdateInventory", payload);
       },
       sHostItemBank: async (payload, game) => {
-        this.bank = {
-          wands: payload.wands ?? [],
-          spells: payload.spells ?? [],
-          flasks: payload.items ?? [],
-          objects: payload.objects ?? [],
-        };
+        game.bank.flasks = payload.items ?? [];
+        game.bank.objects = payload.objects ?? [];
+        game.bank.spells = payload.spells ?? [];
+        game.bank.wands = payload.wands ?? [];
         game.gold = payload.gold ?? 0;
         this.bankToGame();
       },
-      sHostUserTake: async (payload) => {
+      sHostUserTake: async (payload, game) => {
         if (!payload.success) {
           if (payload.userId == this.user.userId) {
             this.sendEvt("UserTakeFailed", payload);
           }
           return;
         }
-        for (const key in this.bank) {
-          for (const [index, item] of this.bank[key].entries()) {
-            if (item.id == payload.id) {
-              this.bank[key].splice(index, 1);
-              this.sendEvt("UserTakeSuccess", {
-                me: payload.userId == this.user.userId,
-                ...payload,
-              });
-            }
-          }
+        const removed = [
+          removeFromArray(game.bank.flasks, (v) => v.id == payload.id),
+          removeFromArray(game.bank.objects, (v) => v.id == payload.id),
+          removeFromArray(game.bank.spells, (v) => v.id == payload.id),
+          removeFromArray(game.bank.wands, (v) => v.id == payload.id),
+        ];
+        if (removed.length > 0) {
+          this.sendEvt("UserTakeSuccess", {
+            me: payload.userId == this.user.userId,
+            ...payload,
+          });
         }
       },
-      sPlayerAddItem: async (payload) => {
+      sPlayerAddItem: async (payload, game) => {
         const data = {
-          flasks: payload.flasks,
-          spells: payload.spells,
-          wands: payload.wands,
-          objects: payload.objects,
+          flasks: payload.flasks?.list ?? [],
+          objects: payload.objects?.list ?? [],
+          spells: payload.spells?.list ?? [],
+          wands: payload.wands?.list ?? [],
         };
-        const items = [];
+        game.bank.flasks.push(...data.flasks);
+        game.bank.objects.push(...data.objects);
+        game.bank.spells.push(...data.spells);
+        game.bank.wands.push(...data.wands);
 
-        for (const key in data) {
-          if (!data[key]) {
-            continue;
-          }
-          for (const item of data[key].list) {
-            this.bank[key].push(item);
-            items.push(item);
-          }
-        }
-
-        this.sendEvt("UserAddItems", { userId: payload.userId, items }); //filter later?
+        this.sendEvt("UserAddItems", {
+          userId: payload.userId,
+          items: [data.flasks, data.objects, data.spells, data.wands].flat(),
+        }); //filter later?
       },
       sPlayerAddGold: async (payload, game) => {
         game.gold += payload.amount;
@@ -268,8 +255,9 @@ class NoitaGame extends EventEmitter {
         if (!this.isHost) {
           return;
         }
-        for (const key in this.bank) {
-          for (const item of this.bank[key]) {
+        if (!this.#game) return;
+        for (const key in this.#game.bank) {
+          for (const item of this.#game.bank[key]) {
             if (item.id == payload.id) {
               this.emit("HostTake", {
                 userId: payload.userId,
@@ -422,7 +410,7 @@ class NoitaGame extends EventEmitter {
     });
 
     this.on("GameSpellList", (payload) => {
-      this.setSpellList(payload);
+      // TODO: What's this for?
     });
     this.on("RequestPlayerList", () => {
       this.sendPlayerList();
@@ -432,20 +420,27 @@ class NoitaGame extends EventEmitter {
       this.sendEvt("UpdateFlags", this.#game?.flags ?? []);
     });
     this.on("PlayerDeath", () => {
-      this.bank = {
-        wands: [],
-        spells: [],
-        flasks: [],
-        objects: [],
-      };
+      // TODO: When does this happen and what exactly should it do?
+      console.log("PlayerDeath");
+      const game = this.#game;
+      if (!game) return;
+      game.gold = 0;
+      game.bank.flasks = [];
+      game.bank.objects = [];
+      game.bank.spells = [];
+      game.bank.wands = [];
     });
     this.on("RunOver", () => {
-      this.bank = {
-        wands: [],
-        spells: [],
-        flasks: [],
-        objects: [],
-      };
+      // TODO: When does this happen and what exactly should it do?
+      console.log("RunOver");
+      // Clear the bank
+      const game = this.#game;
+      if (!game) return;
+      game.gold = 0;
+      game.bank.flasks = [];
+      game.bank.objects = [];
+      game.bank.spells = [];
+      game.bank.wands = [];
     });
   }
   // event and ping
@@ -560,23 +555,13 @@ class NoitaGame extends EventEmitter {
 
   bankToGame() {
     if (!this.#game) return;
-    const bank = [];
-    for (const wand of this.bank.wands) {
-      bank.push(wand);
-    }
-    for (const spell of this.bank.spells) {
-      bank.push(spell);
-    }
-    for (const item of this.bank.flasks) {
-      bank.push(item);
-    }
-    for (const item of this.bank.objects) {
-      bank.push(item);
-    }
-    this.sendEvt("ItemBank", { items: bank, gold: this.#game.gold });
-  }
+    const bank = this.#game.bank;
 
-  setSpellList(data) {}
+    this.sendEvt("ItemBank", {
+      items: [bank.flasks, bank.objects, bank.spells, bank.wands].flat(),
+      gold: this.#game.gold,
+    });
+  }
 
   sendPlayerList() {
     for (let player in this.players) {
@@ -648,23 +633,16 @@ class NoitaGame extends EventEmitter {
     this.#game = null;
     this.setHost(false);
     this.rejectConnections = true;
-    this.spellList = [];
     this.players = {};
-    this.bank = {
-      wands: [],
-      spells: [],
-      flasks: [],
-      objects: [],
-    };
   }
 
   getBank() {
     if (!this.#game) return null;
     return {
-      wands: this.bank.wands,
-      spells: this.bank.spells,
-      flasks: this.bank.flasks,
-      objects: this.bank.objects,
+      wands: this.#game.bank.wands,
+      spells: this.#game.bank.spells,
+      flasks: this.#game.bank.flasks,
+      objects: this.#game.bank.objects,
       gold: this.#game.gold,
     };
   }
