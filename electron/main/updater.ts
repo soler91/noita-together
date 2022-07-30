@@ -10,7 +10,7 @@ const AutoUpdateServers = [
   "https://raw.githubusercontent.com/soler91/noita-together/",
 ];
 
-function forcedirSync(dir) {
+function forcedirSync(dir: fs.PathLike) {
   try {
     fs.mkdirSync(dir, { recursive: true });
   } catch (_) {
@@ -18,7 +18,7 @@ function forcedirSync(dir) {
   }
 }
 
-function hash(data) {
+function hash(data: crypto.BinaryLike) {
   return crypto
     .createHash("sha256")
     .update(data)
@@ -27,9 +27,12 @@ function hash(data) {
     .toUpperCase();
 }
 
+export type UpdateBranch = "mod" | "nemesis";
+
 class Updater extends EventEmitter {
   gamePath: string;
-  constructor(branch = "mod", gamePath: string) {
+  branch: UpdateBranch;
+  constructor(branch: UpdateBranch = "mod", gamePath: string) {
     super();
     this.setMaxListeners(0);
 
@@ -37,18 +40,18 @@ class Updater extends EventEmitter {
     this.gamePath = gamePath;
   }
 
-  buildPath(relpath) {
+  buildPath(relpath: string) {
     const p = path.join(this.gamePath, relpath);
     return p;
   }
-  buildURL(serverIndex, relpath) {
+  buildURL(serverIndex: number, relpath: string) {
     return `${AutoUpdateServers[serverIndex]}${this.branch}/${relpath}`;
   }
-  async downloadRaw(serverIndex, relpath) {
+  async downloadRaw(serverIndex: number, relpath: string) {
     const url = this.buildURL(serverIndex, relpath);
     return await got(url).buffer();
   }
-  async downloadJSON(serverIndex, relpath) {
+  async downloadJSON(serverIndex: number, relpath: string) {
     const url = this.buildURL(serverIndex, relpath);
     return await got(url).json();
   }

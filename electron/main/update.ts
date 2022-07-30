@@ -1,15 +1,14 @@
 import { appEvent } from "./appEvent";
-import Updater from "./updater";
+import Updater, { type UpdateBranch } from "./updater";
 import { getDb } from "./database";
 import { spawn } from "child_process";
 //let branch = "mod" //'master';
-let updatelog = true;
-let noselfupdate = false;
-function updateLog(data) {
+const updatelog = true;
+function updateLog(data: string) {
   appEvent("update_log", data);
 }
 
-function updaterSetup(branch, gamePath) {
+function updaterSetup(branch: UpdateBranch, gamePath: string) {
   let error = false; //eeee
 
   const updater = new Updater(branch, gamePath);
