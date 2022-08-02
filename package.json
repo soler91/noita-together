@@ -1,43 +1,52 @@
 {
-    "name": "nt-app",
-    "version": "0.9.39",
-    "author": "Soler91",
-    "description": "Allows you to play noita with friends...",
-    "private": true,
-    "scripts": {
-        "serve": "vue-cli-service serve",
-        "build": "vue-cli-service build",
-        "lint": "vue-cli-service lint",
-        "electron:build": "vue-cli-service electron:build",
-        "electron:serve": "vue-cli-service electron:serve",
-        "postinstall": "electron-builder install-app-deps",
-        "postuninstall": "electron-builder install-app-deps"
-    },
-    "main": "background.js",
-    "dependencies": {
-        "@fortawesome/fontawesome-free": "^5.15.1",
-        "@popperjs/core": "^2.6.0",
-        "electron-updater": "^4.3.5",
-        "got": "^11.8.1",
-        "keytar": "^7.2.0",
-        "protobufjs": "^6.10.2",
-        "uuid": "^8.3.2",
-        "validator": "^13.5.1",
-        "vue": "^2.6.11",
-        "vue-form-json-schema": "^2.9.2",
-        "vue-router": "^3.2.0",
-        "vuex": "^3.6.0",
-        "ws": "^7.4.2"
-    },
-    "devDependencies": {
-        "@vue/cli-plugin-eslint": "~4.5.0",
-        "@vue/cli-plugin-router": "~4.5.0",
-        "@vue/cli-service": "~4.5.0",
-        "electron": "^9.0.0",
-        "electron-devtools-installer": "^3.1.0",
-        "eslint": "^6.7.2",
-        "eslint-plugin-vue": "^6.2.2",
-        "vue-cli-plugin-electron-builder": "~2.0.0-rc.5",
-        "vue-template-compiler": "^2.6.11"
-    }
+  "name": "nt-app",
+  "version": "0.10.0",
+  "author": "Soler91",
+  "description": "Allows you to play noita with friends.",
+  "private": true,
+  "main": "dist/electron/main/index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit -p tsconfig.node.json --composite false && vue-tsc --noEmit --composite false && vite build && electron-builder --config .electron-builder.config.js",
+    "build-force": "vite build && electron-builder --config .electron-builder.config.js",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --ignore-path .gitignore",
+    "type-gen": "pbjs -t static-module --wrap es6 --no-comments --no-delimited --out electron/main/proto/messages.js public/messages.proto && pbjs -t static-module --no-delimited public/messages.proto | pbts -o electron/main/proto/messages.d.ts -"
+  },
+  "dependencies": {
+    "electron-better-ipc": "^2.0.1",
+    "electron-updater": "5.0.5",
+    "got": "^12.3.0",
+    "keytar": "^7.9.0",
+    "lowdb": "^3.0.0",
+    "protobufjs": "^7.0.0",
+    "uuid": "^8.3.2",
+    "ws": "^8.8.1"
+  },
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "^6.1.2",
+    "@types/sqlite3": "^3.1.8",
+    "@types/uuid": "^8.3.4",
+    "@types/ws": "^8.5.3",
+    "@typescript-eslint/eslint-plugin": "5.31.0",
+    "@vitejs/plugin-vue": "^3.0.1",
+    "@vue/eslint-config-prettier": "^7.0.0",
+    "@vue/eslint-config-typescript": "^11.0.0",
+    "electron": "^19.0.8",
+    "electron-builder": "^23.1.0",
+    "eslint": "8.20.0",
+    "eslint-plugin-vue": "9.3.0",
+    "pinia": "^2.0.17",
+    "protobufjs-cli": "^1.0.0",
+    "typescript": "^4.7.4",
+    "vite": "3.0.4",
+    "vite-plugin-electron": "^0.8.3",
+    "vue": "^3.2.37",
+    "vue-router": "^4.1.3",
+    "vue-tsc": "^0.39.2",
+    "vue3-popper": "^1.5.0"
+  },
+  "env": {
+    "VITE_DEV_SERVER_HOST": "127.0.0.1",
+    "VITE_DEV_SERVER_PORT": 3344
+  }
 }

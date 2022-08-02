@@ -1,41 +1,42 @@
 <template>
-    <vModal>
-        <h1 slot="header">Leave Room?</h1>
-        <template slot="body">
-            <p v-if="isHost">The room will be deleted, and the item bank will be lost.</p>
-            <p v-else>Are you sure you want to leave the room?</p>
-        </template>
-        <div slot="footer" class="centered">
-            <vButton @click="leaveRoom">Leave</vButton>
-            <vButton @click="close">Cancel</vButton>
-        </div>
-    </vModal>
+  <vModal>
+    <template v-slot:header>
+      <h1>Leave Room?</h1>
+    </template>
+    <template v-slot:body>
+      <p v-if="isHost">The room will be saved and can be loaded again.</p>
+      <p v-else>Are you sure you want to leave the room?</p>
+    </template>
+    <template v-slot:footer>
+      <div class="centered">
+        <vButton @click="leaveRoom">Leave</vButton>
+        <vButton @click="close">Cancel</vButton>
+      </div>
+    </template>
+  </vModal>
 </template>
 
-<script>
+<script setup lang="ts">
 import vModal from "../components/vModal.vue";
 import vButton from "../components/vButton.vue";
-export default {
-    name: "vRoomCreation",
-    components: {
-        vButton,
-        vModal
-    },
-    computed: {
-        isHost() {
-            return this.$store.getters.isHost;
-        },
-    },
-    methods: {
-        leaveRoom() {
-            this.$store.dispatch("leaveRoom");
-        },
-        close() {
-            this.$emit("close");
-        }
-    },
-};
+import { ref, computed, onMounted, watch, nextTick } from "vue";
+import useStore from "../store";
+const store = useStore();
+
+const emit = defineEmits<{
+  (e: "close"): void;
+}>();
+
+const isHost = computed(() => {
+  return store.getters.isHost;
+});
+
+function leaveRoom() {
+  store.actions.leaveRoom();
+}
+function close() {
+  emit("close");
+}
 </script>
 
-<style>
-</style>
+<style></style>
