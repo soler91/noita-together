@@ -503,6 +503,7 @@ class NoitaGame extends EventEmitter {
    */
   sendEvt(key: string, payload: any = {}) {
     const data = JSON.stringify({ event: key, payload });
+    console.log("Sending to game:", key, data.length);
     this.#toGame(data);
   }
 
@@ -536,6 +537,7 @@ class NoitaGame extends EventEmitter {
     const game = this.#game;
     if (!game) return false;
     game.gold = savedGame.gold;
+    console.log("Loaded gold ", savedGame.gold);
     savedGame.bank.forEach((bankItem) => {
       if (bankItem.type == "flask") {
         game.bank.flasks.push(bankItem.value);
@@ -584,10 +586,21 @@ class NoitaGame extends EventEmitter {
     if (!this.#game) return;
     const bank = this.#game.bank;
 
+    const items = [bank.flasks, bank.objects, bank.spells, bank.wands].flat();
+
     this.sendEvt("ItemBank", {
-      items: [bank.flasks, bank.objects, bank.spells, bank.wands].flat(),
+      items: [],
       gold: this.#game.gold,
     });
+    // The receiving end has a broken websocket library which can't handle large messages
+    // So we send items over bit by bit
+    const itemsToSendPerMessage = 10;
+    for (let i = 0; i < items.length; i += itemsToSendPerMessage) {
+      this.sendEvt("UserAddItems", {
+        userId: this.user.userId,
+        items: items.slice(i, i + itemsToSendPerMessage),
+      });
+    }
   }
 
   sendPlayerList() {
