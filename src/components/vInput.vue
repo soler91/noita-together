@@ -66,8 +66,7 @@ export default {
     display: flex;
     position: relative;
     padding: 1em 0;
-    min-width: 15em;
-    margin-right: 1em;
+    flex: 1 1 auto;
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -87,6 +86,7 @@ export default {
     width: 100%;
     display: block;
     border: none;
+    padding: 0.2em;
     border-bottom: solid 1px rgba(255, 255, 255, 0.3);
     -webkit-transition: all 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
     transition: all 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
@@ -116,6 +116,7 @@ export default {
 
 .labeled-input > .input-validation-err {
     color: tomato;
+    margin-top: 0.3rem;
     position: absolute;
     transform: translate(0, 1.8em);
     font-size: 0.8em;

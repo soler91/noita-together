@@ -2,21 +2,18 @@
     <vModal>
         <h1 slot="header">Create Room</h1>
         <template slot="body">
-            <select class="slot-selector" v-model="toCreate.gamemode">
-                <option>Co-op</option>
-                <option>Nemesis PROTOTYPE</option>
-            </select>
-            <select class="slot-selector" v-model="toCreate.maxUsers">
-                <option v-for="(slot, index) in slots" :key="index">{{ slot }} slots</option>
-            </select>
-            <vInput
-                v-if="userExtra > 0"
-                v-model="toCreate.name"
-                label="room name"
-                :validate="validateLength"
-                @valid="isValid"
-            />
-            <vInput v-model="toCreate.password" label="room password" />
+            <div class="create-ui-body">
+                <select class="slot-selector" v-model="toCreate.gamemode">
+                    <option>Co-op</option>
+                    <option>Nemesis PROTOTYPE</option>
+                </select>
+                <select class="slot-selector" v-model="toCreate.maxUsers">
+                    <option v-for="(slot, index) in slots" :key="index">{{ slot }} slots</option>
+                </select>
+                <vInput v-if="userExtra > 0" v-model="toCreate.name" label="room name" :validate="validateLength"
+                    @valid="isValid" />
+                <vInput v-model="toCreate.password" label="room password" />
+            </div>
         </template>
         <div slot="footer" class="centered">
             <vButton @click="createRoom" :disabled="!canCreate">Create</vButton>
@@ -92,4 +89,11 @@ export default {
 </script>
 
 <style>
+.create-ui-body {
+    width: 100%;
+}
+
+.create-ui-body > * {
+    margin: 1rem 0;
+}
 </style>

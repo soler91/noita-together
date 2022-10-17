@@ -1,6 +1,6 @@
 <template>
     <vModal>
-        <h1 slot="header">Room Password</h1>
+        <h1 slot="header">{{ room.name }}</h1>
         <template slot="body">
             <vInput v-model="password" label="room password" />
         </template>
@@ -23,8 +23,7 @@ export default {
         vInput,
     },
     props: {
-        id: {
-            type: String,
+        room: {
             required: true,
         },
     },
@@ -35,7 +34,7 @@ export default {
     },
     methods: {
         join() {
-            this.$emit("join", this.id, this.password);
+            this.$emit("join", this.room, this.password);
         },
         close() {
             this.password = "";
