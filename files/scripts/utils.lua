@@ -420,6 +420,10 @@ end
 
 function RespawnPenalty(userId)
     local player_name = PlayerList[userId].name
+    if (GameHasFlagRun("death_penalty_full_respawn")) then
+        GamePrintImportant(player_name .. " died")
+        return
+    end
     local player = GetPlayer()
     local damage_models = nil
     if (player ~= nil) then
@@ -452,6 +456,10 @@ function PlayerRespawn(entity_id, poly, weak)
         
         EntityLoad("mods/noita-together/files/entities/death_cam.xml", cx, cy)
         Respawning = true
+        if (not weak and GameHasFlagRun("death_penalty_full_respawn") and GameGetFrameNum() > LastRespawn + 30) then
+            LastRespawn = GameGetFrameNum()
+            SendWsEvent({event="RespawnPenalty", payload={deaths=0}})--for now
+        end
         if (poly) then
             local children = EntityGetAllChildren(entity_id)
             for _, child in ipairs(children) do
