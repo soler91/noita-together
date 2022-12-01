@@ -160,12 +160,12 @@ class NoitaGame extends EventEmitter {
     }
 
     toGame(obj = {}) {
-        const evt = JSON.stringify(obj)
         if (!this.client) {
             //console.log("[Game] Pushed code to queue.")
-            this.queue.push(evt)
+            this.queue.push(obj)
             return
         }
+        const evt = JSON.stringify(obj)
         this.client.send(evt)
 
         if (this.queue.length > 0) {
