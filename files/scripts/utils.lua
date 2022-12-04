@@ -166,11 +166,11 @@ function PlayerHeartPickup(perk, userId)
         for i, damagemodel in ipairs(damagemodels) do
             local cur_hp = ComponentGetValue2(damagemodel, "hp")
             local max_hp = ComponentGetValue2(damagemodel, "max_hp")
-            local added = max_hp + 1 * multiplier
+            local added = 1 * multiplier
             if (GameHasFlagRun("sync_hearts")) then
-                added = max_hp + math.max(0.16 ,(1 / (playercount)) * multiplier)
+                added = math.max(0.16 ,(1 / (playercount)) * multiplier)
             end
-            local max_hp = max_hp + added
+            max_hp = max_hp + added
 
             local max_hp_cap = ComponentGetValue2(damagemodel, "max_hp_cap")
             if max_hp_cap > 0 then
