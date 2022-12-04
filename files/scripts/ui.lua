@@ -568,8 +568,11 @@ if not initialized then
         GuiZSetForNextWidget(gui, 10)
         GuiBeginScrollContainer(gui, next_id(), 5, 50, 100, 150, false, 1, 1)
         GuiLayoutBeginVertical(gui, 0, 0)
-        for userId, player in pairs(players) do
-            draw_player_info(player, userId)
+        for userId, p in ipairs(_Players) do
+            local player = PlayerList[p[1]] -- could use players instead shrug
+            if (player ~= nil) then
+                draw_player_info(player, p[1])
+            end
         end
 
         GuiLayoutEnd(gui)

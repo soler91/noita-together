@@ -48,6 +48,7 @@ Respawning = false
 LastRespawn = 0
 _start_run = false
 _started = false
+_Players = {}
 function InGameChatAddMsg(data)
     table.insert(InGameChat, data)
     if (#InGameChat > 100) then

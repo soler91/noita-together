@@ -174,7 +174,7 @@ wsEvents = {
     RequestGameInfo = function(data)
         local seed = StatsGetValue("world_seed")
         local mods = ModGetActiveModIDs()
-        SendWsEvent({event="GameInfo", payload={seed=seed, mods=mods, version="v0.10.85", beta=GameIsBetaBuild()}})
+        SendWsEvent({event="GameInfo", payload={seed=seed, mods=mods, version="v0.10.86", beta=GameIsBetaBuild()}})
         SendWsEvent({event="RequestPlayerList", payload={}})
         PopulateSpellList()
     end,
@@ -226,6 +226,14 @@ wsEvents = {
         if (not HideGhosts) then
             SpawnPlayerGhost(data, data.userId)
         end
+
+        --worry about perf later
+        _Players = {}
+        for k, v in pairs(PlayerList) do
+            table.insert(_Players,{k,string.upper(v.name)})
+        end
+        
+        table.sort(_Players, function(a,b) return a[2] < b[2] end)
     end,
     RemovePlayer = function(data)
         DespawnPlayerGhost(data.userId)
