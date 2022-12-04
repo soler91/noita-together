@@ -16,7 +16,11 @@ function shared_heart(entity_item, entity_who_picked, name)
         for i, damagemodel in ipairs(damagemodels) do
             max_hp = tonumber(ComponentGetValue(damagemodel, "max_hp"))
             max_hp_old = max_hp
-            max_hp = max_hp + math.max(0.16 ,(2 / (playercount)) * multiplier)
+            if (GameHasFlagRun("sync_hearts")) then
+                max_hp = max_hp + math.max(0.16 ,(2 / (playercount)) * multiplier)
+            else
+                max_hp = max_hp + 2 * multiplier
+            end
             local max_hp_cap = tonumber(ComponentGetValue(damagemodel, "max_hp_cap"))
             if max_hp_cap > 0 then
                 max_hp = math.min(max_hp, max_hp_cap)
