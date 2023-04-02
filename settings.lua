@@ -10,6 +10,15 @@ mod_settings =
 		value_default = true,
         scope=MOD_SETTING_SCOPE_RUNTIME
 	},
+	{
+		id = "NT_GHOST_OPACITY",
+		ui_name = "Player ghost opacity",
+		value_default = 1.0,
+		value_min = 0.0,
+		value_max = 1.0,
+		value_display_multiplier = 100,
+        scope=MOD_SETTING_SCOPE_RUNTIME
+	},
 }
 
 function ModSettingsUpdate( init_scope )

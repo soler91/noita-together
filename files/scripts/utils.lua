@@ -321,6 +321,7 @@ function AppendName(entity, name)
             scale_y="0.7"
         }
         local name_entity = EntityCreateNew()
+        EntitySetName(name_entity, "player_name")
         EntityAddComponent(name_entity, "InheritTransformComponent", {
             _tags = "enabled_in_world",
             use_root_parent = "1"

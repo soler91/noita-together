@@ -176,22 +176,29 @@ if (visible) then
         movement = ConvertTableToStr(movement)
         local anim = anims_s[current.a] or anims_s[1]
         tx, ty = vec_lerp(x, y, current.x, current.y, 0.869)
+        local alpha = ModSettingGet("noita-together.NT_GHOST_OPACITY")
         EntitySetTransform(entity_id, tx, ty, 0, current.scale_x)
         for _, compid in pairs(platcomp) do
             ComponentSetValue2(compid, "rect_animation", anim)
+            ComponentSetValue2(compid, "alpha", alpha)
         end
         for _, child in pairs(EntityGetAllChildren(entity_id)) do
             local name = EntityGetName(child)
-            if (name == "held_item") then
-                local sprite_comp = EntityGetFirstComponent(child, "SpriteComponent")
-                local sprite = ComponentGetValue2(sprite_comp, "image_file")
-                if (sprite ~= held_wand and held_wand ~= "") then
-                    ComponentSetValue2(sprite_comp, "image_file", held_wand)
-                end
-            end
             if (name == "arm_r" or name == "held_item") then
                 local ax, ay = EntityGetTransform(child)
+                local sprite_comp = EntityGetFirstComponent(child, "SpriteComponent")
                 EntitySetTransform(child, ax, ay, arm.r, 1, arm.sy)
+                if (name == "held_item") then
+                    local sprite = ComponentGetValue2(sprite_comp, "image_file")
+                    if (sprite ~= held_wand and held_wand ~= "") then
+                        ComponentSetValue2(sprite_comp, "image_file", held_wand)
+                    end
+                end
+                ComponentSetValue2(sprite_comp, "alpha", alpha)
+            end
+            if (name == "player_name") then
+                local sprite_comp = EntityGetFirstComponent(child, "SpriteComponent")
+                ComponentSetValue2(sprite_comp, "alpha", alpha)
             end
         end
         ComponentSetValue2(dest_varcomp, "value_string", movement)
